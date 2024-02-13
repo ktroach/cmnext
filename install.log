@@ -1,0 +1,123 @@
+Downloading registry.npmjs.org/imagescript/1.2.18: 10.69 MB/10.69 MB, done
+ WARN  2 deprecated subdependencies found: abab@2.0.6, domexception@4.0.0
+Packages: +1202
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Progress: resolved 1253, reused 853, downloaded 348, added 1202, done
+node_modules/.pnpm/protobufjs@7.2.6/node_modules/protobufjs: Running postinstall script, done in 157ms
+node_modules/.pnpm/core-js@3.35.1/node_modules/core-js: Running postinstall script, done in 160ms
+node_modules/.pnpm/esbuild@0.16.4/node_modules/esbuild: Running postinstall script, done in 599ms
+node_modules/.pnpm/esbuild@0.20.0/node_modules/esbuild: Running postinstall script, done in 644ms
+node_modules/.pnpm/contentlayer@0.3.4_esbuild@0.20.0/node_modules/contentlayer: Running postinstall script, done in 2.2s
+
+dependencies:
++ @clerk/nextjs 4.29.7
++ @clerk/themes 1.7.9
++ @hookform/resolvers 3.3.4
++ @planetscale/database 1.16.0
++ @radix-ui/react-accordion 1.1.2
++ @radix-ui/react-alert-dialog 1.0.5
++ @radix-ui/react-aspect-ratio 1.0.3
++ @radix-ui/react-avatar 1.0.4
++ @radix-ui/react-checkbox 1.0.4
++ @radix-ui/react-dialog 1.0.5
++ @radix-ui/react-dropdown-menu 2.0.6
++ @radix-ui/react-icons 1.3.0
++ @radix-ui/react-label 2.0.2
++ @radix-ui/react-navigation-menu 1.1.4
++ @radix-ui/react-popover 1.0.7
++ @radix-ui/react-scroll-area 1.0.5
++ @radix-ui/react-select 1.2.2 (2.0.0 is available)
++ @radix-ui/react-separator 1.0.3
++ @radix-ui/react-slider 1.1.2
++ @radix-ui/react-slot 1.0.2
++ @radix-ui/react-switch 1.0.3
++ @radix-ui/react-tabs 1.0.4
++ @react-email/components 0.0.7 (0.0.14 is available)
++ @react-email/tailwind 0.0.8 (0.0.14 is available)
++ @t3-oss/env-nextjs 0.6.1 (0.9.2 is available)
++ @tanstack/match-sorter-utils 8.11.8
++ @tanstack/react-table 8.11.8
++ @uploadthing/react 5.7.0 (6.2.2 is available)
++ @vercel/og 0.5.20 (0.6.2 is available)
++ class-variance-authority 0.7.0
++ clsx 2.1.0
++ cmdk 0.2.1
++ concurrently 8.2.2
++ contentlayer 0.3.4
++ date-fns 2.30.0 (3.3.1 is available)
++ dayjs 1.11.10
++ embla-carousel-react 8.0.0-rc11 (8.0.0-rc22 is available)
++ jspdf 2.5.1
++ jspdf-autotable 3.8.2
++ lodash 4.17.21
++ lucide-react 0.263.1 (0.330.0 is available)
++ md-editor-rt 4.11.2
++ next 14.0.4-canary.36 (14.0.4 is available)
++ next-contentlayer 0.3.4
++ next-themes 0.2.1
++ openai 3.1.0 (4.24.1 is available)
++ react 18.2.0
++ react-cropper 2.3.3
++ react-day-picker 8.10.0
++ react-dom 18.2.0
++ react-dropzone 14.2.3
++ react-email 1.10.1 (2.0.0 is available)
++ react-hook-form 7.50.1
++ react-markdown 8.0.0 (8.0.7 is available)
++ react-medium-image-zoom 5.1.10
++ react-wrap-balancer 1.1.0
++ resend 0.17.2 (3.2.0 is available)
++ shiki 0.14.7 (1.1.2 is available)
++ sonner 0.6.2 (1.4.0 is available)
++ stripe 12.18.0 (14.16.0 is available)
++ tailwind-merge 1.14.0 (2.2.1 is available)
++ tailwindcss-animate 1.0.7
++ unstyled-table 0.0.3-alpha-3 (0.0.6-beta-4 is available)
++ uploadthing 5.7.4 (6.3.3 is available)
++ zod 3.22.4
+
+devDependencies:
++ @clerk/types 3.62.0
++ @ianvs/prettier-plugin-sort-imports 4.1.1
++ @types/eslint 8.56.2
++ @types/jest 29.5.12
++ @types/lodash 4.14.196
++ @types/node 20.11.17
++ @types/prettier 2.7.3 (3.0.0 is available)
++ @types/react 18.2.55
++ @types/react-dom 18.2.19
++ @typescript-eslint/eslint-plugin 6.21.0 (7.0.1 is available)
++ @typescript-eslint/parser 6.21.0 (7.0.1 is available)
++ autoprefixer 10.4.17
++ dotenv 16.4.4
++ jest 29.7.0
++ jest-environment-jsdom 29.7.0
++ postcss 8.4.35
++ prettier 3.2.5
++ prettier-plugin-tailwindcss 0.4.1 (0.5.11 is available)
++ tailwindcss 3.4.1
++ ts-jest 29.1.2
++ typescript 5.3.3
+
+ WARN  Issues with peer dependencies found
+.
+├─┬ contentlayer 0.3.4
+│ └─┬ @contentlayer/cli 0.3.4
+│   └─┬ @contentlayer/core 0.3.4
+│     ├── ✕ unmet peer esbuild@"0.17.x || 0.18.x": found 0.20.0
+│     └─┬ @contentlayer/utils 0.3.4
+│       └─┬ @opentelemetry/exporter-trace-otlp-grpc 0.39.1
+│         ├─┬ @opentelemetry/core 1.13.0
+│         │ └── ✕ unmet peer @opentelemetry/api@">=1.0.0 <1.5.0": found 1.7.0 in @contentlayer/utils
+│         └─┬ @opentelemetry/otlp-transformer 0.39.1
+│           ├── ✕ unmet peer @opentelemetry/api@">=1.3.0 <1.5.0": found 1.7.0 in @contentlayer/utils
+│           ├─┬ @opentelemetry/resources 1.13.0
+│           │ └── ✕ unmet peer @opentelemetry/api@">=1.0.0 <1.5.0": found 1.7.0 in @contentlayer/utils
+│           ├─┬ @opentelemetry/sdk-logs 0.39.1
+│           │ └── ✕ unmet peer @opentelemetry/api@">=1.4.0 <1.5.0": found 1.7.0 in @contentlayer/utils
+│           ├─┬ @opentelemetry/sdk-metrics 1.13.0
+│           │ └── ✕ unmet peer @opentelemetry/api@">=1.3.0 <1.5.0": found 1.7.0 in @contentlayer/utils
+│           └─┬ @opentelemetry/sdk-trace-base 1.13.0
+│             └── ✕ unmet peer @opentelemetry/api@">=1.0.0 <1.5.0": found 1.7.0 in @contentlayer/utils
+└─┬ next-contentlayer 0.3.4
+  └── ✕ unmet peer next@"^12 || ^13": found 14.0.4-canary.36
