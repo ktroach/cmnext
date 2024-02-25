@@ -3,7 +3,7 @@ import { cva, type VariantProps } from "class-variance-authority"
 
 import { cn } from "@/lib/utils"
 
-const containerVariants = cva("grid items-center gap-8 pb-8 pt-6 md:py-8", {
+const blockVariants = cva("grid items-center gap-8 pb-8 pt-6 md:py-8", {
   variants: {
     variant: {
       default: "container",
@@ -19,19 +19,19 @@ const containerVariants = cva("grid items-center gap-8 pb-8 pt-6 md:py-8", {
 
 interface ContainerProps
   extends React.HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof containerVariants> {
+    VariantProps<typeof blockVariants> {
   as?: React.ElementType
 }
 
-function Container({
+function Block({
   className,
   as: Comp = "section",
   variant,
   ...props
 }: ContainerProps) {
   return (
-    <Comp className={cn(containerVariants({ variant }), className)} {...props} />
+    <Comp className={cn(blockVariants({ variant }), className)} {...props} />
   )
 }
 
-export { Container, containerVariants }
+export { Block, blockVariants }

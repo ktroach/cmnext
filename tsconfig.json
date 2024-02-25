@@ -27,6 +27,11 @@
         }
       ]
     },
+    "ts-node": {
+      "compilerOptions": {
+        "module": "CommonJS"
+      }
+    },    
     "include": [
       "next.config.js",
       ".eslintrc.cjs",

@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { env } from '@/env.mjs';
-import { metaConfig } from "@/config";
+import { metaConfig } from "@/config/static";
 
 export const metadata: Metadata = {
     metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),

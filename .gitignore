@@ -24,6 +24,8 @@ yarn-debug.log*
 yarn-error.log*
 
 # local env files
+.env
+.env*
 .env*.local
 
 # vercel
@@ -35,6 +37,10 @@ next-env.d.ts
 
 .vercel
 
-
 # Contentlayer
 .contentlayer
+
+install.log
+install.log*
+
+/prisma 
