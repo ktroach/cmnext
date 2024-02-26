@@ -1,8 +1,7 @@
 import { Block } from '@/components/containers/block'
-import PostForm from '@/components/forms/post-form'
 
-export default function IndexPage() {
-return (
+export default function AdminConsole() {
+  return (
     <Block as="div" className="gap-12">
       <section
         id="hero"
@@ -11,7 +10,6 @@ return (
       >
         Admin Console
       </section>
-        <PostForm />
     </Block>
   )
 }

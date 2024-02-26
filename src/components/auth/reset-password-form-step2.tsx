@@ -5,10 +5,11 @@ import { useRouter } from "next/navigation"
 import { useSignIn } from "@clerk/nextjs"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
+import { toast } from "sonner"
 import type { z } from "zod"
 
 import { catchClerkError } from "@/lib/clerk"
-import { authSchema } from "@/validations/auth"
+import { resetPasswordSchema } from "@/validations/auth"
 import { Button } from "@/components/ui/button"
 import {
   Form,
@@ -22,18 +23,19 @@ import { Input } from "@/components/ui/input"
 import { Icons } from "@/styles/icons"
 import { PasswordInput } from "@/components/secure/password-input"
 
-type Inputs = z.infer<typeof authSchema>
+type Inputs = z.infer<typeof resetPasswordSchema>
 
-export function SignInForm() {
+export function ResetPasswordStep2Form() {
   const router = useRouter()
   const { isLoaded, signIn, setActive } = useSignIn()
   const [isPending, startTransition] = React.useTransition()
 
   const form = useForm<Inputs>({
-    resolver: zodResolver(authSchema),
+    resolver: zodResolver(resetPasswordSchema),
     defaultValues: {
-      email: "",
       password: "",
+      confirmPassword: "",
+      code: "",
     },
   })
 
@@ -42,17 +44,22 @@ export function SignInForm() {
 
     startTransition(async () => {
       try {
-        const result = await signIn.create({
-          identifier: data.email,
+        const attemptFirstFactor = await signIn.attemptFirstFactor({
+          strategy: "reset_password_email_code",
+          code: data.code,
           password: data.password,
         })
 
-        if (result.status === "complete") {
-          await setActive({ session: result.createdSessionId })
-
+        if (attemptFirstFactor.status === "needs_second_factor") {
+          // TODO: implement 2FA (requires clerk pro plan)
+        } else if (attemptFirstFactor.status === "complete") {
+          await setActive({
+            session: attemptFirstFactor.createdSessionId,
+          })
           router.push(`${window.location.origin}/`)
+          toast.success("Password reset successfully.")
         } else {
-          console.log(result)
+          console.error(attemptFirstFactor)
         }
       } catch (err) {
         catchClerkError(err)
@@ -68,12 +75,12 @@ export function SignInForm() {
       >
         <FormField
           control={form.control}
-          name="email"
+          name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
+              <FormLabel>Password</FormLabel>
               <FormControl>
-                <Input placeholder="user@domain.com" {...field} />
+                <PasswordInput placeholder="*********" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -81,12 +88,32 @@ export function SignInForm() {
         />
         <FormField
           control={form.control}
-          name="password"
+          name="confirmPassword"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Password</FormLabel>
+              <FormLabel>Confirm Password</FormLabel>
               <FormControl>
-                <PasswordInput placeholder="**********" {...field} />
+                <PasswordInput placeholder="*********" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="code"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Code</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="169420"
+                  {...field}
+                  onChange={(e) => {
+                    e.target.value = e.target.value.trim()
+                    field.onChange(e)
+                  }}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -99,8 +126,8 @@ export function SignInForm() {
               aria-hidden="true"
             />
           )}
-          Sign in
-          <span className="sr-only">Sign in</span>
+          Reset password
+          <span className="sr-only">Reset password</span>
         </Button>
       </form>
     </Form>

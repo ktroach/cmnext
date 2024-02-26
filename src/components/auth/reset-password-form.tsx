@@ -5,10 +5,11 @@ import { useRouter } from "next/navigation"
 import { useSignIn } from "@clerk/nextjs"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
+import { toast } from "sonner"
 import type { z } from "zod"
 
 import { catchClerkError } from "@/lib/clerk"
-import { authSchema } from "@/validations/auth"
+import { checkEmailSchema } from "@/validations/auth"
 import { Button } from "@/components/ui/button"
 import {
   Form,
@@ -20,20 +21,18 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Icons } from "@/styles/icons"
-import { PasswordInput } from "@/components/secure/password-input"
 
-type Inputs = z.infer<typeof authSchema>
+type Inputs = z.infer<typeof checkEmailSchema>
 
-export function SignInForm() {
+export function ResetPasswordForm() {
   const router = useRouter()
-  const { isLoaded, signIn, setActive } = useSignIn()
+  const { isLoaded, signIn } = useSignIn()
   const [isPending, startTransition] = React.useTransition()
 
   const form = useForm<Inputs>({
-    resolver: zodResolver(authSchema),
+    resolver: zodResolver(checkEmailSchema),
     defaultValues: {
       email: "",
-      password: "",
     },
   })
 
@@ -42,17 +41,16 @@ export function SignInForm() {
 
     startTransition(async () => {
       try {
-        const result = await signIn.create({
+        const firstFactor = await signIn.create({
+          strategy: "reset_password_email_code",
           identifier: data.email,
-          password: data.password,
         })
 
-        if (result.status === "complete") {
-          await setActive({ session: result.createdSessionId })
-
-          router.push(`${window.location.origin}/`)
-        } else {
-          console.log(result)
+        if (firstFactor.status === "needs_first_factor") {
+          router.push("/signin/reset-password/step2")
+          toast.message("Check your email", {
+            description: "We sent you a 6-digit verification code.",
+          })
         }
       } catch (err) {
         catchClerkError(err)
@@ -73,20 +71,7 @@ export function SignInForm() {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder="user@domain.com" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="password"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Password</FormLabel>
-              <FormControl>
-                <PasswordInput placeholder="**********" {...field} />
+                <Input placeholder="rodneymullen180@gmail.com" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -99,8 +84,10 @@ export function SignInForm() {
               aria-hidden="true"
             />
           )}
-          Sign in
-          <span className="sr-only">Sign in</span>
+          Continue
+          <span className="sr-only">
+            Continue to reset password verification
+          </span>
         </Button>
       </form>
     </Form>

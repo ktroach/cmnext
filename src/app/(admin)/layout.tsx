@@ -12,7 +12,7 @@ interface CreatorLayoutProps {
   children: React.ReactNode
 }
 
-export default async function CreatorLayout({ children }: CreatorLayoutProps) {
+export default async function AdminLayout({ children }: CreatorLayoutProps) {
   const user = await currentUser()
 
   // Using Clerk Auth SDK redirect unauthorized users

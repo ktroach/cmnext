@@ -1,18 +1,26 @@
-import { type HandleOAuthCallbackParams } from "@clerk/types"
+"use client"
 
-import SSOCallback from "@/components/auth/sso-callback"
-import { Block } from "@/components/containers/block"
+import * as React from "react"
+import { useClerk } from "@clerk/nextjs"
 
-export interface SSOCallbackPageProps {
-  searchParams: HandleOAuthCallbackParams
-}
+import { Icons } from "@/styles/icons"
+import { type SSOCallbackPageProps } from "@/app/(auth)/sso-callback/page"
 
-export default function SSOCallbackPage({
-  searchParams,
-}: SSOCallbackPageProps) {
+export default function SSOCallback({ searchParams }: SSOCallbackPageProps) {
+  const { handleRedirectCallback } = useClerk()
+
+  React.useEffect(() => {
+    void handleRedirectCallback(searchParams)
+  }, [searchParams, handleRedirectCallback])
+
   return (
-    <Block className="max-w-lg">
-      <SSOCallback searchParams={searchParams} />
-    </Block>
+    <div
+      role="status"
+      aria-label="Loading"
+      aria-describedby="loading-description"
+      className="flex items-center justify-center"
+    >
+      <Icons.spinner className="h-16 w-16 animate-spin" aria-hidden="true" />
+    </div>
   )
 }

@@ -8,7 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-// import { ResetPasswordForm } from "@/components/forms/reset-password-form"
+// import { ResetPasswordStep2Form } from "@/components/forms/reset-password-form-step2"
 import { Block } from "@/components/containers/block"
 
 export const metadata: Metadata = {
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   description: "Enter your email to reset your password",
 }
 
-export default function ResetPasswordPage() {
+export default function ResetPasswordStep2Page() {
   return (
     <Block className="max-w-lg">
       <Card>
@@ -28,7 +28,7 @@ export default function ResetPasswordPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          {/* <ResetPasswordForm /> */}
+          {/* <ResetPasswordStep2Form /> */}
         </CardContent>
       </Card>
     </Block>

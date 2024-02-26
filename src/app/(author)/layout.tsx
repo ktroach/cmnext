@@ -1,23 +1,23 @@
 // Creator Layout
-import { redirect } from "next/navigation"
-import { currentUser } from "@clerk/nextjs"
+import { redirect } from 'next/navigation'
+import { currentUser } from '@clerk/nextjs'
 
-import { creatorConfig } from "@/config/creator"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { Sidebar } from "@/components/layouts/sidebar"
-import { SiteFooter } from "@/components/layouts/site-footer"
-import { SiteHeader } from "@/components/layouts/site-header"
+import { creatorConfig } from '@/config/creator'
+import { ScrollArea } from '@/components/ui/scroll-area'
+import { Sidebar } from '@/components/layouts/sidebar'
+import { SiteFooter } from '@/components/layouts/site-footer'
+import { SiteHeader } from '@/components/layouts/site-header'
 
 interface CreatorLayoutProps {
   children: React.ReactNode
 }
 
 export default async function CreatorLayout({ children }: CreatorLayoutProps) {
-    const user = await currentUser()
+  const user = await currentUser()
 
-    if (!user) {
-        redirect("/signin")
-     }
+  if (!user) {
+    redirect('/signin')
+  }
 
   return (
     <div className="flex min-h-screen flex-col">

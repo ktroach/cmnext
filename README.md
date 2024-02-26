@@ -9,6 +9,7 @@ Built with:
 - Clerk Auth
 - ContentLayer
 - MD Editor
+- React Hook Form
 - Zod Validations
 - Framer Motion
 - Aceternity UI 

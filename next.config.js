@@ -22,6 +22,7 @@ const nextConfig = {
   },
   eslint: { ignoreDuringBuilds: true },
   typescript: { ignoreBuildErrors: true },
+  staticPageGenerationTimeout: 1000,
 }
 
 module.exports = withContentlayer(nextConfig)
