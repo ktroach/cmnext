@@ -1,47 +1,59 @@
-# CMNexT 
-Database-less Content Management app in Next.js, minus the headaches
+# cmnext
+Modern Content Management System in Next.js 
 
-Includes
-- NextJS 14 App Router
+Built with:
+- Bun Package Manager
+- Typescript
+- Prisma
+- Next.js 14 App Router
+- Clerk Auth
 - ContentLayer
+- MD Editor
+- Zod Validations
+- Framer Motion
+- Aceternity UI 
 - Shadcn/UI
 - Tailwind 
+- Vercel Web Platform
 
 Features
- - Clean Stack 
- - Minimal Boilerplate
- - Functional 
- - Stylish
- - Dead Simple 
+ - Clean and organized data models 
+ - Clean and simple app architecture 
+ - Modern stack with Framer Motion animations
+ - Minimal boilerplate
 
 1) Clone this repo
 2) Install dependencies 
-3) Mod and Test 
+3) Setup your database
 4) Deploy to Vercel
 
 ## Install Dependencies
 
 ```
-pnpm install
+bun install
 ```
 
 ```
-pnpm run shadcn:add
+bun run shadcn:add
 ```
+
+## Database Setup
+- TODO 
+
 
 ## Build and Run
 
 ```
-pnpm run build
+bun run build
 ```
 
 ```
-pnpm run dev
+bun run dev
 ```
 
 http://localhost:3000/
 
-## Structure
+
 
 
 

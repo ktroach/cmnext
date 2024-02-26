@@ -15,9 +15,9 @@ interface CreatorLayoutProps {
 export default async function CreatorLayout({ children }: CreatorLayoutProps) {
     const user = await currentUser()
 
-    // if (!user) {
-    //     redirect("/signin")
-    //  }
+    if (!user) {
+        redirect("/signin")
+     }
 
   return (
     <div className="flex min-h-screen flex-col">

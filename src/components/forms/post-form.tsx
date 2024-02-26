@@ -1,8 +1,9 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { Button } from '../ui/button'
 import { Label } from '../ui/label'
+import { SparklesCore } from "../ui/sparkles"
 
 export default function PostForm() {
   const [message, setMessage] = useState('')
@@ -14,9 +15,6 @@ export default function PostForm() {
           'Content-Type': 'application/json',
         },
       })
-
-      console.log('>>> response >>> ', response)
-
       const data = await response.json()
       setMessage(data.message)
     } catch (error) {
@@ -26,8 +24,15 @@ export default function PostForm() {
 
   return (
     <div>
-      <Button onClick={createUser}>GET</Button>
-      <Label className=''>{message}</Label>
+        <SparklesCore
+          id="tsparticlesfullpage"
+          background="transparent"
+          minSize={0.6}
+          maxSize={1.4}
+          particleDensity={100}
+          className="w-full h-full"
+          particleColor="#FFFFFF"
+        />
     </div>
   )
 }

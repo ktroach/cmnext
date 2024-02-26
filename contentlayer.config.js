@@ -107,18 +107,6 @@ export const Page = defineDocumentType(() => ({
   computedFields,
 }))
 
-// const syncContentFromGit = async ({ }) => {
-//   // See full example
-// }
-
-// export default makeSource((sourceKey  = 'main') => ({
-//   syncFiles: (contentDir) => syncContentFromGit({ contentDir, gitTag: sourceKey  }),
-//   contentDirPath: `./src/content/${sourceKey}`,
-//   documentTypes: [Post, Author, Page],
-//   experimental: { enableDynamicBuild: true },
-// }))
-
-
 export default makeSource({
   disableImportAliasWarning: true,
   contentDirPath: "./src/content",

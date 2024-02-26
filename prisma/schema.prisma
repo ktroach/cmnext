@@ -1,0 +1,181 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  seed     = "prisma/seed.ts"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Post {
+  id         Int        @id @default(autoincrement())
+  title      String     @db.VarChar(255)
+  content    String?
+  slug       String?
+  published  Boolean    @default(false)
+  deleted    Boolean    @default(false)
+  author     User       @relation(fields: [authorId], references: [id])
+  authorId   Int
+  categories Category[]
+  tags       Tag[]
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime?  @updatedAt
+}
+
+model UserProfile {
+  id        Int       @id @default(autoincrement())
+  bio       String?
+  active    Boolean   @default(true)
+  slug      String?
+  user      User      @relation(fields: [userId], references: [id])
+  userId    Int       @unique
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+}
+
+enum UserRole {
+  USER
+  ADMIN
+  AUTHOR
+  CONTRIBUTOR
+  SUPERADMIN
+}
+
+model ContactAddress {
+  id         Int         @id @default(autoincrement())
+  line1      String
+  line2      String?
+  city       String
+  state      String
+  postalCode String
+  country    String
+  contact    UserContact @relation(fields: [contactId], references: [id])
+  contactId  Int         @unique
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime?   @updatedAt
+}
+
+model ContactEmail {
+  id                 Int         @id @default(autoincrement())
+  primaryEmail       String
+  primaryEmailType   String
+  secondaryEmail     String?
+  secondaryEmailType String?
+  tertiaryEmail      String?
+  tertiaryEmailType  String?
+  contact            UserContact @relation(fields: [contactId], references: [id])
+  contactId          Int         @unique
+  createdAt          DateTime    @default(now())
+  updatedAt          DateTime?   @updatedAt
+}
+
+model ContactPhone {
+  id                 Int         @id @default(autoincrement())
+  primaryPhone       String
+  primaryPhoneType   String
+  secondaryPhone     String?
+  secondaryPhoneType String?
+  tertiaryPhone      String?
+  tertiaryPhoneType  String?
+  contact            UserContact @relation(fields: [contactId], references: [id])
+  contactId          Int         @unique
+  createdAt          DateTime    @default(now())
+  updatedAt          DateTime?   @updatedAt
+}
+
+model ContactWebsite {
+  id               Int         @id @default(autoincrement())
+  primaryUrl       String
+  primaryUrlType   String
+  secondaryUrl     String?
+  secondaryUrlType String?
+  tertiaryUrl      String?
+  tertiaryUrlType  String?
+  contact          UserContact @relation(fields: [contactId], references: [id])
+  contactId        Int         @unique
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime?   @updatedAt
+}
+
+model UserContact {
+  id        Int             @id @default(autoincrement())
+  email     ContactEmail?
+  phone     ContactPhone?
+  address   ContactAddress?
+  website   ContactWebsite?
+  user      User            @relation(fields: [userId], references: [id])
+  userId    Int             @unique
+  createdAt DateTime        @default(now())
+  updatedAt DateTime?       @updatedAt
+}
+
+model User {
+  id            Int          @id @default(autoincrement())
+  email         String       @unique
+  name          String?
+  description   String?
+  token         String?
+  prefix        String?
+  firstName     String?
+  middleName    String?
+  lastName      String?
+  suffix        String?
+  preferredName String?
+  gender        String?
+  birthDate     DateTime?
+  local         String?
+  timeZone      String?
+  lastLoginTime DateTime?
+  contact       UserContact?
+  role          UserRole     @default(USER)
+  posts         Post[]
+  profile       UserProfile?
+  pages         Page[]
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime?    @updatedAt
+}
+
+model Category {
+  id          Int       @id @default(autoincrement())
+  name        String
+  description String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime? @updatedAt
+  posts       Post[]
+  pages       Page[]
+}
+
+model Tag {
+  id          Int       @id @default(autoincrement())
+  name        String
+  description String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime? @updatedAt
+  posts       Post[]
+  pages       Page[]
+}
+
+model Page {
+  id          Int        @id @default(autoincrement())
+  title       String     @db.VarChar(255)
+  description String?
+  content     String?
+  slug        String?
+  published   Boolean    @default(false)
+  deleted     Boolean    @default(false)
+  author      User       @relation(fields: [authorId], references: [id])
+  authorId    Int
+  categories  Category[]
+  tags        Tag[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime?  @updatedAt
+}
+
+
