@@ -43,7 +43,7 @@ export default function IndexPage() {
           title="Featured Blogs"
           description="Explore blogs from around the world"
           href="/blogs"
-          linkText="View all blogs"
+          linkText="View all Blogs"
           className="pt-8 md:pt-10 lg:pt-12"
         >
           <Link href={`/blogs/slug`}>
@@ -115,7 +115,7 @@ export default function IndexPage() {
           title="Featured Sites"
           description="Explore sites from around the world"
           href="/sites"
-          linkText="View all sites"
+          linkText="View all Sites"
           className="py-8 md:py-10 lg:py-12"
         >
           <Link href={`/blogs/slug`}>

@@ -4,7 +4,7 @@ import { clerkClient } from "@clerk/nextjs"
 import { authMiddleware } from "@clerk/nextjs/server"
 
 export default authMiddleware({
-  ignoredRoutes: ['/(.*)'], 
+
   publicRoutes: [
     "/",
     "/console(.*)",
@@ -17,7 +17,8 @@ export default authMiddleware({
     "/contact(.*)",
     "/terms(.*)",
     "/privacy(.*)",
-    "/api(.*)",
+    "/api/hello",
+    "/api/user",
   ],
   async afterAuth(auth, req) {
     // Ignore public routes 
@@ -50,5 +51,5 @@ export default authMiddleware({
 })
 
 export const config = {
-  matcher: ["/((?!.*\\..*|_next).*)", "/", "/(api)(.*)"],
+  matcher: ['/((?!.+\\.[\\w]+$|_next).*)', '/', '/(api|trpc)(.*)'],
 }
