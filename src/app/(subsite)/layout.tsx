@@ -1,10 +1,10 @@
-// SiteLayout
+// Subsite Layout
 
-interface SiteLayoutProps {
+interface SubsiteLayoutProps {
   children: React.ReactNode
 }
 
-export default async function SiteLayout({ children }: SiteLayoutProps) {
+export default async function SubsiteLayout({ children }: SubsiteLayoutProps) {
   return (
     <div className="relative flex min-h-screen flex-col">
       <main className="flex-1">{children}</main>{' '}

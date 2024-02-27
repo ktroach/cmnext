@@ -4,46 +4,41 @@ import { clerkClient } from "@clerk/nextjs"
 import { authMiddleware } from "@clerk/nextjs/server"
 
 export default authMiddleware({
-  // Public routes are routes that don't require authentication
+  ignoredRoutes: ['/(.*)'], 
   publicRoutes: [
     "/",
+    "/console(.*)",
+    "/dashboard(.*)",
     "/signin(.*)",
     "/signup(.*)",
     "/sso-callback(.*)",
-    "/creator(.*)",
-    "/marketing(.*)",
-    "/site(.*)",    
     "/blog(.*)",
     "/about(.*)",
     "/contact(.*)",
     "/terms(.*)",
     "/privacy(.*)",
     "/api(.*)",
-    "/newpage(.*)",    
   ],
   async afterAuth(auth, req) {
+    // Ignore public routes 
     if (auth.isPublicRoute) {
-      //  For public routes, we don't need to do anything
-      return NextResponse.next()
+      return NextResponse.next();
     }
 
-    const url = new URL(req.nextUrl.origin)
+    const url = new URL(req.nextUrl.origin);
 
     if (!auth.userId) {
-      //  If user tries to access a private route without being authenticated,
-      //  redirect them to the sign in page
-      url.pathname = "/signin"
-      return NextResponse.redirect(url)
+      url.pathname = "/signin";
+      return NextResponse.redirect(url);
     }
 
-    // Set the user's role to user if it doesn't exist
+    // Get the user Role 
     const user = await clerkClient.users.getUser(auth.userId)
 
     if (!user) {
       throw new Error("User not found.")
     }
 
-    // If the user doesn't have a role, set it to user
     if (!user.privateMetadata.role) {
       await clerkClient.users.updateUserMetadata(auth.userId, {
         privateMetadata: {
