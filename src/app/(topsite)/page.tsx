@@ -3,42 +3,63 @@ import Link from 'next/link'
 import { Block } from '@/components/containers/block'
 import { Button } from '@/components/ui/button'
 import { ContentSection } from '@/components/containers/content-section'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
+import { Sparkles } from '@/components/animations/sparkles'
+import { Wavy } from '@/components/animations/wavy'
+import { TextGenerator } from '@/components/animations/text-generator'
 
 export default function IndexPage() {
   return (
-    <div>
-      <Block className="max-w-6xl">
-        <section className="mx-auto flex w-full max-w-5xl flex-col items-center justify-center gap-4 py-24 text-center md:py-32">
-          <h1 className="text-balance font-heading text-3xl sm:text-5xl md:text-6xl lg:text-7xl">
-            Content Management made easy again.
-          </h1>
-          <p className="max-w-[42rem] text-balance leading-normal text-muted-foreground sm:text-xl sm:leading-8">
-            Build sites, build blogs, build your digital dreams without paywalls
-            and other hassles
-          </p>
-          <div className="flex flex-wrap items-center justify-center gap-4">
-            <Button asChild>
-              <Link href="/demo">
-                View Demo
-                <span className="sr-only">View Demo</span>
-              </Link>
-            </Button>
-            <Button variant="outline" asChild>
-              <Link href="/dashboard/sites">
-                Get Started
-                <span className="sr-only">Get Started</span>
-              </Link>
-            </Button>
+    <>
+      <div className="h-[40rem] relative w-full bg-transparent flex flex-col items-center justify-center overflow-hidden rounded-md">
+        <div className="w-full absolute inset-0 h-screen">
+          <Sparkles
+            id="tsparticlesfullpage"
+            background="transparent"
+            minSize={0.6}
+            maxSize={1.4}
+            particleDensity={100}
+            className="w-full h-full"
+            particleColor="#38bdf8"
+            speed={1.5}
+          />
+        </div>
+
+        <h1 className="md:text-7xl text-3xl lg:text-6xl font-bold text-center text-white relative z-20">
+          Content Management Made Easy
+        </h1>
+
+        <section className="mx-auto flex w-full max-w-5xl flex-col items-center justify-center gap-4 text-center">
+          <TextGenerator
+            className="mt-5"
+            words="Build sites, build blogs, build your digital dreams without paywalls and the pain"
+          />
+
+          <div className="flex flex-wrap items-center justify-center gap-4 mt-10 z-40">
+            <Wavy
+              className="max-w-4xl mt-10"
+              blur={0.0}
+              backgroundFill="transparent"
+              waveOpacity={0.015}
+            >
+              <Button asChild>
+                <Link href="/demo">
+                  View Demo
+                  <span className="sr-only">View Demo</span>
+                </Link>
+              </Button>
+              <Button variant="outline" asChild>
+                <Link href="/dashboard/sites">
+                  Get Started
+                  <span className="sr-only">Get Started</span>
+                </Link>
+              </Button>
+            </Wavy>
           </div>
         </section>
+      </div>
+      <Block>
         <ContentSection
           title="Featured Blogs"
           description="Explore blogs from around the world"
@@ -109,7 +130,7 @@ export default function IndexPage() {
                 ></React.Suspense>
               </CardContent>
             </Card>
-          </Link>                              
+          </Link>
         </ContentSection>
         <ContentSection
           title="Featured Sites"
@@ -165,7 +186,7 @@ export default function IndexPage() {
                 ></React.Suspense>
               </CardContent>
             </Card>
-          </Link>     
+          </Link>
           <Link href={`/blogs/slug`}>
             <span className="sr-only">title</span>
             <Card className="relative flex size-full flex-col items-center justify-center overflow-hidden rounded-lg bg-transparent transition-colors hover:bg-muted/50">
@@ -181,9 +202,9 @@ export default function IndexPage() {
                 ></React.Suspense>
               </CardContent>
             </Card>
-          </Link>                         
+          </Link>
         </ContentSection>
       </Block>
-    </div>
+    </>
   )
 }
