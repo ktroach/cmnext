@@ -34,3 +34,16 @@ export interface FooterItem {
     external?: boolean
   }[]
 }
+
+export interface FeaturedItemTypes {
+  url: string
+  title: string
+  icon?: keyof typeof Icons
+  iconSize?: string
+}
+
+export interface FeaturedItem extends FeaturedItemTypes {
+  items: FeaturedItemTypes[]
+}
+
+export type FeaturedItemType = FeaturedItem

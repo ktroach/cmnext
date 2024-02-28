@@ -24,9 +24,10 @@ yarn-debug.log*
 yarn-error.log*
 
 # local env files
-.env
-.env*
-.env*.local
+*.env
+*.env.local
+*.env.staging
+*.env.prod
 
 # vercel
 .vercel
@@ -40,8 +41,11 @@ next-env.d.ts
 # Contentlayer
 .contentlayer
 
+*.log
 install.log
 install.log*
 
+* .lockb
 
-.env
+prisma/migrations
+prisma/scripts

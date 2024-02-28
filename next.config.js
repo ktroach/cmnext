@@ -1,6 +1,8 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { withContentlayer } = require("next-contentlayer");
 
+// await import("./src/env.js");
+
 /** @type {import("next").NextConfig} */
 const nextConfig = {
   pageExtensions: ["tsx", "mdx", "ts", "js"],

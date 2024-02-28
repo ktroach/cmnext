@@ -17,8 +17,7 @@ export default authMiddleware({
     "/contact(.*)",
     "/terms(.*)",
     "/privacy(.*)",
-    "/api/hello",
-    "/api/user",
+    "/api/(.*)",
   ],
   async afterAuth(auth, req) {
     // Ignore public routes 
