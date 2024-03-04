@@ -20,6 +20,14 @@ const nextConfig = {
         protocol: "https",
         hostname: "loremflickr.com",
       },
+      {
+        protocol: 'https',
+        hostname: 'miro.medium.com',
+      },      
+      {
+        protocol: 'https',
+        hostname: 'source.unsplash.com',
+      },            
     ],
   },
   eslint: { ignoreDuringBuilds: true },

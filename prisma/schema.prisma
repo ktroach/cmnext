@@ -15,62 +15,113 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id            Int          @id @default(autoincrement())
+  email         String       @unique
+  name          String?
+  description   String?
+  token         String?
+  prefix        String?
+  firstName     String?
+  middleName    String?
+  lastName      String?
+  suffix        String?
+  preferredName String?
+  gender        String?
+  birthDate     DateTime?
+  local         String?
+  timeZone      String?
+  lastLoginTime DateTime?
+  contact       UserContact?
+  role          UserRole     @default(USER)
+  profile       UserProfile?
+  posts         Post[]
+  pages         Page[]
+  accounts      Account[]
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime?    @updatedAt
+}
+
 model Account {
   id         Int       @id @default(autoincrement())
   name       String
-  slug       String?
-  accountRef String
-  users      User[]
+  accountRef String    @default(cuid())
+  admin      User      @relation(fields: [adminId], references: [id])
+  adminId    Int
   subsites   Subsite[]
   createdAt  DateTime  @default(now())
   updatedAt  DateTime? @updatedAt
 }
 
 model Subsite {
-  id         Int             @id @default(autoincrement())
-  name       String
-  slug       String?
-  subsiteRef String
-  accounts   Account[]
-  config     SubsiteConfig[]
-  createdAt  DateTime        @default(now())
-  updatedAt  DateTime?       @updatedAt
-}
-
-model SubsiteConfig {
-  id             Int       @id @default(autoincrement())
-  name           String
-  logoUrl        String?
-  logoSvg        String?
-  navConfig      String?
-  headerConfig   String?
-  footerConfig   String?
-  siteVisibility String?
-  siteLanguage   String?
-  subsiteId      Int
-  subsite        Subsite   @relation(fields: [subsiteId], references: [id])
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime? @updatedAt
+  id              Int       @id @default(autoincrement())
+  name            String
+  slug            String?
+  subsiteRef      String    @default(cuid())
+  posts           Post[]
+  pages           Page[]
+  logoUrl         String?
+  logoSvg         String?
+  navConfig       String?
+  headerConfig    String?
+  footerConfig    String?
+  siteVisibility  String?
+  siteLanguage    String?
+  domainName      String?
+  domainStatus    String?
+  domainCreatedAt DateTime?
+  account         Account   @relation(fields: [accountId], references: [id])
+  accountId       Int       @unique
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime? @updatedAt
 }
 
 model Post {
-  id            Int        @id @default(autoincrement())
-  title         String     @db.VarChar(255)
-  overview      String     @default("")
-  content       String?
-  slug          String?
-  published     Boolean    @default(false)
-  publishedAt   DateTime?
-  deleted       Boolean    @default(false)
-  author        User       @relation(fields: [authorId], references: [id])
-  authorId      Int
-  categories    Category[]
-  tags          Tag[]
-  accountRef    String     @default("")
-  subsiteRef    String     @default("")
-  contextUserId String     @default("")
-  createdAt     DateTime   @default(now())
-  updatedAt     DateTime?  @updatedAt
+  id          Int           @id @default(autoincrement())
+  title       String        @db.VarChar(255)
+  overview    String        @default("")
+  content     String?
+  slug        String?
+  coverImage  String?
+  status      ContentStatus @default(DRAFT)
+  published   Boolean       @default(false)
+  publishedAt DateTime?
+  deleted     Boolean       @default(false)
+  author      User          @relation(fields: [authorId], references: [id])
+  authorId    Int
+  categories  Category[]
+  tags        Tag[]
+  subsite     Subsite       @relation(fields: [subsiteId], references: [id])
+  subsiteId   Int
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime?     @updatedAt
+}
+
+model Page {
+  id             Int           @id @default(autoincrement())
+  title          String        @db.VarChar(255)
+  overview       String        @default("")
+  content        String?
+  slug           String?
+  status         ContentStatus @default(DRAFT)
+  publishedAt    DateTime?
+  published      Boolean       @default(false)
+  coverImage     String?
+  layoutTemplate String?
+  theme          String?
+  metaData       String?
+  seoSettings    String?
+  analyticsCodes String?
+  showOnNav      Boolean       @default(true)
+  deleted        Boolean       @default(false)
+  author         User          @relation(fields: [authorId], references: [id])
+  authorId       Int
+  categories     Category[]
+  tags           Tag[]
+  subsite        Subsite       @relation(fields: [subsiteId], references: [id])
+  subsiteId      Int
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime?     @updatedAt
 }
 
 model UserProfile {
@@ -162,33 +213,6 @@ model UserContact {
   updatedAt DateTime?       @updatedAt
 }
 
-model User {
-  id            Int          @id @default(autoincrement())
-  email         String       @unique
-  name          String?
-  description   String?
-  token         String?
-  prefix        String?
-  firstName     String?
-  middleName    String?
-  lastName      String?
-  suffix        String?
-  preferredName String?
-  gender        String?
-  birthDate     DateTime?
-  local         String?
-  timeZone      String?
-  lastLoginTime DateTime?
-  contact       UserContact?
-  role          UserRole     @default(USER)
-  posts         Post[]
-  profile       UserProfile?
-  pages         Page[]
-  accounts      Account[]
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime?    @updatedAt
-}
-
 model Category {
   id          Int       @id @default(autoincrement())
   name        String
@@ -209,20 +233,9 @@ model Tag {
   pages       Page[]
 }
 
-model Page {
-  id          Int        @id @default(autoincrement())
-  title       String     @db.VarChar(255)
-  description String?
-  content     String?
-  slug        String?
-  published   Boolean    @default(false)
-  deleted     Boolean    @default(false)
-  author      User       @relation(fields: [authorId], references: [id])
-  authorId    Int
-  categories  Category[]
-  tags        Tag[]
-  accountRef  String     @default("")
-  subsiteRef  String     @default("")
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime?  @updatedAt
+enum ContentStatus {
+  DRAFT
+  PENDING
+  REVIEW
+  PUBLISHED
 }

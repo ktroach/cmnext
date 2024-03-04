@@ -121,6 +121,9 @@ exports.Prisma.SubsiteScalarFieldEnum = {
   name: 'name',
   slug: 'slug',
   subsiteRef: 'subsiteRef',
+  domainName: 'domainName',
+  domainStatus: 'domainStatus',
+  domainCreatedAt: 'domainCreatedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -146,6 +149,8 @@ exports.Prisma.PostScalarFieldEnum = {
   overview: 'overview',
   content: 'content',
   slug: 'slug',
+  coverImage: 'coverImage',
+  status: 'status',
   published: 'published',
   publishedAt: 'publishedAt',
   deleted: 'deleted',
@@ -153,6 +158,30 @@ exports.Prisma.PostScalarFieldEnum = {
   accountRef: 'accountRef',
   subsiteRef: 'subsiteRef',
   contextUserId: 'contextUserId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.PageScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  overview: 'overview',
+  content: 'content',
+  slug: 'slug',
+  status: 'status',
+  publishedAt: 'publishedAt',
+  published: 'published',
+  coverImage: 'coverImage',
+  layoutTemplate: 'layoutTemplate',
+  theme: 'theme',
+  metaData: 'metaData',
+  seoSettings: 'seoSettings',
+  analyticsCodes: 'analyticsCodes',
+  showOnNav: 'showOnNav',
+  deleted: 'deleted',
+  authorId: 'authorId',
+  accountRef: 'accountRef',
+  subsiteRef: 'subsiteRef',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -266,21 +295,6 @@ exports.Prisma.TagScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
-exports.Prisma.PageScalarFieldEnum = {
-  id: 'id',
-  title: 'title',
-  description: 'description',
-  content: 'content',
-  slug: 'slug',
-  published: 'published',
-  deleted: 'deleted',
-  authorId: 'authorId',
-  accountRef: 'accountRef',
-  subsiteRef: 'subsiteRef',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-};
-
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -295,6 +309,13 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
+exports.ContentStatus = exports.$Enums.ContentStatus = {
+  DRAFT: 'DRAFT',
+  PENDING: 'PENDING',
+  REVIEW: 'REVIEW',
+  PUBLISHED: 'PUBLISHED'
+};
+
 exports.UserRole = exports.$Enums.UserRole = {
   USER: 'USER',
   ADMIN: 'ADMIN',
@@ -308,6 +329,7 @@ exports.Prisma.ModelName = {
   Subsite: 'Subsite',
   SubsiteConfig: 'SubsiteConfig',
   Post: 'Post',
+  Page: 'Page',
   UserProfile: 'UserProfile',
   ContactAddress: 'ContactAddress',
   ContactEmail: 'ContactEmail',
@@ -316,8 +338,7 @@ exports.Prisma.ModelName = {
   UserContact: 'UserContact',
   User: 'User',
   Category: 'Category',
-  Tag: 'Tag',
-  Page: 'Page'
+  Tag: 'Tag'
 };
 
 /**

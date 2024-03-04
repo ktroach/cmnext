@@ -13,6 +13,7 @@ export const Wavy = ({
   blur = 10,
   speed = "fast",
   waveOpacity = 0.5,
+  animationTimeoutMs = 2000,
   ...props
 }: {
   children?: any;
@@ -24,6 +25,7 @@ export const Wavy = ({
   blur?: number;
   speed?: "slow" | "fast";
   waveOpacity?: number;
+  animationTimeoutMs?: number;
   [key: string]: any;
 }) => {
   const noise = createNoise3D();
@@ -68,6 +70,7 @@ export const Wavy = ({
     "#e879f9",
     "#22d3ee",
   ];
+
   const drawWave = (n: number) => {
     nt += getSpeed();
     for (i = 0; i < n; i++) {
@@ -84,11 +87,12 @@ export const Wavy = ({
   };
 
   let animationId: number;
+
   const render = () => {
     ctx.fillStyle = backgroundFill || "black";
     ctx.globalAlpha = waveOpacity || 0.5;
     ctx.fillRect(0, 0, w, h);
-    drawWave(5);
+    drawWave(10);
     animationId = requestAnimationFrame(render);
   };
 
@@ -99,6 +103,11 @@ export const Wavy = ({
     };
   }, []);
 
+  let timedOut = false
+  setTimeout(() => {
+    timedOut = true
+  }, animationTimeoutMs)
+
   return (
     <div
       className={cn(
@@ -106,11 +115,15 @@ export const Wavy = ({
         containerClassName
       )}
     >
-      <canvas
+      {timedOut ? (<></>) : 
+      (
+        <canvas
         className="absolute inset-0 z-0"
         ref={canvasRef}
         id="canvas"
       ></canvas>
+      )}
+
       <div className={cn("relative z-1", className)} {...props}>
         {children}
       </div>

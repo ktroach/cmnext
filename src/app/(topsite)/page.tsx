@@ -6,7 +6,7 @@ import { ContentSection } from '@/components/containers/content-section'
 import { Sparkles } from '@/components/animations/sparkles'
 import { Wavy } from '@/components/animations/wavy'
 import { TextGenerator } from '@/components/animations/text-generator'
-import { FeaturedItems } from '@/components/templates/featured-items'
+import { FeaturedPosts, FeaturedSites } from '@/components/templates/featured-content'
 
 export default function IndexPage() {
   return (
@@ -41,6 +41,8 @@ export default function IndexPage() {
               blur={0.0}
               backgroundFill="transparent"
               waveOpacity={0.015}
+              waveWidth={2}
+              animationTimeoutMs={4000}
             >
               <Button asChild>
                 <Link href="/product-features" className="mx-[5px]">
@@ -66,7 +68,7 @@ export default function IndexPage() {
           linkText="View all Blogs"
           className="pt-8 md:pt-10 lg:pt-12"
         >
-          <FeaturedItems dataEntity="posts" />
+          <FeaturedPosts takeLimit={4} />
         </ContentSection>
         <ContentSection
           title="Featured Sites"
@@ -75,7 +77,7 @@ export default function IndexPage() {
           linkText="View all Sites"
           className="py-8 md:py-10 lg:py-12"
         >
-          <FeaturedItems dataEntity="sites" />
+          <FeaturedSites takeLimit={4} />
         </ContentSection>
       </Block>
     </>

@@ -62,6 +62,13 @@ bunx prisma migrate dev --name init
 ```
 bunx prisma generate
 ```
+
+Note: after running generate, be sure to update your db script imports to point the generated client location. 
+```
+import { PrismaClient } from '../../src/db/generated/client'
+```
+
+
 <sub><sub>Note: running migrations will automagically re-generate the Prisma client</sub></sub>
 
 > No change required, but note the tRPC server depends on the Prisma Generated Client 
@@ -159,6 +166,12 @@ bunx prisma migrate reset
 ```
 bunx prisma db seed
 ```
+
+### Running DB Scripts:
+```
+bunx tsx ./src/db/scripts/create-user-account.ts
+```
+
 
 </details>   
 

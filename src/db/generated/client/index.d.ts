@@ -34,6 +34,11 @@ export type SubsiteConfig = $Result.DefaultSelection<Prisma.$SubsiteConfigPayloa
  */
 export type Post = $Result.DefaultSelection<Prisma.$PostPayload>
 /**
+ * Model Page
+ * 
+ */
+export type Page = $Result.DefaultSelection<Prisma.$PagePayload>
+/**
  * Model UserProfile
  * 
  */
@@ -78,17 +83,22 @@ export type Category = $Result.DefaultSelection<Prisma.$CategoryPayload>
  * 
  */
 export type Tag = $Result.DefaultSelection<Prisma.$TagPayload>
-/**
- * Model Page
- * 
- */
-export type Page = $Result.DefaultSelection<Prisma.$PagePayload>
 
 /**
  * Enums
  */
 export namespace $Enums {
-  export const UserRole: {
+  export const ContentStatus: {
+  DRAFT: 'DRAFT',
+  PENDING: 'PENDING',
+  REVIEW: 'REVIEW',
+  PUBLISHED: 'PUBLISHED'
+};
+
+export type ContentStatus = (typeof ContentStatus)[keyof typeof ContentStatus]
+
+
+export const UserRole: {
   USER: 'USER',
   ADMIN: 'ADMIN',
   AUTHOR: 'AUTHOR',
@@ -99,6 +109,10 @@ export namespace $Enums {
 export type UserRole = (typeof UserRole)[keyof typeof UserRole]
 
 }
+
+export type ContentStatus = $Enums.ContentStatus
+
+export const ContentStatus: typeof $Enums.ContentStatus
 
 export type UserRole = $Enums.UserRole
 
@@ -267,6 +281,16 @@ export class PrismaClient<
   get post(): Prisma.PostDelegate<ExtArgs>;
 
   /**
+   * `prisma.page`: Exposes CRUD operations for the **Page** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Pages
+    * const pages = await prisma.page.findMany()
+    * ```
+    */
+  get page(): Prisma.PageDelegate<ExtArgs>;
+
+  /**
    * `prisma.userProfile`: Exposes CRUD operations for the **UserProfile** model.
     * Example usage:
     * ```ts
@@ -355,16 +379,6 @@ export class PrismaClient<
     * ```
     */
   get tag(): Prisma.TagDelegate<ExtArgs>;
-
-  /**
-   * `prisma.page`: Exposes CRUD operations for the **Page** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more Pages
-    * const pages = await prisma.page.findMany()
-    * ```
-    */
-  get page(): Prisma.PageDelegate<ExtArgs>;
 }
 
 export namespace Prisma {
@@ -839,6 +853,7 @@ export namespace Prisma {
     Subsite: 'Subsite',
     SubsiteConfig: 'SubsiteConfig',
     Post: 'Post',
+    Page: 'Page',
     UserProfile: 'UserProfile',
     ContactAddress: 'ContactAddress',
     ContactEmail: 'ContactEmail',
@@ -847,8 +862,7 @@ export namespace Prisma {
     UserContact: 'UserContact',
     User: 'User',
     Category: 'Category',
-    Tag: 'Tag',
-    Page: 'Page'
+    Tag: 'Tag'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -865,7 +879,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     meta: {
-      modelProps: 'account' | 'subsite' | 'subsiteConfig' | 'post' | 'userProfile' | 'contactAddress' | 'contactEmail' | 'contactPhone' | 'contactWebsite' | 'userContact' | 'user' | 'category' | 'tag' | 'page'
+      modelProps: 'account' | 'subsite' | 'subsiteConfig' | 'post' | 'page' | 'userProfile' | 'contactAddress' | 'contactEmail' | 'contactPhone' | 'contactWebsite' | 'userContact' | 'user' | 'category' | 'tag'
       txIsolationLevel: Prisma.TransactionIsolationLevel
     },
     model: {
@@ -1130,6 +1144,72 @@ export namespace Prisma {
           count: {
             args: Prisma.PostCountArgs<ExtArgs>,
             result: $Utils.Optional<PostCountAggregateOutputType> | number
+          }
+        }
+      }
+      Page: {
+        payload: Prisma.$PagePayload<ExtArgs>
+        fields: Prisma.PageFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.PageFindUniqueArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$PagePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.PageFindUniqueOrThrowArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$PagePayload>
+          }
+          findFirst: {
+            args: Prisma.PageFindFirstArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$PagePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.PageFindFirstOrThrowArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$PagePayload>
+          }
+          findMany: {
+            args: Prisma.PageFindManyArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$PagePayload>[]
+          }
+          create: {
+            args: Prisma.PageCreateArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$PagePayload>
+          }
+          createMany: {
+            args: Prisma.PageCreateManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          delete: {
+            args: Prisma.PageDeleteArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$PagePayload>
+          }
+          update: {
+            args: Prisma.PageUpdateArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$PagePayload>
+          }
+          deleteMany: {
+            args: Prisma.PageDeleteManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          updateMany: {
+            args: Prisma.PageUpdateManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          upsert: {
+            args: Prisma.PageUpsertArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$PagePayload>
+          }
+          aggregate: {
+            args: Prisma.PageAggregateArgs<ExtArgs>,
+            result: $Utils.Optional<AggregatePage>
+          }
+          groupBy: {
+            args: Prisma.PageGroupByArgs<ExtArgs>,
+            result: $Utils.Optional<PageGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.PageCountArgs<ExtArgs>,
+            result: $Utils.Optional<PageCountAggregateOutputType> | number
           }
         }
       }
@@ -1727,72 +1807,6 @@ export namespace Prisma {
           }
         }
       }
-      Page: {
-        payload: Prisma.$PagePayload<ExtArgs>
-        fields: Prisma.PageFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.PageFindUniqueArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$PagePayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.PageFindUniqueOrThrowArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$PagePayload>
-          }
-          findFirst: {
-            args: Prisma.PageFindFirstArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$PagePayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.PageFindFirstOrThrowArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$PagePayload>
-          }
-          findMany: {
-            args: Prisma.PageFindManyArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$PagePayload>[]
-          }
-          create: {
-            args: Prisma.PageCreateArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$PagePayload>
-          }
-          createMany: {
-            args: Prisma.PageCreateManyArgs<ExtArgs>,
-            result: Prisma.BatchPayload
-          }
-          delete: {
-            args: Prisma.PageDeleteArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$PagePayload>
-          }
-          update: {
-            args: Prisma.PageUpdateArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$PagePayload>
-          }
-          deleteMany: {
-            args: Prisma.PageDeleteManyArgs<ExtArgs>,
-            result: Prisma.BatchPayload
-          }
-          updateMany: {
-            args: Prisma.PageUpdateManyArgs<ExtArgs>,
-            result: Prisma.BatchPayload
-          }
-          upsert: {
-            args: Prisma.PageUpsertArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$PagePayload>
-          }
-          aggregate: {
-            args: Prisma.PageAggregateArgs<ExtArgs>,
-            result: $Utils.Optional<AggregatePage>
-          }
-          groupBy: {
-            args: Prisma.PageGroupByArgs<ExtArgs>,
-            result: $Utils.Optional<PageGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.PageCountArgs<ExtArgs>,
-            result: $Utils.Optional<PageCountAggregateOutputType> | number
-          }
-        }
-      }
     }
   } & {
     other: {
@@ -2080,6 +2094,50 @@ export namespace Prisma {
 
 
   /**
+   * Count Type PageCountOutputType
+   */
+
+  export type PageCountOutputType = {
+    categories: number
+    tags: number
+  }
+
+  export type PageCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    categories?: boolean | PageCountOutputTypeCountCategoriesArgs
+    tags?: boolean | PageCountOutputTypeCountTagsArgs
+  }
+
+  // Custom InputTypes
+
+  /**
+   * PageCountOutputType without action
+   */
+  export type PageCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PageCountOutputType
+     */
+    select?: PageCountOutputTypeSelect<ExtArgs> | null
+  }
+
+
+  /**
+   * PageCountOutputType without action
+   */
+  export type PageCountOutputTypeCountCategoriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CategoryWhereInput
+  }
+
+
+  /**
+   * PageCountOutputType without action
+   */
+  export type PageCountOutputTypeCountTagsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: TagWhereInput
+  }
+
+
+
+  /**
    * Count Type UserCountOutputType
    */
 
@@ -2217,50 +2275,6 @@ export namespace Prisma {
    */
   export type TagCountOutputTypeCountPagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: PageWhereInput
-  }
-
-
-
-  /**
-   * Count Type PageCountOutputType
-   */
-
-  export type PageCountOutputType = {
-    categories: number
-    tags: number
-  }
-
-  export type PageCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    categories?: boolean | PageCountOutputTypeCountCategoriesArgs
-    tags?: boolean | PageCountOutputTypeCountTagsArgs
-  }
-
-  // Custom InputTypes
-
-  /**
-   * PageCountOutputType without action
-   */
-  export type PageCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the PageCountOutputType
-     */
-    select?: PageCountOutputTypeSelect<ExtArgs> | null
-  }
-
-
-  /**
-   * PageCountOutputType without action
-   */
-  export type PageCountOutputTypeCountCategoriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: CategoryWhereInput
-  }
-
-
-  /**
-   * PageCountOutputType without action
-   */
-  export type PageCountOutputTypeCountTagsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: TagWhereInput
   }
 
 
@@ -3306,6 +3320,9 @@ export namespace Prisma {
     name: string | null
     slug: string | null
     subsiteRef: string | null
+    domainName: string | null
+    domainStatus: string | null
+    domainCreatedAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -3315,6 +3332,9 @@ export namespace Prisma {
     name: string | null
     slug: string | null
     subsiteRef: string | null
+    domainName: string | null
+    domainStatus: string | null
+    domainCreatedAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -3324,6 +3344,9 @@ export namespace Prisma {
     name: number
     slug: number
     subsiteRef: number
+    domainName: number
+    domainStatus: number
+    domainCreatedAt: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -3343,6 +3366,9 @@ export namespace Prisma {
     name?: true
     slug?: true
     subsiteRef?: true
+    domainName?: true
+    domainStatus?: true
+    domainCreatedAt?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -3352,6 +3378,9 @@ export namespace Prisma {
     name?: true
     slug?: true
     subsiteRef?: true
+    domainName?: true
+    domainStatus?: true
+    domainCreatedAt?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -3361,6 +3390,9 @@ export namespace Prisma {
     name?: true
     slug?: true
     subsiteRef?: true
+    domainName?: true
+    domainStatus?: true
+    domainCreatedAt?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -3457,6 +3489,9 @@ export namespace Prisma {
     name: string
     slug: string | null
     subsiteRef: string
+    domainName: string | null
+    domainStatus: string | null
+    domainCreatedAt: Date | null
     createdAt: Date
     updatedAt: Date | null
     _count: SubsiteCountAggregateOutputType | null
@@ -3485,6 +3520,9 @@ export namespace Prisma {
     name?: boolean
     slug?: boolean
     subsiteRef?: boolean
+    domainName?: boolean
+    domainStatus?: boolean
+    domainCreatedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     accounts?: boolean | Subsite$accountsArgs<ExtArgs>
@@ -3497,6 +3535,9 @@ export namespace Prisma {
     name?: boolean
     slug?: boolean
     subsiteRef?: boolean
+    domainName?: boolean
+    domainStatus?: boolean
+    domainCreatedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
@@ -3519,6 +3560,9 @@ export namespace Prisma {
       name: string
       slug: string | null
       subsiteRef: string
+      domainName: string | null
+      domainStatus: string | null
+      domainCreatedAt: Date | null
       createdAt: Date
       updatedAt: Date | null
     }, ExtArgs["result"]["subsite"]>
@@ -3922,6 +3966,9 @@ export namespace Prisma {
     readonly name: FieldRef<"Subsite", 'String'>
     readonly slug: FieldRef<"Subsite", 'String'>
     readonly subsiteRef: FieldRef<"Subsite", 'String'>
+    readonly domainName: FieldRef<"Subsite", 'String'>
+    readonly domainStatus: FieldRef<"Subsite", 'String'>
+    readonly domainCreatedAt: FieldRef<"Subsite", 'DateTime'>
     readonly createdAt: FieldRef<"Subsite", 'DateTime'>
     readonly updatedAt: FieldRef<"Subsite", 'DateTime'>
   }
@@ -5354,6 +5401,8 @@ export namespace Prisma {
     overview: string | null
     content: string | null
     slug: string | null
+    coverImage: string | null
+    status: $Enums.ContentStatus | null
     published: boolean | null
     publishedAt: Date | null
     deleted: boolean | null
@@ -5371,6 +5420,8 @@ export namespace Prisma {
     overview: string | null
     content: string | null
     slug: string | null
+    coverImage: string | null
+    status: $Enums.ContentStatus | null
     published: boolean | null
     publishedAt: Date | null
     deleted: boolean | null
@@ -5388,6 +5439,8 @@ export namespace Prisma {
     overview: number
     content: number
     slug: number
+    coverImage: number
+    status: number
     published: number
     publishedAt: number
     deleted: number
@@ -5417,6 +5470,8 @@ export namespace Prisma {
     overview?: true
     content?: true
     slug?: true
+    coverImage?: true
+    status?: true
     published?: true
     publishedAt?: true
     deleted?: true
@@ -5434,6 +5489,8 @@ export namespace Prisma {
     overview?: true
     content?: true
     slug?: true
+    coverImage?: true
+    status?: true
     published?: true
     publishedAt?: true
     deleted?: true
@@ -5451,6 +5508,8 @@ export namespace Prisma {
     overview?: true
     content?: true
     slug?: true
+    coverImage?: true
+    status?: true
     published?: true
     publishedAt?: true
     deleted?: true
@@ -5555,6 +5614,8 @@ export namespace Prisma {
     overview: string
     content: string | null
     slug: string | null
+    coverImage: string | null
+    status: $Enums.ContentStatus
     published: boolean
     publishedAt: Date | null
     deleted: boolean
@@ -5591,6 +5652,8 @@ export namespace Prisma {
     overview?: boolean
     content?: boolean
     slug?: boolean
+    coverImage?: boolean
+    status?: boolean
     published?: boolean
     publishedAt?: boolean
     deleted?: boolean
@@ -5612,6 +5675,8 @@ export namespace Prisma {
     overview?: boolean
     content?: boolean
     slug?: boolean
+    coverImage?: boolean
+    status?: boolean
     published?: boolean
     publishedAt?: boolean
     deleted?: boolean
@@ -5644,6 +5709,8 @@ export namespace Prisma {
       overview: string
       content: string | null
       slug: string | null
+      coverImage: string | null
+      status: $Enums.ContentStatus
       published: boolean
       publishedAt: Date | null
       deleted: boolean
@@ -6057,6 +6124,8 @@ export namespace Prisma {
     readonly overview: FieldRef<"Post", 'String'>
     readonly content: FieldRef<"Post", 'String'>
     readonly slug: FieldRef<"Post", 'String'>
+    readonly coverImage: FieldRef<"Post", 'String'>
+    readonly status: FieldRef<"Post", 'ContentStatus'>
     readonly published: FieldRef<"Post", 'Boolean'>
     readonly publishedAt: FieldRef<"Post", 'DateTime'>
     readonly deleted: FieldRef<"Post", 'Boolean'>
@@ -6431,6 +6500,1192 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well.
      */
     include?: PostInclude<ExtArgs> | null
+  }
+
+
+
+  /**
+   * Model Page
+   */
+
+  export type AggregatePage = {
+    _count: PageCountAggregateOutputType | null
+    _avg: PageAvgAggregateOutputType | null
+    _sum: PageSumAggregateOutputType | null
+    _min: PageMinAggregateOutputType | null
+    _max: PageMaxAggregateOutputType | null
+  }
+
+  export type PageAvgAggregateOutputType = {
+    id: number | null
+    authorId: number | null
+  }
+
+  export type PageSumAggregateOutputType = {
+    id: number | null
+    authorId: number | null
+  }
+
+  export type PageMinAggregateOutputType = {
+    id: number | null
+    title: string | null
+    overview: string | null
+    content: string | null
+    slug: string | null
+    status: $Enums.ContentStatus | null
+    publishedAt: Date | null
+    published: boolean | null
+    coverImage: string | null
+    layoutTemplate: string | null
+    theme: string | null
+    metaData: string | null
+    seoSettings: string | null
+    analyticsCodes: string | null
+    showOnNav: boolean | null
+    deleted: boolean | null
+    authorId: number | null
+    accountRef: string | null
+    subsiteRef: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type PageMaxAggregateOutputType = {
+    id: number | null
+    title: string | null
+    overview: string | null
+    content: string | null
+    slug: string | null
+    status: $Enums.ContentStatus | null
+    publishedAt: Date | null
+    published: boolean | null
+    coverImage: string | null
+    layoutTemplate: string | null
+    theme: string | null
+    metaData: string | null
+    seoSettings: string | null
+    analyticsCodes: string | null
+    showOnNav: boolean | null
+    deleted: boolean | null
+    authorId: number | null
+    accountRef: string | null
+    subsiteRef: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type PageCountAggregateOutputType = {
+    id: number
+    title: number
+    overview: number
+    content: number
+    slug: number
+    status: number
+    publishedAt: number
+    published: number
+    coverImage: number
+    layoutTemplate: number
+    theme: number
+    metaData: number
+    seoSettings: number
+    analyticsCodes: number
+    showOnNav: number
+    deleted: number
+    authorId: number
+    accountRef: number
+    subsiteRef: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type PageAvgAggregateInputType = {
+    id?: true
+    authorId?: true
+  }
+
+  export type PageSumAggregateInputType = {
+    id?: true
+    authorId?: true
+  }
+
+  export type PageMinAggregateInputType = {
+    id?: true
+    title?: true
+    overview?: true
+    content?: true
+    slug?: true
+    status?: true
+    publishedAt?: true
+    published?: true
+    coverImage?: true
+    layoutTemplate?: true
+    theme?: true
+    metaData?: true
+    seoSettings?: true
+    analyticsCodes?: true
+    showOnNav?: true
+    deleted?: true
+    authorId?: true
+    accountRef?: true
+    subsiteRef?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type PageMaxAggregateInputType = {
+    id?: true
+    title?: true
+    overview?: true
+    content?: true
+    slug?: true
+    status?: true
+    publishedAt?: true
+    published?: true
+    coverImage?: true
+    layoutTemplate?: true
+    theme?: true
+    metaData?: true
+    seoSettings?: true
+    analyticsCodes?: true
+    showOnNav?: true
+    deleted?: true
+    authorId?: true
+    accountRef?: true
+    subsiteRef?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type PageCountAggregateInputType = {
+    id?: true
+    title?: true
+    overview?: true
+    content?: true
+    slug?: true
+    status?: true
+    publishedAt?: true
+    published?: true
+    coverImage?: true
+    layoutTemplate?: true
+    theme?: true
+    metaData?: true
+    seoSettings?: true
+    analyticsCodes?: true
+    showOnNav?: true
+    deleted?: true
+    authorId?: true
+    accountRef?: true
+    subsiteRef?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type PageAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Page to aggregate.
+     */
+    where?: PageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Pages to fetch.
+     */
+    orderBy?: PageOrderByWithRelationInput | PageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: PageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Pages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Pages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Pages
+    **/
+    _count?: true | PageCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: PageAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: PageSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: PageMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: PageMaxAggregateInputType
+  }
+
+  export type GetPageAggregateType<T extends PageAggregateArgs> = {
+        [P in keyof T & keyof AggregatePage]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePage[P]>
+      : GetScalarType<T[P], AggregatePage[P]>
+  }
+
+
+
+
+  export type PageGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PageWhereInput
+    orderBy?: PageOrderByWithAggregationInput | PageOrderByWithAggregationInput[]
+    by: PageScalarFieldEnum[] | PageScalarFieldEnum
+    having?: PageScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: PageCountAggregateInputType | true
+    _avg?: PageAvgAggregateInputType
+    _sum?: PageSumAggregateInputType
+    _min?: PageMinAggregateInputType
+    _max?: PageMaxAggregateInputType
+  }
+
+  export type PageGroupByOutputType = {
+    id: number
+    title: string
+    overview: string
+    content: string | null
+    slug: string | null
+    status: $Enums.ContentStatus
+    publishedAt: Date | null
+    published: boolean
+    coverImage: string | null
+    layoutTemplate: string | null
+    theme: string | null
+    metaData: string | null
+    seoSettings: string | null
+    analyticsCodes: string | null
+    showOnNav: boolean
+    deleted: boolean
+    authorId: number
+    accountRef: string
+    subsiteRef: string
+    createdAt: Date
+    updatedAt: Date | null
+    _count: PageCountAggregateOutputType | null
+    _avg: PageAvgAggregateOutputType | null
+    _sum: PageSumAggregateOutputType | null
+    _min: PageMinAggregateOutputType | null
+    _max: PageMaxAggregateOutputType | null
+  }
+
+  type GetPageGroupByPayload<T extends PageGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<PageGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof PageGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], PageGroupByOutputType[P]>
+            : GetScalarType<T[P], PageGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type PageSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    title?: boolean
+    overview?: boolean
+    content?: boolean
+    slug?: boolean
+    status?: boolean
+    publishedAt?: boolean
+    published?: boolean
+    coverImage?: boolean
+    layoutTemplate?: boolean
+    theme?: boolean
+    metaData?: boolean
+    seoSettings?: boolean
+    analyticsCodes?: boolean
+    showOnNav?: boolean
+    deleted?: boolean
+    authorId?: boolean
+    accountRef?: boolean
+    subsiteRef?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    author?: boolean | UserDefaultArgs<ExtArgs>
+    categories?: boolean | Page$categoriesArgs<ExtArgs>
+    tags?: boolean | Page$tagsArgs<ExtArgs>
+    _count?: boolean | PageCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["page"]>
+
+  export type PageSelectScalar = {
+    id?: boolean
+    title?: boolean
+    overview?: boolean
+    content?: boolean
+    slug?: boolean
+    status?: boolean
+    publishedAt?: boolean
+    published?: boolean
+    coverImage?: boolean
+    layoutTemplate?: boolean
+    theme?: boolean
+    metaData?: boolean
+    seoSettings?: boolean
+    analyticsCodes?: boolean
+    showOnNav?: boolean
+    deleted?: boolean
+    authorId?: boolean
+    accountRef?: boolean
+    subsiteRef?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type PageInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    author?: boolean | UserDefaultArgs<ExtArgs>
+    categories?: boolean | Page$categoriesArgs<ExtArgs>
+    tags?: boolean | Page$tagsArgs<ExtArgs>
+    _count?: boolean | PageCountOutputTypeDefaultArgs<ExtArgs>
+  }
+
+
+  export type $PagePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Page"
+    objects: {
+      author: Prisma.$UserPayload<ExtArgs>
+      categories: Prisma.$CategoryPayload<ExtArgs>[]
+      tags: Prisma.$TagPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      title: string
+      overview: string
+      content: string | null
+      slug: string | null
+      status: $Enums.ContentStatus
+      publishedAt: Date | null
+      published: boolean
+      coverImage: string | null
+      layoutTemplate: string | null
+      theme: string | null
+      metaData: string | null
+      seoSettings: string | null
+      analyticsCodes: string | null
+      showOnNav: boolean
+      deleted: boolean
+      authorId: number
+      accountRef: string
+      subsiteRef: string
+      createdAt: Date
+      updatedAt: Date | null
+    }, ExtArgs["result"]["page"]>
+    composites: {}
+  }
+
+
+  type PageGetPayload<S extends boolean | null | undefined | PageDefaultArgs> = $Result.GetResult<Prisma.$PagePayload, S>
+
+  type PageCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<PageFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: PageCountAggregateInputType | true
+    }
+
+  export interface PageDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Page'], meta: { name: 'Page' } }
+    /**
+     * Find zero or one Page that matches the filter.
+     * @param {PageFindUniqueArgs} args - Arguments to find a Page
+     * @example
+     * // Get one Page
+     * const page = await prisma.page.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUnique<T extends PageFindUniqueArgs<ExtArgs>>(
+      args: SelectSubset<T, PageFindUniqueArgs<ExtArgs>>
+    ): Prisma__PageClient<$Result.GetResult<Prisma.$PagePayload<ExtArgs>, T, 'findUnique'> | null, null, ExtArgs>
+
+    /**
+     * Find one Page that matches the filter or throw an error  with `error.code='P2025'` 
+     *     if no matches were found.
+     * @param {PageFindUniqueOrThrowArgs} args - Arguments to find a Page
+     * @example
+     * // Get one Page
+     * const page = await prisma.page.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUniqueOrThrow<T extends PageFindUniqueOrThrowArgs<ExtArgs>>(
+      args?: SelectSubset<T, PageFindUniqueOrThrowArgs<ExtArgs>>
+    ): Prisma__PageClient<$Result.GetResult<Prisma.$PagePayload<ExtArgs>, T, 'findUniqueOrThrow'>, never, ExtArgs>
+
+    /**
+     * Find the first Page that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PageFindFirstArgs} args - Arguments to find a Page
+     * @example
+     * // Get one Page
+     * const page = await prisma.page.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirst<T extends PageFindFirstArgs<ExtArgs>>(
+      args?: SelectSubset<T, PageFindFirstArgs<ExtArgs>>
+    ): Prisma__PageClient<$Result.GetResult<Prisma.$PagePayload<ExtArgs>, T, 'findFirst'> | null, null, ExtArgs>
+
+    /**
+     * Find the first Page that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PageFindFirstOrThrowArgs} args - Arguments to find a Page
+     * @example
+     * // Get one Page
+     * const page = await prisma.page.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirstOrThrow<T extends PageFindFirstOrThrowArgs<ExtArgs>>(
+      args?: SelectSubset<T, PageFindFirstOrThrowArgs<ExtArgs>>
+    ): Prisma__PageClient<$Result.GetResult<Prisma.$PagePayload<ExtArgs>, T, 'findFirstOrThrow'>, never, ExtArgs>
+
+    /**
+     * Find zero or more Pages that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PageFindManyArgs=} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Pages
+     * const pages = await prisma.page.findMany()
+     * 
+     * // Get first 10 Pages
+     * const pages = await prisma.page.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const pageWithIdOnly = await prisma.page.findMany({ select: { id: true } })
+     * 
+    **/
+    findMany<T extends PageFindManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, PageFindManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PagePayload<ExtArgs>, T, 'findMany'>>
+
+    /**
+     * Create a Page.
+     * @param {PageCreateArgs} args - Arguments to create a Page.
+     * @example
+     * // Create one Page
+     * const Page = await prisma.page.create({
+     *   data: {
+     *     // ... data to create a Page
+     *   }
+     * })
+     * 
+    **/
+    create<T extends PageCreateArgs<ExtArgs>>(
+      args: SelectSubset<T, PageCreateArgs<ExtArgs>>
+    ): Prisma__PageClient<$Result.GetResult<Prisma.$PagePayload<ExtArgs>, T, 'create'>, never, ExtArgs>
+
+    /**
+     * Create many Pages.
+     *     @param {PageCreateManyArgs} args - Arguments to create many Pages.
+     *     @example
+     *     // Create many Pages
+     *     const page = await prisma.page.createMany({
+     *       data: {
+     *         // ... provide data here
+     *       }
+     *     })
+     *     
+    **/
+    createMany<T extends PageCreateManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, PageCreateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a Page.
+     * @param {PageDeleteArgs} args - Arguments to delete one Page.
+     * @example
+     * // Delete one Page
+     * const Page = await prisma.page.delete({
+     *   where: {
+     *     // ... filter to delete one Page
+     *   }
+     * })
+     * 
+    **/
+    delete<T extends PageDeleteArgs<ExtArgs>>(
+      args: SelectSubset<T, PageDeleteArgs<ExtArgs>>
+    ): Prisma__PageClient<$Result.GetResult<Prisma.$PagePayload<ExtArgs>, T, 'delete'>, never, ExtArgs>
+
+    /**
+     * Update one Page.
+     * @param {PageUpdateArgs} args - Arguments to update one Page.
+     * @example
+     * // Update one Page
+     * const page = await prisma.page.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    update<T extends PageUpdateArgs<ExtArgs>>(
+      args: SelectSubset<T, PageUpdateArgs<ExtArgs>>
+    ): Prisma__PageClient<$Result.GetResult<Prisma.$PagePayload<ExtArgs>, T, 'update'>, never, ExtArgs>
+
+    /**
+     * Delete zero or more Pages.
+     * @param {PageDeleteManyArgs} args - Arguments to filter Pages to delete.
+     * @example
+     * // Delete a few Pages
+     * const { count } = await prisma.page.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+    **/
+    deleteMany<T extends PageDeleteManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, PageDeleteManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Pages.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PageUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Pages
+     * const page = await prisma.page.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    updateMany<T extends PageUpdateManyArgs<ExtArgs>>(
+      args: SelectSubset<T, PageUpdateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Page.
+     * @param {PageUpsertArgs} args - Arguments to update or create a Page.
+     * @example
+     * // Update or create a Page
+     * const page = await prisma.page.upsert({
+     *   create: {
+     *     // ... data to create a Page
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Page we want to update
+     *   }
+     * })
+    **/
+    upsert<T extends PageUpsertArgs<ExtArgs>>(
+      args: SelectSubset<T, PageUpsertArgs<ExtArgs>>
+    ): Prisma__PageClient<$Result.GetResult<Prisma.$PagePayload<ExtArgs>, T, 'upsert'>, never, ExtArgs>
+
+    /**
+     * Count the number of Pages.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PageCountArgs} args - Arguments to filter Pages to count.
+     * @example
+     * // Count the number of Pages
+     * const count = await prisma.page.count({
+     *   where: {
+     *     // ... the filter for the Pages we want to count
+     *   }
+     * })
+    **/
+    count<T extends PageCountArgs>(
+      args?: Subset<T, PageCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], PageCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Page.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PageAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends PageAggregateArgs>(args: Subset<T, PageAggregateArgs>): Prisma.PrismaPromise<GetPageAggregateType<T>>
+
+    /**
+     * Group by Page.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PageGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends PageGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: PageGroupByArgs['orderBy'] }
+        : { orderBy?: PageGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, PageGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPageGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Page model
+   */
+  readonly fields: PageFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Page.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__PageClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: 'PrismaPromise';
+
+    author<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, 'findUniqueOrThrow'> | Null, Null, ExtArgs>;
+
+    categories<T extends Page$categoriesArgs<ExtArgs> = {}>(args?: Subset<T, Page$categoriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, 'findMany'> | Null>;
+
+    tags<T extends Page$tagsArgs<ExtArgs> = {}>(args?: Subset<T, Page$tagsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TagPayload<ExtArgs>, T, 'findMany'> | Null>;
+
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+  }
+
+
+
+  /**
+   * Fields of the Page model
+   */ 
+  interface PageFieldRefs {
+    readonly id: FieldRef<"Page", 'Int'>
+    readonly title: FieldRef<"Page", 'String'>
+    readonly overview: FieldRef<"Page", 'String'>
+    readonly content: FieldRef<"Page", 'String'>
+    readonly slug: FieldRef<"Page", 'String'>
+    readonly status: FieldRef<"Page", 'ContentStatus'>
+    readonly publishedAt: FieldRef<"Page", 'DateTime'>
+    readonly published: FieldRef<"Page", 'Boolean'>
+    readonly coverImage: FieldRef<"Page", 'String'>
+    readonly layoutTemplate: FieldRef<"Page", 'String'>
+    readonly theme: FieldRef<"Page", 'String'>
+    readonly metaData: FieldRef<"Page", 'String'>
+    readonly seoSettings: FieldRef<"Page", 'String'>
+    readonly analyticsCodes: FieldRef<"Page", 'String'>
+    readonly showOnNav: FieldRef<"Page", 'Boolean'>
+    readonly deleted: FieldRef<"Page", 'Boolean'>
+    readonly authorId: FieldRef<"Page", 'Int'>
+    readonly accountRef: FieldRef<"Page", 'String'>
+    readonly subsiteRef: FieldRef<"Page", 'String'>
+    readonly createdAt: FieldRef<"Page", 'DateTime'>
+    readonly updatedAt: FieldRef<"Page", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+
+  /**
+   * Page findUnique
+   */
+  export type PageFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Page
+     */
+    select?: PageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: PageInclude<ExtArgs> | null
+    /**
+     * Filter, which Page to fetch.
+     */
+    where: PageWhereUniqueInput
+  }
+
+
+  /**
+   * Page findUniqueOrThrow
+   */
+  export type PageFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Page
+     */
+    select?: PageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: PageInclude<ExtArgs> | null
+    /**
+     * Filter, which Page to fetch.
+     */
+    where: PageWhereUniqueInput
+  }
+
+
+  /**
+   * Page findFirst
+   */
+  export type PageFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Page
+     */
+    select?: PageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: PageInclude<ExtArgs> | null
+    /**
+     * Filter, which Page to fetch.
+     */
+    where?: PageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Pages to fetch.
+     */
+    orderBy?: PageOrderByWithRelationInput | PageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Pages.
+     */
+    cursor?: PageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Pages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Pages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Pages.
+     */
+    distinct?: PageScalarFieldEnum | PageScalarFieldEnum[]
+  }
+
+
+  /**
+   * Page findFirstOrThrow
+   */
+  export type PageFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Page
+     */
+    select?: PageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: PageInclude<ExtArgs> | null
+    /**
+     * Filter, which Page to fetch.
+     */
+    where?: PageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Pages to fetch.
+     */
+    orderBy?: PageOrderByWithRelationInput | PageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Pages.
+     */
+    cursor?: PageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Pages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Pages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Pages.
+     */
+    distinct?: PageScalarFieldEnum | PageScalarFieldEnum[]
+  }
+
+
+  /**
+   * Page findMany
+   */
+  export type PageFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Page
+     */
+    select?: PageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: PageInclude<ExtArgs> | null
+    /**
+     * Filter, which Pages to fetch.
+     */
+    where?: PageWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Pages to fetch.
+     */
+    orderBy?: PageOrderByWithRelationInput | PageOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Pages.
+     */
+    cursor?: PageWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Pages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Pages.
+     */
+    skip?: number
+    distinct?: PageScalarFieldEnum | PageScalarFieldEnum[]
+  }
+
+
+  /**
+   * Page create
+   */
+  export type PageCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Page
+     */
+    select?: PageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: PageInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Page.
+     */
+    data: XOR<PageCreateInput, PageUncheckedCreateInput>
+  }
+
+
+  /**
+   * Page createMany
+   */
+  export type PageCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Pages.
+     */
+    data: PageCreateManyInput | PageCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+
+  /**
+   * Page update
+   */
+  export type PageUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Page
+     */
+    select?: PageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: PageInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Page.
+     */
+    data: XOR<PageUpdateInput, PageUncheckedUpdateInput>
+    /**
+     * Choose, which Page to update.
+     */
+    where: PageWhereUniqueInput
+  }
+
+
+  /**
+   * Page updateMany
+   */
+  export type PageUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Pages.
+     */
+    data: XOR<PageUpdateManyMutationInput, PageUncheckedUpdateManyInput>
+    /**
+     * Filter which Pages to update
+     */
+    where?: PageWhereInput
+  }
+
+
+  /**
+   * Page upsert
+   */
+  export type PageUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Page
+     */
+    select?: PageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: PageInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Page to update in case it exists.
+     */
+    where: PageWhereUniqueInput
+    /**
+     * In case the Page found by the `where` argument doesn't exist, create a new Page with this data.
+     */
+    create: XOR<PageCreateInput, PageUncheckedCreateInput>
+    /**
+     * In case the Page was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PageUpdateInput, PageUncheckedUpdateInput>
+  }
+
+
+  /**
+   * Page delete
+   */
+  export type PageDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Page
+     */
+    select?: PageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: PageInclude<ExtArgs> | null
+    /**
+     * Filter which Page to delete.
+     */
+    where: PageWhereUniqueInput
+  }
+
+
+  /**
+   * Page deleteMany
+   */
+  export type PageDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Pages to delete
+     */
+    where?: PageWhereInput
+  }
+
+
+  /**
+   * Page.categories
+   */
+  export type Page$categoriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Category
+     */
+    select?: CategorySelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: CategoryInclude<ExtArgs> | null
+    where?: CategoryWhereInput
+    orderBy?: CategoryOrderByWithRelationInput | CategoryOrderByWithRelationInput[]
+    cursor?: CategoryWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CategoryScalarFieldEnum | CategoryScalarFieldEnum[]
+  }
+
+
+  /**
+   * Page.tags
+   */
+  export type Page$tagsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Tag
+     */
+    select?: TagSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: TagInclude<ExtArgs> | null
+    where?: TagWhereInput
+    orderBy?: TagOrderByWithRelationInput | TagOrderByWithRelationInput[]
+    cursor?: TagWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: TagScalarFieldEnum | TagScalarFieldEnum[]
+  }
+
+
+  /**
+   * Page without action
+   */
+  export type PageDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Page
+     */
+    select?: PageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: PageInclude<ExtArgs> | null
   }
 
 
@@ -15734,1093 +16989,6 @@ export namespace Prisma {
 
 
   /**
-   * Model Page
-   */
-
-  export type AggregatePage = {
-    _count: PageCountAggregateOutputType | null
-    _avg: PageAvgAggregateOutputType | null
-    _sum: PageSumAggregateOutputType | null
-    _min: PageMinAggregateOutputType | null
-    _max: PageMaxAggregateOutputType | null
-  }
-
-  export type PageAvgAggregateOutputType = {
-    id: number | null
-    authorId: number | null
-  }
-
-  export type PageSumAggregateOutputType = {
-    id: number | null
-    authorId: number | null
-  }
-
-  export type PageMinAggregateOutputType = {
-    id: number | null
-    title: string | null
-    description: string | null
-    content: string | null
-    slug: string | null
-    published: boolean | null
-    deleted: boolean | null
-    authorId: number | null
-    accountRef: string | null
-    subsiteRef: string | null
-    createdAt: Date | null
-    updatedAt: Date | null
-  }
-
-  export type PageMaxAggregateOutputType = {
-    id: number | null
-    title: string | null
-    description: string | null
-    content: string | null
-    slug: string | null
-    published: boolean | null
-    deleted: boolean | null
-    authorId: number | null
-    accountRef: string | null
-    subsiteRef: string | null
-    createdAt: Date | null
-    updatedAt: Date | null
-  }
-
-  export type PageCountAggregateOutputType = {
-    id: number
-    title: number
-    description: number
-    content: number
-    slug: number
-    published: number
-    deleted: number
-    authorId: number
-    accountRef: number
-    subsiteRef: number
-    createdAt: number
-    updatedAt: number
-    _all: number
-  }
-
-
-  export type PageAvgAggregateInputType = {
-    id?: true
-    authorId?: true
-  }
-
-  export type PageSumAggregateInputType = {
-    id?: true
-    authorId?: true
-  }
-
-  export type PageMinAggregateInputType = {
-    id?: true
-    title?: true
-    description?: true
-    content?: true
-    slug?: true
-    published?: true
-    deleted?: true
-    authorId?: true
-    accountRef?: true
-    subsiteRef?: true
-    createdAt?: true
-    updatedAt?: true
-  }
-
-  export type PageMaxAggregateInputType = {
-    id?: true
-    title?: true
-    description?: true
-    content?: true
-    slug?: true
-    published?: true
-    deleted?: true
-    authorId?: true
-    accountRef?: true
-    subsiteRef?: true
-    createdAt?: true
-    updatedAt?: true
-  }
-
-  export type PageCountAggregateInputType = {
-    id?: true
-    title?: true
-    description?: true
-    content?: true
-    slug?: true
-    published?: true
-    deleted?: true
-    authorId?: true
-    accountRef?: true
-    subsiteRef?: true
-    createdAt?: true
-    updatedAt?: true
-    _all?: true
-  }
-
-  export type PageAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which Page to aggregate.
-     */
-    where?: PageWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Pages to fetch.
-     */
-    orderBy?: PageOrderByWithRelationInput | PageOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: PageWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Pages from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Pages.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned Pages
-    **/
-    _count?: true | PageCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to average
-    **/
-    _avg?: PageAvgAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to sum
-    **/
-    _sum?: PageSumAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: PageMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: PageMaxAggregateInputType
-  }
-
-  export type GetPageAggregateType<T extends PageAggregateArgs> = {
-        [P in keyof T & keyof AggregatePage]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregatePage[P]>
-      : GetScalarType<T[P], AggregatePage[P]>
-  }
-
-
-
-
-  export type PageGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: PageWhereInput
-    orderBy?: PageOrderByWithAggregationInput | PageOrderByWithAggregationInput[]
-    by: PageScalarFieldEnum[] | PageScalarFieldEnum
-    having?: PageScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: PageCountAggregateInputType | true
-    _avg?: PageAvgAggregateInputType
-    _sum?: PageSumAggregateInputType
-    _min?: PageMinAggregateInputType
-    _max?: PageMaxAggregateInputType
-  }
-
-  export type PageGroupByOutputType = {
-    id: number
-    title: string
-    description: string | null
-    content: string | null
-    slug: string | null
-    published: boolean
-    deleted: boolean
-    authorId: number
-    accountRef: string
-    subsiteRef: string
-    createdAt: Date
-    updatedAt: Date | null
-    _count: PageCountAggregateOutputType | null
-    _avg: PageAvgAggregateOutputType | null
-    _sum: PageSumAggregateOutputType | null
-    _min: PageMinAggregateOutputType | null
-    _max: PageMaxAggregateOutputType | null
-  }
-
-  type GetPageGroupByPayload<T extends PageGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<PageGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof PageGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], PageGroupByOutputType[P]>
-            : GetScalarType<T[P], PageGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type PageSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    title?: boolean
-    description?: boolean
-    content?: boolean
-    slug?: boolean
-    published?: boolean
-    deleted?: boolean
-    authorId?: boolean
-    accountRef?: boolean
-    subsiteRef?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-    author?: boolean | UserDefaultArgs<ExtArgs>
-    categories?: boolean | Page$categoriesArgs<ExtArgs>
-    tags?: boolean | Page$tagsArgs<ExtArgs>
-    _count?: boolean | PageCountOutputTypeDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["page"]>
-
-  export type PageSelectScalar = {
-    id?: boolean
-    title?: boolean
-    description?: boolean
-    content?: boolean
-    slug?: boolean
-    published?: boolean
-    deleted?: boolean
-    authorId?: boolean
-    accountRef?: boolean
-    subsiteRef?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-  }
-
-  export type PageInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    author?: boolean | UserDefaultArgs<ExtArgs>
-    categories?: boolean | Page$categoriesArgs<ExtArgs>
-    tags?: boolean | Page$tagsArgs<ExtArgs>
-    _count?: boolean | PageCountOutputTypeDefaultArgs<ExtArgs>
-  }
-
-
-  export type $PagePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "Page"
-    objects: {
-      author: Prisma.$UserPayload<ExtArgs>
-      categories: Prisma.$CategoryPayload<ExtArgs>[]
-      tags: Prisma.$TagPayload<ExtArgs>[]
-    }
-    scalars: $Extensions.GetPayloadResult<{
-      id: number
-      title: string
-      description: string | null
-      content: string | null
-      slug: string | null
-      published: boolean
-      deleted: boolean
-      authorId: number
-      accountRef: string
-      subsiteRef: string
-      createdAt: Date
-      updatedAt: Date | null
-    }, ExtArgs["result"]["page"]>
-    composites: {}
-  }
-
-
-  type PageGetPayload<S extends boolean | null | undefined | PageDefaultArgs> = $Result.GetResult<Prisma.$PagePayload, S>
-
-  type PageCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
-    Omit<PageFindManyArgs, 'select' | 'include' | 'distinct'> & {
-      select?: PageCountAggregateInputType | true
-    }
-
-  export interface PageDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Page'], meta: { name: 'Page' } }
-    /**
-     * Find zero or one Page that matches the filter.
-     * @param {PageFindUniqueArgs} args - Arguments to find a Page
-     * @example
-     * // Get one Page
-     * const page = await prisma.page.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-    **/
-    findUnique<T extends PageFindUniqueArgs<ExtArgs>>(
-      args: SelectSubset<T, PageFindUniqueArgs<ExtArgs>>
-    ): Prisma__PageClient<$Result.GetResult<Prisma.$PagePayload<ExtArgs>, T, 'findUnique'> | null, null, ExtArgs>
-
-    /**
-     * Find one Page that matches the filter or throw an error  with `error.code='P2025'` 
-     *     if no matches were found.
-     * @param {PageFindUniqueOrThrowArgs} args - Arguments to find a Page
-     * @example
-     * // Get one Page
-     * const page = await prisma.page.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-    **/
-    findUniqueOrThrow<T extends PageFindUniqueOrThrowArgs<ExtArgs>>(
-      args?: SelectSubset<T, PageFindUniqueOrThrowArgs<ExtArgs>>
-    ): Prisma__PageClient<$Result.GetResult<Prisma.$PagePayload<ExtArgs>, T, 'findUniqueOrThrow'>, never, ExtArgs>
-
-    /**
-     * Find the first Page that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {PageFindFirstArgs} args - Arguments to find a Page
-     * @example
-     * // Get one Page
-     * const page = await prisma.page.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-    **/
-    findFirst<T extends PageFindFirstArgs<ExtArgs>>(
-      args?: SelectSubset<T, PageFindFirstArgs<ExtArgs>>
-    ): Prisma__PageClient<$Result.GetResult<Prisma.$PagePayload<ExtArgs>, T, 'findFirst'> | null, null, ExtArgs>
-
-    /**
-     * Find the first Page that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {PageFindFirstOrThrowArgs} args - Arguments to find a Page
-     * @example
-     * // Get one Page
-     * const page = await prisma.page.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-    **/
-    findFirstOrThrow<T extends PageFindFirstOrThrowArgs<ExtArgs>>(
-      args?: SelectSubset<T, PageFindFirstOrThrowArgs<ExtArgs>>
-    ): Prisma__PageClient<$Result.GetResult<Prisma.$PagePayload<ExtArgs>, T, 'findFirstOrThrow'>, never, ExtArgs>
-
-    /**
-     * Find zero or more Pages that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {PageFindManyArgs=} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all Pages
-     * const pages = await prisma.page.findMany()
-     * 
-     * // Get first 10 Pages
-     * const pages = await prisma.page.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const pageWithIdOnly = await prisma.page.findMany({ select: { id: true } })
-     * 
-    **/
-    findMany<T extends PageFindManyArgs<ExtArgs>>(
-      args?: SelectSubset<T, PageFindManyArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PagePayload<ExtArgs>, T, 'findMany'>>
-
-    /**
-     * Create a Page.
-     * @param {PageCreateArgs} args - Arguments to create a Page.
-     * @example
-     * // Create one Page
-     * const Page = await prisma.page.create({
-     *   data: {
-     *     // ... data to create a Page
-     *   }
-     * })
-     * 
-    **/
-    create<T extends PageCreateArgs<ExtArgs>>(
-      args: SelectSubset<T, PageCreateArgs<ExtArgs>>
-    ): Prisma__PageClient<$Result.GetResult<Prisma.$PagePayload<ExtArgs>, T, 'create'>, never, ExtArgs>
-
-    /**
-     * Create many Pages.
-     *     @param {PageCreateManyArgs} args - Arguments to create many Pages.
-     *     @example
-     *     // Create many Pages
-     *     const page = await prisma.page.createMany({
-     *       data: {
-     *         // ... provide data here
-     *       }
-     *     })
-     *     
-    **/
-    createMany<T extends PageCreateManyArgs<ExtArgs>>(
-      args?: SelectSubset<T, PageCreateManyArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Delete a Page.
-     * @param {PageDeleteArgs} args - Arguments to delete one Page.
-     * @example
-     * // Delete one Page
-     * const Page = await prisma.page.delete({
-     *   where: {
-     *     // ... filter to delete one Page
-     *   }
-     * })
-     * 
-    **/
-    delete<T extends PageDeleteArgs<ExtArgs>>(
-      args: SelectSubset<T, PageDeleteArgs<ExtArgs>>
-    ): Prisma__PageClient<$Result.GetResult<Prisma.$PagePayload<ExtArgs>, T, 'delete'>, never, ExtArgs>
-
-    /**
-     * Update one Page.
-     * @param {PageUpdateArgs} args - Arguments to update one Page.
-     * @example
-     * // Update one Page
-     * const page = await prisma.page.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-    **/
-    update<T extends PageUpdateArgs<ExtArgs>>(
-      args: SelectSubset<T, PageUpdateArgs<ExtArgs>>
-    ): Prisma__PageClient<$Result.GetResult<Prisma.$PagePayload<ExtArgs>, T, 'update'>, never, ExtArgs>
-
-    /**
-     * Delete zero or more Pages.
-     * @param {PageDeleteManyArgs} args - Arguments to filter Pages to delete.
-     * @example
-     * // Delete a few Pages
-     * const { count } = await prisma.page.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-    **/
-    deleteMany<T extends PageDeleteManyArgs<ExtArgs>>(
-      args?: SelectSubset<T, PageDeleteManyArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Pages.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {PageUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many Pages
-     * const page = await prisma.page.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-    **/
-    updateMany<T extends PageUpdateManyArgs<ExtArgs>>(
-      args: SelectSubset<T, PageUpdateManyArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create or update one Page.
-     * @param {PageUpsertArgs} args - Arguments to update or create a Page.
-     * @example
-     * // Update or create a Page
-     * const page = await prisma.page.upsert({
-     *   create: {
-     *     // ... data to create a Page
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the Page we want to update
-     *   }
-     * })
-    **/
-    upsert<T extends PageUpsertArgs<ExtArgs>>(
-      args: SelectSubset<T, PageUpsertArgs<ExtArgs>>
-    ): Prisma__PageClient<$Result.GetResult<Prisma.$PagePayload<ExtArgs>, T, 'upsert'>, never, ExtArgs>
-
-    /**
-     * Count the number of Pages.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {PageCountArgs} args - Arguments to filter Pages to count.
-     * @example
-     * // Count the number of Pages
-     * const count = await prisma.page.count({
-     *   where: {
-     *     // ... the filter for the Pages we want to count
-     *   }
-     * })
-    **/
-    count<T extends PageCountArgs>(
-      args?: Subset<T, PageCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], PageCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a Page.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {PageAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends PageAggregateArgs>(args: Subset<T, PageAggregateArgs>): Prisma.PrismaPromise<GetPageAggregateType<T>>
-
-    /**
-     * Group by Page.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {PageGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends PageGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: PageGroupByArgs['orderBy'] }
-        : { orderBy?: PageGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, PageGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPageGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the Page model
-   */
-  readonly fields: PageFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for Page.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__PageClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: 'PrismaPromise';
-
-    author<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, 'findUniqueOrThrow'> | Null, Null, ExtArgs>;
-
-    categories<T extends Page$categoriesArgs<ExtArgs> = {}>(args?: Subset<T, Page$categoriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, 'findMany'> | Null>;
-
-    tags<T extends Page$tagsArgs<ExtArgs> = {}>(args?: Subset<T, Page$tagsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TagPayload<ExtArgs>, T, 'findMany'> | Null>;
-
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>;
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>;
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
-  }
-
-
-
-  /**
-   * Fields of the Page model
-   */ 
-  interface PageFieldRefs {
-    readonly id: FieldRef<"Page", 'Int'>
-    readonly title: FieldRef<"Page", 'String'>
-    readonly description: FieldRef<"Page", 'String'>
-    readonly content: FieldRef<"Page", 'String'>
-    readonly slug: FieldRef<"Page", 'String'>
-    readonly published: FieldRef<"Page", 'Boolean'>
-    readonly deleted: FieldRef<"Page", 'Boolean'>
-    readonly authorId: FieldRef<"Page", 'Int'>
-    readonly accountRef: FieldRef<"Page", 'String'>
-    readonly subsiteRef: FieldRef<"Page", 'String'>
-    readonly createdAt: FieldRef<"Page", 'DateTime'>
-    readonly updatedAt: FieldRef<"Page", 'DateTime'>
-  }
-    
-
-  // Custom InputTypes
-
-  /**
-   * Page findUnique
-   */
-  export type PageFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Page
-     */
-    select?: PageSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: PageInclude<ExtArgs> | null
-    /**
-     * Filter, which Page to fetch.
-     */
-    where: PageWhereUniqueInput
-  }
-
-
-  /**
-   * Page findUniqueOrThrow
-   */
-  export type PageFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Page
-     */
-    select?: PageSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: PageInclude<ExtArgs> | null
-    /**
-     * Filter, which Page to fetch.
-     */
-    where: PageWhereUniqueInput
-  }
-
-
-  /**
-   * Page findFirst
-   */
-  export type PageFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Page
-     */
-    select?: PageSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: PageInclude<ExtArgs> | null
-    /**
-     * Filter, which Page to fetch.
-     */
-    where?: PageWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Pages to fetch.
-     */
-    orderBy?: PageOrderByWithRelationInput | PageOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for Pages.
-     */
-    cursor?: PageWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Pages from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Pages.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Pages.
-     */
-    distinct?: PageScalarFieldEnum | PageScalarFieldEnum[]
-  }
-
-
-  /**
-   * Page findFirstOrThrow
-   */
-  export type PageFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Page
-     */
-    select?: PageSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: PageInclude<ExtArgs> | null
-    /**
-     * Filter, which Page to fetch.
-     */
-    where?: PageWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Pages to fetch.
-     */
-    orderBy?: PageOrderByWithRelationInput | PageOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for Pages.
-     */
-    cursor?: PageWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Pages from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Pages.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Pages.
-     */
-    distinct?: PageScalarFieldEnum | PageScalarFieldEnum[]
-  }
-
-
-  /**
-   * Page findMany
-   */
-  export type PageFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Page
-     */
-    select?: PageSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: PageInclude<ExtArgs> | null
-    /**
-     * Filter, which Pages to fetch.
-     */
-    where?: PageWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Pages to fetch.
-     */
-    orderBy?: PageOrderByWithRelationInput | PageOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing Pages.
-     */
-    cursor?: PageWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Pages from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Pages.
-     */
-    skip?: number
-    distinct?: PageScalarFieldEnum | PageScalarFieldEnum[]
-  }
-
-
-  /**
-   * Page create
-   */
-  export type PageCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Page
-     */
-    select?: PageSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: PageInclude<ExtArgs> | null
-    /**
-     * The data needed to create a Page.
-     */
-    data: XOR<PageCreateInput, PageUncheckedCreateInput>
-  }
-
-
-  /**
-   * Page createMany
-   */
-  export type PageCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many Pages.
-     */
-    data: PageCreateManyInput | PageCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-
-  /**
-   * Page update
-   */
-  export type PageUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Page
-     */
-    select?: PageSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: PageInclude<ExtArgs> | null
-    /**
-     * The data needed to update a Page.
-     */
-    data: XOR<PageUpdateInput, PageUncheckedUpdateInput>
-    /**
-     * Choose, which Page to update.
-     */
-    where: PageWhereUniqueInput
-  }
-
-
-  /**
-   * Page updateMany
-   */
-  export type PageUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update Pages.
-     */
-    data: XOR<PageUpdateManyMutationInput, PageUncheckedUpdateManyInput>
-    /**
-     * Filter which Pages to update
-     */
-    where?: PageWhereInput
-  }
-
-
-  /**
-   * Page upsert
-   */
-  export type PageUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Page
-     */
-    select?: PageSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: PageInclude<ExtArgs> | null
-    /**
-     * The filter to search for the Page to update in case it exists.
-     */
-    where: PageWhereUniqueInput
-    /**
-     * In case the Page found by the `where` argument doesn't exist, create a new Page with this data.
-     */
-    create: XOR<PageCreateInput, PageUncheckedCreateInput>
-    /**
-     * In case the Page was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<PageUpdateInput, PageUncheckedUpdateInput>
-  }
-
-
-  /**
-   * Page delete
-   */
-  export type PageDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Page
-     */
-    select?: PageSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: PageInclude<ExtArgs> | null
-    /**
-     * Filter which Page to delete.
-     */
-    where: PageWhereUniqueInput
-  }
-
-
-  /**
-   * Page deleteMany
-   */
-  export type PageDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which Pages to delete
-     */
-    where?: PageWhereInput
-  }
-
-
-  /**
-   * Page.categories
-   */
-  export type Page$categoriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Category
-     */
-    select?: CategorySelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: CategoryInclude<ExtArgs> | null
-    where?: CategoryWhereInput
-    orderBy?: CategoryOrderByWithRelationInput | CategoryOrderByWithRelationInput[]
-    cursor?: CategoryWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: CategoryScalarFieldEnum | CategoryScalarFieldEnum[]
-  }
-
-
-  /**
-   * Page.tags
-   */
-  export type Page$tagsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Tag
-     */
-    select?: TagSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: TagInclude<ExtArgs> | null
-    where?: TagWhereInput
-    orderBy?: TagOrderByWithRelationInput | TagOrderByWithRelationInput[]
-    cursor?: TagWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: TagScalarFieldEnum | TagScalarFieldEnum[]
-  }
-
-
-  /**
-   * Page without action
-   */
-  export type PageDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Page
-     */
-    select?: PageSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: PageInclude<ExtArgs> | null
-  }
-
-
-
-  /**
    * Enums
    */
 
@@ -16851,6 +17019,9 @@ export namespace Prisma {
     name: 'name',
     slug: 'slug',
     subsiteRef: 'subsiteRef',
+    domainName: 'domainName',
+    domainStatus: 'domainStatus',
+    domainCreatedAt: 'domainCreatedAt',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -16882,6 +17053,8 @@ export namespace Prisma {
     overview: 'overview',
     content: 'content',
     slug: 'slug',
+    coverImage: 'coverImage',
+    status: 'status',
     published: 'published',
     publishedAt: 'publishedAt',
     deleted: 'deleted',
@@ -16894,6 +17067,33 @@ export namespace Prisma {
   };
 
   export type PostScalarFieldEnum = (typeof PostScalarFieldEnum)[keyof typeof PostScalarFieldEnum]
+
+
+  export const PageScalarFieldEnum: {
+    id: 'id',
+    title: 'title',
+    overview: 'overview',
+    content: 'content',
+    slug: 'slug',
+    status: 'status',
+    publishedAt: 'publishedAt',
+    published: 'published',
+    coverImage: 'coverImage',
+    layoutTemplate: 'layoutTemplate',
+    theme: 'theme',
+    metaData: 'metaData',
+    seoSettings: 'seoSettings',
+    analyticsCodes: 'analyticsCodes',
+    showOnNav: 'showOnNav',
+    deleted: 'deleted',
+    authorId: 'authorId',
+    accountRef: 'accountRef',
+    subsiteRef: 'subsiteRef',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type PageScalarFieldEnum = (typeof PageScalarFieldEnum)[keyof typeof PageScalarFieldEnum]
 
 
   export const UserProfileScalarFieldEnum: {
@@ -17032,24 +17232,6 @@ export namespace Prisma {
   export type TagScalarFieldEnum = (typeof TagScalarFieldEnum)[keyof typeof TagScalarFieldEnum]
 
 
-  export const PageScalarFieldEnum: {
-    id: 'id',
-    title: 'title',
-    description: 'description',
-    content: 'content',
-    slug: 'slug',
-    published: 'published',
-    deleted: 'deleted',
-    authorId: 'authorId',
-    accountRef: 'accountRef',
-    subsiteRef: 'subsiteRef',
-    createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
-  };
-
-  export type PageScalarFieldEnum = (typeof PageScalarFieldEnum)[keyof typeof PageScalarFieldEnum]
-
-
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -17118,6 +17300,20 @@ export namespace Prisma {
    * Reference to a field of type 'DateTime[]'
    */
   export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'ContentStatus'
+   */
+  export type EnumContentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ContentStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'ContentStatus[]'
+   */
+  export type ListEnumContentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ContentStatus[]'>
     
 
 
@@ -17232,6 +17428,9 @@ export namespace Prisma {
     name?: StringFilter<"Subsite"> | string
     slug?: StringNullableFilter<"Subsite"> | string | null
     subsiteRef?: StringFilter<"Subsite"> | string
+    domainName?: StringNullableFilter<"Subsite"> | string | null
+    domainStatus?: StringNullableFilter<"Subsite"> | string | null
+    domainCreatedAt?: DateTimeNullableFilter<"Subsite"> | Date | string | null
     createdAt?: DateTimeFilter<"Subsite"> | Date | string
     updatedAt?: DateTimeNullableFilter<"Subsite"> | Date | string | null
     accounts?: AccountListRelationFilter
@@ -17243,6 +17442,9 @@ export namespace Prisma {
     name?: SortOrder
     slug?: SortOrderInput | SortOrder
     subsiteRef?: SortOrder
+    domainName?: SortOrderInput | SortOrder
+    domainStatus?: SortOrderInput | SortOrder
+    domainCreatedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrderInput | SortOrder
     accounts?: AccountOrderByRelationAggregateInput
@@ -17257,6 +17459,9 @@ export namespace Prisma {
     name?: StringFilter<"Subsite"> | string
     slug?: StringNullableFilter<"Subsite"> | string | null
     subsiteRef?: StringFilter<"Subsite"> | string
+    domainName?: StringNullableFilter<"Subsite"> | string | null
+    domainStatus?: StringNullableFilter<"Subsite"> | string | null
+    domainCreatedAt?: DateTimeNullableFilter<"Subsite"> | Date | string | null
     createdAt?: DateTimeFilter<"Subsite"> | Date | string
     updatedAt?: DateTimeNullableFilter<"Subsite"> | Date | string | null
     accounts?: AccountListRelationFilter
@@ -17268,6 +17473,9 @@ export namespace Prisma {
     name?: SortOrder
     slug?: SortOrderInput | SortOrder
     subsiteRef?: SortOrder
+    domainName?: SortOrderInput | SortOrder
+    domainStatus?: SortOrderInput | SortOrder
+    domainCreatedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrderInput | SortOrder
     _count?: SubsiteCountOrderByAggregateInput
@@ -17285,6 +17493,9 @@ export namespace Prisma {
     name?: StringWithAggregatesFilter<"Subsite"> | string
     slug?: StringNullableWithAggregatesFilter<"Subsite"> | string | null
     subsiteRef?: StringWithAggregatesFilter<"Subsite"> | string
+    domainName?: StringNullableWithAggregatesFilter<"Subsite"> | string | null
+    domainStatus?: StringNullableWithAggregatesFilter<"Subsite"> | string | null
+    domainCreatedAt?: DateTimeNullableWithAggregatesFilter<"Subsite"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Subsite"> | Date | string
     updatedAt?: DateTimeNullableWithAggregatesFilter<"Subsite"> | Date | string | null
   }
@@ -17390,6 +17601,8 @@ export namespace Prisma {
     overview?: StringFilter<"Post"> | string
     content?: StringNullableFilter<"Post"> | string | null
     slug?: StringNullableFilter<"Post"> | string | null
+    coverImage?: StringNullableFilter<"Post"> | string | null
+    status?: EnumContentStatusFilter<"Post"> | $Enums.ContentStatus
     published?: BoolFilter<"Post"> | boolean
     publishedAt?: DateTimeNullableFilter<"Post"> | Date | string | null
     deleted?: BoolFilter<"Post"> | boolean
@@ -17410,6 +17623,8 @@ export namespace Prisma {
     overview?: SortOrder
     content?: SortOrderInput | SortOrder
     slug?: SortOrderInput | SortOrder
+    coverImage?: SortOrderInput | SortOrder
+    status?: SortOrder
     published?: SortOrder
     publishedAt?: SortOrderInput | SortOrder
     deleted?: SortOrder
@@ -17433,6 +17648,8 @@ export namespace Prisma {
     overview?: StringFilter<"Post"> | string
     content?: StringNullableFilter<"Post"> | string | null
     slug?: StringNullableFilter<"Post"> | string | null
+    coverImage?: StringNullableFilter<"Post"> | string | null
+    status?: EnumContentStatusFilter<"Post"> | $Enums.ContentStatus
     published?: BoolFilter<"Post"> | boolean
     publishedAt?: DateTimeNullableFilter<"Post"> | Date | string | null
     deleted?: BoolFilter<"Post"> | boolean
@@ -17453,6 +17670,8 @@ export namespace Prisma {
     overview?: SortOrder
     content?: SortOrderInput | SortOrder
     slug?: SortOrderInput | SortOrder
+    coverImage?: SortOrderInput | SortOrder
+    status?: SortOrder
     published?: SortOrder
     publishedAt?: SortOrderInput | SortOrder
     deleted?: SortOrder
@@ -17478,6 +17697,8 @@ export namespace Prisma {
     overview?: StringWithAggregatesFilter<"Post"> | string
     content?: StringNullableWithAggregatesFilter<"Post"> | string | null
     slug?: StringNullableWithAggregatesFilter<"Post"> | string | null
+    coverImage?: StringNullableWithAggregatesFilter<"Post"> | string | null
+    status?: EnumContentStatusWithAggregatesFilter<"Post"> | $Enums.ContentStatus
     published?: BoolWithAggregatesFilter<"Post"> | boolean
     publishedAt?: DateTimeNullableWithAggregatesFilter<"Post"> | Date | string | null
     deleted?: BoolWithAggregatesFilter<"Post"> | boolean
@@ -17487,6 +17708,149 @@ export namespace Prisma {
     contextUserId?: StringWithAggregatesFilter<"Post"> | string
     createdAt?: DateTimeWithAggregatesFilter<"Post"> | Date | string
     updatedAt?: DateTimeNullableWithAggregatesFilter<"Post"> | Date | string | null
+  }
+
+  export type PageWhereInput = {
+    AND?: PageWhereInput | PageWhereInput[]
+    OR?: PageWhereInput[]
+    NOT?: PageWhereInput | PageWhereInput[]
+    id?: IntFilter<"Page"> | number
+    title?: StringFilter<"Page"> | string
+    overview?: StringFilter<"Page"> | string
+    content?: StringNullableFilter<"Page"> | string | null
+    slug?: StringNullableFilter<"Page"> | string | null
+    status?: EnumContentStatusFilter<"Page"> | $Enums.ContentStatus
+    publishedAt?: DateTimeNullableFilter<"Page"> | Date | string | null
+    published?: BoolFilter<"Page"> | boolean
+    coverImage?: StringNullableFilter<"Page"> | string | null
+    layoutTemplate?: StringNullableFilter<"Page"> | string | null
+    theme?: StringNullableFilter<"Page"> | string | null
+    metaData?: StringNullableFilter<"Page"> | string | null
+    seoSettings?: StringNullableFilter<"Page"> | string | null
+    analyticsCodes?: StringNullableFilter<"Page"> | string | null
+    showOnNav?: BoolFilter<"Page"> | boolean
+    deleted?: BoolFilter<"Page"> | boolean
+    authorId?: IntFilter<"Page"> | number
+    accountRef?: StringFilter<"Page"> | string
+    subsiteRef?: StringFilter<"Page"> | string
+    createdAt?: DateTimeFilter<"Page"> | Date | string
+    updatedAt?: DateTimeNullableFilter<"Page"> | Date | string | null
+    author?: XOR<UserRelationFilter, UserWhereInput>
+    categories?: CategoryListRelationFilter
+    tags?: TagListRelationFilter
+  }
+
+  export type PageOrderByWithRelationInput = {
+    id?: SortOrder
+    title?: SortOrder
+    overview?: SortOrder
+    content?: SortOrderInput | SortOrder
+    slug?: SortOrderInput | SortOrder
+    status?: SortOrder
+    publishedAt?: SortOrderInput | SortOrder
+    published?: SortOrder
+    coverImage?: SortOrderInput | SortOrder
+    layoutTemplate?: SortOrderInput | SortOrder
+    theme?: SortOrderInput | SortOrder
+    metaData?: SortOrderInput | SortOrder
+    seoSettings?: SortOrderInput | SortOrder
+    analyticsCodes?: SortOrderInput | SortOrder
+    showOnNav?: SortOrder
+    deleted?: SortOrder
+    authorId?: SortOrder
+    accountRef?: SortOrder
+    subsiteRef?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrderInput | SortOrder
+    author?: UserOrderByWithRelationInput
+    categories?: CategoryOrderByRelationAggregateInput
+    tags?: TagOrderByRelationAggregateInput
+  }
+
+  export type PageWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: PageWhereInput | PageWhereInput[]
+    OR?: PageWhereInput[]
+    NOT?: PageWhereInput | PageWhereInput[]
+    title?: StringFilter<"Page"> | string
+    overview?: StringFilter<"Page"> | string
+    content?: StringNullableFilter<"Page"> | string | null
+    slug?: StringNullableFilter<"Page"> | string | null
+    status?: EnumContentStatusFilter<"Page"> | $Enums.ContentStatus
+    publishedAt?: DateTimeNullableFilter<"Page"> | Date | string | null
+    published?: BoolFilter<"Page"> | boolean
+    coverImage?: StringNullableFilter<"Page"> | string | null
+    layoutTemplate?: StringNullableFilter<"Page"> | string | null
+    theme?: StringNullableFilter<"Page"> | string | null
+    metaData?: StringNullableFilter<"Page"> | string | null
+    seoSettings?: StringNullableFilter<"Page"> | string | null
+    analyticsCodes?: StringNullableFilter<"Page"> | string | null
+    showOnNav?: BoolFilter<"Page"> | boolean
+    deleted?: BoolFilter<"Page"> | boolean
+    authorId?: IntFilter<"Page"> | number
+    accountRef?: StringFilter<"Page"> | string
+    subsiteRef?: StringFilter<"Page"> | string
+    createdAt?: DateTimeFilter<"Page"> | Date | string
+    updatedAt?: DateTimeNullableFilter<"Page"> | Date | string | null
+    author?: XOR<UserRelationFilter, UserWhereInput>
+    categories?: CategoryListRelationFilter
+    tags?: TagListRelationFilter
+  }, "id">
+
+  export type PageOrderByWithAggregationInput = {
+    id?: SortOrder
+    title?: SortOrder
+    overview?: SortOrder
+    content?: SortOrderInput | SortOrder
+    slug?: SortOrderInput | SortOrder
+    status?: SortOrder
+    publishedAt?: SortOrderInput | SortOrder
+    published?: SortOrder
+    coverImage?: SortOrderInput | SortOrder
+    layoutTemplate?: SortOrderInput | SortOrder
+    theme?: SortOrderInput | SortOrder
+    metaData?: SortOrderInput | SortOrder
+    seoSettings?: SortOrderInput | SortOrder
+    analyticsCodes?: SortOrderInput | SortOrder
+    showOnNav?: SortOrder
+    deleted?: SortOrder
+    authorId?: SortOrder
+    accountRef?: SortOrder
+    subsiteRef?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrderInput | SortOrder
+    _count?: PageCountOrderByAggregateInput
+    _avg?: PageAvgOrderByAggregateInput
+    _max?: PageMaxOrderByAggregateInput
+    _min?: PageMinOrderByAggregateInput
+    _sum?: PageSumOrderByAggregateInput
+  }
+
+  export type PageScalarWhereWithAggregatesInput = {
+    AND?: PageScalarWhereWithAggregatesInput | PageScalarWhereWithAggregatesInput[]
+    OR?: PageScalarWhereWithAggregatesInput[]
+    NOT?: PageScalarWhereWithAggregatesInput | PageScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"Page"> | number
+    title?: StringWithAggregatesFilter<"Page"> | string
+    overview?: StringWithAggregatesFilter<"Page"> | string
+    content?: StringNullableWithAggregatesFilter<"Page"> | string | null
+    slug?: StringNullableWithAggregatesFilter<"Page"> | string | null
+    status?: EnumContentStatusWithAggregatesFilter<"Page"> | $Enums.ContentStatus
+    publishedAt?: DateTimeNullableWithAggregatesFilter<"Page"> | Date | string | null
+    published?: BoolWithAggregatesFilter<"Page"> | boolean
+    coverImage?: StringNullableWithAggregatesFilter<"Page"> | string | null
+    layoutTemplate?: StringNullableWithAggregatesFilter<"Page"> | string | null
+    theme?: StringNullableWithAggregatesFilter<"Page"> | string | null
+    metaData?: StringNullableWithAggregatesFilter<"Page"> | string | null
+    seoSettings?: StringNullableWithAggregatesFilter<"Page"> | string | null
+    analyticsCodes?: StringNullableWithAggregatesFilter<"Page"> | string | null
+    showOnNav?: BoolWithAggregatesFilter<"Page"> | boolean
+    deleted?: BoolWithAggregatesFilter<"Page"> | boolean
+    authorId?: IntWithAggregatesFilter<"Page"> | number
+    accountRef?: StringWithAggregatesFilter<"Page"> | string
+    subsiteRef?: StringWithAggregatesFilter<"Page"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"Page"> | Date | string
+    updatedAt?: DateTimeNullableWithAggregatesFilter<"Page"> | Date | string | null
   }
 
   export type UserProfileWhereInput = {
@@ -18217,108 +18581,10 @@ export namespace Prisma {
     updatedAt?: DateTimeNullableWithAggregatesFilter<"Tag"> | Date | string | null
   }
 
-  export type PageWhereInput = {
-    AND?: PageWhereInput | PageWhereInput[]
-    OR?: PageWhereInput[]
-    NOT?: PageWhereInput | PageWhereInput[]
-    id?: IntFilter<"Page"> | number
-    title?: StringFilter<"Page"> | string
-    description?: StringNullableFilter<"Page"> | string | null
-    content?: StringNullableFilter<"Page"> | string | null
-    slug?: StringNullableFilter<"Page"> | string | null
-    published?: BoolFilter<"Page"> | boolean
-    deleted?: BoolFilter<"Page"> | boolean
-    authorId?: IntFilter<"Page"> | number
-    accountRef?: StringFilter<"Page"> | string
-    subsiteRef?: StringFilter<"Page"> | string
-    createdAt?: DateTimeFilter<"Page"> | Date | string
-    updatedAt?: DateTimeNullableFilter<"Page"> | Date | string | null
-    author?: XOR<UserRelationFilter, UserWhereInput>
-    categories?: CategoryListRelationFilter
-    tags?: TagListRelationFilter
-  }
-
-  export type PageOrderByWithRelationInput = {
-    id?: SortOrder
-    title?: SortOrder
-    description?: SortOrderInput | SortOrder
-    content?: SortOrderInput | SortOrder
-    slug?: SortOrderInput | SortOrder
-    published?: SortOrder
-    deleted?: SortOrder
-    authorId?: SortOrder
-    accountRef?: SortOrder
-    subsiteRef?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrderInput | SortOrder
-    author?: UserOrderByWithRelationInput
-    categories?: CategoryOrderByRelationAggregateInput
-    tags?: TagOrderByRelationAggregateInput
-  }
-
-  export type PageWhereUniqueInput = Prisma.AtLeast<{
-    id?: number
-    AND?: PageWhereInput | PageWhereInput[]
-    OR?: PageWhereInput[]
-    NOT?: PageWhereInput | PageWhereInput[]
-    title?: StringFilter<"Page"> | string
-    description?: StringNullableFilter<"Page"> | string | null
-    content?: StringNullableFilter<"Page"> | string | null
-    slug?: StringNullableFilter<"Page"> | string | null
-    published?: BoolFilter<"Page"> | boolean
-    deleted?: BoolFilter<"Page"> | boolean
-    authorId?: IntFilter<"Page"> | number
-    accountRef?: StringFilter<"Page"> | string
-    subsiteRef?: StringFilter<"Page"> | string
-    createdAt?: DateTimeFilter<"Page"> | Date | string
-    updatedAt?: DateTimeNullableFilter<"Page"> | Date | string | null
-    author?: XOR<UserRelationFilter, UserWhereInput>
-    categories?: CategoryListRelationFilter
-    tags?: TagListRelationFilter
-  }, "id">
-
-  export type PageOrderByWithAggregationInput = {
-    id?: SortOrder
-    title?: SortOrder
-    description?: SortOrderInput | SortOrder
-    content?: SortOrderInput | SortOrder
-    slug?: SortOrderInput | SortOrder
-    published?: SortOrder
-    deleted?: SortOrder
-    authorId?: SortOrder
-    accountRef?: SortOrder
-    subsiteRef?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrderInput | SortOrder
-    _count?: PageCountOrderByAggregateInput
-    _avg?: PageAvgOrderByAggregateInput
-    _max?: PageMaxOrderByAggregateInput
-    _min?: PageMinOrderByAggregateInput
-    _sum?: PageSumOrderByAggregateInput
-  }
-
-  export type PageScalarWhereWithAggregatesInput = {
-    AND?: PageScalarWhereWithAggregatesInput | PageScalarWhereWithAggregatesInput[]
-    OR?: PageScalarWhereWithAggregatesInput[]
-    NOT?: PageScalarWhereWithAggregatesInput | PageScalarWhereWithAggregatesInput[]
-    id?: IntWithAggregatesFilter<"Page"> | number
-    title?: StringWithAggregatesFilter<"Page"> | string
-    description?: StringNullableWithAggregatesFilter<"Page"> | string | null
-    content?: StringNullableWithAggregatesFilter<"Page"> | string | null
-    slug?: StringNullableWithAggregatesFilter<"Page"> | string | null
-    published?: BoolWithAggregatesFilter<"Page"> | boolean
-    deleted?: BoolWithAggregatesFilter<"Page"> | boolean
-    authorId?: IntWithAggregatesFilter<"Page"> | number
-    accountRef?: StringWithAggregatesFilter<"Page"> | string
-    subsiteRef?: StringWithAggregatesFilter<"Page"> | string
-    createdAt?: DateTimeWithAggregatesFilter<"Page"> | Date | string
-    updatedAt?: DateTimeNullableWithAggregatesFilter<"Page"> | Date | string | null
-  }
-
   export type AccountCreateInput = {
     name: string
     slug?: string | null
-    accountRef: string
+    accountRef?: string
     createdAt?: Date | string
     updatedAt?: Date | string | null
     users?: UserCreateNestedManyWithoutAccountsInput
@@ -18329,7 +18595,7 @@ export namespace Prisma {
     id?: number
     name: string
     slug?: string | null
-    accountRef: string
+    accountRef?: string
     createdAt?: Date | string
     updatedAt?: Date | string | null
     users?: UserUncheckedCreateNestedManyWithoutAccountsInput
@@ -18361,7 +18627,7 @@ export namespace Prisma {
     id?: number
     name: string
     slug?: string | null
-    accountRef: string
+    accountRef?: string
     createdAt?: Date | string
     updatedAt?: Date | string | null
   }
@@ -18386,7 +18652,10 @@ export namespace Prisma {
   export type SubsiteCreateInput = {
     name: string
     slug?: string | null
-    subsiteRef: string
+    subsiteRef?: string
+    domainName?: string | null
+    domainStatus?: string | null
+    domainCreatedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string | null
     accounts?: AccountCreateNestedManyWithoutSubsitesInput
@@ -18397,7 +18666,10 @@ export namespace Prisma {
     id?: number
     name: string
     slug?: string | null
-    subsiteRef: string
+    subsiteRef?: string
+    domainName?: string | null
+    domainStatus?: string | null
+    domainCreatedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutSubsitesInput
@@ -18408,6 +18680,9 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: NullableStringFieldUpdateOperationsInput | string | null
     subsiteRef?: StringFieldUpdateOperationsInput | string
+    domainName?: NullableStringFieldUpdateOperationsInput | string | null
+    domainStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    domainCreatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     accounts?: AccountUpdateManyWithoutSubsitesNestedInput
@@ -18419,6 +18694,9 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: NullableStringFieldUpdateOperationsInput | string | null
     subsiteRef?: StringFieldUpdateOperationsInput | string
+    domainName?: NullableStringFieldUpdateOperationsInput | string | null
+    domainStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    domainCreatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     accounts?: AccountUncheckedUpdateManyWithoutSubsitesNestedInput
@@ -18429,7 +18707,10 @@ export namespace Prisma {
     id?: number
     name: string
     slug?: string | null
-    subsiteRef: string
+    subsiteRef?: string
+    domainName?: string | null
+    domainStatus?: string | null
+    domainCreatedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string | null
   }
@@ -18438,6 +18719,9 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: NullableStringFieldUpdateOperationsInput | string | null
     subsiteRef?: StringFieldUpdateOperationsInput | string
+    domainName?: NullableStringFieldUpdateOperationsInput | string | null
+    domainStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    domainCreatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
@@ -18447,6 +18731,9 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: NullableStringFieldUpdateOperationsInput | string | null
     subsiteRef?: StringFieldUpdateOperationsInput | string
+    domainName?: NullableStringFieldUpdateOperationsInput | string | null
+    domainStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    domainCreatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
@@ -18557,6 +18844,8 @@ export namespace Prisma {
     overview?: string
     content?: string | null
     slug?: string | null
+    coverImage?: string | null
+    status?: $Enums.ContentStatus
     published?: boolean
     publishedAt?: Date | string | null
     deleted?: boolean
@@ -18576,6 +18865,8 @@ export namespace Prisma {
     overview?: string
     content?: string | null
     slug?: string | null
+    coverImage?: string | null
+    status?: $Enums.ContentStatus
     published?: boolean
     publishedAt?: Date | string | null
     deleted?: boolean
@@ -18594,6 +18885,8 @@ export namespace Prisma {
     overview?: StringFieldUpdateOperationsInput | string
     content?: NullableStringFieldUpdateOperationsInput | string | null
     slug?: NullableStringFieldUpdateOperationsInput | string | null
+    coverImage?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumContentStatusFieldUpdateOperationsInput | $Enums.ContentStatus
     published?: BoolFieldUpdateOperationsInput | boolean
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deleted?: BoolFieldUpdateOperationsInput | boolean
@@ -18613,6 +18906,8 @@ export namespace Prisma {
     overview?: StringFieldUpdateOperationsInput | string
     content?: NullableStringFieldUpdateOperationsInput | string | null
     slug?: NullableStringFieldUpdateOperationsInput | string | null
+    coverImage?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumContentStatusFieldUpdateOperationsInput | $Enums.ContentStatus
     published?: BoolFieldUpdateOperationsInput | boolean
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deleted?: BoolFieldUpdateOperationsInput | boolean
@@ -18632,6 +18927,8 @@ export namespace Prisma {
     overview?: string
     content?: string | null
     slug?: string | null
+    coverImage?: string | null
+    status?: $Enums.ContentStatus
     published?: boolean
     publishedAt?: Date | string | null
     deleted?: boolean
@@ -18648,6 +18945,8 @@ export namespace Prisma {
     overview?: StringFieldUpdateOperationsInput | string
     content?: NullableStringFieldUpdateOperationsInput | string | null
     slug?: NullableStringFieldUpdateOperationsInput | string | null
+    coverImage?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumContentStatusFieldUpdateOperationsInput | $Enums.ContentStatus
     published?: BoolFieldUpdateOperationsInput | boolean
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deleted?: BoolFieldUpdateOperationsInput | boolean
@@ -18664,6 +18963,8 @@ export namespace Prisma {
     overview?: StringFieldUpdateOperationsInput | string
     content?: NullableStringFieldUpdateOperationsInput | string | null
     slug?: NullableStringFieldUpdateOperationsInput | string | null
+    coverImage?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumContentStatusFieldUpdateOperationsInput | $Enums.ContentStatus
     published?: BoolFieldUpdateOperationsInput | boolean
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deleted?: BoolFieldUpdateOperationsInput | boolean
@@ -18671,6 +18972,178 @@ export namespace Prisma {
     accountRef?: StringFieldUpdateOperationsInput | string
     subsiteRef?: StringFieldUpdateOperationsInput | string
     contextUserId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type PageCreateInput = {
+    title: string
+    overview?: string
+    content?: string | null
+    slug?: string | null
+    status?: $Enums.ContentStatus
+    publishedAt?: Date | string | null
+    published?: boolean
+    coverImage?: string | null
+    layoutTemplate?: string | null
+    theme?: string | null
+    metaData?: string | null
+    seoSettings?: string | null
+    analyticsCodes?: string | null
+    showOnNav?: boolean
+    deleted?: boolean
+    accountRef?: string
+    subsiteRef?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string | null
+    author: UserCreateNestedOneWithoutPagesInput
+    categories?: CategoryCreateNestedManyWithoutPagesInput
+    tags?: TagCreateNestedManyWithoutPagesInput
+  }
+
+  export type PageUncheckedCreateInput = {
+    id?: number
+    title: string
+    overview?: string
+    content?: string | null
+    slug?: string | null
+    status?: $Enums.ContentStatus
+    publishedAt?: Date | string | null
+    published?: boolean
+    coverImage?: string | null
+    layoutTemplate?: string | null
+    theme?: string | null
+    metaData?: string | null
+    seoSettings?: string | null
+    analyticsCodes?: string | null
+    showOnNav?: boolean
+    deleted?: boolean
+    authorId: number
+    accountRef?: string
+    subsiteRef?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string | null
+    categories?: CategoryUncheckedCreateNestedManyWithoutPagesInput
+    tags?: TagUncheckedCreateNestedManyWithoutPagesInput
+  }
+
+  export type PageUpdateInput = {
+    title?: StringFieldUpdateOperationsInput | string
+    overview?: StringFieldUpdateOperationsInput | string
+    content?: NullableStringFieldUpdateOperationsInput | string | null
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumContentStatusFieldUpdateOperationsInput | $Enums.ContentStatus
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    published?: BoolFieldUpdateOperationsInput | boolean
+    coverImage?: NullableStringFieldUpdateOperationsInput | string | null
+    layoutTemplate?: NullableStringFieldUpdateOperationsInput | string | null
+    theme?: NullableStringFieldUpdateOperationsInput | string | null
+    metaData?: NullableStringFieldUpdateOperationsInput | string | null
+    seoSettings?: NullableStringFieldUpdateOperationsInput | string | null
+    analyticsCodes?: NullableStringFieldUpdateOperationsInput | string | null
+    showOnNav?: BoolFieldUpdateOperationsInput | boolean
+    deleted?: BoolFieldUpdateOperationsInput | boolean
+    accountRef?: StringFieldUpdateOperationsInput | string
+    subsiteRef?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    author?: UserUpdateOneRequiredWithoutPagesNestedInput
+    categories?: CategoryUpdateManyWithoutPagesNestedInput
+    tags?: TagUpdateManyWithoutPagesNestedInput
+  }
+
+  export type PageUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    overview?: StringFieldUpdateOperationsInput | string
+    content?: NullableStringFieldUpdateOperationsInput | string | null
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumContentStatusFieldUpdateOperationsInput | $Enums.ContentStatus
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    published?: BoolFieldUpdateOperationsInput | boolean
+    coverImage?: NullableStringFieldUpdateOperationsInput | string | null
+    layoutTemplate?: NullableStringFieldUpdateOperationsInput | string | null
+    theme?: NullableStringFieldUpdateOperationsInput | string | null
+    metaData?: NullableStringFieldUpdateOperationsInput | string | null
+    seoSettings?: NullableStringFieldUpdateOperationsInput | string | null
+    analyticsCodes?: NullableStringFieldUpdateOperationsInput | string | null
+    showOnNav?: BoolFieldUpdateOperationsInput | boolean
+    deleted?: BoolFieldUpdateOperationsInput | boolean
+    authorId?: IntFieldUpdateOperationsInput | number
+    accountRef?: StringFieldUpdateOperationsInput | string
+    subsiteRef?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    categories?: CategoryUncheckedUpdateManyWithoutPagesNestedInput
+    tags?: TagUncheckedUpdateManyWithoutPagesNestedInput
+  }
+
+  export type PageCreateManyInput = {
+    id?: number
+    title: string
+    overview?: string
+    content?: string | null
+    slug?: string | null
+    status?: $Enums.ContentStatus
+    publishedAt?: Date | string | null
+    published?: boolean
+    coverImage?: string | null
+    layoutTemplate?: string | null
+    theme?: string | null
+    metaData?: string | null
+    seoSettings?: string | null
+    analyticsCodes?: string | null
+    showOnNav?: boolean
+    deleted?: boolean
+    authorId: number
+    accountRef?: string
+    subsiteRef?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string | null
+  }
+
+  export type PageUpdateManyMutationInput = {
+    title?: StringFieldUpdateOperationsInput | string
+    overview?: StringFieldUpdateOperationsInput | string
+    content?: NullableStringFieldUpdateOperationsInput | string | null
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumContentStatusFieldUpdateOperationsInput | $Enums.ContentStatus
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    published?: BoolFieldUpdateOperationsInput | boolean
+    coverImage?: NullableStringFieldUpdateOperationsInput | string | null
+    layoutTemplate?: NullableStringFieldUpdateOperationsInput | string | null
+    theme?: NullableStringFieldUpdateOperationsInput | string | null
+    metaData?: NullableStringFieldUpdateOperationsInput | string | null
+    seoSettings?: NullableStringFieldUpdateOperationsInput | string | null
+    analyticsCodes?: NullableStringFieldUpdateOperationsInput | string | null
+    showOnNav?: BoolFieldUpdateOperationsInput | boolean
+    deleted?: BoolFieldUpdateOperationsInput | boolean
+    accountRef?: StringFieldUpdateOperationsInput | string
+    subsiteRef?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type PageUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    overview?: StringFieldUpdateOperationsInput | string
+    content?: NullableStringFieldUpdateOperationsInput | string | null
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumContentStatusFieldUpdateOperationsInput | $Enums.ContentStatus
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    published?: BoolFieldUpdateOperationsInput | boolean
+    coverImage?: NullableStringFieldUpdateOperationsInput | string | null
+    layoutTemplate?: NullableStringFieldUpdateOperationsInput | string | null
+    theme?: NullableStringFieldUpdateOperationsInput | string | null
+    metaData?: NullableStringFieldUpdateOperationsInput | string | null
+    seoSettings?: NullableStringFieldUpdateOperationsInput | string | null
+    analyticsCodes?: NullableStringFieldUpdateOperationsInput | string | null
+    showOnNav?: BoolFieldUpdateOperationsInput | boolean
+    deleted?: BoolFieldUpdateOperationsInput | boolean
+    authorId?: IntFieldUpdateOperationsInput | number
+    accountRef?: StringFieldUpdateOperationsInput | string
+    subsiteRef?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
@@ -19457,115 +19930,6 @@ export namespace Prisma {
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
-  export type PageCreateInput = {
-    title: string
-    description?: string | null
-    content?: string | null
-    slug?: string | null
-    published?: boolean
-    deleted?: boolean
-    accountRef?: string
-    subsiteRef?: string
-    createdAt?: Date | string
-    updatedAt?: Date | string | null
-    author: UserCreateNestedOneWithoutPagesInput
-    categories?: CategoryCreateNestedManyWithoutPagesInput
-    tags?: TagCreateNestedManyWithoutPagesInput
-  }
-
-  export type PageUncheckedCreateInput = {
-    id?: number
-    title: string
-    description?: string | null
-    content?: string | null
-    slug?: string | null
-    published?: boolean
-    deleted?: boolean
-    authorId: number
-    accountRef?: string
-    subsiteRef?: string
-    createdAt?: Date | string
-    updatedAt?: Date | string | null
-    categories?: CategoryUncheckedCreateNestedManyWithoutPagesInput
-    tags?: TagUncheckedCreateNestedManyWithoutPagesInput
-  }
-
-  export type PageUpdateInput = {
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    content?: NullableStringFieldUpdateOperationsInput | string | null
-    slug?: NullableStringFieldUpdateOperationsInput | string | null
-    published?: BoolFieldUpdateOperationsInput | boolean
-    deleted?: BoolFieldUpdateOperationsInput | boolean
-    accountRef?: StringFieldUpdateOperationsInput | string
-    subsiteRef?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    author?: UserUpdateOneRequiredWithoutPagesNestedInput
-    categories?: CategoryUpdateManyWithoutPagesNestedInput
-    tags?: TagUpdateManyWithoutPagesNestedInput
-  }
-
-  export type PageUncheckedUpdateInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    content?: NullableStringFieldUpdateOperationsInput | string | null
-    slug?: NullableStringFieldUpdateOperationsInput | string | null
-    published?: BoolFieldUpdateOperationsInput | boolean
-    deleted?: BoolFieldUpdateOperationsInput | boolean
-    authorId?: IntFieldUpdateOperationsInput | number
-    accountRef?: StringFieldUpdateOperationsInput | string
-    subsiteRef?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    categories?: CategoryUncheckedUpdateManyWithoutPagesNestedInput
-    tags?: TagUncheckedUpdateManyWithoutPagesNestedInput
-  }
-
-  export type PageCreateManyInput = {
-    id?: number
-    title: string
-    description?: string | null
-    content?: string | null
-    slug?: string | null
-    published?: boolean
-    deleted?: boolean
-    authorId: number
-    accountRef?: string
-    subsiteRef?: string
-    createdAt?: Date | string
-    updatedAt?: Date | string | null
-  }
-
-  export type PageUpdateManyMutationInput = {
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    content?: NullableStringFieldUpdateOperationsInput | string | null
-    slug?: NullableStringFieldUpdateOperationsInput | string | null
-    published?: BoolFieldUpdateOperationsInput | boolean
-    deleted?: BoolFieldUpdateOperationsInput | boolean
-    accountRef?: StringFieldUpdateOperationsInput | string
-    subsiteRef?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  }
-
-  export type PageUncheckedUpdateManyInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    content?: NullableStringFieldUpdateOperationsInput | string | null
-    slug?: NullableStringFieldUpdateOperationsInput | string | null
-    published?: BoolFieldUpdateOperationsInput | boolean
-    deleted?: BoolFieldUpdateOperationsInput | boolean
-    authorId?: IntFieldUpdateOperationsInput | number
-    accountRef?: StringFieldUpdateOperationsInput | string
-    subsiteRef?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  }
-
   export type IntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -19794,6 +20158,9 @@ export namespace Prisma {
     name?: SortOrder
     slug?: SortOrder
     subsiteRef?: SortOrder
+    domainName?: SortOrder
+    domainStatus?: SortOrder
+    domainCreatedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -19807,6 +20174,9 @@ export namespace Prisma {
     name?: SortOrder
     slug?: SortOrder
     subsiteRef?: SortOrder
+    domainName?: SortOrder
+    domainStatus?: SortOrder
+    domainCreatedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -19816,6 +20186,9 @@ export namespace Prisma {
     name?: SortOrder
     slug?: SortOrder
     subsiteRef?: SortOrder
+    domainName?: SortOrder
+    domainStatus?: SortOrder
+    domainCreatedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -19884,6 +20257,13 @@ export namespace Prisma {
     subsiteId?: SortOrder
   }
 
+  export type EnumContentStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.ContentStatus | EnumContentStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ContentStatus[] | ListEnumContentStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ContentStatus[] | ListEnumContentStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumContentStatusFilter<$PrismaModel> | $Enums.ContentStatus
+  }
+
   export type BoolFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolFilter<$PrismaModel> | boolean
@@ -19920,6 +20300,8 @@ export namespace Prisma {
     overview?: SortOrder
     content?: SortOrder
     slug?: SortOrder
+    coverImage?: SortOrder
+    status?: SortOrder
     published?: SortOrder
     publishedAt?: SortOrder
     deleted?: SortOrder
@@ -19942,6 +20324,8 @@ export namespace Prisma {
     overview?: SortOrder
     content?: SortOrder
     slug?: SortOrder
+    coverImage?: SortOrder
+    status?: SortOrder
     published?: SortOrder
     publishedAt?: SortOrder
     deleted?: SortOrder
@@ -19959,6 +20343,8 @@ export namespace Prisma {
     overview?: SortOrder
     content?: SortOrder
     slug?: SortOrder
+    coverImage?: SortOrder
+    status?: SortOrder
     published?: SortOrder
     publishedAt?: SortOrder
     deleted?: SortOrder
@@ -19975,12 +20361,104 @@ export namespace Prisma {
     authorId?: SortOrder
   }
 
+  export type EnumContentStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ContentStatus | EnumContentStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ContentStatus[] | ListEnumContentStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ContentStatus[] | ListEnumContentStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumContentStatusWithAggregatesFilter<$PrismaModel> | $Enums.ContentStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumContentStatusFilter<$PrismaModel>
+    _max?: NestedEnumContentStatusFilter<$PrismaModel>
+  }
+
   export type BoolWithAggregatesFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedBoolFilter<$PrismaModel>
     _max?: NestedBoolFilter<$PrismaModel>
+  }
+
+  export type PageCountOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    overview?: SortOrder
+    content?: SortOrder
+    slug?: SortOrder
+    status?: SortOrder
+    publishedAt?: SortOrder
+    published?: SortOrder
+    coverImage?: SortOrder
+    layoutTemplate?: SortOrder
+    theme?: SortOrder
+    metaData?: SortOrder
+    seoSettings?: SortOrder
+    analyticsCodes?: SortOrder
+    showOnNav?: SortOrder
+    deleted?: SortOrder
+    authorId?: SortOrder
+    accountRef?: SortOrder
+    subsiteRef?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PageAvgOrderByAggregateInput = {
+    id?: SortOrder
+    authorId?: SortOrder
+  }
+
+  export type PageMaxOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    overview?: SortOrder
+    content?: SortOrder
+    slug?: SortOrder
+    status?: SortOrder
+    publishedAt?: SortOrder
+    published?: SortOrder
+    coverImage?: SortOrder
+    layoutTemplate?: SortOrder
+    theme?: SortOrder
+    metaData?: SortOrder
+    seoSettings?: SortOrder
+    analyticsCodes?: SortOrder
+    showOnNav?: SortOrder
+    deleted?: SortOrder
+    authorId?: SortOrder
+    accountRef?: SortOrder
+    subsiteRef?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PageMinOrderByAggregateInput = {
+    id?: SortOrder
+    title?: SortOrder
+    overview?: SortOrder
+    content?: SortOrder
+    slug?: SortOrder
+    status?: SortOrder
+    publishedAt?: SortOrder
+    published?: SortOrder
+    coverImage?: SortOrder
+    layoutTemplate?: SortOrder
+    theme?: SortOrder
+    metaData?: SortOrder
+    seoSettings?: SortOrder
+    analyticsCodes?: SortOrder
+    showOnNav?: SortOrder
+    deleted?: SortOrder
+    authorId?: SortOrder
+    accountRef?: SortOrder
+    subsiteRef?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type PageSumOrderByAggregateInput = {
+    id?: SortOrder
+    authorId?: SortOrder
   }
 
   export type UserProfileCountOrderByAggregateInput = {
@@ -20466,61 +20944,6 @@ export namespace Prisma {
     id?: SortOrder
   }
 
-  export type PageCountOrderByAggregateInput = {
-    id?: SortOrder
-    title?: SortOrder
-    description?: SortOrder
-    content?: SortOrder
-    slug?: SortOrder
-    published?: SortOrder
-    deleted?: SortOrder
-    authorId?: SortOrder
-    accountRef?: SortOrder
-    subsiteRef?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-  }
-
-  export type PageAvgOrderByAggregateInput = {
-    id?: SortOrder
-    authorId?: SortOrder
-  }
-
-  export type PageMaxOrderByAggregateInput = {
-    id?: SortOrder
-    title?: SortOrder
-    description?: SortOrder
-    content?: SortOrder
-    slug?: SortOrder
-    published?: SortOrder
-    deleted?: SortOrder
-    authorId?: SortOrder
-    accountRef?: SortOrder
-    subsiteRef?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-  }
-
-  export type PageMinOrderByAggregateInput = {
-    id?: SortOrder
-    title?: SortOrder
-    description?: SortOrder
-    content?: SortOrder
-    slug?: SortOrder
-    published?: SortOrder
-    deleted?: SortOrder
-    authorId?: SortOrder
-    accountRef?: SortOrder
-    subsiteRef?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-  }
-
-  export type PageSumOrderByAggregateInput = {
-    id?: SortOrder
-    authorId?: SortOrder
-  }
-
   export type UserCreateNestedManyWithoutAccountsInput = {
     create?: XOR<UserCreateWithoutAccountsInput, UserUncheckedCreateWithoutAccountsInput> | UserCreateWithoutAccountsInput[] | UserUncheckedCreateWithoutAccountsInput[]
     connectOrCreate?: UserCreateOrConnectWithoutAccountsInput | UserCreateOrConnectWithoutAccountsInput[]
@@ -20745,6 +21168,10 @@ export namespace Prisma {
     connect?: TagWhereUniqueInput | TagWhereUniqueInput[]
   }
 
+  export type EnumContentStatusFieldUpdateOperationsInput = {
+    set?: $Enums.ContentStatus
+  }
+
   export type BoolFieldUpdateOperationsInput = {
     set?: boolean
   }
@@ -20806,6 +21233,96 @@ export namespace Prisma {
     connect?: TagWhereUniqueInput | TagWhereUniqueInput[]
     update?: TagUpdateWithWhereUniqueWithoutPostsInput | TagUpdateWithWhereUniqueWithoutPostsInput[]
     updateMany?: TagUpdateManyWithWhereWithoutPostsInput | TagUpdateManyWithWhereWithoutPostsInput[]
+    deleteMany?: TagScalarWhereInput | TagScalarWhereInput[]
+  }
+
+  export type UserCreateNestedOneWithoutPagesInput = {
+    create?: XOR<UserCreateWithoutPagesInput, UserUncheckedCreateWithoutPagesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutPagesInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type CategoryCreateNestedManyWithoutPagesInput = {
+    create?: XOR<CategoryCreateWithoutPagesInput, CategoryUncheckedCreateWithoutPagesInput> | CategoryCreateWithoutPagesInput[] | CategoryUncheckedCreateWithoutPagesInput[]
+    connectOrCreate?: CategoryCreateOrConnectWithoutPagesInput | CategoryCreateOrConnectWithoutPagesInput[]
+    connect?: CategoryWhereUniqueInput | CategoryWhereUniqueInput[]
+  }
+
+  export type TagCreateNestedManyWithoutPagesInput = {
+    create?: XOR<TagCreateWithoutPagesInput, TagUncheckedCreateWithoutPagesInput> | TagCreateWithoutPagesInput[] | TagUncheckedCreateWithoutPagesInput[]
+    connectOrCreate?: TagCreateOrConnectWithoutPagesInput | TagCreateOrConnectWithoutPagesInput[]
+    connect?: TagWhereUniqueInput | TagWhereUniqueInput[]
+  }
+
+  export type CategoryUncheckedCreateNestedManyWithoutPagesInput = {
+    create?: XOR<CategoryCreateWithoutPagesInput, CategoryUncheckedCreateWithoutPagesInput> | CategoryCreateWithoutPagesInput[] | CategoryUncheckedCreateWithoutPagesInput[]
+    connectOrCreate?: CategoryCreateOrConnectWithoutPagesInput | CategoryCreateOrConnectWithoutPagesInput[]
+    connect?: CategoryWhereUniqueInput | CategoryWhereUniqueInput[]
+  }
+
+  export type TagUncheckedCreateNestedManyWithoutPagesInput = {
+    create?: XOR<TagCreateWithoutPagesInput, TagUncheckedCreateWithoutPagesInput> | TagCreateWithoutPagesInput[] | TagUncheckedCreateWithoutPagesInput[]
+    connectOrCreate?: TagCreateOrConnectWithoutPagesInput | TagCreateOrConnectWithoutPagesInput[]
+    connect?: TagWhereUniqueInput | TagWhereUniqueInput[]
+  }
+
+  export type UserUpdateOneRequiredWithoutPagesNestedInput = {
+    create?: XOR<UserCreateWithoutPagesInput, UserUncheckedCreateWithoutPagesInput>
+    connectOrCreate?: UserCreateOrConnectWithoutPagesInput
+    upsert?: UserUpsertWithoutPagesInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutPagesInput, UserUpdateWithoutPagesInput>, UserUncheckedUpdateWithoutPagesInput>
+  }
+
+  export type CategoryUpdateManyWithoutPagesNestedInput = {
+    create?: XOR<CategoryCreateWithoutPagesInput, CategoryUncheckedCreateWithoutPagesInput> | CategoryCreateWithoutPagesInput[] | CategoryUncheckedCreateWithoutPagesInput[]
+    connectOrCreate?: CategoryCreateOrConnectWithoutPagesInput | CategoryCreateOrConnectWithoutPagesInput[]
+    upsert?: CategoryUpsertWithWhereUniqueWithoutPagesInput | CategoryUpsertWithWhereUniqueWithoutPagesInput[]
+    set?: CategoryWhereUniqueInput | CategoryWhereUniqueInput[]
+    disconnect?: CategoryWhereUniqueInput | CategoryWhereUniqueInput[]
+    delete?: CategoryWhereUniqueInput | CategoryWhereUniqueInput[]
+    connect?: CategoryWhereUniqueInput | CategoryWhereUniqueInput[]
+    update?: CategoryUpdateWithWhereUniqueWithoutPagesInput | CategoryUpdateWithWhereUniqueWithoutPagesInput[]
+    updateMany?: CategoryUpdateManyWithWhereWithoutPagesInput | CategoryUpdateManyWithWhereWithoutPagesInput[]
+    deleteMany?: CategoryScalarWhereInput | CategoryScalarWhereInput[]
+  }
+
+  export type TagUpdateManyWithoutPagesNestedInput = {
+    create?: XOR<TagCreateWithoutPagesInput, TagUncheckedCreateWithoutPagesInput> | TagCreateWithoutPagesInput[] | TagUncheckedCreateWithoutPagesInput[]
+    connectOrCreate?: TagCreateOrConnectWithoutPagesInput | TagCreateOrConnectWithoutPagesInput[]
+    upsert?: TagUpsertWithWhereUniqueWithoutPagesInput | TagUpsertWithWhereUniqueWithoutPagesInput[]
+    set?: TagWhereUniqueInput | TagWhereUniqueInput[]
+    disconnect?: TagWhereUniqueInput | TagWhereUniqueInput[]
+    delete?: TagWhereUniqueInput | TagWhereUniqueInput[]
+    connect?: TagWhereUniqueInput | TagWhereUniqueInput[]
+    update?: TagUpdateWithWhereUniqueWithoutPagesInput | TagUpdateWithWhereUniqueWithoutPagesInput[]
+    updateMany?: TagUpdateManyWithWhereWithoutPagesInput | TagUpdateManyWithWhereWithoutPagesInput[]
+    deleteMany?: TagScalarWhereInput | TagScalarWhereInput[]
+  }
+
+  export type CategoryUncheckedUpdateManyWithoutPagesNestedInput = {
+    create?: XOR<CategoryCreateWithoutPagesInput, CategoryUncheckedCreateWithoutPagesInput> | CategoryCreateWithoutPagesInput[] | CategoryUncheckedCreateWithoutPagesInput[]
+    connectOrCreate?: CategoryCreateOrConnectWithoutPagesInput | CategoryCreateOrConnectWithoutPagesInput[]
+    upsert?: CategoryUpsertWithWhereUniqueWithoutPagesInput | CategoryUpsertWithWhereUniqueWithoutPagesInput[]
+    set?: CategoryWhereUniqueInput | CategoryWhereUniqueInput[]
+    disconnect?: CategoryWhereUniqueInput | CategoryWhereUniqueInput[]
+    delete?: CategoryWhereUniqueInput | CategoryWhereUniqueInput[]
+    connect?: CategoryWhereUniqueInput | CategoryWhereUniqueInput[]
+    update?: CategoryUpdateWithWhereUniqueWithoutPagesInput | CategoryUpdateWithWhereUniqueWithoutPagesInput[]
+    updateMany?: CategoryUpdateManyWithWhereWithoutPagesInput | CategoryUpdateManyWithWhereWithoutPagesInput[]
+    deleteMany?: CategoryScalarWhereInput | CategoryScalarWhereInput[]
+  }
+
+  export type TagUncheckedUpdateManyWithoutPagesNestedInput = {
+    create?: XOR<TagCreateWithoutPagesInput, TagUncheckedCreateWithoutPagesInput> | TagCreateWithoutPagesInput[] | TagUncheckedCreateWithoutPagesInput[]
+    connectOrCreate?: TagCreateOrConnectWithoutPagesInput | TagCreateOrConnectWithoutPagesInput[]
+    upsert?: TagUpsertWithWhereUniqueWithoutPagesInput | TagUpsertWithWhereUniqueWithoutPagesInput[]
+    set?: TagWhereUniqueInput | TagWhereUniqueInput[]
+    disconnect?: TagWhereUniqueInput | TagWhereUniqueInput[]
+    delete?: TagWhereUniqueInput | TagWhereUniqueInput[]
+    connect?: TagWhereUniqueInput | TagWhereUniqueInput[]
+    update?: TagUpdateWithWhereUniqueWithoutPagesInput | TagUpdateWithWhereUniqueWithoutPagesInput[]
+    updateMany?: TagUpdateManyWithWhereWithoutPagesInput | TagUpdateManyWithWhereWithoutPagesInput[]
     deleteMany?: TagScalarWhereInput | TagScalarWhereInput[]
   }
 
@@ -21363,96 +21880,6 @@ export namespace Prisma {
     deleteMany?: PageScalarWhereInput | PageScalarWhereInput[]
   }
 
-  export type UserCreateNestedOneWithoutPagesInput = {
-    create?: XOR<UserCreateWithoutPagesInput, UserUncheckedCreateWithoutPagesInput>
-    connectOrCreate?: UserCreateOrConnectWithoutPagesInput
-    connect?: UserWhereUniqueInput
-  }
-
-  export type CategoryCreateNestedManyWithoutPagesInput = {
-    create?: XOR<CategoryCreateWithoutPagesInput, CategoryUncheckedCreateWithoutPagesInput> | CategoryCreateWithoutPagesInput[] | CategoryUncheckedCreateWithoutPagesInput[]
-    connectOrCreate?: CategoryCreateOrConnectWithoutPagesInput | CategoryCreateOrConnectWithoutPagesInput[]
-    connect?: CategoryWhereUniqueInput | CategoryWhereUniqueInput[]
-  }
-
-  export type TagCreateNestedManyWithoutPagesInput = {
-    create?: XOR<TagCreateWithoutPagesInput, TagUncheckedCreateWithoutPagesInput> | TagCreateWithoutPagesInput[] | TagUncheckedCreateWithoutPagesInput[]
-    connectOrCreate?: TagCreateOrConnectWithoutPagesInput | TagCreateOrConnectWithoutPagesInput[]
-    connect?: TagWhereUniqueInput | TagWhereUniqueInput[]
-  }
-
-  export type CategoryUncheckedCreateNestedManyWithoutPagesInput = {
-    create?: XOR<CategoryCreateWithoutPagesInput, CategoryUncheckedCreateWithoutPagesInput> | CategoryCreateWithoutPagesInput[] | CategoryUncheckedCreateWithoutPagesInput[]
-    connectOrCreate?: CategoryCreateOrConnectWithoutPagesInput | CategoryCreateOrConnectWithoutPagesInput[]
-    connect?: CategoryWhereUniqueInput | CategoryWhereUniqueInput[]
-  }
-
-  export type TagUncheckedCreateNestedManyWithoutPagesInput = {
-    create?: XOR<TagCreateWithoutPagesInput, TagUncheckedCreateWithoutPagesInput> | TagCreateWithoutPagesInput[] | TagUncheckedCreateWithoutPagesInput[]
-    connectOrCreate?: TagCreateOrConnectWithoutPagesInput | TagCreateOrConnectWithoutPagesInput[]
-    connect?: TagWhereUniqueInput | TagWhereUniqueInput[]
-  }
-
-  export type UserUpdateOneRequiredWithoutPagesNestedInput = {
-    create?: XOR<UserCreateWithoutPagesInput, UserUncheckedCreateWithoutPagesInput>
-    connectOrCreate?: UserCreateOrConnectWithoutPagesInput
-    upsert?: UserUpsertWithoutPagesInput
-    connect?: UserWhereUniqueInput
-    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutPagesInput, UserUpdateWithoutPagesInput>, UserUncheckedUpdateWithoutPagesInput>
-  }
-
-  export type CategoryUpdateManyWithoutPagesNestedInput = {
-    create?: XOR<CategoryCreateWithoutPagesInput, CategoryUncheckedCreateWithoutPagesInput> | CategoryCreateWithoutPagesInput[] | CategoryUncheckedCreateWithoutPagesInput[]
-    connectOrCreate?: CategoryCreateOrConnectWithoutPagesInput | CategoryCreateOrConnectWithoutPagesInput[]
-    upsert?: CategoryUpsertWithWhereUniqueWithoutPagesInput | CategoryUpsertWithWhereUniqueWithoutPagesInput[]
-    set?: CategoryWhereUniqueInput | CategoryWhereUniqueInput[]
-    disconnect?: CategoryWhereUniqueInput | CategoryWhereUniqueInput[]
-    delete?: CategoryWhereUniqueInput | CategoryWhereUniqueInput[]
-    connect?: CategoryWhereUniqueInput | CategoryWhereUniqueInput[]
-    update?: CategoryUpdateWithWhereUniqueWithoutPagesInput | CategoryUpdateWithWhereUniqueWithoutPagesInput[]
-    updateMany?: CategoryUpdateManyWithWhereWithoutPagesInput | CategoryUpdateManyWithWhereWithoutPagesInput[]
-    deleteMany?: CategoryScalarWhereInput | CategoryScalarWhereInput[]
-  }
-
-  export type TagUpdateManyWithoutPagesNestedInput = {
-    create?: XOR<TagCreateWithoutPagesInput, TagUncheckedCreateWithoutPagesInput> | TagCreateWithoutPagesInput[] | TagUncheckedCreateWithoutPagesInput[]
-    connectOrCreate?: TagCreateOrConnectWithoutPagesInput | TagCreateOrConnectWithoutPagesInput[]
-    upsert?: TagUpsertWithWhereUniqueWithoutPagesInput | TagUpsertWithWhereUniqueWithoutPagesInput[]
-    set?: TagWhereUniqueInput | TagWhereUniqueInput[]
-    disconnect?: TagWhereUniqueInput | TagWhereUniqueInput[]
-    delete?: TagWhereUniqueInput | TagWhereUniqueInput[]
-    connect?: TagWhereUniqueInput | TagWhereUniqueInput[]
-    update?: TagUpdateWithWhereUniqueWithoutPagesInput | TagUpdateWithWhereUniqueWithoutPagesInput[]
-    updateMany?: TagUpdateManyWithWhereWithoutPagesInput | TagUpdateManyWithWhereWithoutPagesInput[]
-    deleteMany?: TagScalarWhereInput | TagScalarWhereInput[]
-  }
-
-  export type CategoryUncheckedUpdateManyWithoutPagesNestedInput = {
-    create?: XOR<CategoryCreateWithoutPagesInput, CategoryUncheckedCreateWithoutPagesInput> | CategoryCreateWithoutPagesInput[] | CategoryUncheckedCreateWithoutPagesInput[]
-    connectOrCreate?: CategoryCreateOrConnectWithoutPagesInput | CategoryCreateOrConnectWithoutPagesInput[]
-    upsert?: CategoryUpsertWithWhereUniqueWithoutPagesInput | CategoryUpsertWithWhereUniqueWithoutPagesInput[]
-    set?: CategoryWhereUniqueInput | CategoryWhereUniqueInput[]
-    disconnect?: CategoryWhereUniqueInput | CategoryWhereUniqueInput[]
-    delete?: CategoryWhereUniqueInput | CategoryWhereUniqueInput[]
-    connect?: CategoryWhereUniqueInput | CategoryWhereUniqueInput[]
-    update?: CategoryUpdateWithWhereUniqueWithoutPagesInput | CategoryUpdateWithWhereUniqueWithoutPagesInput[]
-    updateMany?: CategoryUpdateManyWithWhereWithoutPagesInput | CategoryUpdateManyWithWhereWithoutPagesInput[]
-    deleteMany?: CategoryScalarWhereInput | CategoryScalarWhereInput[]
-  }
-
-  export type TagUncheckedUpdateManyWithoutPagesNestedInput = {
-    create?: XOR<TagCreateWithoutPagesInput, TagUncheckedCreateWithoutPagesInput> | TagCreateWithoutPagesInput[] | TagUncheckedCreateWithoutPagesInput[]
-    connectOrCreate?: TagCreateOrConnectWithoutPagesInput | TagCreateOrConnectWithoutPagesInput[]
-    upsert?: TagUpsertWithWhereUniqueWithoutPagesInput | TagUpsertWithWhereUniqueWithoutPagesInput[]
-    set?: TagWhereUniqueInput | TagWhereUniqueInput[]
-    disconnect?: TagWhereUniqueInput | TagWhereUniqueInput[]
-    delete?: TagWhereUniqueInput | TagWhereUniqueInput[]
-    connect?: TagWhereUniqueInput | TagWhereUniqueInput[]
-    update?: TagUpdateWithWhereUniqueWithoutPagesInput | TagUpdateWithWhereUniqueWithoutPagesInput[]
-    updateMany?: TagUpdateManyWithWhereWithoutPagesInput | TagUpdateManyWithWhereWithoutPagesInput[]
-    deleteMany?: TagScalarWhereInput | TagScalarWhereInput[]
-  }
-
   export type NestedIntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[] | ListIntFieldRefInput<$PrismaModel>
@@ -21614,9 +22041,26 @@ export namespace Prisma {
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
+  export type NestedEnumContentStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.ContentStatus | EnumContentStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ContentStatus[] | ListEnumContentStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ContentStatus[] | ListEnumContentStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumContentStatusFilter<$PrismaModel> | $Enums.ContentStatus
+  }
+
   export type NestedBoolFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type NestedEnumContentStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.ContentStatus | EnumContentStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.ContentStatus[] | ListEnumContentStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.ContentStatus[] | ListEnumContentStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumContentStatusWithAggregatesFilter<$PrismaModel> | $Enums.ContentStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumContentStatusFilter<$PrismaModel>
+    _max?: NestedEnumContentStatusFilter<$PrismaModel>
   }
 
   export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
@@ -21703,7 +22147,10 @@ export namespace Prisma {
   export type SubsiteCreateWithoutAccountsInput = {
     name: string
     slug?: string | null
-    subsiteRef: string
+    subsiteRef?: string
+    domainName?: string | null
+    domainStatus?: string | null
+    domainCreatedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string | null
     config?: SubsiteConfigCreateNestedManyWithoutSubsiteInput
@@ -21713,7 +22160,10 @@ export namespace Prisma {
     id?: number
     name: string
     slug?: string | null
-    subsiteRef: string
+    subsiteRef?: string
+    domainName?: string | null
+    domainStatus?: string | null
+    domainCreatedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string | null
     config?: SubsiteConfigUncheckedCreateNestedManyWithoutSubsiteInput
@@ -21789,6 +22239,9 @@ export namespace Prisma {
     name?: StringFilter<"Subsite"> | string
     slug?: StringNullableFilter<"Subsite"> | string | null
     subsiteRef?: StringFilter<"Subsite"> | string
+    domainName?: StringNullableFilter<"Subsite"> | string | null
+    domainStatus?: StringNullableFilter<"Subsite"> | string | null
+    domainCreatedAt?: DateTimeNullableFilter<"Subsite"> | Date | string | null
     createdAt?: DateTimeFilter<"Subsite"> | Date | string
     updatedAt?: DateTimeNullableFilter<"Subsite"> | Date | string | null
   }
@@ -21796,7 +22249,7 @@ export namespace Prisma {
   export type AccountCreateWithoutSubsitesInput = {
     name: string
     slug?: string | null
-    accountRef: string
+    accountRef?: string
     createdAt?: Date | string
     updatedAt?: Date | string | null
     users?: UserCreateNestedManyWithoutAccountsInput
@@ -21806,7 +22259,7 @@ export namespace Prisma {
     id?: number
     name: string
     slug?: string | null
-    accountRef: string
+    accountRef?: string
     createdAt?: Date | string
     updatedAt?: Date | string | null
     users?: UserUncheckedCreateNestedManyWithoutAccountsInput
@@ -21919,7 +22372,10 @@ export namespace Prisma {
   export type SubsiteCreateWithoutConfigInput = {
     name: string
     slug?: string | null
-    subsiteRef: string
+    subsiteRef?: string
+    domainName?: string | null
+    domainStatus?: string | null
+    domainCreatedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string | null
     accounts?: AccountCreateNestedManyWithoutSubsitesInput
@@ -21929,7 +22385,10 @@ export namespace Prisma {
     id?: number
     name: string
     slug?: string | null
-    subsiteRef: string
+    subsiteRef?: string
+    domainName?: string | null
+    domainStatus?: string | null
+    domainCreatedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string | null
     accounts?: AccountUncheckedCreateNestedManyWithoutSubsitesInput
@@ -21955,6 +22414,9 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: NullableStringFieldUpdateOperationsInput | string | null
     subsiteRef?: StringFieldUpdateOperationsInput | string
+    domainName?: NullableStringFieldUpdateOperationsInput | string | null
+    domainStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    domainCreatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     accounts?: AccountUpdateManyWithoutSubsitesNestedInput
@@ -21965,6 +22427,9 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: NullableStringFieldUpdateOperationsInput | string | null
     subsiteRef?: StringFieldUpdateOperationsInput | string
+    domainName?: NullableStringFieldUpdateOperationsInput | string | null
+    domainStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    domainCreatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     accounts?: AccountUncheckedUpdateManyWithoutSubsitesNestedInput
@@ -22184,6 +22649,200 @@ export namespace Prisma {
     description?: StringFilter<"Tag"> | string
     createdAt?: DateTimeFilter<"Tag"> | Date | string
     updatedAt?: DateTimeNullableFilter<"Tag"> | Date | string | null
+  }
+
+  export type UserCreateWithoutPagesInput = {
+    email: string
+    name?: string | null
+    description?: string | null
+    token?: string | null
+    prefix?: string | null
+    firstName?: string | null
+    middleName?: string | null
+    lastName?: string | null
+    suffix?: string | null
+    preferredName?: string | null
+    gender?: string | null
+    birthDate?: Date | string | null
+    local?: string | null
+    timeZone?: string | null
+    lastLoginTime?: Date | string | null
+    role?: $Enums.UserRole
+    createdAt?: Date | string
+    updatedAt?: Date | string | null
+    contact?: UserContactCreateNestedOneWithoutUserInput
+    posts?: PostCreateNestedManyWithoutAuthorInput
+    profile?: UserProfileCreateNestedOneWithoutUserInput
+    accounts?: AccountCreateNestedManyWithoutUsersInput
+  }
+
+  export type UserUncheckedCreateWithoutPagesInput = {
+    id?: number
+    email: string
+    name?: string | null
+    description?: string | null
+    token?: string | null
+    prefix?: string | null
+    firstName?: string | null
+    middleName?: string | null
+    lastName?: string | null
+    suffix?: string | null
+    preferredName?: string | null
+    gender?: string | null
+    birthDate?: Date | string | null
+    local?: string | null
+    timeZone?: string | null
+    lastLoginTime?: Date | string | null
+    role?: $Enums.UserRole
+    createdAt?: Date | string
+    updatedAt?: Date | string | null
+    contact?: UserContactUncheckedCreateNestedOneWithoutUserInput
+    posts?: PostUncheckedCreateNestedManyWithoutAuthorInput
+    profile?: UserProfileUncheckedCreateNestedOneWithoutUserInput
+    accounts?: AccountUncheckedCreateNestedManyWithoutUsersInput
+  }
+
+  export type UserCreateOrConnectWithoutPagesInput = {
+    where: UserWhereUniqueInput
+    create: XOR<UserCreateWithoutPagesInput, UserUncheckedCreateWithoutPagesInput>
+  }
+
+  export type CategoryCreateWithoutPagesInput = {
+    name: string
+    description?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string | null
+    posts?: PostCreateNestedManyWithoutCategoriesInput
+  }
+
+  export type CategoryUncheckedCreateWithoutPagesInput = {
+    id?: number
+    name: string
+    description?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string | null
+    posts?: PostUncheckedCreateNestedManyWithoutCategoriesInput
+  }
+
+  export type CategoryCreateOrConnectWithoutPagesInput = {
+    where: CategoryWhereUniqueInput
+    create: XOR<CategoryCreateWithoutPagesInput, CategoryUncheckedCreateWithoutPagesInput>
+  }
+
+  export type TagCreateWithoutPagesInput = {
+    name: string
+    description: string
+    createdAt?: Date | string
+    updatedAt?: Date | string | null
+    posts?: PostCreateNestedManyWithoutTagsInput
+  }
+
+  export type TagUncheckedCreateWithoutPagesInput = {
+    id?: number
+    name: string
+    description: string
+    createdAt?: Date | string
+    updatedAt?: Date | string | null
+    posts?: PostUncheckedCreateNestedManyWithoutTagsInput
+  }
+
+  export type TagCreateOrConnectWithoutPagesInput = {
+    where: TagWhereUniqueInput
+    create: XOR<TagCreateWithoutPagesInput, TagUncheckedCreateWithoutPagesInput>
+  }
+
+  export type UserUpsertWithoutPagesInput = {
+    update: XOR<UserUpdateWithoutPagesInput, UserUncheckedUpdateWithoutPagesInput>
+    create: XOR<UserCreateWithoutPagesInput, UserUncheckedCreateWithoutPagesInput>
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutPagesInput = {
+    where?: UserWhereInput
+    data: XOR<UserUpdateWithoutPagesInput, UserUncheckedUpdateWithoutPagesInput>
+  }
+
+  export type UserUpdateWithoutPagesInput = {
+    email?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    token?: NullableStringFieldUpdateOperationsInput | string | null
+    prefix?: NullableStringFieldUpdateOperationsInput | string | null
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    middleName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    suffix?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredName?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    local?: NullableStringFieldUpdateOperationsInput | string | null
+    timeZone?: NullableStringFieldUpdateOperationsInput | string | null
+    lastLoginTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    contact?: UserContactUpdateOneWithoutUserNestedInput
+    posts?: PostUpdateManyWithoutAuthorNestedInput
+    profile?: UserProfileUpdateOneWithoutUserNestedInput
+    accounts?: AccountUpdateManyWithoutUsersNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutPagesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    email?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    token?: NullableStringFieldUpdateOperationsInput | string | null
+    prefix?: NullableStringFieldUpdateOperationsInput | string | null
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    middleName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    suffix?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredName?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    local?: NullableStringFieldUpdateOperationsInput | string | null
+    timeZone?: NullableStringFieldUpdateOperationsInput | string | null
+    lastLoginTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    contact?: UserContactUncheckedUpdateOneWithoutUserNestedInput
+    posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput
+    profile?: UserProfileUncheckedUpdateOneWithoutUserNestedInput
+    accounts?: AccountUncheckedUpdateManyWithoutUsersNestedInput
+  }
+
+  export type CategoryUpsertWithWhereUniqueWithoutPagesInput = {
+    where: CategoryWhereUniqueInput
+    update: XOR<CategoryUpdateWithoutPagesInput, CategoryUncheckedUpdateWithoutPagesInput>
+    create: XOR<CategoryCreateWithoutPagesInput, CategoryUncheckedCreateWithoutPagesInput>
+  }
+
+  export type CategoryUpdateWithWhereUniqueWithoutPagesInput = {
+    where: CategoryWhereUniqueInput
+    data: XOR<CategoryUpdateWithoutPagesInput, CategoryUncheckedUpdateWithoutPagesInput>
+  }
+
+  export type CategoryUpdateManyWithWhereWithoutPagesInput = {
+    where: CategoryScalarWhereInput
+    data: XOR<CategoryUpdateManyMutationInput, CategoryUncheckedUpdateManyWithoutPagesInput>
+  }
+
+  export type TagUpsertWithWhereUniqueWithoutPagesInput = {
+    where: TagWhereUniqueInput
+    update: XOR<TagUpdateWithoutPagesInput, TagUncheckedUpdateWithoutPagesInput>
+    create: XOR<TagCreateWithoutPagesInput, TagUncheckedCreateWithoutPagesInput>
+  }
+
+  export type TagUpdateWithWhereUniqueWithoutPagesInput = {
+    where: TagWhereUniqueInput
+    data: XOR<TagUpdateWithoutPagesInput, TagUncheckedUpdateWithoutPagesInput>
+  }
+
+  export type TagUpdateManyWithWhereWithoutPagesInput = {
+    where: TagScalarWhereInput
+    data: XOR<TagUpdateManyMutationInput, TagUncheckedUpdateManyWithoutPagesInput>
   }
 
   export type UserCreateWithoutProfileInput = {
@@ -22915,6 +23574,8 @@ export namespace Prisma {
     overview?: string
     content?: string | null
     slug?: string | null
+    coverImage?: string | null
+    status?: $Enums.ContentStatus
     published?: boolean
     publishedAt?: Date | string | null
     deleted?: boolean
@@ -22933,6 +23594,8 @@ export namespace Prisma {
     overview?: string
     content?: string | null
     slug?: string | null
+    coverImage?: string | null
+    status?: $Enums.ContentStatus
     published?: boolean
     publishedAt?: Date | string | null
     deleted?: boolean
@@ -22983,10 +23646,19 @@ export namespace Prisma {
 
   export type PageCreateWithoutAuthorInput = {
     title: string
-    description?: string | null
+    overview?: string
     content?: string | null
     slug?: string | null
+    status?: $Enums.ContentStatus
+    publishedAt?: Date | string | null
     published?: boolean
+    coverImage?: string | null
+    layoutTemplate?: string | null
+    theme?: string | null
+    metaData?: string | null
+    seoSettings?: string | null
+    analyticsCodes?: string | null
+    showOnNav?: boolean
     deleted?: boolean
     accountRef?: string
     subsiteRef?: string
@@ -22999,10 +23671,19 @@ export namespace Prisma {
   export type PageUncheckedCreateWithoutAuthorInput = {
     id?: number
     title: string
-    description?: string | null
+    overview?: string
     content?: string | null
     slug?: string | null
+    status?: $Enums.ContentStatus
+    publishedAt?: Date | string | null
     published?: boolean
+    coverImage?: string | null
+    layoutTemplate?: string | null
+    theme?: string | null
+    metaData?: string | null
+    seoSettings?: string | null
+    analyticsCodes?: string | null
+    showOnNav?: boolean
     deleted?: boolean
     accountRef?: string
     subsiteRef?: string
@@ -23025,7 +23706,7 @@ export namespace Prisma {
   export type AccountCreateWithoutUsersInput = {
     name: string
     slug?: string | null
-    accountRef: string
+    accountRef?: string
     createdAt?: Date | string
     updatedAt?: Date | string | null
     subsites?: SubsiteCreateNestedManyWithoutAccountsInput
@@ -23035,7 +23716,7 @@ export namespace Prisma {
     id?: number
     name: string
     slug?: string | null
-    accountRef: string
+    accountRef?: string
     createdAt?: Date | string
     updatedAt?: Date | string | null
     subsites?: SubsiteUncheckedCreateNestedManyWithoutAccountsInput
@@ -23101,6 +23782,8 @@ export namespace Prisma {
     overview?: StringFilter<"Post"> | string
     content?: StringNullableFilter<"Post"> | string | null
     slug?: StringNullableFilter<"Post"> | string | null
+    coverImage?: StringNullableFilter<"Post"> | string | null
+    status?: EnumContentStatusFilter<"Post"> | $Enums.ContentStatus
     published?: BoolFilter<"Post"> | boolean
     publishedAt?: DateTimeNullableFilter<"Post"> | Date | string | null
     deleted?: BoolFilter<"Post"> | boolean
@@ -23166,10 +23849,19 @@ export namespace Prisma {
     NOT?: PageScalarWhereInput | PageScalarWhereInput[]
     id?: IntFilter<"Page"> | number
     title?: StringFilter<"Page"> | string
-    description?: StringNullableFilter<"Page"> | string | null
+    overview?: StringFilter<"Page"> | string
     content?: StringNullableFilter<"Page"> | string | null
     slug?: StringNullableFilter<"Page"> | string | null
+    status?: EnumContentStatusFilter<"Page"> | $Enums.ContentStatus
+    publishedAt?: DateTimeNullableFilter<"Page"> | Date | string | null
     published?: BoolFilter<"Page"> | boolean
+    coverImage?: StringNullableFilter<"Page"> | string | null
+    layoutTemplate?: StringNullableFilter<"Page"> | string | null
+    theme?: StringNullableFilter<"Page"> | string | null
+    metaData?: StringNullableFilter<"Page"> | string | null
+    seoSettings?: StringNullableFilter<"Page"> | string | null
+    analyticsCodes?: StringNullableFilter<"Page"> | string | null
+    showOnNav?: BoolFilter<"Page"> | boolean
     deleted?: BoolFilter<"Page"> | boolean
     authorId?: IntFilter<"Page"> | number
     accountRef?: StringFilter<"Page"> | string
@@ -23199,6 +23891,8 @@ export namespace Prisma {
     overview?: string
     content?: string | null
     slug?: string | null
+    coverImage?: string | null
+    status?: $Enums.ContentStatus
     published?: boolean
     publishedAt?: Date | string | null
     deleted?: boolean
@@ -23217,6 +23911,8 @@ export namespace Prisma {
     overview?: string
     content?: string | null
     slug?: string | null
+    coverImage?: string | null
+    status?: $Enums.ContentStatus
     published?: boolean
     publishedAt?: Date | string | null
     deleted?: boolean
@@ -23236,10 +23932,19 @@ export namespace Prisma {
 
   export type PageCreateWithoutCategoriesInput = {
     title: string
-    description?: string | null
+    overview?: string
     content?: string | null
     slug?: string | null
+    status?: $Enums.ContentStatus
+    publishedAt?: Date | string | null
     published?: boolean
+    coverImage?: string | null
+    layoutTemplate?: string | null
+    theme?: string | null
+    metaData?: string | null
+    seoSettings?: string | null
+    analyticsCodes?: string | null
+    showOnNav?: boolean
     deleted?: boolean
     accountRef?: string
     subsiteRef?: string
@@ -23252,10 +23957,19 @@ export namespace Prisma {
   export type PageUncheckedCreateWithoutCategoriesInput = {
     id?: number
     title: string
-    description?: string | null
+    overview?: string
     content?: string | null
     slug?: string | null
+    status?: $Enums.ContentStatus
+    publishedAt?: Date | string | null
     published?: boolean
+    coverImage?: string | null
+    layoutTemplate?: string | null
+    theme?: string | null
+    metaData?: string | null
+    seoSettings?: string | null
+    analyticsCodes?: string | null
+    showOnNav?: boolean
     deleted?: boolean
     authorId: number
     accountRef?: string
@@ -23307,6 +24021,8 @@ export namespace Prisma {
     overview?: string
     content?: string | null
     slug?: string | null
+    coverImage?: string | null
+    status?: $Enums.ContentStatus
     published?: boolean
     publishedAt?: Date | string | null
     deleted?: boolean
@@ -23325,6 +24041,8 @@ export namespace Prisma {
     overview?: string
     content?: string | null
     slug?: string | null
+    coverImage?: string | null
+    status?: $Enums.ContentStatus
     published?: boolean
     publishedAt?: Date | string | null
     deleted?: boolean
@@ -23344,10 +24062,19 @@ export namespace Prisma {
 
   export type PageCreateWithoutTagsInput = {
     title: string
-    description?: string | null
+    overview?: string
     content?: string | null
     slug?: string | null
+    status?: $Enums.ContentStatus
+    publishedAt?: Date | string | null
     published?: boolean
+    coverImage?: string | null
+    layoutTemplate?: string | null
+    theme?: string | null
+    metaData?: string | null
+    seoSettings?: string | null
+    analyticsCodes?: string | null
+    showOnNav?: boolean
     deleted?: boolean
     accountRef?: string
     subsiteRef?: string
@@ -23360,10 +24087,19 @@ export namespace Prisma {
   export type PageUncheckedCreateWithoutTagsInput = {
     id?: number
     title: string
-    description?: string | null
+    overview?: string
     content?: string | null
     slug?: string | null
+    status?: $Enums.ContentStatus
+    publishedAt?: Date | string | null
     published?: boolean
+    coverImage?: string | null
+    layoutTemplate?: string | null
+    theme?: string | null
+    metaData?: string | null
+    seoSettings?: string | null
+    analyticsCodes?: string | null
+    showOnNav?: boolean
     deleted?: boolean
     authorId: number
     accountRef?: string
@@ -23408,200 +24144,6 @@ export namespace Prisma {
   export type PageUpdateManyWithWhereWithoutTagsInput = {
     where: PageScalarWhereInput
     data: XOR<PageUpdateManyMutationInput, PageUncheckedUpdateManyWithoutTagsInput>
-  }
-
-  export type UserCreateWithoutPagesInput = {
-    email: string
-    name?: string | null
-    description?: string | null
-    token?: string | null
-    prefix?: string | null
-    firstName?: string | null
-    middleName?: string | null
-    lastName?: string | null
-    suffix?: string | null
-    preferredName?: string | null
-    gender?: string | null
-    birthDate?: Date | string | null
-    local?: string | null
-    timeZone?: string | null
-    lastLoginTime?: Date | string | null
-    role?: $Enums.UserRole
-    createdAt?: Date | string
-    updatedAt?: Date | string | null
-    contact?: UserContactCreateNestedOneWithoutUserInput
-    posts?: PostCreateNestedManyWithoutAuthorInput
-    profile?: UserProfileCreateNestedOneWithoutUserInput
-    accounts?: AccountCreateNestedManyWithoutUsersInput
-  }
-
-  export type UserUncheckedCreateWithoutPagesInput = {
-    id?: number
-    email: string
-    name?: string | null
-    description?: string | null
-    token?: string | null
-    prefix?: string | null
-    firstName?: string | null
-    middleName?: string | null
-    lastName?: string | null
-    suffix?: string | null
-    preferredName?: string | null
-    gender?: string | null
-    birthDate?: Date | string | null
-    local?: string | null
-    timeZone?: string | null
-    lastLoginTime?: Date | string | null
-    role?: $Enums.UserRole
-    createdAt?: Date | string
-    updatedAt?: Date | string | null
-    contact?: UserContactUncheckedCreateNestedOneWithoutUserInput
-    posts?: PostUncheckedCreateNestedManyWithoutAuthorInput
-    profile?: UserProfileUncheckedCreateNestedOneWithoutUserInput
-    accounts?: AccountUncheckedCreateNestedManyWithoutUsersInput
-  }
-
-  export type UserCreateOrConnectWithoutPagesInput = {
-    where: UserWhereUniqueInput
-    create: XOR<UserCreateWithoutPagesInput, UserUncheckedCreateWithoutPagesInput>
-  }
-
-  export type CategoryCreateWithoutPagesInput = {
-    name: string
-    description?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string | null
-    posts?: PostCreateNestedManyWithoutCategoriesInput
-  }
-
-  export type CategoryUncheckedCreateWithoutPagesInput = {
-    id?: number
-    name: string
-    description?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string | null
-    posts?: PostUncheckedCreateNestedManyWithoutCategoriesInput
-  }
-
-  export type CategoryCreateOrConnectWithoutPagesInput = {
-    where: CategoryWhereUniqueInput
-    create: XOR<CategoryCreateWithoutPagesInput, CategoryUncheckedCreateWithoutPagesInput>
-  }
-
-  export type TagCreateWithoutPagesInput = {
-    name: string
-    description: string
-    createdAt?: Date | string
-    updatedAt?: Date | string | null
-    posts?: PostCreateNestedManyWithoutTagsInput
-  }
-
-  export type TagUncheckedCreateWithoutPagesInput = {
-    id?: number
-    name: string
-    description: string
-    createdAt?: Date | string
-    updatedAt?: Date | string | null
-    posts?: PostUncheckedCreateNestedManyWithoutTagsInput
-  }
-
-  export type TagCreateOrConnectWithoutPagesInput = {
-    where: TagWhereUniqueInput
-    create: XOR<TagCreateWithoutPagesInput, TagUncheckedCreateWithoutPagesInput>
-  }
-
-  export type UserUpsertWithoutPagesInput = {
-    update: XOR<UserUpdateWithoutPagesInput, UserUncheckedUpdateWithoutPagesInput>
-    create: XOR<UserCreateWithoutPagesInput, UserUncheckedCreateWithoutPagesInput>
-    where?: UserWhereInput
-  }
-
-  export type UserUpdateToOneWithWhereWithoutPagesInput = {
-    where?: UserWhereInput
-    data: XOR<UserUpdateWithoutPagesInput, UserUncheckedUpdateWithoutPagesInput>
-  }
-
-  export type UserUpdateWithoutPagesInput = {
-    email?: StringFieldUpdateOperationsInput | string
-    name?: NullableStringFieldUpdateOperationsInput | string | null
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    token?: NullableStringFieldUpdateOperationsInput | string | null
-    prefix?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: NullableStringFieldUpdateOperationsInput | string | null
-    middleName?: NullableStringFieldUpdateOperationsInput | string | null
-    lastName?: NullableStringFieldUpdateOperationsInput | string | null
-    suffix?: NullableStringFieldUpdateOperationsInput | string | null
-    preferredName?: NullableStringFieldUpdateOperationsInput | string | null
-    gender?: NullableStringFieldUpdateOperationsInput | string | null
-    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    local?: NullableStringFieldUpdateOperationsInput | string | null
-    timeZone?: NullableStringFieldUpdateOperationsInput | string | null
-    lastLoginTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    contact?: UserContactUpdateOneWithoutUserNestedInput
-    posts?: PostUpdateManyWithoutAuthorNestedInput
-    profile?: UserProfileUpdateOneWithoutUserNestedInput
-    accounts?: AccountUpdateManyWithoutUsersNestedInput
-  }
-
-  export type UserUncheckedUpdateWithoutPagesInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    email?: StringFieldUpdateOperationsInput | string
-    name?: NullableStringFieldUpdateOperationsInput | string | null
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    token?: NullableStringFieldUpdateOperationsInput | string | null
-    prefix?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: NullableStringFieldUpdateOperationsInput | string | null
-    middleName?: NullableStringFieldUpdateOperationsInput | string | null
-    lastName?: NullableStringFieldUpdateOperationsInput | string | null
-    suffix?: NullableStringFieldUpdateOperationsInput | string | null
-    preferredName?: NullableStringFieldUpdateOperationsInput | string | null
-    gender?: NullableStringFieldUpdateOperationsInput | string | null
-    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    local?: NullableStringFieldUpdateOperationsInput | string | null
-    timeZone?: NullableStringFieldUpdateOperationsInput | string | null
-    lastLoginTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    contact?: UserContactUncheckedUpdateOneWithoutUserNestedInput
-    posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput
-    profile?: UserProfileUncheckedUpdateOneWithoutUserNestedInput
-    accounts?: AccountUncheckedUpdateManyWithoutUsersNestedInput
-  }
-
-  export type CategoryUpsertWithWhereUniqueWithoutPagesInput = {
-    where: CategoryWhereUniqueInput
-    update: XOR<CategoryUpdateWithoutPagesInput, CategoryUncheckedUpdateWithoutPagesInput>
-    create: XOR<CategoryCreateWithoutPagesInput, CategoryUncheckedCreateWithoutPagesInput>
-  }
-
-  export type CategoryUpdateWithWhereUniqueWithoutPagesInput = {
-    where: CategoryWhereUniqueInput
-    data: XOR<CategoryUpdateWithoutPagesInput, CategoryUncheckedUpdateWithoutPagesInput>
-  }
-
-  export type CategoryUpdateManyWithWhereWithoutPagesInput = {
-    where: CategoryScalarWhereInput
-    data: XOR<CategoryUpdateManyMutationInput, CategoryUncheckedUpdateManyWithoutPagesInput>
-  }
-
-  export type TagUpsertWithWhereUniqueWithoutPagesInput = {
-    where: TagWhereUniqueInput
-    update: XOR<TagUpdateWithoutPagesInput, TagUncheckedUpdateWithoutPagesInput>
-    create: XOR<TagCreateWithoutPagesInput, TagUncheckedCreateWithoutPagesInput>
-  }
-
-  export type TagUpdateWithWhereUniqueWithoutPagesInput = {
-    where: TagWhereUniqueInput
-    data: XOR<TagUpdateWithoutPagesInput, TagUncheckedUpdateWithoutPagesInput>
-  }
-
-  export type TagUpdateManyWithWhereWithoutPagesInput = {
-    where: TagScalarWhereInput
-    data: XOR<TagUpdateManyMutationInput, TagUncheckedUpdateManyWithoutPagesInput>
   }
 
   export type UserUpdateWithoutAccountsInput = {
@@ -23681,6 +24223,9 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: NullableStringFieldUpdateOperationsInput | string | null
     subsiteRef?: StringFieldUpdateOperationsInput | string
+    domainName?: NullableStringFieldUpdateOperationsInput | string | null
+    domainStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    domainCreatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     config?: SubsiteConfigUpdateManyWithoutSubsiteNestedInput
@@ -23691,6 +24236,9 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: NullableStringFieldUpdateOperationsInput | string | null
     subsiteRef?: StringFieldUpdateOperationsInput | string
+    domainName?: NullableStringFieldUpdateOperationsInput | string | null
+    domainStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    domainCreatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     config?: SubsiteConfigUncheckedUpdateManyWithoutSubsiteNestedInput
@@ -23701,6 +24249,9 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: NullableStringFieldUpdateOperationsInput | string | null
     subsiteRef?: StringFieldUpdateOperationsInput | string
+    domainName?: NullableStringFieldUpdateOperationsInput | string | null
+    domainStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    domainCreatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
@@ -23838,356 +24389,6 @@ export namespace Prisma {
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
-  export type PostCreateManyAuthorInput = {
-    id?: number
-    title: string
-    overview?: string
-    content?: string | null
-    slug?: string | null
-    published?: boolean
-    publishedAt?: Date | string | null
-    deleted?: boolean
-    accountRef?: string
-    subsiteRef?: string
-    contextUserId?: string
-    createdAt?: Date | string
-    updatedAt?: Date | string | null
-  }
-
-  export type PageCreateManyAuthorInput = {
-    id?: number
-    title: string
-    description?: string | null
-    content?: string | null
-    slug?: string | null
-    published?: boolean
-    deleted?: boolean
-    accountRef?: string
-    subsiteRef?: string
-    createdAt?: Date | string
-    updatedAt?: Date | string | null
-  }
-
-  export type PostUpdateWithoutAuthorInput = {
-    title?: StringFieldUpdateOperationsInput | string
-    overview?: StringFieldUpdateOperationsInput | string
-    content?: NullableStringFieldUpdateOperationsInput | string | null
-    slug?: NullableStringFieldUpdateOperationsInput | string | null
-    published?: BoolFieldUpdateOperationsInput | boolean
-    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    deleted?: BoolFieldUpdateOperationsInput | boolean
-    accountRef?: StringFieldUpdateOperationsInput | string
-    subsiteRef?: StringFieldUpdateOperationsInput | string
-    contextUserId?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    categories?: CategoryUpdateManyWithoutPostsNestedInput
-    tags?: TagUpdateManyWithoutPostsNestedInput
-  }
-
-  export type PostUncheckedUpdateWithoutAuthorInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    title?: StringFieldUpdateOperationsInput | string
-    overview?: StringFieldUpdateOperationsInput | string
-    content?: NullableStringFieldUpdateOperationsInput | string | null
-    slug?: NullableStringFieldUpdateOperationsInput | string | null
-    published?: BoolFieldUpdateOperationsInput | boolean
-    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    deleted?: BoolFieldUpdateOperationsInput | boolean
-    accountRef?: StringFieldUpdateOperationsInput | string
-    subsiteRef?: StringFieldUpdateOperationsInput | string
-    contextUserId?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    categories?: CategoryUncheckedUpdateManyWithoutPostsNestedInput
-    tags?: TagUncheckedUpdateManyWithoutPostsNestedInput
-  }
-
-  export type PostUncheckedUpdateManyWithoutAuthorInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    title?: StringFieldUpdateOperationsInput | string
-    overview?: StringFieldUpdateOperationsInput | string
-    content?: NullableStringFieldUpdateOperationsInput | string | null
-    slug?: NullableStringFieldUpdateOperationsInput | string | null
-    published?: BoolFieldUpdateOperationsInput | boolean
-    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    deleted?: BoolFieldUpdateOperationsInput | boolean
-    accountRef?: StringFieldUpdateOperationsInput | string
-    subsiteRef?: StringFieldUpdateOperationsInput | string
-    contextUserId?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  }
-
-  export type PageUpdateWithoutAuthorInput = {
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    content?: NullableStringFieldUpdateOperationsInput | string | null
-    slug?: NullableStringFieldUpdateOperationsInput | string | null
-    published?: BoolFieldUpdateOperationsInput | boolean
-    deleted?: BoolFieldUpdateOperationsInput | boolean
-    accountRef?: StringFieldUpdateOperationsInput | string
-    subsiteRef?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    categories?: CategoryUpdateManyWithoutPagesNestedInput
-    tags?: TagUpdateManyWithoutPagesNestedInput
-  }
-
-  export type PageUncheckedUpdateWithoutAuthorInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    content?: NullableStringFieldUpdateOperationsInput | string | null
-    slug?: NullableStringFieldUpdateOperationsInput | string | null
-    published?: BoolFieldUpdateOperationsInput | boolean
-    deleted?: BoolFieldUpdateOperationsInput | boolean
-    accountRef?: StringFieldUpdateOperationsInput | string
-    subsiteRef?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    categories?: CategoryUncheckedUpdateManyWithoutPagesNestedInput
-    tags?: TagUncheckedUpdateManyWithoutPagesNestedInput
-  }
-
-  export type PageUncheckedUpdateManyWithoutAuthorInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    content?: NullableStringFieldUpdateOperationsInput | string | null
-    slug?: NullableStringFieldUpdateOperationsInput | string | null
-    published?: BoolFieldUpdateOperationsInput | boolean
-    deleted?: BoolFieldUpdateOperationsInput | boolean
-    accountRef?: StringFieldUpdateOperationsInput | string
-    subsiteRef?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  }
-
-  export type AccountUpdateWithoutUsersInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    slug?: NullableStringFieldUpdateOperationsInput | string | null
-    accountRef?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    subsites?: SubsiteUpdateManyWithoutAccountsNestedInput
-  }
-
-  export type AccountUncheckedUpdateWithoutUsersInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    slug?: NullableStringFieldUpdateOperationsInput | string | null
-    accountRef?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    subsites?: SubsiteUncheckedUpdateManyWithoutAccountsNestedInput
-  }
-
-  export type AccountUncheckedUpdateManyWithoutUsersInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    slug?: NullableStringFieldUpdateOperationsInput | string | null
-    accountRef?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  }
-
-  export type PostUpdateWithoutCategoriesInput = {
-    title?: StringFieldUpdateOperationsInput | string
-    overview?: StringFieldUpdateOperationsInput | string
-    content?: NullableStringFieldUpdateOperationsInput | string | null
-    slug?: NullableStringFieldUpdateOperationsInput | string | null
-    published?: BoolFieldUpdateOperationsInput | boolean
-    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    deleted?: BoolFieldUpdateOperationsInput | boolean
-    accountRef?: StringFieldUpdateOperationsInput | string
-    subsiteRef?: StringFieldUpdateOperationsInput | string
-    contextUserId?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    author?: UserUpdateOneRequiredWithoutPostsNestedInput
-    tags?: TagUpdateManyWithoutPostsNestedInput
-  }
-
-  export type PostUncheckedUpdateWithoutCategoriesInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    title?: StringFieldUpdateOperationsInput | string
-    overview?: StringFieldUpdateOperationsInput | string
-    content?: NullableStringFieldUpdateOperationsInput | string | null
-    slug?: NullableStringFieldUpdateOperationsInput | string | null
-    published?: BoolFieldUpdateOperationsInput | boolean
-    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    deleted?: BoolFieldUpdateOperationsInput | boolean
-    authorId?: IntFieldUpdateOperationsInput | number
-    accountRef?: StringFieldUpdateOperationsInput | string
-    subsiteRef?: StringFieldUpdateOperationsInput | string
-    contextUserId?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    tags?: TagUncheckedUpdateManyWithoutPostsNestedInput
-  }
-
-  export type PostUncheckedUpdateManyWithoutCategoriesInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    title?: StringFieldUpdateOperationsInput | string
-    overview?: StringFieldUpdateOperationsInput | string
-    content?: NullableStringFieldUpdateOperationsInput | string | null
-    slug?: NullableStringFieldUpdateOperationsInput | string | null
-    published?: BoolFieldUpdateOperationsInput | boolean
-    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    deleted?: BoolFieldUpdateOperationsInput | boolean
-    authorId?: IntFieldUpdateOperationsInput | number
-    accountRef?: StringFieldUpdateOperationsInput | string
-    subsiteRef?: StringFieldUpdateOperationsInput | string
-    contextUserId?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  }
-
-  export type PageUpdateWithoutCategoriesInput = {
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    content?: NullableStringFieldUpdateOperationsInput | string | null
-    slug?: NullableStringFieldUpdateOperationsInput | string | null
-    published?: BoolFieldUpdateOperationsInput | boolean
-    deleted?: BoolFieldUpdateOperationsInput | boolean
-    accountRef?: StringFieldUpdateOperationsInput | string
-    subsiteRef?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    author?: UserUpdateOneRequiredWithoutPagesNestedInput
-    tags?: TagUpdateManyWithoutPagesNestedInput
-  }
-
-  export type PageUncheckedUpdateWithoutCategoriesInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    content?: NullableStringFieldUpdateOperationsInput | string | null
-    slug?: NullableStringFieldUpdateOperationsInput | string | null
-    published?: BoolFieldUpdateOperationsInput | boolean
-    deleted?: BoolFieldUpdateOperationsInput | boolean
-    authorId?: IntFieldUpdateOperationsInput | number
-    accountRef?: StringFieldUpdateOperationsInput | string
-    subsiteRef?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    tags?: TagUncheckedUpdateManyWithoutPagesNestedInput
-  }
-
-  export type PageUncheckedUpdateManyWithoutCategoriesInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    content?: NullableStringFieldUpdateOperationsInput | string | null
-    slug?: NullableStringFieldUpdateOperationsInput | string | null
-    published?: BoolFieldUpdateOperationsInput | boolean
-    deleted?: BoolFieldUpdateOperationsInput | boolean
-    authorId?: IntFieldUpdateOperationsInput | number
-    accountRef?: StringFieldUpdateOperationsInput | string
-    subsiteRef?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  }
-
-  export type PostUpdateWithoutTagsInput = {
-    title?: StringFieldUpdateOperationsInput | string
-    overview?: StringFieldUpdateOperationsInput | string
-    content?: NullableStringFieldUpdateOperationsInput | string | null
-    slug?: NullableStringFieldUpdateOperationsInput | string | null
-    published?: BoolFieldUpdateOperationsInput | boolean
-    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    deleted?: BoolFieldUpdateOperationsInput | boolean
-    accountRef?: StringFieldUpdateOperationsInput | string
-    subsiteRef?: StringFieldUpdateOperationsInput | string
-    contextUserId?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    author?: UserUpdateOneRequiredWithoutPostsNestedInput
-    categories?: CategoryUpdateManyWithoutPostsNestedInput
-  }
-
-  export type PostUncheckedUpdateWithoutTagsInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    title?: StringFieldUpdateOperationsInput | string
-    overview?: StringFieldUpdateOperationsInput | string
-    content?: NullableStringFieldUpdateOperationsInput | string | null
-    slug?: NullableStringFieldUpdateOperationsInput | string | null
-    published?: BoolFieldUpdateOperationsInput | boolean
-    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    deleted?: BoolFieldUpdateOperationsInput | boolean
-    authorId?: IntFieldUpdateOperationsInput | number
-    accountRef?: StringFieldUpdateOperationsInput | string
-    subsiteRef?: StringFieldUpdateOperationsInput | string
-    contextUserId?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    categories?: CategoryUncheckedUpdateManyWithoutPostsNestedInput
-  }
-
-  export type PostUncheckedUpdateManyWithoutTagsInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    title?: StringFieldUpdateOperationsInput | string
-    overview?: StringFieldUpdateOperationsInput | string
-    content?: NullableStringFieldUpdateOperationsInput | string | null
-    slug?: NullableStringFieldUpdateOperationsInput | string | null
-    published?: BoolFieldUpdateOperationsInput | boolean
-    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    deleted?: BoolFieldUpdateOperationsInput | boolean
-    authorId?: IntFieldUpdateOperationsInput | number
-    accountRef?: StringFieldUpdateOperationsInput | string
-    subsiteRef?: StringFieldUpdateOperationsInput | string
-    contextUserId?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  }
-
-  export type PageUpdateWithoutTagsInput = {
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    content?: NullableStringFieldUpdateOperationsInput | string | null
-    slug?: NullableStringFieldUpdateOperationsInput | string | null
-    published?: BoolFieldUpdateOperationsInput | boolean
-    deleted?: BoolFieldUpdateOperationsInput | boolean
-    accountRef?: StringFieldUpdateOperationsInput | string
-    subsiteRef?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    author?: UserUpdateOneRequiredWithoutPagesNestedInput
-    categories?: CategoryUpdateManyWithoutPagesNestedInput
-  }
-
-  export type PageUncheckedUpdateWithoutTagsInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    content?: NullableStringFieldUpdateOperationsInput | string | null
-    slug?: NullableStringFieldUpdateOperationsInput | string | null
-    published?: BoolFieldUpdateOperationsInput | boolean
-    deleted?: BoolFieldUpdateOperationsInput | boolean
-    authorId?: IntFieldUpdateOperationsInput | number
-    accountRef?: StringFieldUpdateOperationsInput | string
-    subsiteRef?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    categories?: CategoryUncheckedUpdateManyWithoutPagesNestedInput
-  }
-
-  export type PageUncheckedUpdateManyWithoutTagsInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    content?: NullableStringFieldUpdateOperationsInput | string | null
-    slug?: NullableStringFieldUpdateOperationsInput | string | null
-    published?: BoolFieldUpdateOperationsInput | boolean
-    deleted?: BoolFieldUpdateOperationsInput | boolean
-    authorId?: IntFieldUpdateOperationsInput | number
-    accountRef?: StringFieldUpdateOperationsInput | string
-    subsiteRef?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  }
-
   export type CategoryUpdateWithoutPagesInput = {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
@@ -24238,6 +24439,466 @@ export namespace Prisma {
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
+  export type PostCreateManyAuthorInput = {
+    id?: number
+    title: string
+    overview?: string
+    content?: string | null
+    slug?: string | null
+    coverImage?: string | null
+    status?: $Enums.ContentStatus
+    published?: boolean
+    publishedAt?: Date | string | null
+    deleted?: boolean
+    accountRef?: string
+    subsiteRef?: string
+    contextUserId?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string | null
+  }
+
+  export type PageCreateManyAuthorInput = {
+    id?: number
+    title: string
+    overview?: string
+    content?: string | null
+    slug?: string | null
+    status?: $Enums.ContentStatus
+    publishedAt?: Date | string | null
+    published?: boolean
+    coverImage?: string | null
+    layoutTemplate?: string | null
+    theme?: string | null
+    metaData?: string | null
+    seoSettings?: string | null
+    analyticsCodes?: string | null
+    showOnNav?: boolean
+    deleted?: boolean
+    accountRef?: string
+    subsiteRef?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string | null
+  }
+
+  export type PostUpdateWithoutAuthorInput = {
+    title?: StringFieldUpdateOperationsInput | string
+    overview?: StringFieldUpdateOperationsInput | string
+    content?: NullableStringFieldUpdateOperationsInput | string | null
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    coverImage?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumContentStatusFieldUpdateOperationsInput | $Enums.ContentStatus
+    published?: BoolFieldUpdateOperationsInput | boolean
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deleted?: BoolFieldUpdateOperationsInput | boolean
+    accountRef?: StringFieldUpdateOperationsInput | string
+    subsiteRef?: StringFieldUpdateOperationsInput | string
+    contextUserId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    categories?: CategoryUpdateManyWithoutPostsNestedInput
+    tags?: TagUpdateManyWithoutPostsNestedInput
+  }
+
+  export type PostUncheckedUpdateWithoutAuthorInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    overview?: StringFieldUpdateOperationsInput | string
+    content?: NullableStringFieldUpdateOperationsInput | string | null
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    coverImage?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumContentStatusFieldUpdateOperationsInput | $Enums.ContentStatus
+    published?: BoolFieldUpdateOperationsInput | boolean
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deleted?: BoolFieldUpdateOperationsInput | boolean
+    accountRef?: StringFieldUpdateOperationsInput | string
+    subsiteRef?: StringFieldUpdateOperationsInput | string
+    contextUserId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    categories?: CategoryUncheckedUpdateManyWithoutPostsNestedInput
+    tags?: TagUncheckedUpdateManyWithoutPostsNestedInput
+  }
+
+  export type PostUncheckedUpdateManyWithoutAuthorInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    overview?: StringFieldUpdateOperationsInput | string
+    content?: NullableStringFieldUpdateOperationsInput | string | null
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    coverImage?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumContentStatusFieldUpdateOperationsInput | $Enums.ContentStatus
+    published?: BoolFieldUpdateOperationsInput | boolean
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deleted?: BoolFieldUpdateOperationsInput | boolean
+    accountRef?: StringFieldUpdateOperationsInput | string
+    subsiteRef?: StringFieldUpdateOperationsInput | string
+    contextUserId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type PageUpdateWithoutAuthorInput = {
+    title?: StringFieldUpdateOperationsInput | string
+    overview?: StringFieldUpdateOperationsInput | string
+    content?: NullableStringFieldUpdateOperationsInput | string | null
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumContentStatusFieldUpdateOperationsInput | $Enums.ContentStatus
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    published?: BoolFieldUpdateOperationsInput | boolean
+    coverImage?: NullableStringFieldUpdateOperationsInput | string | null
+    layoutTemplate?: NullableStringFieldUpdateOperationsInput | string | null
+    theme?: NullableStringFieldUpdateOperationsInput | string | null
+    metaData?: NullableStringFieldUpdateOperationsInput | string | null
+    seoSettings?: NullableStringFieldUpdateOperationsInput | string | null
+    analyticsCodes?: NullableStringFieldUpdateOperationsInput | string | null
+    showOnNav?: BoolFieldUpdateOperationsInput | boolean
+    deleted?: BoolFieldUpdateOperationsInput | boolean
+    accountRef?: StringFieldUpdateOperationsInput | string
+    subsiteRef?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    categories?: CategoryUpdateManyWithoutPagesNestedInput
+    tags?: TagUpdateManyWithoutPagesNestedInput
+  }
+
+  export type PageUncheckedUpdateWithoutAuthorInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    overview?: StringFieldUpdateOperationsInput | string
+    content?: NullableStringFieldUpdateOperationsInput | string | null
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumContentStatusFieldUpdateOperationsInput | $Enums.ContentStatus
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    published?: BoolFieldUpdateOperationsInput | boolean
+    coverImage?: NullableStringFieldUpdateOperationsInput | string | null
+    layoutTemplate?: NullableStringFieldUpdateOperationsInput | string | null
+    theme?: NullableStringFieldUpdateOperationsInput | string | null
+    metaData?: NullableStringFieldUpdateOperationsInput | string | null
+    seoSettings?: NullableStringFieldUpdateOperationsInput | string | null
+    analyticsCodes?: NullableStringFieldUpdateOperationsInput | string | null
+    showOnNav?: BoolFieldUpdateOperationsInput | boolean
+    deleted?: BoolFieldUpdateOperationsInput | boolean
+    accountRef?: StringFieldUpdateOperationsInput | string
+    subsiteRef?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    categories?: CategoryUncheckedUpdateManyWithoutPagesNestedInput
+    tags?: TagUncheckedUpdateManyWithoutPagesNestedInput
+  }
+
+  export type PageUncheckedUpdateManyWithoutAuthorInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    overview?: StringFieldUpdateOperationsInput | string
+    content?: NullableStringFieldUpdateOperationsInput | string | null
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumContentStatusFieldUpdateOperationsInput | $Enums.ContentStatus
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    published?: BoolFieldUpdateOperationsInput | boolean
+    coverImage?: NullableStringFieldUpdateOperationsInput | string | null
+    layoutTemplate?: NullableStringFieldUpdateOperationsInput | string | null
+    theme?: NullableStringFieldUpdateOperationsInput | string | null
+    metaData?: NullableStringFieldUpdateOperationsInput | string | null
+    seoSettings?: NullableStringFieldUpdateOperationsInput | string | null
+    analyticsCodes?: NullableStringFieldUpdateOperationsInput | string | null
+    showOnNav?: BoolFieldUpdateOperationsInput | boolean
+    deleted?: BoolFieldUpdateOperationsInput | boolean
+    accountRef?: StringFieldUpdateOperationsInput | string
+    subsiteRef?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type AccountUpdateWithoutUsersInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    accountRef?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    subsites?: SubsiteUpdateManyWithoutAccountsNestedInput
+  }
+
+  export type AccountUncheckedUpdateWithoutUsersInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    accountRef?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    subsites?: SubsiteUncheckedUpdateManyWithoutAccountsNestedInput
+  }
+
+  export type AccountUncheckedUpdateManyWithoutUsersInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    accountRef?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type PostUpdateWithoutCategoriesInput = {
+    title?: StringFieldUpdateOperationsInput | string
+    overview?: StringFieldUpdateOperationsInput | string
+    content?: NullableStringFieldUpdateOperationsInput | string | null
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    coverImage?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumContentStatusFieldUpdateOperationsInput | $Enums.ContentStatus
+    published?: BoolFieldUpdateOperationsInput | boolean
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deleted?: BoolFieldUpdateOperationsInput | boolean
+    accountRef?: StringFieldUpdateOperationsInput | string
+    subsiteRef?: StringFieldUpdateOperationsInput | string
+    contextUserId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    author?: UserUpdateOneRequiredWithoutPostsNestedInput
+    tags?: TagUpdateManyWithoutPostsNestedInput
+  }
+
+  export type PostUncheckedUpdateWithoutCategoriesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    overview?: StringFieldUpdateOperationsInput | string
+    content?: NullableStringFieldUpdateOperationsInput | string | null
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    coverImage?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumContentStatusFieldUpdateOperationsInput | $Enums.ContentStatus
+    published?: BoolFieldUpdateOperationsInput | boolean
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deleted?: BoolFieldUpdateOperationsInput | boolean
+    authorId?: IntFieldUpdateOperationsInput | number
+    accountRef?: StringFieldUpdateOperationsInput | string
+    subsiteRef?: StringFieldUpdateOperationsInput | string
+    contextUserId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    tags?: TagUncheckedUpdateManyWithoutPostsNestedInput
+  }
+
+  export type PostUncheckedUpdateManyWithoutCategoriesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    overview?: StringFieldUpdateOperationsInput | string
+    content?: NullableStringFieldUpdateOperationsInput | string | null
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    coverImage?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumContentStatusFieldUpdateOperationsInput | $Enums.ContentStatus
+    published?: BoolFieldUpdateOperationsInput | boolean
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deleted?: BoolFieldUpdateOperationsInput | boolean
+    authorId?: IntFieldUpdateOperationsInput | number
+    accountRef?: StringFieldUpdateOperationsInput | string
+    subsiteRef?: StringFieldUpdateOperationsInput | string
+    contextUserId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type PageUpdateWithoutCategoriesInput = {
+    title?: StringFieldUpdateOperationsInput | string
+    overview?: StringFieldUpdateOperationsInput | string
+    content?: NullableStringFieldUpdateOperationsInput | string | null
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumContentStatusFieldUpdateOperationsInput | $Enums.ContentStatus
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    published?: BoolFieldUpdateOperationsInput | boolean
+    coverImage?: NullableStringFieldUpdateOperationsInput | string | null
+    layoutTemplate?: NullableStringFieldUpdateOperationsInput | string | null
+    theme?: NullableStringFieldUpdateOperationsInput | string | null
+    metaData?: NullableStringFieldUpdateOperationsInput | string | null
+    seoSettings?: NullableStringFieldUpdateOperationsInput | string | null
+    analyticsCodes?: NullableStringFieldUpdateOperationsInput | string | null
+    showOnNav?: BoolFieldUpdateOperationsInput | boolean
+    deleted?: BoolFieldUpdateOperationsInput | boolean
+    accountRef?: StringFieldUpdateOperationsInput | string
+    subsiteRef?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    author?: UserUpdateOneRequiredWithoutPagesNestedInput
+    tags?: TagUpdateManyWithoutPagesNestedInput
+  }
+
+  export type PageUncheckedUpdateWithoutCategoriesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    overview?: StringFieldUpdateOperationsInput | string
+    content?: NullableStringFieldUpdateOperationsInput | string | null
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumContentStatusFieldUpdateOperationsInput | $Enums.ContentStatus
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    published?: BoolFieldUpdateOperationsInput | boolean
+    coverImage?: NullableStringFieldUpdateOperationsInput | string | null
+    layoutTemplate?: NullableStringFieldUpdateOperationsInput | string | null
+    theme?: NullableStringFieldUpdateOperationsInput | string | null
+    metaData?: NullableStringFieldUpdateOperationsInput | string | null
+    seoSettings?: NullableStringFieldUpdateOperationsInput | string | null
+    analyticsCodes?: NullableStringFieldUpdateOperationsInput | string | null
+    showOnNav?: BoolFieldUpdateOperationsInput | boolean
+    deleted?: BoolFieldUpdateOperationsInput | boolean
+    authorId?: IntFieldUpdateOperationsInput | number
+    accountRef?: StringFieldUpdateOperationsInput | string
+    subsiteRef?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    tags?: TagUncheckedUpdateManyWithoutPagesNestedInput
+  }
+
+  export type PageUncheckedUpdateManyWithoutCategoriesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    overview?: StringFieldUpdateOperationsInput | string
+    content?: NullableStringFieldUpdateOperationsInput | string | null
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumContentStatusFieldUpdateOperationsInput | $Enums.ContentStatus
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    published?: BoolFieldUpdateOperationsInput | boolean
+    coverImage?: NullableStringFieldUpdateOperationsInput | string | null
+    layoutTemplate?: NullableStringFieldUpdateOperationsInput | string | null
+    theme?: NullableStringFieldUpdateOperationsInput | string | null
+    metaData?: NullableStringFieldUpdateOperationsInput | string | null
+    seoSettings?: NullableStringFieldUpdateOperationsInput | string | null
+    analyticsCodes?: NullableStringFieldUpdateOperationsInput | string | null
+    showOnNav?: BoolFieldUpdateOperationsInput | boolean
+    deleted?: BoolFieldUpdateOperationsInput | boolean
+    authorId?: IntFieldUpdateOperationsInput | number
+    accountRef?: StringFieldUpdateOperationsInput | string
+    subsiteRef?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type PostUpdateWithoutTagsInput = {
+    title?: StringFieldUpdateOperationsInput | string
+    overview?: StringFieldUpdateOperationsInput | string
+    content?: NullableStringFieldUpdateOperationsInput | string | null
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    coverImage?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumContentStatusFieldUpdateOperationsInput | $Enums.ContentStatus
+    published?: BoolFieldUpdateOperationsInput | boolean
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deleted?: BoolFieldUpdateOperationsInput | boolean
+    accountRef?: StringFieldUpdateOperationsInput | string
+    subsiteRef?: StringFieldUpdateOperationsInput | string
+    contextUserId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    author?: UserUpdateOneRequiredWithoutPostsNestedInput
+    categories?: CategoryUpdateManyWithoutPostsNestedInput
+  }
+
+  export type PostUncheckedUpdateWithoutTagsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    overview?: StringFieldUpdateOperationsInput | string
+    content?: NullableStringFieldUpdateOperationsInput | string | null
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    coverImage?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumContentStatusFieldUpdateOperationsInput | $Enums.ContentStatus
+    published?: BoolFieldUpdateOperationsInput | boolean
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deleted?: BoolFieldUpdateOperationsInput | boolean
+    authorId?: IntFieldUpdateOperationsInput | number
+    accountRef?: StringFieldUpdateOperationsInput | string
+    subsiteRef?: StringFieldUpdateOperationsInput | string
+    contextUserId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    categories?: CategoryUncheckedUpdateManyWithoutPostsNestedInput
+  }
+
+  export type PostUncheckedUpdateManyWithoutTagsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    overview?: StringFieldUpdateOperationsInput | string
+    content?: NullableStringFieldUpdateOperationsInput | string | null
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    coverImage?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumContentStatusFieldUpdateOperationsInput | $Enums.ContentStatus
+    published?: BoolFieldUpdateOperationsInput | boolean
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deleted?: BoolFieldUpdateOperationsInput | boolean
+    authorId?: IntFieldUpdateOperationsInput | number
+    accountRef?: StringFieldUpdateOperationsInput | string
+    subsiteRef?: StringFieldUpdateOperationsInput | string
+    contextUserId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type PageUpdateWithoutTagsInput = {
+    title?: StringFieldUpdateOperationsInput | string
+    overview?: StringFieldUpdateOperationsInput | string
+    content?: NullableStringFieldUpdateOperationsInput | string | null
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumContentStatusFieldUpdateOperationsInput | $Enums.ContentStatus
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    published?: BoolFieldUpdateOperationsInput | boolean
+    coverImage?: NullableStringFieldUpdateOperationsInput | string | null
+    layoutTemplate?: NullableStringFieldUpdateOperationsInput | string | null
+    theme?: NullableStringFieldUpdateOperationsInput | string | null
+    metaData?: NullableStringFieldUpdateOperationsInput | string | null
+    seoSettings?: NullableStringFieldUpdateOperationsInput | string | null
+    analyticsCodes?: NullableStringFieldUpdateOperationsInput | string | null
+    showOnNav?: BoolFieldUpdateOperationsInput | boolean
+    deleted?: BoolFieldUpdateOperationsInput | boolean
+    accountRef?: StringFieldUpdateOperationsInput | string
+    subsiteRef?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    author?: UserUpdateOneRequiredWithoutPagesNestedInput
+    categories?: CategoryUpdateManyWithoutPagesNestedInput
+  }
+
+  export type PageUncheckedUpdateWithoutTagsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    overview?: StringFieldUpdateOperationsInput | string
+    content?: NullableStringFieldUpdateOperationsInput | string | null
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumContentStatusFieldUpdateOperationsInput | $Enums.ContentStatus
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    published?: BoolFieldUpdateOperationsInput | boolean
+    coverImage?: NullableStringFieldUpdateOperationsInput | string | null
+    layoutTemplate?: NullableStringFieldUpdateOperationsInput | string | null
+    theme?: NullableStringFieldUpdateOperationsInput | string | null
+    metaData?: NullableStringFieldUpdateOperationsInput | string | null
+    seoSettings?: NullableStringFieldUpdateOperationsInput | string | null
+    analyticsCodes?: NullableStringFieldUpdateOperationsInput | string | null
+    showOnNav?: BoolFieldUpdateOperationsInput | boolean
+    deleted?: BoolFieldUpdateOperationsInput | boolean
+    authorId?: IntFieldUpdateOperationsInput | number
+    accountRef?: StringFieldUpdateOperationsInput | string
+    subsiteRef?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    categories?: CategoryUncheckedUpdateManyWithoutPagesNestedInput
+  }
+
+  export type PageUncheckedUpdateManyWithoutTagsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    overview?: StringFieldUpdateOperationsInput | string
+    content?: NullableStringFieldUpdateOperationsInput | string | null
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumContentStatusFieldUpdateOperationsInput | $Enums.ContentStatus
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    published?: BoolFieldUpdateOperationsInput | boolean
+    coverImage?: NullableStringFieldUpdateOperationsInput | string | null
+    layoutTemplate?: NullableStringFieldUpdateOperationsInput | string | null
+    theme?: NullableStringFieldUpdateOperationsInput | string | null
+    metaData?: NullableStringFieldUpdateOperationsInput | string | null
+    seoSettings?: NullableStringFieldUpdateOperationsInput | string | null
+    analyticsCodes?: NullableStringFieldUpdateOperationsInput | string | null
+    showOnNav?: BoolFieldUpdateOperationsInput | boolean
+    deleted?: BoolFieldUpdateOperationsInput | boolean
+    authorId?: IntFieldUpdateOperationsInput | number
+    accountRef?: StringFieldUpdateOperationsInput | string
+    subsiteRef?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
 
 
   /**
@@ -24256,6 +24917,10 @@ export namespace Prisma {
      */
     export type PostCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = PostCountOutputTypeDefaultArgs<ExtArgs>
     /**
+     * @deprecated Use PageCountOutputTypeDefaultArgs instead
+     */
+    export type PageCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = PageCountOutputTypeDefaultArgs<ExtArgs>
+    /**
      * @deprecated Use UserCountOutputTypeDefaultArgs instead
      */
     export type UserCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = UserCountOutputTypeDefaultArgs<ExtArgs>
@@ -24267,10 +24932,6 @@ export namespace Prisma {
      * @deprecated Use TagCountOutputTypeDefaultArgs instead
      */
     export type TagCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = TagCountOutputTypeDefaultArgs<ExtArgs>
-    /**
-     * @deprecated Use PageCountOutputTypeDefaultArgs instead
-     */
-    export type PageCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = PageCountOutputTypeDefaultArgs<ExtArgs>
     /**
      * @deprecated Use AccountDefaultArgs instead
      */
@@ -24287,6 +24948,10 @@ export namespace Prisma {
      * @deprecated Use PostDefaultArgs instead
      */
     export type PostArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = PostDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use PageDefaultArgs instead
+     */
+    export type PageArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = PageDefaultArgs<ExtArgs>
     /**
      * @deprecated Use UserProfileDefaultArgs instead
      */
@@ -24323,10 +24988,6 @@ export namespace Prisma {
      * @deprecated Use TagDefaultArgs instead
      */
     export type TagArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = TagDefaultArgs<ExtArgs>
-    /**
-     * @deprecated Use PageDefaultArgs instead
-     */
-    export type PageArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = PageDefaultArgs<ExtArgs>
 
   /**
    * Batch Payload for updateMany & deleteMany & createMany
