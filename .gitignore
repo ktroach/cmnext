@@ -24,6 +24,7 @@ yarn-debug.log*
 yarn-error.log*
 
 # env files
+.env
 .env*.local
 .env*
 !**.env.sample
@@ -35,8 +36,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-.vercel
-
 # Contentlayer
 .contentlayer
 
@@ -46,5 +45,5 @@ install.log*
 
 * .lockb
 
-prisma/migrations
-prisma/scripts
+prisma/migrations/
+prisma/scripts/
