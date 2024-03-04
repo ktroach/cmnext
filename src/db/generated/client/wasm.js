@@ -107,11 +107,33 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
   Serializable: 'Serializable'
 });
 
+exports.Prisma.UserScalarFieldEnum = {
+  id: 'id',
+  email: 'email',
+  name: 'name',
+  description: 'description',
+  token: 'token',
+  prefix: 'prefix',
+  firstName: 'firstName',
+  middleName: 'middleName',
+  lastName: 'lastName',
+  suffix: 'suffix',
+  preferredName: 'preferredName',
+  gender: 'gender',
+  birthDate: 'birthDate',
+  local: 'local',
+  timeZone: 'timeZone',
+  lastLoginTime: 'lastLoginTime',
+  role: 'role',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.AccountScalarFieldEnum = {
   id: 'id',
   name: 'name',
-  slug: 'slug',
   accountRef: 'accountRef',
+  adminId: 'adminId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -121,16 +143,6 @@ exports.Prisma.SubsiteScalarFieldEnum = {
   name: 'name',
   slug: 'slug',
   subsiteRef: 'subsiteRef',
-  domainName: 'domainName',
-  domainStatus: 'domainStatus',
-  domainCreatedAt: 'domainCreatedAt',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-};
-
-exports.Prisma.SubsiteConfigScalarFieldEnum = {
-  id: 'id',
-  name: 'name',
   logoUrl: 'logoUrl',
   logoSvg: 'logoSvg',
   navConfig: 'navConfig',
@@ -138,7 +150,10 @@ exports.Prisma.SubsiteConfigScalarFieldEnum = {
   footerConfig: 'footerConfig',
   siteVisibility: 'siteVisibility',
   siteLanguage: 'siteLanguage',
-  subsiteId: 'subsiteId',
+  domainName: 'domainName',
+  domainStatus: 'domainStatus',
+  domainCreatedAt: 'domainCreatedAt',
+  accountId: 'accountId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -155,9 +170,7 @@ exports.Prisma.PostScalarFieldEnum = {
   publishedAt: 'publishedAt',
   deleted: 'deleted',
   authorId: 'authorId',
-  accountRef: 'accountRef',
-  subsiteRef: 'subsiteRef',
-  contextUserId: 'contextUserId',
+  subsiteId: 'subsiteId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -180,8 +193,7 @@ exports.Prisma.PageScalarFieldEnum = {
   showOnNav: 'showOnNav',
   deleted: 'deleted',
   authorId: 'authorId',
-  accountRef: 'accountRef',
-  subsiteRef: 'subsiteRef',
+  subsiteId: 'subsiteId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -257,28 +269,6 @@ exports.Prisma.UserContactScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
-exports.Prisma.UserScalarFieldEnum = {
-  id: 'id',
-  email: 'email',
-  name: 'name',
-  description: 'description',
-  token: 'token',
-  prefix: 'prefix',
-  firstName: 'firstName',
-  middleName: 'middleName',
-  lastName: 'lastName',
-  suffix: 'suffix',
-  preferredName: 'preferredName',
-  gender: 'gender',
-  birthDate: 'birthDate',
-  local: 'local',
-  timeZone: 'timeZone',
-  lastLoginTime: 'lastLoginTime',
-  role: 'role',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-};
-
 exports.Prisma.CategoryScalarFieldEnum = {
   id: 'id',
   name: 'name',
@@ -309,13 +299,6 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
-exports.ContentStatus = exports.$Enums.ContentStatus = {
-  DRAFT: 'DRAFT',
-  PENDING: 'PENDING',
-  REVIEW: 'REVIEW',
-  PUBLISHED: 'PUBLISHED'
-};
-
 exports.UserRole = exports.$Enums.UserRole = {
   USER: 'USER',
   ADMIN: 'ADMIN',
@@ -324,10 +307,17 @@ exports.UserRole = exports.$Enums.UserRole = {
   SUPERADMIN: 'SUPERADMIN'
 };
 
+exports.ContentStatus = exports.$Enums.ContentStatus = {
+  DRAFT: 'DRAFT',
+  PENDING: 'PENDING',
+  REVIEW: 'REVIEW',
+  PUBLISHED: 'PUBLISHED'
+};
+
 exports.Prisma.ModelName = {
+  User: 'User',
   Account: 'Account',
   Subsite: 'Subsite',
-  SubsiteConfig: 'SubsiteConfig',
   Post: 'Post',
   Page: 'Page',
   UserProfile: 'UserProfile',
@@ -336,7 +326,6 @@ exports.Prisma.ModelName = {
   ContactPhone: 'ContactPhone',
   ContactWebsite: 'ContactWebsite',
   UserContact: 'UserContact',
-  User: 'User',
   Category: 'Category',
   Tag: 'Tag'
 };

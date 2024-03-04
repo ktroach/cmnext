@@ -10,8 +10,7 @@ export const postRouter = createTRPCRouter({
         content: z.string().min(1),
         slug: z.string().min(1),
         authorId: z.number().min(1),
-        accountRef: z.string().min(1),
-        subsiteRef: z.string().min(1),
+        subsiteId: z.number().min(1),
       })
     )
     .mutation(async ({ input, ctx }) => {
@@ -23,9 +22,7 @@ export const postRouter = createTRPCRouter({
           published: false,
           deleted: false,
           authorId: input.authorId,
-          accountRef: input.accountRef,
-          subsiteRef: input.subsiteRef,
-          contextUserId: ctx.userId,
+          subsiteId: input.subsiteId
         },
       })
     }),
@@ -49,15 +46,13 @@ export const postRouter = createTRPCRouter({
   getAll: protectedProcedure
     .input(
       z.object({
-        accountRef: z.string().min(1),
-        subsiteRef: z.string().min(1),
+        subsiteId: z.number().min(1),
       })
     )
     .query(async ({ input, ctx }) => {
-      console.log({ 'input.accountRef': input.accountRef })
+      console.log({ 'input.subsiteId': input.subsiteId })
       const getAllWhere = {
-        accountRef: input.accountRef,
-        subsiteRef: input.subsiteRef,
+        subsiteId: input.subsiteId,
       }
       return await ctx.db.post.findMany({
         where: getAllWhere,

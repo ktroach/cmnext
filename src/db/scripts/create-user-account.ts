@@ -3,25 +3,25 @@ import { prisma } from "../";
 async function main() {
   const user = await prisma.user.create({
     data: {
-      email: 'Jim.Smith@cmnext.io',
-      name: 'Jim Smith',
+      email: 'bob.smith@cmnext.io',
+      name: 'Bob Smith',
       accounts: {
         create: [
           {
-            name: "Jim's Discount Kaiju Cages",
+            name: "Bob's Auto Paint LLC",
           }
         ]
       },
     },
-  })
+  });
 
   const returnUser = await prisma.user.findUnique({
     where: {
       id: user.id,
     },
-  })
+  });
 
-  console.log(returnUser)
+  console.log(returnUser);
 }
 
 main(); 

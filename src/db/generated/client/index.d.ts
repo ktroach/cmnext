@@ -14,6 +14,11 @@ export type PrismaPromise<T> = $Public.PrismaPromise<T>
 
 
 /**
+ * Model User
+ * 
+ */
+export type User = $Result.DefaultSelection<Prisma.$UserPayload>
+/**
  * Model Account
  * 
  */
@@ -23,11 +28,6 @@ export type Account = $Result.DefaultSelection<Prisma.$AccountPayload>
  * 
  */
 export type Subsite = $Result.DefaultSelection<Prisma.$SubsitePayload>
-/**
- * Model SubsiteConfig
- * 
- */
-export type SubsiteConfig = $Result.DefaultSelection<Prisma.$SubsiteConfigPayload>
 /**
  * Model Post
  * 
@@ -69,11 +69,6 @@ export type ContactWebsite = $Result.DefaultSelection<Prisma.$ContactWebsitePayl
  */
 export type UserContact = $Result.DefaultSelection<Prisma.$UserContactPayload>
 /**
- * Model User
- * 
- */
-export type User = $Result.DefaultSelection<Prisma.$UserPayload>
-/**
  * Model Category
  * 
  */
@@ -88,17 +83,7 @@ export type Tag = $Result.DefaultSelection<Prisma.$TagPayload>
  * Enums
  */
 export namespace $Enums {
-  export const ContentStatus: {
-  DRAFT: 'DRAFT',
-  PENDING: 'PENDING',
-  REVIEW: 'REVIEW',
-  PUBLISHED: 'PUBLISHED'
-};
-
-export type ContentStatus = (typeof ContentStatus)[keyof typeof ContentStatus]
-
-
-export const UserRole: {
+  export const UserRole: {
   USER: 'USER',
   ADMIN: 'ADMIN',
   AUTHOR: 'AUTHOR',
@@ -108,15 +93,25 @@ export const UserRole: {
 
 export type UserRole = (typeof UserRole)[keyof typeof UserRole]
 
+
+export const ContentStatus: {
+  DRAFT: 'DRAFT',
+  PENDING: 'PENDING',
+  REVIEW: 'REVIEW',
+  PUBLISHED: 'PUBLISHED'
+};
+
+export type ContentStatus = (typeof ContentStatus)[keyof typeof ContentStatus]
+
 }
-
-export type ContentStatus = $Enums.ContentStatus
-
-export const ContentStatus: typeof $Enums.ContentStatus
 
 export type UserRole = $Enums.UserRole
 
 export const UserRole: typeof $Enums.UserRole
+
+export type ContentStatus = $Enums.ContentStatus
+
+export const ContentStatus: typeof $Enums.ContentStatus
 
 /**
  * ##  Prisma Client ʲˢ
@@ -125,8 +120,8 @@ export const UserRole: typeof $Enums.UserRole
  * @example
  * ```
  * const prisma = new PrismaClient()
- * // Fetch zero or more Accounts
- * const accounts = await prisma.account.findMany()
+ * // Fetch zero or more Users
+ * const users = await prisma.user.findMany()
  * ```
  *
  * 
@@ -146,8 +141,8 @@ export class PrismaClient<
    * @example
    * ```
    * const prisma = new PrismaClient()
-   * // Fetch zero or more Accounts
-   * const accounts = await prisma.account.findMany()
+   * // Fetch zero or more Users
+   * const users = await prisma.user.findMany()
    * ```
    *
    * 
@@ -241,6 +236,16 @@ export class PrismaClient<
   $extends: $Extensions.ExtendsHook<'extends', Prisma.TypeMapCb, ExtArgs>
 
       /**
+   * `prisma.user`: Exposes CRUD operations for the **User** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Users
+    * const users = await prisma.user.findMany()
+    * ```
+    */
+  get user(): Prisma.UserDelegate<ExtArgs>;
+
+  /**
    * `prisma.account`: Exposes CRUD operations for the **Account** model.
     * Example usage:
     * ```ts
@@ -259,16 +264,6 @@ export class PrismaClient<
     * ```
     */
   get subsite(): Prisma.SubsiteDelegate<ExtArgs>;
-
-  /**
-   * `prisma.subsiteConfig`: Exposes CRUD operations for the **SubsiteConfig** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more SubsiteConfigs
-    * const subsiteConfigs = await prisma.subsiteConfig.findMany()
-    * ```
-    */
-  get subsiteConfig(): Prisma.SubsiteConfigDelegate<ExtArgs>;
 
   /**
    * `prisma.post`: Exposes CRUD operations for the **Post** model.
@@ -349,16 +344,6 @@ export class PrismaClient<
     * ```
     */
   get userContact(): Prisma.UserContactDelegate<ExtArgs>;
-
-  /**
-   * `prisma.user`: Exposes CRUD operations for the **User** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more Users
-    * const users = await prisma.user.findMany()
-    * ```
-    */
-  get user(): Prisma.UserDelegate<ExtArgs>;
 
   /**
    * `prisma.category`: Exposes CRUD operations for the **Category** model.
@@ -849,9 +834,9 @@ export namespace Prisma {
 
 
   export const ModelName: {
+    User: 'User',
     Account: 'Account',
     Subsite: 'Subsite',
-    SubsiteConfig: 'SubsiteConfig',
     Post: 'Post',
     Page: 'Page',
     UserProfile: 'UserProfile',
@@ -860,7 +845,6 @@ export namespace Prisma {
     ContactPhone: 'ContactPhone',
     ContactWebsite: 'ContactWebsite',
     UserContact: 'UserContact',
-    User: 'User',
     Category: 'Category',
     Tag: 'Tag'
   };
@@ -879,10 +863,76 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     meta: {
-      modelProps: 'account' | 'subsite' | 'subsiteConfig' | 'post' | 'page' | 'userProfile' | 'contactAddress' | 'contactEmail' | 'contactPhone' | 'contactWebsite' | 'userContact' | 'user' | 'category' | 'tag'
+      modelProps: 'user' | 'account' | 'subsite' | 'post' | 'page' | 'userProfile' | 'contactAddress' | 'contactEmail' | 'contactPhone' | 'contactWebsite' | 'userContact' | 'category' | 'tag'
       txIsolationLevel: Prisma.TransactionIsolationLevel
     },
     model: {
+      User: {
+        payload: Prisma.$UserPayload<ExtArgs>
+        fields: Prisma.UserFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.UserFindUniqueArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$UserPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.UserFindUniqueOrThrowArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$UserPayload>
+          }
+          findFirst: {
+            args: Prisma.UserFindFirstArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$UserPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.UserFindFirstOrThrowArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$UserPayload>
+          }
+          findMany: {
+            args: Prisma.UserFindManyArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$UserPayload>[]
+          }
+          create: {
+            args: Prisma.UserCreateArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$UserPayload>
+          }
+          createMany: {
+            args: Prisma.UserCreateManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          delete: {
+            args: Prisma.UserDeleteArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$UserPayload>
+          }
+          update: {
+            args: Prisma.UserUpdateArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$UserPayload>
+          }
+          deleteMany: {
+            args: Prisma.UserDeleteManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          updateMany: {
+            args: Prisma.UserUpdateManyArgs<ExtArgs>,
+            result: Prisma.BatchPayload
+          }
+          upsert: {
+            args: Prisma.UserUpsertArgs<ExtArgs>,
+            result: $Utils.PayloadToResult<Prisma.$UserPayload>
+          }
+          aggregate: {
+            args: Prisma.UserAggregateArgs<ExtArgs>,
+            result: $Utils.Optional<AggregateUser>
+          }
+          groupBy: {
+            args: Prisma.UserGroupByArgs<ExtArgs>,
+            result: $Utils.Optional<UserGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.UserCountArgs<ExtArgs>,
+            result: $Utils.Optional<UserCountAggregateOutputType> | number
+          }
+        }
+      }
       Account: {
         payload: Prisma.$AccountPayload<ExtArgs>
         fields: Prisma.AccountFieldRefs
@@ -1012,72 +1062,6 @@ export namespace Prisma {
           count: {
             args: Prisma.SubsiteCountArgs<ExtArgs>,
             result: $Utils.Optional<SubsiteCountAggregateOutputType> | number
-          }
-        }
-      }
-      SubsiteConfig: {
-        payload: Prisma.$SubsiteConfigPayload<ExtArgs>
-        fields: Prisma.SubsiteConfigFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.SubsiteConfigFindUniqueArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$SubsiteConfigPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.SubsiteConfigFindUniqueOrThrowArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$SubsiteConfigPayload>
-          }
-          findFirst: {
-            args: Prisma.SubsiteConfigFindFirstArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$SubsiteConfigPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.SubsiteConfigFindFirstOrThrowArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$SubsiteConfigPayload>
-          }
-          findMany: {
-            args: Prisma.SubsiteConfigFindManyArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$SubsiteConfigPayload>[]
-          }
-          create: {
-            args: Prisma.SubsiteConfigCreateArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$SubsiteConfigPayload>
-          }
-          createMany: {
-            args: Prisma.SubsiteConfigCreateManyArgs<ExtArgs>,
-            result: Prisma.BatchPayload
-          }
-          delete: {
-            args: Prisma.SubsiteConfigDeleteArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$SubsiteConfigPayload>
-          }
-          update: {
-            args: Prisma.SubsiteConfigUpdateArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$SubsiteConfigPayload>
-          }
-          deleteMany: {
-            args: Prisma.SubsiteConfigDeleteManyArgs<ExtArgs>,
-            result: Prisma.BatchPayload
-          }
-          updateMany: {
-            args: Prisma.SubsiteConfigUpdateManyArgs<ExtArgs>,
-            result: Prisma.BatchPayload
-          }
-          upsert: {
-            args: Prisma.SubsiteConfigUpsertArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$SubsiteConfigPayload>
-          }
-          aggregate: {
-            args: Prisma.SubsiteConfigAggregateArgs<ExtArgs>,
-            result: $Utils.Optional<AggregateSubsiteConfig>
-          }
-          groupBy: {
-            args: Prisma.SubsiteConfigGroupByArgs<ExtArgs>,
-            result: $Utils.Optional<SubsiteConfigGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.SubsiteConfigCountArgs<ExtArgs>,
-            result: $Utils.Optional<SubsiteConfigCountAggregateOutputType> | number
           }
         }
       }
@@ -1609,72 +1593,6 @@ export namespace Prisma {
           }
         }
       }
-      User: {
-        payload: Prisma.$UserPayload<ExtArgs>
-        fields: Prisma.UserFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.UserFindUniqueArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$UserPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.UserFindUniqueOrThrowArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$UserPayload>
-          }
-          findFirst: {
-            args: Prisma.UserFindFirstArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$UserPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.UserFindFirstOrThrowArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$UserPayload>
-          }
-          findMany: {
-            args: Prisma.UserFindManyArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$UserPayload>[]
-          }
-          create: {
-            args: Prisma.UserCreateArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$UserPayload>
-          }
-          createMany: {
-            args: Prisma.UserCreateManyArgs<ExtArgs>,
-            result: Prisma.BatchPayload
-          }
-          delete: {
-            args: Prisma.UserDeleteArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$UserPayload>
-          }
-          update: {
-            args: Prisma.UserUpdateArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$UserPayload>
-          }
-          deleteMany: {
-            args: Prisma.UserDeleteManyArgs<ExtArgs>,
-            result: Prisma.BatchPayload
-          }
-          updateMany: {
-            args: Prisma.UserUpdateManyArgs<ExtArgs>,
-            result: Prisma.BatchPayload
-          }
-          upsert: {
-            args: Prisma.UserUpsertArgs<ExtArgs>,
-            result: $Utils.PayloadToResult<Prisma.$UserPayload>
-          }
-          aggregate: {
-            args: Prisma.UserAggregateArgs<ExtArgs>,
-            result: $Utils.Optional<AggregateUser>
-          }
-          groupBy: {
-            args: Prisma.UserGroupByArgs<ExtArgs>,
-            result: $Utils.Optional<UserGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.UserCountArgs<ExtArgs>,
-            result: $Utils.Optional<UserCountAggregateOutputType> | number
-          }
-        }
-      }
       Category: {
         payload: Prisma.$CategoryPayload<ExtArgs>
         fields: Prisma.CategoryFieldRefs
@@ -1962,16 +1880,68 @@ export namespace Prisma {
 
 
   /**
+   * Count Type UserCountOutputType
+   */
+
+  export type UserCountOutputType = {
+    posts: number
+    pages: number
+    accounts: number
+  }
+
+  export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    posts?: boolean | UserCountOutputTypeCountPostsArgs
+    pages?: boolean | UserCountOutputTypeCountPagesArgs
+    accounts?: boolean | UserCountOutputTypeCountAccountsArgs
+  }
+
+  // Custom InputTypes
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserCountOutputType
+     */
+    select?: UserCountOutputTypeSelect<ExtArgs> | null
+  }
+
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountPostsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PostWhereInput
+  }
+
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountPagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PageWhereInput
+  }
+
+
+  /**
+   * UserCountOutputType without action
+   */
+  export type UserCountOutputTypeCountAccountsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AccountWhereInput
+  }
+
+
+
+  /**
    * Count Type AccountCountOutputType
    */
 
   export type AccountCountOutputType = {
-    users: number
     subsites: number
   }
 
   export type AccountCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    users?: boolean | AccountCountOutputTypeCountUsersArgs
     subsites?: boolean | AccountCountOutputTypeCountSubsitesArgs
   }
 
@@ -1991,14 +1961,6 @@ export namespace Prisma {
   /**
    * AccountCountOutputType without action
    */
-  export type AccountCountOutputTypeCountUsersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: UserWhereInput
-  }
-
-
-  /**
-   * AccountCountOutputType without action
-   */
   export type AccountCountOutputTypeCountSubsitesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: SubsiteWhereInput
   }
@@ -2010,13 +1972,13 @@ export namespace Prisma {
    */
 
   export type SubsiteCountOutputType = {
-    accounts: number
-    config: number
+    posts: number
+    pages: number
   }
 
   export type SubsiteCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    accounts?: boolean | SubsiteCountOutputTypeCountAccountsArgs
-    config?: boolean | SubsiteCountOutputTypeCountConfigArgs
+    posts?: boolean | SubsiteCountOutputTypeCountPostsArgs
+    pages?: boolean | SubsiteCountOutputTypeCountPagesArgs
   }
 
   // Custom InputTypes
@@ -2035,16 +1997,16 @@ export namespace Prisma {
   /**
    * SubsiteCountOutputType without action
    */
-  export type SubsiteCountOutputTypeCountAccountsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: AccountWhereInput
+  export type SubsiteCountOutputTypeCountPostsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PostWhereInput
   }
 
 
   /**
    * SubsiteCountOutputType without action
    */
-  export type SubsiteCountOutputTypeCountConfigArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: SubsiteConfigWhereInput
+  export type SubsiteCountOutputTypeCountPagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PageWhereInput
   }
 
 
@@ -2133,60 +2095,6 @@ export namespace Prisma {
    */
   export type PageCountOutputTypeCountTagsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: TagWhereInput
-  }
-
-
-
-  /**
-   * Count Type UserCountOutputType
-   */
-
-  export type UserCountOutputType = {
-    posts: number
-    pages: number
-    accounts: number
-  }
-
-  export type UserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    posts?: boolean | UserCountOutputTypeCountPostsArgs
-    pages?: boolean | UserCountOutputTypeCountPagesArgs
-    accounts?: boolean | UserCountOutputTypeCountAccountsArgs
-  }
-
-  // Custom InputTypes
-
-  /**
-   * UserCountOutputType without action
-   */
-  export type UserCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the UserCountOutputType
-     */
-    select?: UserCountOutputTypeSelect<ExtArgs> | null
-  }
-
-
-  /**
-   * UserCountOutputType without action
-   */
-  export type UserCountOutputTypeCountPostsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: PostWhereInput
-  }
-
-
-  /**
-   * UserCountOutputType without action
-   */
-  export type UserCountOutputTypeCountPagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: PageWhereInput
-  }
-
-
-  /**
-   * UserCountOutputType without action
-   */
-  export type UserCountOutputTypeCountAccountsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: AccountWhereInput
   }
 
 
@@ -2284,6 +2192,1229 @@ export namespace Prisma {
    */
 
   /**
+   * Model User
+   */
+
+  export type AggregateUser = {
+    _count: UserCountAggregateOutputType | null
+    _avg: UserAvgAggregateOutputType | null
+    _sum: UserSumAggregateOutputType | null
+    _min: UserMinAggregateOutputType | null
+    _max: UserMaxAggregateOutputType | null
+  }
+
+  export type UserAvgAggregateOutputType = {
+    id: number | null
+  }
+
+  export type UserSumAggregateOutputType = {
+    id: number | null
+  }
+
+  export type UserMinAggregateOutputType = {
+    id: number | null
+    email: string | null
+    name: string | null
+    description: string | null
+    token: string | null
+    prefix: string | null
+    firstName: string | null
+    middleName: string | null
+    lastName: string | null
+    suffix: string | null
+    preferredName: string | null
+    gender: string | null
+    birthDate: Date | null
+    local: string | null
+    timeZone: string | null
+    lastLoginTime: Date | null
+    role: $Enums.UserRole | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type UserMaxAggregateOutputType = {
+    id: number | null
+    email: string | null
+    name: string | null
+    description: string | null
+    token: string | null
+    prefix: string | null
+    firstName: string | null
+    middleName: string | null
+    lastName: string | null
+    suffix: string | null
+    preferredName: string | null
+    gender: string | null
+    birthDate: Date | null
+    local: string | null
+    timeZone: string | null
+    lastLoginTime: Date | null
+    role: $Enums.UserRole | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type UserCountAggregateOutputType = {
+    id: number
+    email: number
+    name: number
+    description: number
+    token: number
+    prefix: number
+    firstName: number
+    middleName: number
+    lastName: number
+    suffix: number
+    preferredName: number
+    gender: number
+    birthDate: number
+    local: number
+    timeZone: number
+    lastLoginTime: number
+    role: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type UserAvgAggregateInputType = {
+    id?: true
+  }
+
+  export type UserSumAggregateInputType = {
+    id?: true
+  }
+
+  export type UserMinAggregateInputType = {
+    id?: true
+    email?: true
+    name?: true
+    description?: true
+    token?: true
+    prefix?: true
+    firstName?: true
+    middleName?: true
+    lastName?: true
+    suffix?: true
+    preferredName?: true
+    gender?: true
+    birthDate?: true
+    local?: true
+    timeZone?: true
+    lastLoginTime?: true
+    role?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type UserMaxAggregateInputType = {
+    id?: true
+    email?: true
+    name?: true
+    description?: true
+    token?: true
+    prefix?: true
+    firstName?: true
+    middleName?: true
+    lastName?: true
+    suffix?: true
+    preferredName?: true
+    gender?: true
+    birthDate?: true
+    local?: true
+    timeZone?: true
+    lastLoginTime?: true
+    role?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type UserCountAggregateInputType = {
+    id?: true
+    email?: true
+    name?: true
+    description?: true
+    token?: true
+    prefix?: true
+    firstName?: true
+    middleName?: true
+    lastName?: true
+    suffix?: true
+    preferredName?: true
+    gender?: true
+    birthDate?: true
+    local?: true
+    timeZone?: true
+    lastLoginTime?: true
+    role?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type UserAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which User to aggregate.
+     */
+    where?: UserWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Users to fetch.
+     */
+    orderBy?: UserOrderByWithRelationInput | UserOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: UserWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Users from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Users.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Users
+    **/
+    _count?: true | UserCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: UserAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: UserSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: UserMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: UserMaxAggregateInputType
+  }
+
+  export type GetUserAggregateType<T extends UserAggregateArgs> = {
+        [P in keyof T & keyof AggregateUser]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateUser[P]>
+      : GetScalarType<T[P], AggregateUser[P]>
+  }
+
+
+
+
+  export type UserGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: UserWhereInput
+    orderBy?: UserOrderByWithAggregationInput | UserOrderByWithAggregationInput[]
+    by: UserScalarFieldEnum[] | UserScalarFieldEnum
+    having?: UserScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: UserCountAggregateInputType | true
+    _avg?: UserAvgAggregateInputType
+    _sum?: UserSumAggregateInputType
+    _min?: UserMinAggregateInputType
+    _max?: UserMaxAggregateInputType
+  }
+
+  export type UserGroupByOutputType = {
+    id: number
+    email: string
+    name: string | null
+    description: string | null
+    token: string | null
+    prefix: string | null
+    firstName: string | null
+    middleName: string | null
+    lastName: string | null
+    suffix: string | null
+    preferredName: string | null
+    gender: string | null
+    birthDate: Date | null
+    local: string | null
+    timeZone: string | null
+    lastLoginTime: Date | null
+    role: $Enums.UserRole
+    createdAt: Date
+    updatedAt: Date | null
+    _count: UserCountAggregateOutputType | null
+    _avg: UserAvgAggregateOutputType | null
+    _sum: UserSumAggregateOutputType | null
+    _min: UserMinAggregateOutputType | null
+    _max: UserMaxAggregateOutputType | null
+  }
+
+  type GetUserGroupByPayload<T extends UserGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<UserGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof UserGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], UserGroupByOutputType[P]>
+            : GetScalarType<T[P], UserGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type UserSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    email?: boolean
+    name?: boolean
+    description?: boolean
+    token?: boolean
+    prefix?: boolean
+    firstName?: boolean
+    middleName?: boolean
+    lastName?: boolean
+    suffix?: boolean
+    preferredName?: boolean
+    gender?: boolean
+    birthDate?: boolean
+    local?: boolean
+    timeZone?: boolean
+    lastLoginTime?: boolean
+    role?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    contact?: boolean | User$contactArgs<ExtArgs>
+    profile?: boolean | User$profileArgs<ExtArgs>
+    posts?: boolean | User$postsArgs<ExtArgs>
+    pages?: boolean | User$pagesArgs<ExtArgs>
+    accounts?: boolean | User$accountsArgs<ExtArgs>
+    _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["user"]>
+
+  export type UserSelectScalar = {
+    id?: boolean
+    email?: boolean
+    name?: boolean
+    description?: boolean
+    token?: boolean
+    prefix?: boolean
+    firstName?: boolean
+    middleName?: boolean
+    lastName?: boolean
+    suffix?: boolean
+    preferredName?: boolean
+    gender?: boolean
+    birthDate?: boolean
+    local?: boolean
+    timeZone?: boolean
+    lastLoginTime?: boolean
+    role?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    contact?: boolean | User$contactArgs<ExtArgs>
+    profile?: boolean | User$profileArgs<ExtArgs>
+    posts?: boolean | User$postsArgs<ExtArgs>
+    pages?: boolean | User$pagesArgs<ExtArgs>
+    accounts?: boolean | User$accountsArgs<ExtArgs>
+    _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
+  }
+
+
+  export type $UserPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "User"
+    objects: {
+      contact: Prisma.$UserContactPayload<ExtArgs> | null
+      profile: Prisma.$UserProfilePayload<ExtArgs> | null
+      posts: Prisma.$PostPayload<ExtArgs>[]
+      pages: Prisma.$PagePayload<ExtArgs>[]
+      accounts: Prisma.$AccountPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      email: string
+      name: string | null
+      description: string | null
+      token: string | null
+      prefix: string | null
+      firstName: string | null
+      middleName: string | null
+      lastName: string | null
+      suffix: string | null
+      preferredName: string | null
+      gender: string | null
+      birthDate: Date | null
+      local: string | null
+      timeZone: string | null
+      lastLoginTime: Date | null
+      role: $Enums.UserRole
+      createdAt: Date
+      updatedAt: Date | null
+    }, ExtArgs["result"]["user"]>
+    composites: {}
+  }
+
+
+  type UserGetPayload<S extends boolean | null | undefined | UserDefaultArgs> = $Result.GetResult<Prisma.$UserPayload, S>
+
+  type UserCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<UserFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: UserCountAggregateInputType | true
+    }
+
+  export interface UserDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['User'], meta: { name: 'User' } }
+    /**
+     * Find zero or one User that matches the filter.
+     * @param {UserFindUniqueArgs} args - Arguments to find a User
+     * @example
+     * // Get one User
+     * const user = await prisma.user.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUnique<T extends UserFindUniqueArgs<ExtArgs>>(
+      args: SelectSubset<T, UserFindUniqueArgs<ExtArgs>>
+    ): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, 'findUnique'> | null, null, ExtArgs>
+
+    /**
+     * Find one User that matches the filter or throw an error  with `error.code='P2025'` 
+     *     if no matches were found.
+     * @param {UserFindUniqueOrThrowArgs} args - Arguments to find a User
+     * @example
+     * // Get one User
+     * const user = await prisma.user.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findUniqueOrThrow<T extends UserFindUniqueOrThrowArgs<ExtArgs>>(
+      args?: SelectSubset<T, UserFindUniqueOrThrowArgs<ExtArgs>>
+    ): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, 'findUniqueOrThrow'>, never, ExtArgs>
+
+    /**
+     * Find the first User that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserFindFirstArgs} args - Arguments to find a User
+     * @example
+     * // Get one User
+     * const user = await prisma.user.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirst<T extends UserFindFirstArgs<ExtArgs>>(
+      args?: SelectSubset<T, UserFindFirstArgs<ExtArgs>>
+    ): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, 'findFirst'> | null, null, ExtArgs>
+
+    /**
+     * Find the first User that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserFindFirstOrThrowArgs} args - Arguments to find a User
+     * @example
+     * // Get one User
+     * const user = await prisma.user.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+    **/
+    findFirstOrThrow<T extends UserFindFirstOrThrowArgs<ExtArgs>>(
+      args?: SelectSubset<T, UserFindFirstOrThrowArgs<ExtArgs>>
+    ): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, 'findFirstOrThrow'>, never, ExtArgs>
+
+    /**
+     * Find zero or more Users that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserFindManyArgs=} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Users
+     * const users = await prisma.user.findMany()
+     * 
+     * // Get first 10 Users
+     * const users = await prisma.user.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const userWithIdOnly = await prisma.user.findMany({ select: { id: true } })
+     * 
+    **/
+    findMany<T extends UserFindManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, UserFindManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, 'findMany'>>
+
+    /**
+     * Create a User.
+     * @param {UserCreateArgs} args - Arguments to create a User.
+     * @example
+     * // Create one User
+     * const User = await prisma.user.create({
+     *   data: {
+     *     // ... data to create a User
+     *   }
+     * })
+     * 
+    **/
+    create<T extends UserCreateArgs<ExtArgs>>(
+      args: SelectSubset<T, UserCreateArgs<ExtArgs>>
+    ): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, 'create'>, never, ExtArgs>
+
+    /**
+     * Create many Users.
+     *     @param {UserCreateManyArgs} args - Arguments to create many Users.
+     *     @example
+     *     // Create many Users
+     *     const user = await prisma.user.createMany({
+     *       data: {
+     *         // ... provide data here
+     *       }
+     *     })
+     *     
+    **/
+    createMany<T extends UserCreateManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, UserCreateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a User.
+     * @param {UserDeleteArgs} args - Arguments to delete one User.
+     * @example
+     * // Delete one User
+     * const User = await prisma.user.delete({
+     *   where: {
+     *     // ... filter to delete one User
+     *   }
+     * })
+     * 
+    **/
+    delete<T extends UserDeleteArgs<ExtArgs>>(
+      args: SelectSubset<T, UserDeleteArgs<ExtArgs>>
+    ): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, 'delete'>, never, ExtArgs>
+
+    /**
+     * Update one User.
+     * @param {UserUpdateArgs} args - Arguments to update one User.
+     * @example
+     * // Update one User
+     * const user = await prisma.user.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    update<T extends UserUpdateArgs<ExtArgs>>(
+      args: SelectSubset<T, UserUpdateArgs<ExtArgs>>
+    ): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, 'update'>, never, ExtArgs>
+
+    /**
+     * Delete zero or more Users.
+     * @param {UserDeleteManyArgs} args - Arguments to filter Users to delete.
+     * @example
+     * // Delete a few Users
+     * const { count } = await prisma.user.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+    **/
+    deleteMany<T extends UserDeleteManyArgs<ExtArgs>>(
+      args?: SelectSubset<T, UserDeleteManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Users.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Users
+     * const user = await prisma.user.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+    **/
+    updateMany<T extends UserUpdateManyArgs<ExtArgs>>(
+      args: SelectSubset<T, UserUpdateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one User.
+     * @param {UserUpsertArgs} args - Arguments to update or create a User.
+     * @example
+     * // Update or create a User
+     * const user = await prisma.user.upsert({
+     *   create: {
+     *     // ... data to create a User
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the User we want to update
+     *   }
+     * })
+    **/
+    upsert<T extends UserUpsertArgs<ExtArgs>>(
+      args: SelectSubset<T, UserUpsertArgs<ExtArgs>>
+    ): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, 'upsert'>, never, ExtArgs>
+
+    /**
+     * Count the number of Users.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserCountArgs} args - Arguments to filter Users to count.
+     * @example
+     * // Count the number of Users
+     * const count = await prisma.user.count({
+     *   where: {
+     *     // ... the filter for the Users we want to count
+     *   }
+     * })
+    **/
+    count<T extends UserCountArgs>(
+      args?: Subset<T, UserCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], UserCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a User.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends UserAggregateArgs>(args: Subset<T, UserAggregateArgs>): Prisma.PrismaPromise<GetUserAggregateType<T>>
+
+    /**
+     * Group by User.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {UserGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends UserGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: UserGroupByArgs['orderBy'] }
+        : { orderBy?: UserGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, UserGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetUserGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the User model
+   */
+  readonly fields: UserFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for User.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: 'PrismaPromise';
+
+    contact<T extends User$contactArgs<ExtArgs> = {}>(args?: Subset<T, User$contactArgs<ExtArgs>>): Prisma__UserContactClient<$Result.GetResult<Prisma.$UserContactPayload<ExtArgs>, T, 'findUniqueOrThrow'> | null, null, ExtArgs>;
+
+    profile<T extends User$profileArgs<ExtArgs> = {}>(args?: Subset<T, User$profileArgs<ExtArgs>>): Prisma__UserProfileClient<$Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, 'findUniqueOrThrow'> | null, null, ExtArgs>;
+
+    posts<T extends User$postsArgs<ExtArgs> = {}>(args?: Subset<T, User$postsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, 'findMany'> | Null>;
+
+    pages<T extends User$pagesArgs<ExtArgs> = {}>(args?: Subset<T, User$pagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PagePayload<ExtArgs>, T, 'findMany'> | Null>;
+
+    accounts<T extends User$accountsArgs<ExtArgs> = {}>(args?: Subset<T, User$accountsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, 'findMany'> | Null>;
+
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>;
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>;
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
+  }
+
+
+
+  /**
+   * Fields of the User model
+   */ 
+  interface UserFieldRefs {
+    readonly id: FieldRef<"User", 'Int'>
+    readonly email: FieldRef<"User", 'String'>
+    readonly name: FieldRef<"User", 'String'>
+    readonly description: FieldRef<"User", 'String'>
+    readonly token: FieldRef<"User", 'String'>
+    readonly prefix: FieldRef<"User", 'String'>
+    readonly firstName: FieldRef<"User", 'String'>
+    readonly middleName: FieldRef<"User", 'String'>
+    readonly lastName: FieldRef<"User", 'String'>
+    readonly suffix: FieldRef<"User", 'String'>
+    readonly preferredName: FieldRef<"User", 'String'>
+    readonly gender: FieldRef<"User", 'String'>
+    readonly birthDate: FieldRef<"User", 'DateTime'>
+    readonly local: FieldRef<"User", 'String'>
+    readonly timeZone: FieldRef<"User", 'String'>
+    readonly lastLoginTime: FieldRef<"User", 'DateTime'>
+    readonly role: FieldRef<"User", 'UserRole'>
+    readonly createdAt: FieldRef<"User", 'DateTime'>
+    readonly updatedAt: FieldRef<"User", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+
+  /**
+   * User findUnique
+   */
+  export type UserFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
+     * Filter, which User to fetch.
+     */
+    where: UserWhereUniqueInput
+  }
+
+
+  /**
+   * User findUniqueOrThrow
+   */
+  export type UserFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
+     * Filter, which User to fetch.
+     */
+    where: UserWhereUniqueInput
+  }
+
+
+  /**
+   * User findFirst
+   */
+  export type UserFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
+     * Filter, which User to fetch.
+     */
+    where?: UserWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Users to fetch.
+     */
+    orderBy?: UserOrderByWithRelationInput | UserOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Users.
+     */
+    cursor?: UserWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Users from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Users.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Users.
+     */
+    distinct?: UserScalarFieldEnum | UserScalarFieldEnum[]
+  }
+
+
+  /**
+   * User findFirstOrThrow
+   */
+  export type UserFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
+     * Filter, which User to fetch.
+     */
+    where?: UserWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Users to fetch.
+     */
+    orderBy?: UserOrderByWithRelationInput | UserOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Users.
+     */
+    cursor?: UserWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Users from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Users.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Users.
+     */
+    distinct?: UserScalarFieldEnum | UserScalarFieldEnum[]
+  }
+
+
+  /**
+   * User findMany
+   */
+  export type UserFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
+     * Filter, which Users to fetch.
+     */
+    where?: UserWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Users to fetch.
+     */
+    orderBy?: UserOrderByWithRelationInput | UserOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Users.
+     */
+    cursor?: UserWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Users from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Users.
+     */
+    skip?: number
+    distinct?: UserScalarFieldEnum | UserScalarFieldEnum[]
+  }
+
+
+  /**
+   * User create
+   */
+  export type UserCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
+     * The data needed to create a User.
+     */
+    data: XOR<UserCreateInput, UserUncheckedCreateInput>
+  }
+
+
+  /**
+   * User createMany
+   */
+  export type UserCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Users.
+     */
+    data: UserCreateManyInput | UserCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+
+  /**
+   * User update
+   */
+  export type UserUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
+     * The data needed to update a User.
+     */
+    data: XOR<UserUpdateInput, UserUncheckedUpdateInput>
+    /**
+     * Choose, which User to update.
+     */
+    where: UserWhereUniqueInput
+  }
+
+
+  /**
+   * User updateMany
+   */
+  export type UserUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Users.
+     */
+    data: XOR<UserUpdateManyMutationInput, UserUncheckedUpdateManyInput>
+    /**
+     * Filter which Users to update
+     */
+    where?: UserWhereInput
+  }
+
+
+  /**
+   * User upsert
+   */
+  export type UserUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
+     * The filter to search for the User to update in case it exists.
+     */
+    where: UserWhereUniqueInput
+    /**
+     * In case the User found by the `where` argument doesn't exist, create a new User with this data.
+     */
+    create: XOR<UserCreateInput, UserUncheckedCreateInput>
+    /**
+     * In case the User was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<UserUpdateInput, UserUncheckedUpdateInput>
+  }
+
+
+  /**
+   * User delete
+   */
+  export type UserDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: UserInclude<ExtArgs> | null
+    /**
+     * Filter which User to delete.
+     */
+    where: UserWhereUniqueInput
+  }
+
+
+  /**
+   * User deleteMany
+   */
+  export type UserDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Users to delete
+     */
+    where?: UserWhereInput
+  }
+
+
+  /**
+   * User.contact
+   */
+  export type User$contactArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserContact
+     */
+    select?: UserContactSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: UserContactInclude<ExtArgs> | null
+    where?: UserContactWhereInput
+  }
+
+
+  /**
+   * User.profile
+   */
+  export type User$profileArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the UserProfile
+     */
+    select?: UserProfileSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: UserProfileInclude<ExtArgs> | null
+    where?: UserProfileWhereInput
+  }
+
+
+  /**
+   * User.posts
+   */
+  export type User$postsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Post
+     */
+    select?: PostSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: PostInclude<ExtArgs> | null
+    where?: PostWhereInput
+    orderBy?: PostOrderByWithRelationInput | PostOrderByWithRelationInput[]
+    cursor?: PostWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PostScalarFieldEnum | PostScalarFieldEnum[]
+  }
+
+
+  /**
+   * User.pages
+   */
+  export type User$pagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Page
+     */
+    select?: PageSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: PageInclude<ExtArgs> | null
+    where?: PageWhereInput
+    orderBy?: PageOrderByWithRelationInput | PageOrderByWithRelationInput[]
+    cursor?: PageWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PageScalarFieldEnum | PageScalarFieldEnum[]
+  }
+
+
+  /**
+   * User.accounts
+   */
+  export type User$accountsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Account
+     */
+    select?: AccountSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: AccountInclude<ExtArgs> | null
+    where?: AccountWhereInput
+    orderBy?: AccountOrderByWithRelationInput | AccountOrderByWithRelationInput[]
+    cursor?: AccountWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: AccountScalarFieldEnum | AccountScalarFieldEnum[]
+  }
+
+
+  /**
+   * User without action
+   */
+  export type UserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the User
+     */
+    select?: UserSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well.
+     */
+    include?: UserInclude<ExtArgs> | null
+  }
+
+
+
+  /**
    * Model Account
    */
 
@@ -2297,17 +3428,19 @@ export namespace Prisma {
 
   export type AccountAvgAggregateOutputType = {
     id: number | null
+    adminId: number | null
   }
 
   export type AccountSumAggregateOutputType = {
     id: number | null
+    adminId: number | null
   }
 
   export type AccountMinAggregateOutputType = {
     id: number | null
     name: string | null
-    slug: string | null
     accountRef: string | null
+    adminId: number | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -2315,8 +3448,8 @@ export namespace Prisma {
   export type AccountMaxAggregateOutputType = {
     id: number | null
     name: string | null
-    slug: string | null
     accountRef: string | null
+    adminId: number | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -2324,8 +3457,8 @@ export namespace Prisma {
   export type AccountCountAggregateOutputType = {
     id: number
     name: number
-    slug: number
     accountRef: number
+    adminId: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -2334,17 +3467,19 @@ export namespace Prisma {
 
   export type AccountAvgAggregateInputType = {
     id?: true
+    adminId?: true
   }
 
   export type AccountSumAggregateInputType = {
     id?: true
+    adminId?: true
   }
 
   export type AccountMinAggregateInputType = {
     id?: true
     name?: true
-    slug?: true
     accountRef?: true
+    adminId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -2352,8 +3487,8 @@ export namespace Prisma {
   export type AccountMaxAggregateInputType = {
     id?: true
     name?: true
-    slug?: true
     accountRef?: true
+    adminId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -2361,8 +3496,8 @@ export namespace Prisma {
   export type AccountCountAggregateInputType = {
     id?: true
     name?: true
-    slug?: true
     accountRef?: true
+    adminId?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -2457,8 +3592,8 @@ export namespace Prisma {
   export type AccountGroupByOutputType = {
     id: number
     name: string
-    slug: string | null
     accountRef: string
+    adminId: number
     createdAt: Date
     updatedAt: Date | null
     _count: AccountCountAggregateOutputType | null
@@ -2485,11 +3620,11 @@ export namespace Prisma {
   export type AccountSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
-    slug?: boolean
     accountRef?: boolean
+    adminId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    users?: boolean | Account$usersArgs<ExtArgs>
+    admin?: boolean | UserDefaultArgs<ExtArgs>
     subsites?: boolean | Account$subsitesArgs<ExtArgs>
     _count?: boolean | AccountCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["account"]>
@@ -2497,14 +3632,14 @@ export namespace Prisma {
   export type AccountSelectScalar = {
     id?: boolean
     name?: boolean
-    slug?: boolean
     accountRef?: boolean
+    adminId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
   export type AccountInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    users?: boolean | Account$usersArgs<ExtArgs>
+    admin?: boolean | UserDefaultArgs<ExtArgs>
     subsites?: boolean | Account$subsitesArgs<ExtArgs>
     _count?: boolean | AccountCountOutputTypeDefaultArgs<ExtArgs>
   }
@@ -2513,14 +3648,14 @@ export namespace Prisma {
   export type $AccountPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Account"
     objects: {
-      users: Prisma.$UserPayload<ExtArgs>[]
+      admin: Prisma.$UserPayload<ExtArgs>
       subsites: Prisma.$SubsitePayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
       name: string
-      slug: string | null
       accountRef: string
+      adminId: number
       createdAt: Date
       updatedAt: Date | null
     }, ExtArgs["result"]["account"]>
@@ -2888,7 +4023,7 @@ export namespace Prisma {
   export interface Prisma__AccountClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: 'PrismaPromise';
 
-    users<T extends Account$usersArgs<ExtArgs> = {}>(args?: Subset<T, Account$usersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, 'findMany'> | Null>;
+    admin<T extends UserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, UserDefaultArgs<ExtArgs>>): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, 'findUniqueOrThrow'> | Null, Null, ExtArgs>;
 
     subsites<T extends Account$subsitesArgs<ExtArgs> = {}>(args?: Subset<T, Account$subsitesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SubsitePayload<ExtArgs>, T, 'findMany'> | Null>;
 
@@ -2922,8 +4057,8 @@ export namespace Prisma {
   interface AccountFieldRefs {
     readonly id: FieldRef<"Account", 'Int'>
     readonly name: FieldRef<"Account", 'String'>
-    readonly slug: FieldRef<"Account", 'String'>
     readonly accountRef: FieldRef<"Account", 'String'>
+    readonly adminId: FieldRef<"Account", 'Int'>
     readonly createdAt: FieldRef<"Account", 'DateTime'>
     readonly updatedAt: FieldRef<"Account", 'DateTime'>
   }
@@ -3238,27 +4373,6 @@ export namespace Prisma {
 
 
   /**
-   * Account.users
-   */
-  export type Account$usersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the User
-     */
-    select?: UserSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: UserInclude<ExtArgs> | null
-    where?: UserWhereInput
-    orderBy?: UserOrderByWithRelationInput | UserOrderByWithRelationInput[]
-    cursor?: UserWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: UserScalarFieldEnum | UserScalarFieldEnum[]
-  }
-
-
-  /**
    * Account.subsites
    */
   export type Account$subsitesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3309,10 +4423,12 @@ export namespace Prisma {
 
   export type SubsiteAvgAggregateOutputType = {
     id: number | null
+    accountId: number | null
   }
 
   export type SubsiteSumAggregateOutputType = {
     id: number | null
+    accountId: number | null
   }
 
   export type SubsiteMinAggregateOutputType = {
@@ -3320,9 +4436,17 @@ export namespace Prisma {
     name: string | null
     slug: string | null
     subsiteRef: string | null
+    logoUrl: string | null
+    logoSvg: string | null
+    navConfig: string | null
+    headerConfig: string | null
+    footerConfig: string | null
+    siteVisibility: string | null
+    siteLanguage: string | null
     domainName: string | null
     domainStatus: string | null
     domainCreatedAt: Date | null
+    accountId: number | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -3332,9 +4456,17 @@ export namespace Prisma {
     name: string | null
     slug: string | null
     subsiteRef: string | null
+    logoUrl: string | null
+    logoSvg: string | null
+    navConfig: string | null
+    headerConfig: string | null
+    footerConfig: string | null
+    siteVisibility: string | null
+    siteLanguage: string | null
     domainName: string | null
     domainStatus: string | null
     domainCreatedAt: Date | null
+    accountId: number | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -3344,9 +4476,17 @@ export namespace Prisma {
     name: number
     slug: number
     subsiteRef: number
+    logoUrl: number
+    logoSvg: number
+    navConfig: number
+    headerConfig: number
+    footerConfig: number
+    siteVisibility: number
+    siteLanguage: number
     domainName: number
     domainStatus: number
     domainCreatedAt: number
+    accountId: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -3355,10 +4495,12 @@ export namespace Prisma {
 
   export type SubsiteAvgAggregateInputType = {
     id?: true
+    accountId?: true
   }
 
   export type SubsiteSumAggregateInputType = {
     id?: true
+    accountId?: true
   }
 
   export type SubsiteMinAggregateInputType = {
@@ -3366,9 +4508,17 @@ export namespace Prisma {
     name?: true
     slug?: true
     subsiteRef?: true
+    logoUrl?: true
+    logoSvg?: true
+    navConfig?: true
+    headerConfig?: true
+    footerConfig?: true
+    siteVisibility?: true
+    siteLanguage?: true
     domainName?: true
     domainStatus?: true
     domainCreatedAt?: true
+    accountId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -3378,9 +4528,17 @@ export namespace Prisma {
     name?: true
     slug?: true
     subsiteRef?: true
+    logoUrl?: true
+    logoSvg?: true
+    navConfig?: true
+    headerConfig?: true
+    footerConfig?: true
+    siteVisibility?: true
+    siteLanguage?: true
     domainName?: true
     domainStatus?: true
     domainCreatedAt?: true
+    accountId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -3390,9 +4548,17 @@ export namespace Prisma {
     name?: true
     slug?: true
     subsiteRef?: true
+    logoUrl?: true
+    logoSvg?: true
+    navConfig?: true
+    headerConfig?: true
+    footerConfig?: true
+    siteVisibility?: true
+    siteLanguage?: true
     domainName?: true
     domainStatus?: true
     domainCreatedAt?: true
+    accountId?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -3489,9 +4655,17 @@ export namespace Prisma {
     name: string
     slug: string | null
     subsiteRef: string
+    logoUrl: string | null
+    logoSvg: string | null
+    navConfig: string | null
+    headerConfig: string | null
+    footerConfig: string | null
+    siteVisibility: string | null
+    siteLanguage: string | null
     domainName: string | null
     domainStatus: string | null
     domainCreatedAt: Date | null
+    accountId: number
     createdAt: Date
     updatedAt: Date | null
     _count: SubsiteCountAggregateOutputType | null
@@ -3520,13 +4694,22 @@ export namespace Prisma {
     name?: boolean
     slug?: boolean
     subsiteRef?: boolean
+    logoUrl?: boolean
+    logoSvg?: boolean
+    navConfig?: boolean
+    headerConfig?: boolean
+    footerConfig?: boolean
+    siteVisibility?: boolean
+    siteLanguage?: boolean
     domainName?: boolean
     domainStatus?: boolean
     domainCreatedAt?: boolean
+    accountId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    accounts?: boolean | Subsite$accountsArgs<ExtArgs>
-    config?: boolean | Subsite$configArgs<ExtArgs>
+    posts?: boolean | Subsite$postsArgs<ExtArgs>
+    pages?: boolean | Subsite$pagesArgs<ExtArgs>
+    account?: boolean | AccountDefaultArgs<ExtArgs>
     _count?: boolean | SubsiteCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["subsite"]>
 
@@ -3535,16 +4718,25 @@ export namespace Prisma {
     name?: boolean
     slug?: boolean
     subsiteRef?: boolean
+    logoUrl?: boolean
+    logoSvg?: boolean
+    navConfig?: boolean
+    headerConfig?: boolean
+    footerConfig?: boolean
+    siteVisibility?: boolean
+    siteLanguage?: boolean
     domainName?: boolean
     domainStatus?: boolean
     domainCreatedAt?: boolean
+    accountId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
   export type SubsiteInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    accounts?: boolean | Subsite$accountsArgs<ExtArgs>
-    config?: boolean | Subsite$configArgs<ExtArgs>
+    posts?: boolean | Subsite$postsArgs<ExtArgs>
+    pages?: boolean | Subsite$pagesArgs<ExtArgs>
+    account?: boolean | AccountDefaultArgs<ExtArgs>
     _count?: boolean | SubsiteCountOutputTypeDefaultArgs<ExtArgs>
   }
 
@@ -3552,17 +4744,26 @@ export namespace Prisma {
   export type $SubsitePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Subsite"
     objects: {
-      accounts: Prisma.$AccountPayload<ExtArgs>[]
-      config: Prisma.$SubsiteConfigPayload<ExtArgs>[]
+      posts: Prisma.$PostPayload<ExtArgs>[]
+      pages: Prisma.$PagePayload<ExtArgs>[]
+      account: Prisma.$AccountPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
       name: string
       slug: string | null
       subsiteRef: string
+      logoUrl: string | null
+      logoSvg: string | null
+      navConfig: string | null
+      headerConfig: string | null
+      footerConfig: string | null
+      siteVisibility: string | null
+      siteLanguage: string | null
       domainName: string | null
       domainStatus: string | null
       domainCreatedAt: Date | null
+      accountId: number
       createdAt: Date
       updatedAt: Date | null
     }, ExtArgs["result"]["subsite"]>
@@ -3930,9 +5131,11 @@ export namespace Prisma {
   export interface Prisma__SubsiteClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: 'PrismaPromise';
 
-    accounts<T extends Subsite$accountsArgs<ExtArgs> = {}>(args?: Subset<T, Subsite$accountsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, 'findMany'> | Null>;
+    posts<T extends Subsite$postsArgs<ExtArgs> = {}>(args?: Subset<T, Subsite$postsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, 'findMany'> | Null>;
 
-    config<T extends Subsite$configArgs<ExtArgs> = {}>(args?: Subset<T, Subsite$configArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SubsiteConfigPayload<ExtArgs>, T, 'findMany'> | Null>;
+    pages<T extends Subsite$pagesArgs<ExtArgs> = {}>(args?: Subset<T, Subsite$pagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PagePayload<ExtArgs>, T, 'findMany'> | Null>;
+
+    account<T extends AccountDefaultArgs<ExtArgs> = {}>(args?: Subset<T, AccountDefaultArgs<ExtArgs>>): Prisma__AccountClient<$Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, 'findUniqueOrThrow'> | Null, Null, ExtArgs>;
 
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -3966,9 +5169,17 @@ export namespace Prisma {
     readonly name: FieldRef<"Subsite", 'String'>
     readonly slug: FieldRef<"Subsite", 'String'>
     readonly subsiteRef: FieldRef<"Subsite", 'String'>
+    readonly logoUrl: FieldRef<"Subsite", 'String'>
+    readonly logoSvg: FieldRef<"Subsite", 'String'>
+    readonly navConfig: FieldRef<"Subsite", 'String'>
+    readonly headerConfig: FieldRef<"Subsite", 'String'>
+    readonly footerConfig: FieldRef<"Subsite", 'String'>
+    readonly siteVisibility: FieldRef<"Subsite", 'String'>
+    readonly siteLanguage: FieldRef<"Subsite", 'String'>
     readonly domainName: FieldRef<"Subsite", 'String'>
     readonly domainStatus: FieldRef<"Subsite", 'String'>
     readonly domainCreatedAt: FieldRef<"Subsite", 'DateTime'>
+    readonly accountId: FieldRef<"Subsite", 'Int'>
     readonly createdAt: FieldRef<"Subsite", 'DateTime'>
     readonly updatedAt: FieldRef<"Subsite", 'DateTime'>
   }
@@ -4283,44 +5494,44 @@ export namespace Prisma {
 
 
   /**
-   * Subsite.accounts
+   * Subsite.posts
    */
-  export type Subsite$accountsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Subsite$postsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the Account
+     * Select specific fields to fetch from the Post
      */
-    select?: AccountSelect<ExtArgs> | null
+    select?: PostSelect<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well.
      */
-    include?: AccountInclude<ExtArgs> | null
-    where?: AccountWhereInput
-    orderBy?: AccountOrderByWithRelationInput | AccountOrderByWithRelationInput[]
-    cursor?: AccountWhereUniqueInput
+    include?: PostInclude<ExtArgs> | null
+    where?: PostWhereInput
+    orderBy?: PostOrderByWithRelationInput | PostOrderByWithRelationInput[]
+    cursor?: PostWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: AccountScalarFieldEnum | AccountScalarFieldEnum[]
+    distinct?: PostScalarFieldEnum | PostScalarFieldEnum[]
   }
 
 
   /**
-   * Subsite.config
+   * Subsite.pages
    */
-  export type Subsite$configArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type Subsite$pagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the SubsiteConfig
+     * Select specific fields to fetch from the Page
      */
-    select?: SubsiteConfigSelect<ExtArgs> | null
+    select?: PageSelect<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well.
      */
-    include?: SubsiteConfigInclude<ExtArgs> | null
-    where?: SubsiteConfigWhereInput
-    orderBy?: SubsiteConfigOrderByWithRelationInput | SubsiteConfigOrderByWithRelationInput[]
-    cursor?: SubsiteConfigWhereUniqueInput
+    include?: PageInclude<ExtArgs> | null
+    where?: PageWhereInput
+    orderBy?: PageOrderByWithRelationInput | PageOrderByWithRelationInput[]
+    cursor?: PageWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: SubsiteConfigScalarFieldEnum | SubsiteConfigScalarFieldEnum[]
+    distinct?: PageScalarFieldEnum | PageScalarFieldEnum[]
   }
 
 
@@ -4341,1039 +5552,6 @@ export namespace Prisma {
 
 
   /**
-   * Model SubsiteConfig
-   */
-
-  export type AggregateSubsiteConfig = {
-    _count: SubsiteConfigCountAggregateOutputType | null
-    _avg: SubsiteConfigAvgAggregateOutputType | null
-    _sum: SubsiteConfigSumAggregateOutputType | null
-    _min: SubsiteConfigMinAggregateOutputType | null
-    _max: SubsiteConfigMaxAggregateOutputType | null
-  }
-
-  export type SubsiteConfigAvgAggregateOutputType = {
-    id: number | null
-    subsiteId: number | null
-  }
-
-  export type SubsiteConfigSumAggregateOutputType = {
-    id: number | null
-    subsiteId: number | null
-  }
-
-  export type SubsiteConfigMinAggregateOutputType = {
-    id: number | null
-    name: string | null
-    logoUrl: string | null
-    logoSvg: string | null
-    navConfig: string | null
-    headerConfig: string | null
-    footerConfig: string | null
-    siteVisibility: string | null
-    siteLanguage: string | null
-    subsiteId: number | null
-    createdAt: Date | null
-    updatedAt: Date | null
-  }
-
-  export type SubsiteConfigMaxAggregateOutputType = {
-    id: number | null
-    name: string | null
-    logoUrl: string | null
-    logoSvg: string | null
-    navConfig: string | null
-    headerConfig: string | null
-    footerConfig: string | null
-    siteVisibility: string | null
-    siteLanguage: string | null
-    subsiteId: number | null
-    createdAt: Date | null
-    updatedAt: Date | null
-  }
-
-  export type SubsiteConfigCountAggregateOutputType = {
-    id: number
-    name: number
-    logoUrl: number
-    logoSvg: number
-    navConfig: number
-    headerConfig: number
-    footerConfig: number
-    siteVisibility: number
-    siteLanguage: number
-    subsiteId: number
-    createdAt: number
-    updatedAt: number
-    _all: number
-  }
-
-
-  export type SubsiteConfigAvgAggregateInputType = {
-    id?: true
-    subsiteId?: true
-  }
-
-  export type SubsiteConfigSumAggregateInputType = {
-    id?: true
-    subsiteId?: true
-  }
-
-  export type SubsiteConfigMinAggregateInputType = {
-    id?: true
-    name?: true
-    logoUrl?: true
-    logoSvg?: true
-    navConfig?: true
-    headerConfig?: true
-    footerConfig?: true
-    siteVisibility?: true
-    siteLanguage?: true
-    subsiteId?: true
-    createdAt?: true
-    updatedAt?: true
-  }
-
-  export type SubsiteConfigMaxAggregateInputType = {
-    id?: true
-    name?: true
-    logoUrl?: true
-    logoSvg?: true
-    navConfig?: true
-    headerConfig?: true
-    footerConfig?: true
-    siteVisibility?: true
-    siteLanguage?: true
-    subsiteId?: true
-    createdAt?: true
-    updatedAt?: true
-  }
-
-  export type SubsiteConfigCountAggregateInputType = {
-    id?: true
-    name?: true
-    logoUrl?: true
-    logoSvg?: true
-    navConfig?: true
-    headerConfig?: true
-    footerConfig?: true
-    siteVisibility?: true
-    siteLanguage?: true
-    subsiteId?: true
-    createdAt?: true
-    updatedAt?: true
-    _all?: true
-  }
-
-  export type SubsiteConfigAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which SubsiteConfig to aggregate.
-     */
-    where?: SubsiteConfigWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of SubsiteConfigs to fetch.
-     */
-    orderBy?: SubsiteConfigOrderByWithRelationInput | SubsiteConfigOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: SubsiteConfigWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` SubsiteConfigs from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` SubsiteConfigs.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned SubsiteConfigs
-    **/
-    _count?: true | SubsiteConfigCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to average
-    **/
-    _avg?: SubsiteConfigAvgAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to sum
-    **/
-    _sum?: SubsiteConfigSumAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: SubsiteConfigMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: SubsiteConfigMaxAggregateInputType
-  }
-
-  export type GetSubsiteConfigAggregateType<T extends SubsiteConfigAggregateArgs> = {
-        [P in keyof T & keyof AggregateSubsiteConfig]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateSubsiteConfig[P]>
-      : GetScalarType<T[P], AggregateSubsiteConfig[P]>
-  }
-
-
-
-
-  export type SubsiteConfigGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: SubsiteConfigWhereInput
-    orderBy?: SubsiteConfigOrderByWithAggregationInput | SubsiteConfigOrderByWithAggregationInput[]
-    by: SubsiteConfigScalarFieldEnum[] | SubsiteConfigScalarFieldEnum
-    having?: SubsiteConfigScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: SubsiteConfigCountAggregateInputType | true
-    _avg?: SubsiteConfigAvgAggregateInputType
-    _sum?: SubsiteConfigSumAggregateInputType
-    _min?: SubsiteConfigMinAggregateInputType
-    _max?: SubsiteConfigMaxAggregateInputType
-  }
-
-  export type SubsiteConfigGroupByOutputType = {
-    id: number
-    name: string
-    logoUrl: string | null
-    logoSvg: string | null
-    navConfig: string | null
-    headerConfig: string | null
-    footerConfig: string | null
-    siteVisibility: string | null
-    siteLanguage: string | null
-    subsiteId: number
-    createdAt: Date
-    updatedAt: Date | null
-    _count: SubsiteConfigCountAggregateOutputType | null
-    _avg: SubsiteConfigAvgAggregateOutputType | null
-    _sum: SubsiteConfigSumAggregateOutputType | null
-    _min: SubsiteConfigMinAggregateOutputType | null
-    _max: SubsiteConfigMaxAggregateOutputType | null
-  }
-
-  type GetSubsiteConfigGroupByPayload<T extends SubsiteConfigGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<SubsiteConfigGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof SubsiteConfigGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], SubsiteConfigGroupByOutputType[P]>
-            : GetScalarType<T[P], SubsiteConfigGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type SubsiteConfigSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    name?: boolean
-    logoUrl?: boolean
-    logoSvg?: boolean
-    navConfig?: boolean
-    headerConfig?: boolean
-    footerConfig?: boolean
-    siteVisibility?: boolean
-    siteLanguage?: boolean
-    subsiteId?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-    subsite?: boolean | SubsiteDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["subsiteConfig"]>
-
-  export type SubsiteConfigSelectScalar = {
-    id?: boolean
-    name?: boolean
-    logoUrl?: boolean
-    logoSvg?: boolean
-    navConfig?: boolean
-    headerConfig?: boolean
-    footerConfig?: boolean
-    siteVisibility?: boolean
-    siteLanguage?: boolean
-    subsiteId?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-  }
-
-  export type SubsiteConfigInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    subsite?: boolean | SubsiteDefaultArgs<ExtArgs>
-  }
-
-
-  export type $SubsiteConfigPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "SubsiteConfig"
-    objects: {
-      subsite: Prisma.$SubsitePayload<ExtArgs>
-    }
-    scalars: $Extensions.GetPayloadResult<{
-      id: number
-      name: string
-      logoUrl: string | null
-      logoSvg: string | null
-      navConfig: string | null
-      headerConfig: string | null
-      footerConfig: string | null
-      siteVisibility: string | null
-      siteLanguage: string | null
-      subsiteId: number
-      createdAt: Date
-      updatedAt: Date | null
-    }, ExtArgs["result"]["subsiteConfig"]>
-    composites: {}
-  }
-
-
-  type SubsiteConfigGetPayload<S extends boolean | null | undefined | SubsiteConfigDefaultArgs> = $Result.GetResult<Prisma.$SubsiteConfigPayload, S>
-
-  type SubsiteConfigCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
-    Omit<SubsiteConfigFindManyArgs, 'select' | 'include' | 'distinct'> & {
-      select?: SubsiteConfigCountAggregateInputType | true
-    }
-
-  export interface SubsiteConfigDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['SubsiteConfig'], meta: { name: 'SubsiteConfig' } }
-    /**
-     * Find zero or one SubsiteConfig that matches the filter.
-     * @param {SubsiteConfigFindUniqueArgs} args - Arguments to find a SubsiteConfig
-     * @example
-     * // Get one SubsiteConfig
-     * const subsiteConfig = await prisma.subsiteConfig.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-    **/
-    findUnique<T extends SubsiteConfigFindUniqueArgs<ExtArgs>>(
-      args: SelectSubset<T, SubsiteConfigFindUniqueArgs<ExtArgs>>
-    ): Prisma__SubsiteConfigClient<$Result.GetResult<Prisma.$SubsiteConfigPayload<ExtArgs>, T, 'findUnique'> | null, null, ExtArgs>
-
-    /**
-     * Find one SubsiteConfig that matches the filter or throw an error  with `error.code='P2025'` 
-     *     if no matches were found.
-     * @param {SubsiteConfigFindUniqueOrThrowArgs} args - Arguments to find a SubsiteConfig
-     * @example
-     * // Get one SubsiteConfig
-     * const subsiteConfig = await prisma.subsiteConfig.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-    **/
-    findUniqueOrThrow<T extends SubsiteConfigFindUniqueOrThrowArgs<ExtArgs>>(
-      args?: SelectSubset<T, SubsiteConfigFindUniqueOrThrowArgs<ExtArgs>>
-    ): Prisma__SubsiteConfigClient<$Result.GetResult<Prisma.$SubsiteConfigPayload<ExtArgs>, T, 'findUniqueOrThrow'>, never, ExtArgs>
-
-    /**
-     * Find the first SubsiteConfig that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {SubsiteConfigFindFirstArgs} args - Arguments to find a SubsiteConfig
-     * @example
-     * // Get one SubsiteConfig
-     * const subsiteConfig = await prisma.subsiteConfig.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-    **/
-    findFirst<T extends SubsiteConfigFindFirstArgs<ExtArgs>>(
-      args?: SelectSubset<T, SubsiteConfigFindFirstArgs<ExtArgs>>
-    ): Prisma__SubsiteConfigClient<$Result.GetResult<Prisma.$SubsiteConfigPayload<ExtArgs>, T, 'findFirst'> | null, null, ExtArgs>
-
-    /**
-     * Find the first SubsiteConfig that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {SubsiteConfigFindFirstOrThrowArgs} args - Arguments to find a SubsiteConfig
-     * @example
-     * // Get one SubsiteConfig
-     * const subsiteConfig = await prisma.subsiteConfig.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-    **/
-    findFirstOrThrow<T extends SubsiteConfigFindFirstOrThrowArgs<ExtArgs>>(
-      args?: SelectSubset<T, SubsiteConfigFindFirstOrThrowArgs<ExtArgs>>
-    ): Prisma__SubsiteConfigClient<$Result.GetResult<Prisma.$SubsiteConfigPayload<ExtArgs>, T, 'findFirstOrThrow'>, never, ExtArgs>
-
-    /**
-     * Find zero or more SubsiteConfigs that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {SubsiteConfigFindManyArgs=} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all SubsiteConfigs
-     * const subsiteConfigs = await prisma.subsiteConfig.findMany()
-     * 
-     * // Get first 10 SubsiteConfigs
-     * const subsiteConfigs = await prisma.subsiteConfig.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const subsiteConfigWithIdOnly = await prisma.subsiteConfig.findMany({ select: { id: true } })
-     * 
-    **/
-    findMany<T extends SubsiteConfigFindManyArgs<ExtArgs>>(
-      args?: SelectSubset<T, SubsiteConfigFindManyArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SubsiteConfigPayload<ExtArgs>, T, 'findMany'>>
-
-    /**
-     * Create a SubsiteConfig.
-     * @param {SubsiteConfigCreateArgs} args - Arguments to create a SubsiteConfig.
-     * @example
-     * // Create one SubsiteConfig
-     * const SubsiteConfig = await prisma.subsiteConfig.create({
-     *   data: {
-     *     // ... data to create a SubsiteConfig
-     *   }
-     * })
-     * 
-    **/
-    create<T extends SubsiteConfigCreateArgs<ExtArgs>>(
-      args: SelectSubset<T, SubsiteConfigCreateArgs<ExtArgs>>
-    ): Prisma__SubsiteConfigClient<$Result.GetResult<Prisma.$SubsiteConfigPayload<ExtArgs>, T, 'create'>, never, ExtArgs>
-
-    /**
-     * Create many SubsiteConfigs.
-     *     @param {SubsiteConfigCreateManyArgs} args - Arguments to create many SubsiteConfigs.
-     *     @example
-     *     // Create many SubsiteConfigs
-     *     const subsiteConfig = await prisma.subsiteConfig.createMany({
-     *       data: {
-     *         // ... provide data here
-     *       }
-     *     })
-     *     
-    **/
-    createMany<T extends SubsiteConfigCreateManyArgs<ExtArgs>>(
-      args?: SelectSubset<T, SubsiteConfigCreateManyArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Delete a SubsiteConfig.
-     * @param {SubsiteConfigDeleteArgs} args - Arguments to delete one SubsiteConfig.
-     * @example
-     * // Delete one SubsiteConfig
-     * const SubsiteConfig = await prisma.subsiteConfig.delete({
-     *   where: {
-     *     // ... filter to delete one SubsiteConfig
-     *   }
-     * })
-     * 
-    **/
-    delete<T extends SubsiteConfigDeleteArgs<ExtArgs>>(
-      args: SelectSubset<T, SubsiteConfigDeleteArgs<ExtArgs>>
-    ): Prisma__SubsiteConfigClient<$Result.GetResult<Prisma.$SubsiteConfigPayload<ExtArgs>, T, 'delete'>, never, ExtArgs>
-
-    /**
-     * Update one SubsiteConfig.
-     * @param {SubsiteConfigUpdateArgs} args - Arguments to update one SubsiteConfig.
-     * @example
-     * // Update one SubsiteConfig
-     * const subsiteConfig = await prisma.subsiteConfig.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-    **/
-    update<T extends SubsiteConfigUpdateArgs<ExtArgs>>(
-      args: SelectSubset<T, SubsiteConfigUpdateArgs<ExtArgs>>
-    ): Prisma__SubsiteConfigClient<$Result.GetResult<Prisma.$SubsiteConfigPayload<ExtArgs>, T, 'update'>, never, ExtArgs>
-
-    /**
-     * Delete zero or more SubsiteConfigs.
-     * @param {SubsiteConfigDeleteManyArgs} args - Arguments to filter SubsiteConfigs to delete.
-     * @example
-     * // Delete a few SubsiteConfigs
-     * const { count } = await prisma.subsiteConfig.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-    **/
-    deleteMany<T extends SubsiteConfigDeleteManyArgs<ExtArgs>>(
-      args?: SelectSubset<T, SubsiteConfigDeleteManyArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more SubsiteConfigs.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {SubsiteConfigUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many SubsiteConfigs
-     * const subsiteConfig = await prisma.subsiteConfig.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-    **/
-    updateMany<T extends SubsiteConfigUpdateManyArgs<ExtArgs>>(
-      args: SelectSubset<T, SubsiteConfigUpdateManyArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create or update one SubsiteConfig.
-     * @param {SubsiteConfigUpsertArgs} args - Arguments to update or create a SubsiteConfig.
-     * @example
-     * // Update or create a SubsiteConfig
-     * const subsiteConfig = await prisma.subsiteConfig.upsert({
-     *   create: {
-     *     // ... data to create a SubsiteConfig
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the SubsiteConfig we want to update
-     *   }
-     * })
-    **/
-    upsert<T extends SubsiteConfigUpsertArgs<ExtArgs>>(
-      args: SelectSubset<T, SubsiteConfigUpsertArgs<ExtArgs>>
-    ): Prisma__SubsiteConfigClient<$Result.GetResult<Prisma.$SubsiteConfigPayload<ExtArgs>, T, 'upsert'>, never, ExtArgs>
-
-    /**
-     * Count the number of SubsiteConfigs.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {SubsiteConfigCountArgs} args - Arguments to filter SubsiteConfigs to count.
-     * @example
-     * // Count the number of SubsiteConfigs
-     * const count = await prisma.subsiteConfig.count({
-     *   where: {
-     *     // ... the filter for the SubsiteConfigs we want to count
-     *   }
-     * })
-    **/
-    count<T extends SubsiteConfigCountArgs>(
-      args?: Subset<T, SubsiteConfigCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], SubsiteConfigCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a SubsiteConfig.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {SubsiteConfigAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends SubsiteConfigAggregateArgs>(args: Subset<T, SubsiteConfigAggregateArgs>): Prisma.PrismaPromise<GetSubsiteConfigAggregateType<T>>
-
-    /**
-     * Group by SubsiteConfig.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {SubsiteConfigGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends SubsiteConfigGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: SubsiteConfigGroupByArgs['orderBy'] }
-        : { orderBy?: SubsiteConfigGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, SubsiteConfigGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetSubsiteConfigGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the SubsiteConfig model
-   */
-  readonly fields: SubsiteConfigFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for SubsiteConfig.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__SubsiteConfigClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: 'PrismaPromise';
-
-    subsite<T extends SubsiteDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SubsiteDefaultArgs<ExtArgs>>): Prisma__SubsiteClient<$Result.GetResult<Prisma.$SubsitePayload<ExtArgs>, T, 'findUniqueOrThrow'> | Null, Null, ExtArgs>;
-
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>;
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>;
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
-  }
-
-
-
-  /**
-   * Fields of the SubsiteConfig model
-   */ 
-  interface SubsiteConfigFieldRefs {
-    readonly id: FieldRef<"SubsiteConfig", 'Int'>
-    readonly name: FieldRef<"SubsiteConfig", 'String'>
-    readonly logoUrl: FieldRef<"SubsiteConfig", 'String'>
-    readonly logoSvg: FieldRef<"SubsiteConfig", 'String'>
-    readonly navConfig: FieldRef<"SubsiteConfig", 'String'>
-    readonly headerConfig: FieldRef<"SubsiteConfig", 'String'>
-    readonly footerConfig: FieldRef<"SubsiteConfig", 'String'>
-    readonly siteVisibility: FieldRef<"SubsiteConfig", 'String'>
-    readonly siteLanguage: FieldRef<"SubsiteConfig", 'String'>
-    readonly subsiteId: FieldRef<"SubsiteConfig", 'Int'>
-    readonly createdAt: FieldRef<"SubsiteConfig", 'DateTime'>
-    readonly updatedAt: FieldRef<"SubsiteConfig", 'DateTime'>
-  }
-    
-
-  // Custom InputTypes
-
-  /**
-   * SubsiteConfig findUnique
-   */
-  export type SubsiteConfigFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the SubsiteConfig
-     */
-    select?: SubsiteConfigSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: SubsiteConfigInclude<ExtArgs> | null
-    /**
-     * Filter, which SubsiteConfig to fetch.
-     */
-    where: SubsiteConfigWhereUniqueInput
-  }
-
-
-  /**
-   * SubsiteConfig findUniqueOrThrow
-   */
-  export type SubsiteConfigFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the SubsiteConfig
-     */
-    select?: SubsiteConfigSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: SubsiteConfigInclude<ExtArgs> | null
-    /**
-     * Filter, which SubsiteConfig to fetch.
-     */
-    where: SubsiteConfigWhereUniqueInput
-  }
-
-
-  /**
-   * SubsiteConfig findFirst
-   */
-  export type SubsiteConfigFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the SubsiteConfig
-     */
-    select?: SubsiteConfigSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: SubsiteConfigInclude<ExtArgs> | null
-    /**
-     * Filter, which SubsiteConfig to fetch.
-     */
-    where?: SubsiteConfigWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of SubsiteConfigs to fetch.
-     */
-    orderBy?: SubsiteConfigOrderByWithRelationInput | SubsiteConfigOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for SubsiteConfigs.
-     */
-    cursor?: SubsiteConfigWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` SubsiteConfigs from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` SubsiteConfigs.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of SubsiteConfigs.
-     */
-    distinct?: SubsiteConfigScalarFieldEnum | SubsiteConfigScalarFieldEnum[]
-  }
-
-
-  /**
-   * SubsiteConfig findFirstOrThrow
-   */
-  export type SubsiteConfigFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the SubsiteConfig
-     */
-    select?: SubsiteConfigSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: SubsiteConfigInclude<ExtArgs> | null
-    /**
-     * Filter, which SubsiteConfig to fetch.
-     */
-    where?: SubsiteConfigWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of SubsiteConfigs to fetch.
-     */
-    orderBy?: SubsiteConfigOrderByWithRelationInput | SubsiteConfigOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for SubsiteConfigs.
-     */
-    cursor?: SubsiteConfigWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` SubsiteConfigs from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` SubsiteConfigs.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of SubsiteConfigs.
-     */
-    distinct?: SubsiteConfigScalarFieldEnum | SubsiteConfigScalarFieldEnum[]
-  }
-
-
-  /**
-   * SubsiteConfig findMany
-   */
-  export type SubsiteConfigFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the SubsiteConfig
-     */
-    select?: SubsiteConfigSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: SubsiteConfigInclude<ExtArgs> | null
-    /**
-     * Filter, which SubsiteConfigs to fetch.
-     */
-    where?: SubsiteConfigWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of SubsiteConfigs to fetch.
-     */
-    orderBy?: SubsiteConfigOrderByWithRelationInput | SubsiteConfigOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing SubsiteConfigs.
-     */
-    cursor?: SubsiteConfigWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` SubsiteConfigs from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` SubsiteConfigs.
-     */
-    skip?: number
-    distinct?: SubsiteConfigScalarFieldEnum | SubsiteConfigScalarFieldEnum[]
-  }
-
-
-  /**
-   * SubsiteConfig create
-   */
-  export type SubsiteConfigCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the SubsiteConfig
-     */
-    select?: SubsiteConfigSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: SubsiteConfigInclude<ExtArgs> | null
-    /**
-     * The data needed to create a SubsiteConfig.
-     */
-    data: XOR<SubsiteConfigCreateInput, SubsiteConfigUncheckedCreateInput>
-  }
-
-
-  /**
-   * SubsiteConfig createMany
-   */
-  export type SubsiteConfigCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many SubsiteConfigs.
-     */
-    data: SubsiteConfigCreateManyInput | SubsiteConfigCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-
-  /**
-   * SubsiteConfig update
-   */
-  export type SubsiteConfigUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the SubsiteConfig
-     */
-    select?: SubsiteConfigSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: SubsiteConfigInclude<ExtArgs> | null
-    /**
-     * The data needed to update a SubsiteConfig.
-     */
-    data: XOR<SubsiteConfigUpdateInput, SubsiteConfigUncheckedUpdateInput>
-    /**
-     * Choose, which SubsiteConfig to update.
-     */
-    where: SubsiteConfigWhereUniqueInput
-  }
-
-
-  /**
-   * SubsiteConfig updateMany
-   */
-  export type SubsiteConfigUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update SubsiteConfigs.
-     */
-    data: XOR<SubsiteConfigUpdateManyMutationInput, SubsiteConfigUncheckedUpdateManyInput>
-    /**
-     * Filter which SubsiteConfigs to update
-     */
-    where?: SubsiteConfigWhereInput
-  }
-
-
-  /**
-   * SubsiteConfig upsert
-   */
-  export type SubsiteConfigUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the SubsiteConfig
-     */
-    select?: SubsiteConfigSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: SubsiteConfigInclude<ExtArgs> | null
-    /**
-     * The filter to search for the SubsiteConfig to update in case it exists.
-     */
-    where: SubsiteConfigWhereUniqueInput
-    /**
-     * In case the SubsiteConfig found by the `where` argument doesn't exist, create a new SubsiteConfig with this data.
-     */
-    create: XOR<SubsiteConfigCreateInput, SubsiteConfigUncheckedCreateInput>
-    /**
-     * In case the SubsiteConfig was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<SubsiteConfigUpdateInput, SubsiteConfigUncheckedUpdateInput>
-  }
-
-
-  /**
-   * SubsiteConfig delete
-   */
-  export type SubsiteConfigDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the SubsiteConfig
-     */
-    select?: SubsiteConfigSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: SubsiteConfigInclude<ExtArgs> | null
-    /**
-     * Filter which SubsiteConfig to delete.
-     */
-    where: SubsiteConfigWhereUniqueInput
-  }
-
-
-  /**
-   * SubsiteConfig deleteMany
-   */
-  export type SubsiteConfigDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which SubsiteConfigs to delete
-     */
-    where?: SubsiteConfigWhereInput
-  }
-
-
-  /**
-   * SubsiteConfig without action
-   */
-  export type SubsiteConfigDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the SubsiteConfig
-     */
-    select?: SubsiteConfigSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: SubsiteConfigInclude<ExtArgs> | null
-  }
-
-
-
-  /**
    * Model Post
    */
 
@@ -5388,11 +5566,13 @@ export namespace Prisma {
   export type PostAvgAggregateOutputType = {
     id: number | null
     authorId: number | null
+    subsiteId: number | null
   }
 
   export type PostSumAggregateOutputType = {
     id: number | null
     authorId: number | null
+    subsiteId: number | null
   }
 
   export type PostMinAggregateOutputType = {
@@ -5407,9 +5587,7 @@ export namespace Prisma {
     publishedAt: Date | null
     deleted: boolean | null
     authorId: number | null
-    accountRef: string | null
-    subsiteRef: string | null
-    contextUserId: string | null
+    subsiteId: number | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -5426,9 +5604,7 @@ export namespace Prisma {
     publishedAt: Date | null
     deleted: boolean | null
     authorId: number | null
-    accountRef: string | null
-    subsiteRef: string | null
-    contextUserId: string | null
+    subsiteId: number | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -5445,9 +5621,7 @@ export namespace Prisma {
     publishedAt: number
     deleted: number
     authorId: number
-    accountRef: number
-    subsiteRef: number
-    contextUserId: number
+    subsiteId: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -5457,11 +5631,13 @@ export namespace Prisma {
   export type PostAvgAggregateInputType = {
     id?: true
     authorId?: true
+    subsiteId?: true
   }
 
   export type PostSumAggregateInputType = {
     id?: true
     authorId?: true
+    subsiteId?: true
   }
 
   export type PostMinAggregateInputType = {
@@ -5476,9 +5652,7 @@ export namespace Prisma {
     publishedAt?: true
     deleted?: true
     authorId?: true
-    accountRef?: true
-    subsiteRef?: true
-    contextUserId?: true
+    subsiteId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -5495,9 +5669,7 @@ export namespace Prisma {
     publishedAt?: true
     deleted?: true
     authorId?: true
-    accountRef?: true
-    subsiteRef?: true
-    contextUserId?: true
+    subsiteId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -5514,9 +5686,7 @@ export namespace Prisma {
     publishedAt?: true
     deleted?: true
     authorId?: true
-    accountRef?: true
-    subsiteRef?: true
-    contextUserId?: true
+    subsiteId?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -5620,9 +5790,7 @@ export namespace Prisma {
     publishedAt: Date | null
     deleted: boolean
     authorId: number
-    accountRef: string
-    subsiteRef: string
-    contextUserId: string
+    subsiteId: number
     createdAt: Date
     updatedAt: Date | null
     _count: PostCountAggregateOutputType | null
@@ -5658,14 +5826,13 @@ export namespace Prisma {
     publishedAt?: boolean
     deleted?: boolean
     authorId?: boolean
-    accountRef?: boolean
-    subsiteRef?: boolean
-    contextUserId?: boolean
+    subsiteId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     author?: boolean | UserDefaultArgs<ExtArgs>
     categories?: boolean | Post$categoriesArgs<ExtArgs>
     tags?: boolean | Post$tagsArgs<ExtArgs>
+    subsite?: boolean | SubsiteDefaultArgs<ExtArgs>
     _count?: boolean | PostCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["post"]>
 
@@ -5681,9 +5848,7 @@ export namespace Prisma {
     publishedAt?: boolean
     deleted?: boolean
     authorId?: boolean
-    accountRef?: boolean
-    subsiteRef?: boolean
-    contextUserId?: boolean
+    subsiteId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
@@ -5692,6 +5857,7 @@ export namespace Prisma {
     author?: boolean | UserDefaultArgs<ExtArgs>
     categories?: boolean | Post$categoriesArgs<ExtArgs>
     tags?: boolean | Post$tagsArgs<ExtArgs>
+    subsite?: boolean | SubsiteDefaultArgs<ExtArgs>
     _count?: boolean | PostCountOutputTypeDefaultArgs<ExtArgs>
   }
 
@@ -5702,6 +5868,7 @@ export namespace Prisma {
       author: Prisma.$UserPayload<ExtArgs>
       categories: Prisma.$CategoryPayload<ExtArgs>[]
       tags: Prisma.$TagPayload<ExtArgs>[]
+      subsite: Prisma.$SubsitePayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -5715,9 +5882,7 @@ export namespace Prisma {
       publishedAt: Date | null
       deleted: boolean
       authorId: number
-      accountRef: string
-      subsiteRef: string
-      contextUserId: string
+      subsiteId: number
       createdAt: Date
       updatedAt: Date | null
     }, ExtArgs["result"]["post"]>
@@ -6091,6 +6256,8 @@ export namespace Prisma {
 
     tags<T extends Post$tagsArgs<ExtArgs> = {}>(args?: Subset<T, Post$tagsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TagPayload<ExtArgs>, T, 'findMany'> | Null>;
 
+    subsite<T extends SubsiteDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SubsiteDefaultArgs<ExtArgs>>): Prisma__SubsiteClient<$Result.GetResult<Prisma.$SubsitePayload<ExtArgs>, T, 'findUniqueOrThrow'> | Null, Null, ExtArgs>;
+
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -6130,9 +6297,7 @@ export namespace Prisma {
     readonly publishedAt: FieldRef<"Post", 'DateTime'>
     readonly deleted: FieldRef<"Post", 'Boolean'>
     readonly authorId: FieldRef<"Post", 'Int'>
-    readonly accountRef: FieldRef<"Post", 'String'>
-    readonly subsiteRef: FieldRef<"Post", 'String'>
-    readonly contextUserId: FieldRef<"Post", 'String'>
+    readonly subsiteId: FieldRef<"Post", 'Int'>
     readonly createdAt: FieldRef<"Post", 'DateTime'>
     readonly updatedAt: FieldRef<"Post", 'DateTime'>
   }
@@ -6519,11 +6684,13 @@ export namespace Prisma {
   export type PageAvgAggregateOutputType = {
     id: number | null
     authorId: number | null
+    subsiteId: number | null
   }
 
   export type PageSumAggregateOutputType = {
     id: number | null
     authorId: number | null
+    subsiteId: number | null
   }
 
   export type PageMinAggregateOutputType = {
@@ -6544,8 +6711,7 @@ export namespace Prisma {
     showOnNav: boolean | null
     deleted: boolean | null
     authorId: number | null
-    accountRef: string | null
-    subsiteRef: string | null
+    subsiteId: number | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -6568,8 +6734,7 @@ export namespace Prisma {
     showOnNav: boolean | null
     deleted: boolean | null
     authorId: number | null
-    accountRef: string | null
-    subsiteRef: string | null
+    subsiteId: number | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -6592,8 +6757,7 @@ export namespace Prisma {
     showOnNav: number
     deleted: number
     authorId: number
-    accountRef: number
-    subsiteRef: number
+    subsiteId: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -6603,11 +6767,13 @@ export namespace Prisma {
   export type PageAvgAggregateInputType = {
     id?: true
     authorId?: true
+    subsiteId?: true
   }
 
   export type PageSumAggregateInputType = {
     id?: true
     authorId?: true
+    subsiteId?: true
   }
 
   export type PageMinAggregateInputType = {
@@ -6628,8 +6794,7 @@ export namespace Prisma {
     showOnNav?: true
     deleted?: true
     authorId?: true
-    accountRef?: true
-    subsiteRef?: true
+    subsiteId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -6652,8 +6817,7 @@ export namespace Prisma {
     showOnNav?: true
     deleted?: true
     authorId?: true
-    accountRef?: true
-    subsiteRef?: true
+    subsiteId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -6676,8 +6840,7 @@ export namespace Prisma {
     showOnNav?: true
     deleted?: true
     authorId?: true
-    accountRef?: true
-    subsiteRef?: true
+    subsiteId?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -6787,8 +6950,7 @@ export namespace Prisma {
     showOnNav: boolean
     deleted: boolean
     authorId: number
-    accountRef: string
-    subsiteRef: string
+    subsiteId: number
     createdAt: Date
     updatedAt: Date | null
     _count: PageCountAggregateOutputType | null
@@ -6830,13 +6992,13 @@ export namespace Prisma {
     showOnNav?: boolean
     deleted?: boolean
     authorId?: boolean
-    accountRef?: boolean
-    subsiteRef?: boolean
+    subsiteId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     author?: boolean | UserDefaultArgs<ExtArgs>
     categories?: boolean | Page$categoriesArgs<ExtArgs>
     tags?: boolean | Page$tagsArgs<ExtArgs>
+    subsite?: boolean | SubsiteDefaultArgs<ExtArgs>
     _count?: boolean | PageCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["page"]>
 
@@ -6858,8 +7020,7 @@ export namespace Prisma {
     showOnNav?: boolean
     deleted?: boolean
     authorId?: boolean
-    accountRef?: boolean
-    subsiteRef?: boolean
+    subsiteId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
@@ -6868,6 +7029,7 @@ export namespace Prisma {
     author?: boolean | UserDefaultArgs<ExtArgs>
     categories?: boolean | Page$categoriesArgs<ExtArgs>
     tags?: boolean | Page$tagsArgs<ExtArgs>
+    subsite?: boolean | SubsiteDefaultArgs<ExtArgs>
     _count?: boolean | PageCountOutputTypeDefaultArgs<ExtArgs>
   }
 
@@ -6878,6 +7040,7 @@ export namespace Prisma {
       author: Prisma.$UserPayload<ExtArgs>
       categories: Prisma.$CategoryPayload<ExtArgs>[]
       tags: Prisma.$TagPayload<ExtArgs>[]
+      subsite: Prisma.$SubsitePayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
       id: number
@@ -6897,8 +7060,7 @@ export namespace Prisma {
       showOnNav: boolean
       deleted: boolean
       authorId: number
-      accountRef: string
-      subsiteRef: string
+      subsiteId: number
       createdAt: Date
       updatedAt: Date | null
     }, ExtArgs["result"]["page"]>
@@ -7272,6 +7434,8 @@ export namespace Prisma {
 
     tags<T extends Page$tagsArgs<ExtArgs> = {}>(args?: Subset<T, Page$tagsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TagPayload<ExtArgs>, T, 'findMany'> | Null>;
 
+    subsite<T extends SubsiteDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SubsiteDefaultArgs<ExtArgs>>): Prisma__SubsiteClient<$Result.GetResult<Prisma.$SubsitePayload<ExtArgs>, T, 'findUniqueOrThrow'> | Null, Null, ExtArgs>;
+
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -7317,8 +7481,7 @@ export namespace Prisma {
     readonly showOnNav: FieldRef<"Page", 'Boolean'>
     readonly deleted: FieldRef<"Page", 'Boolean'>
     readonly authorId: FieldRef<"Page", 'Int'>
-    readonly accountRef: FieldRef<"Page", 'String'>
-    readonly subsiteRef: FieldRef<"Page", 'String'>
+    readonly subsiteId: FieldRef<"Page", 'Int'>
     readonly createdAt: FieldRef<"Page", 'DateTime'>
     readonly updatedAt: FieldRef<"Page", 'DateTime'>
   }
@@ -13764,1229 +13927,6 @@ export namespace Prisma {
 
 
   /**
-   * Model User
-   */
-
-  export type AggregateUser = {
-    _count: UserCountAggregateOutputType | null
-    _avg: UserAvgAggregateOutputType | null
-    _sum: UserSumAggregateOutputType | null
-    _min: UserMinAggregateOutputType | null
-    _max: UserMaxAggregateOutputType | null
-  }
-
-  export type UserAvgAggregateOutputType = {
-    id: number | null
-  }
-
-  export type UserSumAggregateOutputType = {
-    id: number | null
-  }
-
-  export type UserMinAggregateOutputType = {
-    id: number | null
-    email: string | null
-    name: string | null
-    description: string | null
-    token: string | null
-    prefix: string | null
-    firstName: string | null
-    middleName: string | null
-    lastName: string | null
-    suffix: string | null
-    preferredName: string | null
-    gender: string | null
-    birthDate: Date | null
-    local: string | null
-    timeZone: string | null
-    lastLoginTime: Date | null
-    role: $Enums.UserRole | null
-    createdAt: Date | null
-    updatedAt: Date | null
-  }
-
-  export type UserMaxAggregateOutputType = {
-    id: number | null
-    email: string | null
-    name: string | null
-    description: string | null
-    token: string | null
-    prefix: string | null
-    firstName: string | null
-    middleName: string | null
-    lastName: string | null
-    suffix: string | null
-    preferredName: string | null
-    gender: string | null
-    birthDate: Date | null
-    local: string | null
-    timeZone: string | null
-    lastLoginTime: Date | null
-    role: $Enums.UserRole | null
-    createdAt: Date | null
-    updatedAt: Date | null
-  }
-
-  export type UserCountAggregateOutputType = {
-    id: number
-    email: number
-    name: number
-    description: number
-    token: number
-    prefix: number
-    firstName: number
-    middleName: number
-    lastName: number
-    suffix: number
-    preferredName: number
-    gender: number
-    birthDate: number
-    local: number
-    timeZone: number
-    lastLoginTime: number
-    role: number
-    createdAt: number
-    updatedAt: number
-    _all: number
-  }
-
-
-  export type UserAvgAggregateInputType = {
-    id?: true
-  }
-
-  export type UserSumAggregateInputType = {
-    id?: true
-  }
-
-  export type UserMinAggregateInputType = {
-    id?: true
-    email?: true
-    name?: true
-    description?: true
-    token?: true
-    prefix?: true
-    firstName?: true
-    middleName?: true
-    lastName?: true
-    suffix?: true
-    preferredName?: true
-    gender?: true
-    birthDate?: true
-    local?: true
-    timeZone?: true
-    lastLoginTime?: true
-    role?: true
-    createdAt?: true
-    updatedAt?: true
-  }
-
-  export type UserMaxAggregateInputType = {
-    id?: true
-    email?: true
-    name?: true
-    description?: true
-    token?: true
-    prefix?: true
-    firstName?: true
-    middleName?: true
-    lastName?: true
-    suffix?: true
-    preferredName?: true
-    gender?: true
-    birthDate?: true
-    local?: true
-    timeZone?: true
-    lastLoginTime?: true
-    role?: true
-    createdAt?: true
-    updatedAt?: true
-  }
-
-  export type UserCountAggregateInputType = {
-    id?: true
-    email?: true
-    name?: true
-    description?: true
-    token?: true
-    prefix?: true
-    firstName?: true
-    middleName?: true
-    lastName?: true
-    suffix?: true
-    preferredName?: true
-    gender?: true
-    birthDate?: true
-    local?: true
-    timeZone?: true
-    lastLoginTime?: true
-    role?: true
-    createdAt?: true
-    updatedAt?: true
-    _all?: true
-  }
-
-  export type UserAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which User to aggregate.
-     */
-    where?: UserWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Users to fetch.
-     */
-    orderBy?: UserOrderByWithRelationInput | UserOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: UserWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Users from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Users.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned Users
-    **/
-    _count?: true | UserCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to average
-    **/
-    _avg?: UserAvgAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to sum
-    **/
-    _sum?: UserSumAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: UserMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: UserMaxAggregateInputType
-  }
-
-  export type GetUserAggregateType<T extends UserAggregateArgs> = {
-        [P in keyof T & keyof AggregateUser]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateUser[P]>
-      : GetScalarType<T[P], AggregateUser[P]>
-  }
-
-
-
-
-  export type UserGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: UserWhereInput
-    orderBy?: UserOrderByWithAggregationInput | UserOrderByWithAggregationInput[]
-    by: UserScalarFieldEnum[] | UserScalarFieldEnum
-    having?: UserScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: UserCountAggregateInputType | true
-    _avg?: UserAvgAggregateInputType
-    _sum?: UserSumAggregateInputType
-    _min?: UserMinAggregateInputType
-    _max?: UserMaxAggregateInputType
-  }
-
-  export type UserGroupByOutputType = {
-    id: number
-    email: string
-    name: string | null
-    description: string | null
-    token: string | null
-    prefix: string | null
-    firstName: string | null
-    middleName: string | null
-    lastName: string | null
-    suffix: string | null
-    preferredName: string | null
-    gender: string | null
-    birthDate: Date | null
-    local: string | null
-    timeZone: string | null
-    lastLoginTime: Date | null
-    role: $Enums.UserRole
-    createdAt: Date
-    updatedAt: Date | null
-    _count: UserCountAggregateOutputType | null
-    _avg: UserAvgAggregateOutputType | null
-    _sum: UserSumAggregateOutputType | null
-    _min: UserMinAggregateOutputType | null
-    _max: UserMaxAggregateOutputType | null
-  }
-
-  type GetUserGroupByPayload<T extends UserGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<UserGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof UserGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], UserGroupByOutputType[P]>
-            : GetScalarType<T[P], UserGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type UserSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    email?: boolean
-    name?: boolean
-    description?: boolean
-    token?: boolean
-    prefix?: boolean
-    firstName?: boolean
-    middleName?: boolean
-    lastName?: boolean
-    suffix?: boolean
-    preferredName?: boolean
-    gender?: boolean
-    birthDate?: boolean
-    local?: boolean
-    timeZone?: boolean
-    lastLoginTime?: boolean
-    role?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-    contact?: boolean | User$contactArgs<ExtArgs>
-    posts?: boolean | User$postsArgs<ExtArgs>
-    profile?: boolean | User$profileArgs<ExtArgs>
-    pages?: boolean | User$pagesArgs<ExtArgs>
-    accounts?: boolean | User$accountsArgs<ExtArgs>
-    _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["user"]>
-
-  export type UserSelectScalar = {
-    id?: boolean
-    email?: boolean
-    name?: boolean
-    description?: boolean
-    token?: boolean
-    prefix?: boolean
-    firstName?: boolean
-    middleName?: boolean
-    lastName?: boolean
-    suffix?: boolean
-    preferredName?: boolean
-    gender?: boolean
-    birthDate?: boolean
-    local?: boolean
-    timeZone?: boolean
-    lastLoginTime?: boolean
-    role?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-  }
-
-  export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    contact?: boolean | User$contactArgs<ExtArgs>
-    posts?: boolean | User$postsArgs<ExtArgs>
-    profile?: boolean | User$profileArgs<ExtArgs>
-    pages?: boolean | User$pagesArgs<ExtArgs>
-    accounts?: boolean | User$accountsArgs<ExtArgs>
-    _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
-  }
-
-
-  export type $UserPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "User"
-    objects: {
-      contact: Prisma.$UserContactPayload<ExtArgs> | null
-      posts: Prisma.$PostPayload<ExtArgs>[]
-      profile: Prisma.$UserProfilePayload<ExtArgs> | null
-      pages: Prisma.$PagePayload<ExtArgs>[]
-      accounts: Prisma.$AccountPayload<ExtArgs>[]
-    }
-    scalars: $Extensions.GetPayloadResult<{
-      id: number
-      email: string
-      name: string | null
-      description: string | null
-      token: string | null
-      prefix: string | null
-      firstName: string | null
-      middleName: string | null
-      lastName: string | null
-      suffix: string | null
-      preferredName: string | null
-      gender: string | null
-      birthDate: Date | null
-      local: string | null
-      timeZone: string | null
-      lastLoginTime: Date | null
-      role: $Enums.UserRole
-      createdAt: Date
-      updatedAt: Date | null
-    }, ExtArgs["result"]["user"]>
-    composites: {}
-  }
-
-
-  type UserGetPayload<S extends boolean | null | undefined | UserDefaultArgs> = $Result.GetResult<Prisma.$UserPayload, S>
-
-  type UserCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
-    Omit<UserFindManyArgs, 'select' | 'include' | 'distinct'> & {
-      select?: UserCountAggregateInputType | true
-    }
-
-  export interface UserDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['User'], meta: { name: 'User' } }
-    /**
-     * Find zero or one User that matches the filter.
-     * @param {UserFindUniqueArgs} args - Arguments to find a User
-     * @example
-     * // Get one User
-     * const user = await prisma.user.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-    **/
-    findUnique<T extends UserFindUniqueArgs<ExtArgs>>(
-      args: SelectSubset<T, UserFindUniqueArgs<ExtArgs>>
-    ): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, 'findUnique'> | null, null, ExtArgs>
-
-    /**
-     * Find one User that matches the filter or throw an error  with `error.code='P2025'` 
-     *     if no matches were found.
-     * @param {UserFindUniqueOrThrowArgs} args - Arguments to find a User
-     * @example
-     * // Get one User
-     * const user = await prisma.user.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-    **/
-    findUniqueOrThrow<T extends UserFindUniqueOrThrowArgs<ExtArgs>>(
-      args?: SelectSubset<T, UserFindUniqueOrThrowArgs<ExtArgs>>
-    ): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, 'findUniqueOrThrow'>, never, ExtArgs>
-
-    /**
-     * Find the first User that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {UserFindFirstArgs} args - Arguments to find a User
-     * @example
-     * // Get one User
-     * const user = await prisma.user.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-    **/
-    findFirst<T extends UserFindFirstArgs<ExtArgs>>(
-      args?: SelectSubset<T, UserFindFirstArgs<ExtArgs>>
-    ): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, 'findFirst'> | null, null, ExtArgs>
-
-    /**
-     * Find the first User that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {UserFindFirstOrThrowArgs} args - Arguments to find a User
-     * @example
-     * // Get one User
-     * const user = await prisma.user.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-    **/
-    findFirstOrThrow<T extends UserFindFirstOrThrowArgs<ExtArgs>>(
-      args?: SelectSubset<T, UserFindFirstOrThrowArgs<ExtArgs>>
-    ): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, 'findFirstOrThrow'>, never, ExtArgs>
-
-    /**
-     * Find zero or more Users that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {UserFindManyArgs=} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all Users
-     * const users = await prisma.user.findMany()
-     * 
-     * // Get first 10 Users
-     * const users = await prisma.user.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const userWithIdOnly = await prisma.user.findMany({ select: { id: true } })
-     * 
-    **/
-    findMany<T extends UserFindManyArgs<ExtArgs>>(
-      args?: SelectSubset<T, UserFindManyArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, 'findMany'>>
-
-    /**
-     * Create a User.
-     * @param {UserCreateArgs} args - Arguments to create a User.
-     * @example
-     * // Create one User
-     * const User = await prisma.user.create({
-     *   data: {
-     *     // ... data to create a User
-     *   }
-     * })
-     * 
-    **/
-    create<T extends UserCreateArgs<ExtArgs>>(
-      args: SelectSubset<T, UserCreateArgs<ExtArgs>>
-    ): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, 'create'>, never, ExtArgs>
-
-    /**
-     * Create many Users.
-     *     @param {UserCreateManyArgs} args - Arguments to create many Users.
-     *     @example
-     *     // Create many Users
-     *     const user = await prisma.user.createMany({
-     *       data: {
-     *         // ... provide data here
-     *       }
-     *     })
-     *     
-    **/
-    createMany<T extends UserCreateManyArgs<ExtArgs>>(
-      args?: SelectSubset<T, UserCreateManyArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Delete a User.
-     * @param {UserDeleteArgs} args - Arguments to delete one User.
-     * @example
-     * // Delete one User
-     * const User = await prisma.user.delete({
-     *   where: {
-     *     // ... filter to delete one User
-     *   }
-     * })
-     * 
-    **/
-    delete<T extends UserDeleteArgs<ExtArgs>>(
-      args: SelectSubset<T, UserDeleteArgs<ExtArgs>>
-    ): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, 'delete'>, never, ExtArgs>
-
-    /**
-     * Update one User.
-     * @param {UserUpdateArgs} args - Arguments to update one User.
-     * @example
-     * // Update one User
-     * const user = await prisma.user.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-    **/
-    update<T extends UserUpdateArgs<ExtArgs>>(
-      args: SelectSubset<T, UserUpdateArgs<ExtArgs>>
-    ): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, 'update'>, never, ExtArgs>
-
-    /**
-     * Delete zero or more Users.
-     * @param {UserDeleteManyArgs} args - Arguments to filter Users to delete.
-     * @example
-     * // Delete a few Users
-     * const { count } = await prisma.user.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-    **/
-    deleteMany<T extends UserDeleteManyArgs<ExtArgs>>(
-      args?: SelectSubset<T, UserDeleteManyArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Users.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {UserUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many Users
-     * const user = await prisma.user.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-    **/
-    updateMany<T extends UserUpdateManyArgs<ExtArgs>>(
-      args: SelectSubset<T, UserUpdateManyArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create or update one User.
-     * @param {UserUpsertArgs} args - Arguments to update or create a User.
-     * @example
-     * // Update or create a User
-     * const user = await prisma.user.upsert({
-     *   create: {
-     *     // ... data to create a User
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the User we want to update
-     *   }
-     * })
-    **/
-    upsert<T extends UserUpsertArgs<ExtArgs>>(
-      args: SelectSubset<T, UserUpsertArgs<ExtArgs>>
-    ): Prisma__UserClient<$Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, 'upsert'>, never, ExtArgs>
-
-    /**
-     * Count the number of Users.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {UserCountArgs} args - Arguments to filter Users to count.
-     * @example
-     * // Count the number of Users
-     * const count = await prisma.user.count({
-     *   where: {
-     *     // ... the filter for the Users we want to count
-     *   }
-     * })
-    **/
-    count<T extends UserCountArgs>(
-      args?: Subset<T, UserCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], UserCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a User.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {UserAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends UserAggregateArgs>(args: Subset<T, UserAggregateArgs>): Prisma.PrismaPromise<GetUserAggregateType<T>>
-
-    /**
-     * Group by User.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {UserGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends UserGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: UserGroupByArgs['orderBy'] }
-        : { orderBy?: UserGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, UserGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetUserGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the User model
-   */
-  readonly fields: UserFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for User.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__UserClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: 'PrismaPromise';
-
-    contact<T extends User$contactArgs<ExtArgs> = {}>(args?: Subset<T, User$contactArgs<ExtArgs>>): Prisma__UserContactClient<$Result.GetResult<Prisma.$UserContactPayload<ExtArgs>, T, 'findUniqueOrThrow'> | null, null, ExtArgs>;
-
-    posts<T extends User$postsArgs<ExtArgs> = {}>(args?: Subset<T, User$postsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PostPayload<ExtArgs>, T, 'findMany'> | Null>;
-
-    profile<T extends User$profileArgs<ExtArgs> = {}>(args?: Subset<T, User$profileArgs<ExtArgs>>): Prisma__UserProfileClient<$Result.GetResult<Prisma.$UserProfilePayload<ExtArgs>, T, 'findUniqueOrThrow'> | null, null, ExtArgs>;
-
-    pages<T extends User$pagesArgs<ExtArgs> = {}>(args?: Subset<T, User$pagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PagePayload<ExtArgs>, T, 'findMany'> | Null>;
-
-    accounts<T extends User$accountsArgs<ExtArgs> = {}>(args?: Subset<T, User$accountsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AccountPayload<ExtArgs>, T, 'findMany'> | Null>;
-
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>;
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>;
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>;
-  }
-
-
-
-  /**
-   * Fields of the User model
-   */ 
-  interface UserFieldRefs {
-    readonly id: FieldRef<"User", 'Int'>
-    readonly email: FieldRef<"User", 'String'>
-    readonly name: FieldRef<"User", 'String'>
-    readonly description: FieldRef<"User", 'String'>
-    readonly token: FieldRef<"User", 'String'>
-    readonly prefix: FieldRef<"User", 'String'>
-    readonly firstName: FieldRef<"User", 'String'>
-    readonly middleName: FieldRef<"User", 'String'>
-    readonly lastName: FieldRef<"User", 'String'>
-    readonly suffix: FieldRef<"User", 'String'>
-    readonly preferredName: FieldRef<"User", 'String'>
-    readonly gender: FieldRef<"User", 'String'>
-    readonly birthDate: FieldRef<"User", 'DateTime'>
-    readonly local: FieldRef<"User", 'String'>
-    readonly timeZone: FieldRef<"User", 'String'>
-    readonly lastLoginTime: FieldRef<"User", 'DateTime'>
-    readonly role: FieldRef<"User", 'UserRole'>
-    readonly createdAt: FieldRef<"User", 'DateTime'>
-    readonly updatedAt: FieldRef<"User", 'DateTime'>
-  }
-    
-
-  // Custom InputTypes
-
-  /**
-   * User findUnique
-   */
-  export type UserFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the User
-     */
-    select?: UserSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: UserInclude<ExtArgs> | null
-    /**
-     * Filter, which User to fetch.
-     */
-    where: UserWhereUniqueInput
-  }
-
-
-  /**
-   * User findUniqueOrThrow
-   */
-  export type UserFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the User
-     */
-    select?: UserSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: UserInclude<ExtArgs> | null
-    /**
-     * Filter, which User to fetch.
-     */
-    where: UserWhereUniqueInput
-  }
-
-
-  /**
-   * User findFirst
-   */
-  export type UserFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the User
-     */
-    select?: UserSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: UserInclude<ExtArgs> | null
-    /**
-     * Filter, which User to fetch.
-     */
-    where?: UserWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Users to fetch.
-     */
-    orderBy?: UserOrderByWithRelationInput | UserOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for Users.
-     */
-    cursor?: UserWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Users from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Users.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Users.
-     */
-    distinct?: UserScalarFieldEnum | UserScalarFieldEnum[]
-  }
-
-
-  /**
-   * User findFirstOrThrow
-   */
-  export type UserFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the User
-     */
-    select?: UserSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: UserInclude<ExtArgs> | null
-    /**
-     * Filter, which User to fetch.
-     */
-    where?: UserWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Users to fetch.
-     */
-    orderBy?: UserOrderByWithRelationInput | UserOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for Users.
-     */
-    cursor?: UserWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Users from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Users.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of Users.
-     */
-    distinct?: UserScalarFieldEnum | UserScalarFieldEnum[]
-  }
-
-
-  /**
-   * User findMany
-   */
-  export type UserFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the User
-     */
-    select?: UserSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: UserInclude<ExtArgs> | null
-    /**
-     * Filter, which Users to fetch.
-     */
-    where?: UserWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of Users to fetch.
-     */
-    orderBy?: UserOrderByWithRelationInput | UserOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing Users.
-     */
-    cursor?: UserWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` Users from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` Users.
-     */
-    skip?: number
-    distinct?: UserScalarFieldEnum | UserScalarFieldEnum[]
-  }
-
-
-  /**
-   * User create
-   */
-  export type UserCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the User
-     */
-    select?: UserSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: UserInclude<ExtArgs> | null
-    /**
-     * The data needed to create a User.
-     */
-    data: XOR<UserCreateInput, UserUncheckedCreateInput>
-  }
-
-
-  /**
-   * User createMany
-   */
-  export type UserCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many Users.
-     */
-    data: UserCreateManyInput | UserCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-
-  /**
-   * User update
-   */
-  export type UserUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the User
-     */
-    select?: UserSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: UserInclude<ExtArgs> | null
-    /**
-     * The data needed to update a User.
-     */
-    data: XOR<UserUpdateInput, UserUncheckedUpdateInput>
-    /**
-     * Choose, which User to update.
-     */
-    where: UserWhereUniqueInput
-  }
-
-
-  /**
-   * User updateMany
-   */
-  export type UserUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update Users.
-     */
-    data: XOR<UserUpdateManyMutationInput, UserUncheckedUpdateManyInput>
-    /**
-     * Filter which Users to update
-     */
-    where?: UserWhereInput
-  }
-
-
-  /**
-   * User upsert
-   */
-  export type UserUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the User
-     */
-    select?: UserSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: UserInclude<ExtArgs> | null
-    /**
-     * The filter to search for the User to update in case it exists.
-     */
-    where: UserWhereUniqueInput
-    /**
-     * In case the User found by the `where` argument doesn't exist, create a new User with this data.
-     */
-    create: XOR<UserCreateInput, UserUncheckedCreateInput>
-    /**
-     * In case the User was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<UserUpdateInput, UserUncheckedUpdateInput>
-  }
-
-
-  /**
-   * User delete
-   */
-  export type UserDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the User
-     */
-    select?: UserSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: UserInclude<ExtArgs> | null
-    /**
-     * Filter which User to delete.
-     */
-    where: UserWhereUniqueInput
-  }
-
-
-  /**
-   * User deleteMany
-   */
-  export type UserDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which Users to delete
-     */
-    where?: UserWhereInput
-  }
-
-
-  /**
-   * User.contact
-   */
-  export type User$contactArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the UserContact
-     */
-    select?: UserContactSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: UserContactInclude<ExtArgs> | null
-    where?: UserContactWhereInput
-  }
-
-
-  /**
-   * User.posts
-   */
-  export type User$postsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Post
-     */
-    select?: PostSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: PostInclude<ExtArgs> | null
-    where?: PostWhereInput
-    orderBy?: PostOrderByWithRelationInput | PostOrderByWithRelationInput[]
-    cursor?: PostWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: PostScalarFieldEnum | PostScalarFieldEnum[]
-  }
-
-
-  /**
-   * User.profile
-   */
-  export type User$profileArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the UserProfile
-     */
-    select?: UserProfileSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: UserProfileInclude<ExtArgs> | null
-    where?: UserProfileWhereInput
-  }
-
-
-  /**
-   * User.pages
-   */
-  export type User$pagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Page
-     */
-    select?: PageSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: PageInclude<ExtArgs> | null
-    where?: PageWhereInput
-    orderBy?: PageOrderByWithRelationInput | PageOrderByWithRelationInput[]
-    cursor?: PageWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: PageScalarFieldEnum | PageScalarFieldEnum[]
-  }
-
-
-  /**
-   * User.accounts
-   */
-  export type User$accountsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Account
-     */
-    select?: AccountSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: AccountInclude<ExtArgs> | null
-    where?: AccountWhereInput
-    orderBy?: AccountOrderByWithRelationInput | AccountOrderByWithRelationInput[]
-    cursor?: AccountWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: AccountScalarFieldEnum | AccountScalarFieldEnum[]
-  }
-
-
-  /**
-   * User without action
-   */
-  export type UserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the User
-     */
-    select?: UserSelect<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well.
-     */
-    include?: UserInclude<ExtArgs> | null
-  }
-
-
-
-  /**
    * Model Category
    */
 
@@ -17002,11 +15942,36 @@ export namespace Prisma {
   export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
+  export const UserScalarFieldEnum: {
+    id: 'id',
+    email: 'email',
+    name: 'name',
+    description: 'description',
+    token: 'token',
+    prefix: 'prefix',
+    firstName: 'firstName',
+    middleName: 'middleName',
+    lastName: 'lastName',
+    suffix: 'suffix',
+    preferredName: 'preferredName',
+    gender: 'gender',
+    birthDate: 'birthDate',
+    local: 'local',
+    timeZone: 'timeZone',
+    lastLoginTime: 'lastLoginTime',
+    role: 'role',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
   export const AccountScalarFieldEnum: {
     id: 'id',
     name: 'name',
-    slug: 'slug',
     accountRef: 'accountRef',
+    adminId: 'adminId',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -17019,19 +15984,6 @@ export namespace Prisma {
     name: 'name',
     slug: 'slug',
     subsiteRef: 'subsiteRef',
-    domainName: 'domainName',
-    domainStatus: 'domainStatus',
-    domainCreatedAt: 'domainCreatedAt',
-    createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
-  };
-
-  export type SubsiteScalarFieldEnum = (typeof SubsiteScalarFieldEnum)[keyof typeof SubsiteScalarFieldEnum]
-
-
-  export const SubsiteConfigScalarFieldEnum: {
-    id: 'id',
-    name: 'name',
     logoUrl: 'logoUrl',
     logoSvg: 'logoSvg',
     navConfig: 'navConfig',
@@ -17039,12 +15991,15 @@ export namespace Prisma {
     footerConfig: 'footerConfig',
     siteVisibility: 'siteVisibility',
     siteLanguage: 'siteLanguage',
-    subsiteId: 'subsiteId',
+    domainName: 'domainName',
+    domainStatus: 'domainStatus',
+    domainCreatedAt: 'domainCreatedAt',
+    accountId: 'accountId',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
 
-  export type SubsiteConfigScalarFieldEnum = (typeof SubsiteConfigScalarFieldEnum)[keyof typeof SubsiteConfigScalarFieldEnum]
+  export type SubsiteScalarFieldEnum = (typeof SubsiteScalarFieldEnum)[keyof typeof SubsiteScalarFieldEnum]
 
 
   export const PostScalarFieldEnum: {
@@ -17059,9 +16014,7 @@ export namespace Prisma {
     publishedAt: 'publishedAt',
     deleted: 'deleted',
     authorId: 'authorId',
-    accountRef: 'accountRef',
-    subsiteRef: 'subsiteRef',
-    contextUserId: 'contextUserId',
+    subsiteId: 'subsiteId',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -17087,8 +16040,7 @@ export namespace Prisma {
     showOnNav: 'showOnNav',
     deleted: 'deleted',
     authorId: 'authorId',
-    accountRef: 'accountRef',
-    subsiteRef: 'subsiteRef',
+    subsiteId: 'subsiteId',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -17185,31 +16137,6 @@ export namespace Prisma {
   export type UserContactScalarFieldEnum = (typeof UserContactScalarFieldEnum)[keyof typeof UserContactScalarFieldEnum]
 
 
-  export const UserScalarFieldEnum: {
-    id: 'id',
-    email: 'email',
-    name: 'name',
-    description: 'description',
-    token: 'token',
-    prefix: 'prefix',
-    firstName: 'firstName',
-    middleName: 'middleName',
-    lastName: 'lastName',
-    suffix: 'suffix',
-    preferredName: 'preferredName',
-    gender: 'gender',
-    birthDate: 'birthDate',
-    local: 'local',
-    timeZone: 'timeZone',
-    lastLoginTime: 'lastLoginTime',
-    role: 'role',
-    createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
-  };
-
-  export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
-
-
   export const CategoryScalarFieldEnum: {
     id: 'id',
     name: 'name',
@@ -17304,6 +16231,20 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'UserRole'
+   */
+  export type EnumUserRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UserRole'>
+    
+
+
+  /**
+   * Reference to a field of type 'UserRole[]'
+   */
+  export type ListEnumUserRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UserRole[]'>
+    
+
+
+  /**
    * Reference to a field of type 'ContentStatus'
    */
   export type EnumContentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'ContentStatus'>
@@ -17325,20 +16266,6 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'UserRole'
-   */
-  export type EnumUserRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UserRole'>
-    
-
-
-  /**
-   * Reference to a field of type 'UserRole[]'
-   */
-  export type ListEnumUserRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UserRole[]'>
-    
-
-
-  /**
    * Reference to a field of type 'Float'
    */
   export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -17355,28 +16282,167 @@ export namespace Prisma {
    */
 
 
+  export type UserWhereInput = {
+    AND?: UserWhereInput | UserWhereInput[]
+    OR?: UserWhereInput[]
+    NOT?: UserWhereInput | UserWhereInput[]
+    id?: IntFilter<"User"> | number
+    email?: StringFilter<"User"> | string
+    name?: StringNullableFilter<"User"> | string | null
+    description?: StringNullableFilter<"User"> | string | null
+    token?: StringNullableFilter<"User"> | string | null
+    prefix?: StringNullableFilter<"User"> | string | null
+    firstName?: StringNullableFilter<"User"> | string | null
+    middleName?: StringNullableFilter<"User"> | string | null
+    lastName?: StringNullableFilter<"User"> | string | null
+    suffix?: StringNullableFilter<"User"> | string | null
+    preferredName?: StringNullableFilter<"User"> | string | null
+    gender?: StringNullableFilter<"User"> | string | null
+    birthDate?: DateTimeNullableFilter<"User"> | Date | string | null
+    local?: StringNullableFilter<"User"> | string | null
+    timeZone?: StringNullableFilter<"User"> | string | null
+    lastLoginTime?: DateTimeNullableFilter<"User"> | Date | string | null
+    role?: EnumUserRoleFilter<"User"> | $Enums.UserRole
+    createdAt?: DateTimeFilter<"User"> | Date | string
+    updatedAt?: DateTimeNullableFilter<"User"> | Date | string | null
+    contact?: XOR<UserContactNullableRelationFilter, UserContactWhereInput> | null
+    profile?: XOR<UserProfileNullableRelationFilter, UserProfileWhereInput> | null
+    posts?: PostListRelationFilter
+    pages?: PageListRelationFilter
+    accounts?: AccountListRelationFilter
+  }
+
+  export type UserOrderByWithRelationInput = {
+    id?: SortOrder
+    email?: SortOrder
+    name?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
+    token?: SortOrderInput | SortOrder
+    prefix?: SortOrderInput | SortOrder
+    firstName?: SortOrderInput | SortOrder
+    middleName?: SortOrderInput | SortOrder
+    lastName?: SortOrderInput | SortOrder
+    suffix?: SortOrderInput | SortOrder
+    preferredName?: SortOrderInput | SortOrder
+    gender?: SortOrderInput | SortOrder
+    birthDate?: SortOrderInput | SortOrder
+    local?: SortOrderInput | SortOrder
+    timeZone?: SortOrderInput | SortOrder
+    lastLoginTime?: SortOrderInput | SortOrder
+    role?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrderInput | SortOrder
+    contact?: UserContactOrderByWithRelationInput
+    profile?: UserProfileOrderByWithRelationInput
+    posts?: PostOrderByRelationAggregateInput
+    pages?: PageOrderByRelationAggregateInput
+    accounts?: AccountOrderByRelationAggregateInput
+  }
+
+  export type UserWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    email?: string
+    AND?: UserWhereInput | UserWhereInput[]
+    OR?: UserWhereInput[]
+    NOT?: UserWhereInput | UserWhereInput[]
+    name?: StringNullableFilter<"User"> | string | null
+    description?: StringNullableFilter<"User"> | string | null
+    token?: StringNullableFilter<"User"> | string | null
+    prefix?: StringNullableFilter<"User"> | string | null
+    firstName?: StringNullableFilter<"User"> | string | null
+    middleName?: StringNullableFilter<"User"> | string | null
+    lastName?: StringNullableFilter<"User"> | string | null
+    suffix?: StringNullableFilter<"User"> | string | null
+    preferredName?: StringNullableFilter<"User"> | string | null
+    gender?: StringNullableFilter<"User"> | string | null
+    birthDate?: DateTimeNullableFilter<"User"> | Date | string | null
+    local?: StringNullableFilter<"User"> | string | null
+    timeZone?: StringNullableFilter<"User"> | string | null
+    lastLoginTime?: DateTimeNullableFilter<"User"> | Date | string | null
+    role?: EnumUserRoleFilter<"User"> | $Enums.UserRole
+    createdAt?: DateTimeFilter<"User"> | Date | string
+    updatedAt?: DateTimeNullableFilter<"User"> | Date | string | null
+    contact?: XOR<UserContactNullableRelationFilter, UserContactWhereInput> | null
+    profile?: XOR<UserProfileNullableRelationFilter, UserProfileWhereInput> | null
+    posts?: PostListRelationFilter
+    pages?: PageListRelationFilter
+    accounts?: AccountListRelationFilter
+  }, "id" | "email">
+
+  export type UserOrderByWithAggregationInput = {
+    id?: SortOrder
+    email?: SortOrder
+    name?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
+    token?: SortOrderInput | SortOrder
+    prefix?: SortOrderInput | SortOrder
+    firstName?: SortOrderInput | SortOrder
+    middleName?: SortOrderInput | SortOrder
+    lastName?: SortOrderInput | SortOrder
+    suffix?: SortOrderInput | SortOrder
+    preferredName?: SortOrderInput | SortOrder
+    gender?: SortOrderInput | SortOrder
+    birthDate?: SortOrderInput | SortOrder
+    local?: SortOrderInput | SortOrder
+    timeZone?: SortOrderInput | SortOrder
+    lastLoginTime?: SortOrderInput | SortOrder
+    role?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrderInput | SortOrder
+    _count?: UserCountOrderByAggregateInput
+    _avg?: UserAvgOrderByAggregateInput
+    _max?: UserMaxOrderByAggregateInput
+    _min?: UserMinOrderByAggregateInput
+    _sum?: UserSumOrderByAggregateInput
+  }
+
+  export type UserScalarWhereWithAggregatesInput = {
+    AND?: UserScalarWhereWithAggregatesInput | UserScalarWhereWithAggregatesInput[]
+    OR?: UserScalarWhereWithAggregatesInput[]
+    NOT?: UserScalarWhereWithAggregatesInput | UserScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"User"> | number
+    email?: StringWithAggregatesFilter<"User"> | string
+    name?: StringNullableWithAggregatesFilter<"User"> | string | null
+    description?: StringNullableWithAggregatesFilter<"User"> | string | null
+    token?: StringNullableWithAggregatesFilter<"User"> | string | null
+    prefix?: StringNullableWithAggregatesFilter<"User"> | string | null
+    firstName?: StringNullableWithAggregatesFilter<"User"> | string | null
+    middleName?: StringNullableWithAggregatesFilter<"User"> | string | null
+    lastName?: StringNullableWithAggregatesFilter<"User"> | string | null
+    suffix?: StringNullableWithAggregatesFilter<"User"> | string | null
+    preferredName?: StringNullableWithAggregatesFilter<"User"> | string | null
+    gender?: StringNullableWithAggregatesFilter<"User"> | string | null
+    birthDate?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
+    local?: StringNullableWithAggregatesFilter<"User"> | string | null
+    timeZone?: StringNullableWithAggregatesFilter<"User"> | string | null
+    lastLoginTime?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
+    role?: EnumUserRoleWithAggregatesFilter<"User"> | $Enums.UserRole
+    createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
+    updatedAt?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
+  }
+
   export type AccountWhereInput = {
     AND?: AccountWhereInput | AccountWhereInput[]
     OR?: AccountWhereInput[]
     NOT?: AccountWhereInput | AccountWhereInput[]
     id?: IntFilter<"Account"> | number
     name?: StringFilter<"Account"> | string
-    slug?: StringNullableFilter<"Account"> | string | null
     accountRef?: StringFilter<"Account"> | string
+    adminId?: IntFilter<"Account"> | number
     createdAt?: DateTimeFilter<"Account"> | Date | string
     updatedAt?: DateTimeNullableFilter<"Account"> | Date | string | null
-    users?: UserListRelationFilter
+    admin?: XOR<UserRelationFilter, UserWhereInput>
     subsites?: SubsiteListRelationFilter
   }
 
   export type AccountOrderByWithRelationInput = {
     id?: SortOrder
     name?: SortOrder
-    slug?: SortOrderInput | SortOrder
     accountRef?: SortOrder
+    adminId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrderInput | SortOrder
-    users?: UserOrderByRelationAggregateInput
+    admin?: UserOrderByWithRelationInput
     subsites?: SubsiteOrderByRelationAggregateInput
   }
 
@@ -17386,19 +16452,19 @@ export namespace Prisma {
     OR?: AccountWhereInput[]
     NOT?: AccountWhereInput | AccountWhereInput[]
     name?: StringFilter<"Account"> | string
-    slug?: StringNullableFilter<"Account"> | string | null
     accountRef?: StringFilter<"Account"> | string
+    adminId?: IntFilter<"Account"> | number
     createdAt?: DateTimeFilter<"Account"> | Date | string
     updatedAt?: DateTimeNullableFilter<"Account"> | Date | string | null
-    users?: UserListRelationFilter
+    admin?: XOR<UserRelationFilter, UserWhereInput>
     subsites?: SubsiteListRelationFilter
   }, "id">
 
   export type AccountOrderByWithAggregationInput = {
     id?: SortOrder
     name?: SortOrder
-    slug?: SortOrderInput | SortOrder
     accountRef?: SortOrder
+    adminId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrderInput | SortOrder
     _count?: AccountCountOrderByAggregateInput
@@ -17414,8 +16480,8 @@ export namespace Prisma {
     NOT?: AccountScalarWhereWithAggregatesInput | AccountScalarWhereWithAggregatesInput[]
     id?: IntWithAggregatesFilter<"Account"> | number
     name?: StringWithAggregatesFilter<"Account"> | string
-    slug?: StringNullableWithAggregatesFilter<"Account"> | string | null
     accountRef?: StringWithAggregatesFilter<"Account"> | string
+    adminId?: IntWithAggregatesFilter<"Account"> | number
     createdAt?: DateTimeWithAggregatesFilter<"Account"> | Date | string
     updatedAt?: DateTimeNullableWithAggregatesFilter<"Account"> | Date | string | null
   }
@@ -17428,13 +16494,22 @@ export namespace Prisma {
     name?: StringFilter<"Subsite"> | string
     slug?: StringNullableFilter<"Subsite"> | string | null
     subsiteRef?: StringFilter<"Subsite"> | string
+    logoUrl?: StringNullableFilter<"Subsite"> | string | null
+    logoSvg?: StringNullableFilter<"Subsite"> | string | null
+    navConfig?: StringNullableFilter<"Subsite"> | string | null
+    headerConfig?: StringNullableFilter<"Subsite"> | string | null
+    footerConfig?: StringNullableFilter<"Subsite"> | string | null
+    siteVisibility?: StringNullableFilter<"Subsite"> | string | null
+    siteLanguage?: StringNullableFilter<"Subsite"> | string | null
     domainName?: StringNullableFilter<"Subsite"> | string | null
     domainStatus?: StringNullableFilter<"Subsite"> | string | null
     domainCreatedAt?: DateTimeNullableFilter<"Subsite"> | Date | string | null
+    accountId?: IntFilter<"Subsite"> | number
     createdAt?: DateTimeFilter<"Subsite"> | Date | string
     updatedAt?: DateTimeNullableFilter<"Subsite"> | Date | string | null
-    accounts?: AccountListRelationFilter
-    config?: SubsiteConfigListRelationFilter
+    posts?: PostListRelationFilter
+    pages?: PageListRelationFilter
+    account?: XOR<AccountRelationFilter, AccountWhereInput>
   }
 
   export type SubsiteOrderByWithRelationInput = {
@@ -17442,40 +16517,66 @@ export namespace Prisma {
     name?: SortOrder
     slug?: SortOrderInput | SortOrder
     subsiteRef?: SortOrder
+    logoUrl?: SortOrderInput | SortOrder
+    logoSvg?: SortOrderInput | SortOrder
+    navConfig?: SortOrderInput | SortOrder
+    headerConfig?: SortOrderInput | SortOrder
+    footerConfig?: SortOrderInput | SortOrder
+    siteVisibility?: SortOrderInput | SortOrder
+    siteLanguage?: SortOrderInput | SortOrder
     domainName?: SortOrderInput | SortOrder
     domainStatus?: SortOrderInput | SortOrder
     domainCreatedAt?: SortOrderInput | SortOrder
+    accountId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrderInput | SortOrder
-    accounts?: AccountOrderByRelationAggregateInput
-    config?: SubsiteConfigOrderByRelationAggregateInput
+    posts?: PostOrderByRelationAggregateInput
+    pages?: PageOrderByRelationAggregateInput
+    account?: AccountOrderByWithRelationInput
   }
 
   export type SubsiteWhereUniqueInput = Prisma.AtLeast<{
     id?: number
+    accountId?: number
     AND?: SubsiteWhereInput | SubsiteWhereInput[]
     OR?: SubsiteWhereInput[]
     NOT?: SubsiteWhereInput | SubsiteWhereInput[]
     name?: StringFilter<"Subsite"> | string
     slug?: StringNullableFilter<"Subsite"> | string | null
     subsiteRef?: StringFilter<"Subsite"> | string
+    logoUrl?: StringNullableFilter<"Subsite"> | string | null
+    logoSvg?: StringNullableFilter<"Subsite"> | string | null
+    navConfig?: StringNullableFilter<"Subsite"> | string | null
+    headerConfig?: StringNullableFilter<"Subsite"> | string | null
+    footerConfig?: StringNullableFilter<"Subsite"> | string | null
+    siteVisibility?: StringNullableFilter<"Subsite"> | string | null
+    siteLanguage?: StringNullableFilter<"Subsite"> | string | null
     domainName?: StringNullableFilter<"Subsite"> | string | null
     domainStatus?: StringNullableFilter<"Subsite"> | string | null
     domainCreatedAt?: DateTimeNullableFilter<"Subsite"> | Date | string | null
     createdAt?: DateTimeFilter<"Subsite"> | Date | string
     updatedAt?: DateTimeNullableFilter<"Subsite"> | Date | string | null
-    accounts?: AccountListRelationFilter
-    config?: SubsiteConfigListRelationFilter
-  }, "id">
+    posts?: PostListRelationFilter
+    pages?: PageListRelationFilter
+    account?: XOR<AccountRelationFilter, AccountWhereInput>
+  }, "id" | "accountId">
 
   export type SubsiteOrderByWithAggregationInput = {
     id?: SortOrder
     name?: SortOrder
     slug?: SortOrderInput | SortOrder
     subsiteRef?: SortOrder
+    logoUrl?: SortOrderInput | SortOrder
+    logoSvg?: SortOrderInput | SortOrder
+    navConfig?: SortOrderInput | SortOrder
+    headerConfig?: SortOrderInput | SortOrder
+    footerConfig?: SortOrderInput | SortOrder
+    siteVisibility?: SortOrderInput | SortOrder
+    siteLanguage?: SortOrderInput | SortOrder
     domainName?: SortOrderInput | SortOrder
     domainStatus?: SortOrderInput | SortOrder
     domainCreatedAt?: SortOrderInput | SortOrder
+    accountId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrderInput | SortOrder
     _count?: SubsiteCountOrderByAggregateInput
@@ -17493,103 +16594,19 @@ export namespace Prisma {
     name?: StringWithAggregatesFilter<"Subsite"> | string
     slug?: StringNullableWithAggregatesFilter<"Subsite"> | string | null
     subsiteRef?: StringWithAggregatesFilter<"Subsite"> | string
+    logoUrl?: StringNullableWithAggregatesFilter<"Subsite"> | string | null
+    logoSvg?: StringNullableWithAggregatesFilter<"Subsite"> | string | null
+    navConfig?: StringNullableWithAggregatesFilter<"Subsite"> | string | null
+    headerConfig?: StringNullableWithAggregatesFilter<"Subsite"> | string | null
+    footerConfig?: StringNullableWithAggregatesFilter<"Subsite"> | string | null
+    siteVisibility?: StringNullableWithAggregatesFilter<"Subsite"> | string | null
+    siteLanguage?: StringNullableWithAggregatesFilter<"Subsite"> | string | null
     domainName?: StringNullableWithAggregatesFilter<"Subsite"> | string | null
     domainStatus?: StringNullableWithAggregatesFilter<"Subsite"> | string | null
     domainCreatedAt?: DateTimeNullableWithAggregatesFilter<"Subsite"> | Date | string | null
+    accountId?: IntWithAggregatesFilter<"Subsite"> | number
     createdAt?: DateTimeWithAggregatesFilter<"Subsite"> | Date | string
     updatedAt?: DateTimeNullableWithAggregatesFilter<"Subsite"> | Date | string | null
-  }
-
-  export type SubsiteConfigWhereInput = {
-    AND?: SubsiteConfigWhereInput | SubsiteConfigWhereInput[]
-    OR?: SubsiteConfigWhereInput[]
-    NOT?: SubsiteConfigWhereInput | SubsiteConfigWhereInput[]
-    id?: IntFilter<"SubsiteConfig"> | number
-    name?: StringFilter<"SubsiteConfig"> | string
-    logoUrl?: StringNullableFilter<"SubsiteConfig"> | string | null
-    logoSvg?: StringNullableFilter<"SubsiteConfig"> | string | null
-    navConfig?: StringNullableFilter<"SubsiteConfig"> | string | null
-    headerConfig?: StringNullableFilter<"SubsiteConfig"> | string | null
-    footerConfig?: StringNullableFilter<"SubsiteConfig"> | string | null
-    siteVisibility?: StringNullableFilter<"SubsiteConfig"> | string | null
-    siteLanguage?: StringNullableFilter<"SubsiteConfig"> | string | null
-    subsiteId?: IntFilter<"SubsiteConfig"> | number
-    createdAt?: DateTimeFilter<"SubsiteConfig"> | Date | string
-    updatedAt?: DateTimeNullableFilter<"SubsiteConfig"> | Date | string | null
-    subsite?: XOR<SubsiteRelationFilter, SubsiteWhereInput>
-  }
-
-  export type SubsiteConfigOrderByWithRelationInput = {
-    id?: SortOrder
-    name?: SortOrder
-    logoUrl?: SortOrderInput | SortOrder
-    logoSvg?: SortOrderInput | SortOrder
-    navConfig?: SortOrderInput | SortOrder
-    headerConfig?: SortOrderInput | SortOrder
-    footerConfig?: SortOrderInput | SortOrder
-    siteVisibility?: SortOrderInput | SortOrder
-    siteLanguage?: SortOrderInput | SortOrder
-    subsiteId?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrderInput | SortOrder
-    subsite?: SubsiteOrderByWithRelationInput
-  }
-
-  export type SubsiteConfigWhereUniqueInput = Prisma.AtLeast<{
-    id?: number
-    AND?: SubsiteConfigWhereInput | SubsiteConfigWhereInput[]
-    OR?: SubsiteConfigWhereInput[]
-    NOT?: SubsiteConfigWhereInput | SubsiteConfigWhereInput[]
-    name?: StringFilter<"SubsiteConfig"> | string
-    logoUrl?: StringNullableFilter<"SubsiteConfig"> | string | null
-    logoSvg?: StringNullableFilter<"SubsiteConfig"> | string | null
-    navConfig?: StringNullableFilter<"SubsiteConfig"> | string | null
-    headerConfig?: StringNullableFilter<"SubsiteConfig"> | string | null
-    footerConfig?: StringNullableFilter<"SubsiteConfig"> | string | null
-    siteVisibility?: StringNullableFilter<"SubsiteConfig"> | string | null
-    siteLanguage?: StringNullableFilter<"SubsiteConfig"> | string | null
-    subsiteId?: IntFilter<"SubsiteConfig"> | number
-    createdAt?: DateTimeFilter<"SubsiteConfig"> | Date | string
-    updatedAt?: DateTimeNullableFilter<"SubsiteConfig"> | Date | string | null
-    subsite?: XOR<SubsiteRelationFilter, SubsiteWhereInput>
-  }, "id">
-
-  export type SubsiteConfigOrderByWithAggregationInput = {
-    id?: SortOrder
-    name?: SortOrder
-    logoUrl?: SortOrderInput | SortOrder
-    logoSvg?: SortOrderInput | SortOrder
-    navConfig?: SortOrderInput | SortOrder
-    headerConfig?: SortOrderInput | SortOrder
-    footerConfig?: SortOrderInput | SortOrder
-    siteVisibility?: SortOrderInput | SortOrder
-    siteLanguage?: SortOrderInput | SortOrder
-    subsiteId?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrderInput | SortOrder
-    _count?: SubsiteConfigCountOrderByAggregateInput
-    _avg?: SubsiteConfigAvgOrderByAggregateInput
-    _max?: SubsiteConfigMaxOrderByAggregateInput
-    _min?: SubsiteConfigMinOrderByAggregateInput
-    _sum?: SubsiteConfigSumOrderByAggregateInput
-  }
-
-  export type SubsiteConfigScalarWhereWithAggregatesInput = {
-    AND?: SubsiteConfigScalarWhereWithAggregatesInput | SubsiteConfigScalarWhereWithAggregatesInput[]
-    OR?: SubsiteConfigScalarWhereWithAggregatesInput[]
-    NOT?: SubsiteConfigScalarWhereWithAggregatesInput | SubsiteConfigScalarWhereWithAggregatesInput[]
-    id?: IntWithAggregatesFilter<"SubsiteConfig"> | number
-    name?: StringWithAggregatesFilter<"SubsiteConfig"> | string
-    logoUrl?: StringNullableWithAggregatesFilter<"SubsiteConfig"> | string | null
-    logoSvg?: StringNullableWithAggregatesFilter<"SubsiteConfig"> | string | null
-    navConfig?: StringNullableWithAggregatesFilter<"SubsiteConfig"> | string | null
-    headerConfig?: StringNullableWithAggregatesFilter<"SubsiteConfig"> | string | null
-    footerConfig?: StringNullableWithAggregatesFilter<"SubsiteConfig"> | string | null
-    siteVisibility?: StringNullableWithAggregatesFilter<"SubsiteConfig"> | string | null
-    siteLanguage?: StringNullableWithAggregatesFilter<"SubsiteConfig"> | string | null
-    subsiteId?: IntWithAggregatesFilter<"SubsiteConfig"> | number
-    createdAt?: DateTimeWithAggregatesFilter<"SubsiteConfig"> | Date | string
-    updatedAt?: DateTimeNullableWithAggregatesFilter<"SubsiteConfig"> | Date | string | null
   }
 
   export type PostWhereInput = {
@@ -17607,14 +16624,13 @@ export namespace Prisma {
     publishedAt?: DateTimeNullableFilter<"Post"> | Date | string | null
     deleted?: BoolFilter<"Post"> | boolean
     authorId?: IntFilter<"Post"> | number
-    accountRef?: StringFilter<"Post"> | string
-    subsiteRef?: StringFilter<"Post"> | string
-    contextUserId?: StringFilter<"Post"> | string
+    subsiteId?: IntFilter<"Post"> | number
     createdAt?: DateTimeFilter<"Post"> | Date | string
     updatedAt?: DateTimeNullableFilter<"Post"> | Date | string | null
     author?: XOR<UserRelationFilter, UserWhereInput>
     categories?: CategoryListRelationFilter
     tags?: TagListRelationFilter
+    subsite?: XOR<SubsiteRelationFilter, SubsiteWhereInput>
   }
 
   export type PostOrderByWithRelationInput = {
@@ -17629,14 +16645,13 @@ export namespace Prisma {
     publishedAt?: SortOrderInput | SortOrder
     deleted?: SortOrder
     authorId?: SortOrder
-    accountRef?: SortOrder
-    subsiteRef?: SortOrder
-    contextUserId?: SortOrder
+    subsiteId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrderInput | SortOrder
     author?: UserOrderByWithRelationInput
     categories?: CategoryOrderByRelationAggregateInput
     tags?: TagOrderByRelationAggregateInput
+    subsite?: SubsiteOrderByWithRelationInput
   }
 
   export type PostWhereUniqueInput = Prisma.AtLeast<{
@@ -17654,14 +16669,13 @@ export namespace Prisma {
     publishedAt?: DateTimeNullableFilter<"Post"> | Date | string | null
     deleted?: BoolFilter<"Post"> | boolean
     authorId?: IntFilter<"Post"> | number
-    accountRef?: StringFilter<"Post"> | string
-    subsiteRef?: StringFilter<"Post"> | string
-    contextUserId?: StringFilter<"Post"> | string
+    subsiteId?: IntFilter<"Post"> | number
     createdAt?: DateTimeFilter<"Post"> | Date | string
     updatedAt?: DateTimeNullableFilter<"Post"> | Date | string | null
     author?: XOR<UserRelationFilter, UserWhereInput>
     categories?: CategoryListRelationFilter
     tags?: TagListRelationFilter
+    subsite?: XOR<SubsiteRelationFilter, SubsiteWhereInput>
   }, "id">
 
   export type PostOrderByWithAggregationInput = {
@@ -17676,9 +16690,7 @@ export namespace Prisma {
     publishedAt?: SortOrderInput | SortOrder
     deleted?: SortOrder
     authorId?: SortOrder
-    accountRef?: SortOrder
-    subsiteRef?: SortOrder
-    contextUserId?: SortOrder
+    subsiteId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrderInput | SortOrder
     _count?: PostCountOrderByAggregateInput
@@ -17703,9 +16715,7 @@ export namespace Prisma {
     publishedAt?: DateTimeNullableWithAggregatesFilter<"Post"> | Date | string | null
     deleted?: BoolWithAggregatesFilter<"Post"> | boolean
     authorId?: IntWithAggregatesFilter<"Post"> | number
-    accountRef?: StringWithAggregatesFilter<"Post"> | string
-    subsiteRef?: StringWithAggregatesFilter<"Post"> | string
-    contextUserId?: StringWithAggregatesFilter<"Post"> | string
+    subsiteId?: IntWithAggregatesFilter<"Post"> | number
     createdAt?: DateTimeWithAggregatesFilter<"Post"> | Date | string
     updatedAt?: DateTimeNullableWithAggregatesFilter<"Post"> | Date | string | null
   }
@@ -17731,13 +16741,13 @@ export namespace Prisma {
     showOnNav?: BoolFilter<"Page"> | boolean
     deleted?: BoolFilter<"Page"> | boolean
     authorId?: IntFilter<"Page"> | number
-    accountRef?: StringFilter<"Page"> | string
-    subsiteRef?: StringFilter<"Page"> | string
+    subsiteId?: IntFilter<"Page"> | number
     createdAt?: DateTimeFilter<"Page"> | Date | string
     updatedAt?: DateTimeNullableFilter<"Page"> | Date | string | null
     author?: XOR<UserRelationFilter, UserWhereInput>
     categories?: CategoryListRelationFilter
     tags?: TagListRelationFilter
+    subsite?: XOR<SubsiteRelationFilter, SubsiteWhereInput>
   }
 
   export type PageOrderByWithRelationInput = {
@@ -17758,13 +16768,13 @@ export namespace Prisma {
     showOnNav?: SortOrder
     deleted?: SortOrder
     authorId?: SortOrder
-    accountRef?: SortOrder
-    subsiteRef?: SortOrder
+    subsiteId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrderInput | SortOrder
     author?: UserOrderByWithRelationInput
     categories?: CategoryOrderByRelationAggregateInput
     tags?: TagOrderByRelationAggregateInput
+    subsite?: SubsiteOrderByWithRelationInput
   }
 
   export type PageWhereUniqueInput = Prisma.AtLeast<{
@@ -17788,13 +16798,13 @@ export namespace Prisma {
     showOnNav?: BoolFilter<"Page"> | boolean
     deleted?: BoolFilter<"Page"> | boolean
     authorId?: IntFilter<"Page"> | number
-    accountRef?: StringFilter<"Page"> | string
-    subsiteRef?: StringFilter<"Page"> | string
+    subsiteId?: IntFilter<"Page"> | number
     createdAt?: DateTimeFilter<"Page"> | Date | string
     updatedAt?: DateTimeNullableFilter<"Page"> | Date | string | null
     author?: XOR<UserRelationFilter, UserWhereInput>
     categories?: CategoryListRelationFilter
     tags?: TagListRelationFilter
+    subsite?: XOR<SubsiteRelationFilter, SubsiteWhereInput>
   }, "id">
 
   export type PageOrderByWithAggregationInput = {
@@ -17815,8 +16825,7 @@ export namespace Prisma {
     showOnNav?: SortOrder
     deleted?: SortOrder
     authorId?: SortOrder
-    accountRef?: SortOrder
-    subsiteRef?: SortOrder
+    subsiteId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrderInput | SortOrder
     _count?: PageCountOrderByAggregateInput
@@ -17847,8 +16856,7 @@ export namespace Prisma {
     showOnNav?: BoolWithAggregatesFilter<"Page"> | boolean
     deleted?: BoolWithAggregatesFilter<"Page"> | boolean
     authorId?: IntWithAggregatesFilter<"Page"> | number
-    accountRef?: StringWithAggregatesFilter<"Page"> | string
-    subsiteRef?: StringWithAggregatesFilter<"Page"> | string
+    subsiteId?: IntWithAggregatesFilter<"Page"> | number
     createdAt?: DateTimeWithAggregatesFilter<"Page"> | Date | string
     updatedAt?: DateTimeNullableWithAggregatesFilter<"Page"> | Date | string | null
   }
@@ -18322,145 +17330,6 @@ export namespace Prisma {
     updatedAt?: DateTimeNullableWithAggregatesFilter<"UserContact"> | Date | string | null
   }
 
-  export type UserWhereInput = {
-    AND?: UserWhereInput | UserWhereInput[]
-    OR?: UserWhereInput[]
-    NOT?: UserWhereInput | UserWhereInput[]
-    id?: IntFilter<"User"> | number
-    email?: StringFilter<"User"> | string
-    name?: StringNullableFilter<"User"> | string | null
-    description?: StringNullableFilter<"User"> | string | null
-    token?: StringNullableFilter<"User"> | string | null
-    prefix?: StringNullableFilter<"User"> | string | null
-    firstName?: StringNullableFilter<"User"> | string | null
-    middleName?: StringNullableFilter<"User"> | string | null
-    lastName?: StringNullableFilter<"User"> | string | null
-    suffix?: StringNullableFilter<"User"> | string | null
-    preferredName?: StringNullableFilter<"User"> | string | null
-    gender?: StringNullableFilter<"User"> | string | null
-    birthDate?: DateTimeNullableFilter<"User"> | Date | string | null
-    local?: StringNullableFilter<"User"> | string | null
-    timeZone?: StringNullableFilter<"User"> | string | null
-    lastLoginTime?: DateTimeNullableFilter<"User"> | Date | string | null
-    role?: EnumUserRoleFilter<"User"> | $Enums.UserRole
-    createdAt?: DateTimeFilter<"User"> | Date | string
-    updatedAt?: DateTimeNullableFilter<"User"> | Date | string | null
-    contact?: XOR<UserContactNullableRelationFilter, UserContactWhereInput> | null
-    posts?: PostListRelationFilter
-    profile?: XOR<UserProfileNullableRelationFilter, UserProfileWhereInput> | null
-    pages?: PageListRelationFilter
-    accounts?: AccountListRelationFilter
-  }
-
-  export type UserOrderByWithRelationInput = {
-    id?: SortOrder
-    email?: SortOrder
-    name?: SortOrderInput | SortOrder
-    description?: SortOrderInput | SortOrder
-    token?: SortOrderInput | SortOrder
-    prefix?: SortOrderInput | SortOrder
-    firstName?: SortOrderInput | SortOrder
-    middleName?: SortOrderInput | SortOrder
-    lastName?: SortOrderInput | SortOrder
-    suffix?: SortOrderInput | SortOrder
-    preferredName?: SortOrderInput | SortOrder
-    gender?: SortOrderInput | SortOrder
-    birthDate?: SortOrderInput | SortOrder
-    local?: SortOrderInput | SortOrder
-    timeZone?: SortOrderInput | SortOrder
-    lastLoginTime?: SortOrderInput | SortOrder
-    role?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrderInput | SortOrder
-    contact?: UserContactOrderByWithRelationInput
-    posts?: PostOrderByRelationAggregateInput
-    profile?: UserProfileOrderByWithRelationInput
-    pages?: PageOrderByRelationAggregateInput
-    accounts?: AccountOrderByRelationAggregateInput
-  }
-
-  export type UserWhereUniqueInput = Prisma.AtLeast<{
-    id?: number
-    email?: string
-    AND?: UserWhereInput | UserWhereInput[]
-    OR?: UserWhereInput[]
-    NOT?: UserWhereInput | UserWhereInput[]
-    name?: StringNullableFilter<"User"> | string | null
-    description?: StringNullableFilter<"User"> | string | null
-    token?: StringNullableFilter<"User"> | string | null
-    prefix?: StringNullableFilter<"User"> | string | null
-    firstName?: StringNullableFilter<"User"> | string | null
-    middleName?: StringNullableFilter<"User"> | string | null
-    lastName?: StringNullableFilter<"User"> | string | null
-    suffix?: StringNullableFilter<"User"> | string | null
-    preferredName?: StringNullableFilter<"User"> | string | null
-    gender?: StringNullableFilter<"User"> | string | null
-    birthDate?: DateTimeNullableFilter<"User"> | Date | string | null
-    local?: StringNullableFilter<"User"> | string | null
-    timeZone?: StringNullableFilter<"User"> | string | null
-    lastLoginTime?: DateTimeNullableFilter<"User"> | Date | string | null
-    role?: EnumUserRoleFilter<"User"> | $Enums.UserRole
-    createdAt?: DateTimeFilter<"User"> | Date | string
-    updatedAt?: DateTimeNullableFilter<"User"> | Date | string | null
-    contact?: XOR<UserContactNullableRelationFilter, UserContactWhereInput> | null
-    posts?: PostListRelationFilter
-    profile?: XOR<UserProfileNullableRelationFilter, UserProfileWhereInput> | null
-    pages?: PageListRelationFilter
-    accounts?: AccountListRelationFilter
-  }, "id" | "email">
-
-  export type UserOrderByWithAggregationInput = {
-    id?: SortOrder
-    email?: SortOrder
-    name?: SortOrderInput | SortOrder
-    description?: SortOrderInput | SortOrder
-    token?: SortOrderInput | SortOrder
-    prefix?: SortOrderInput | SortOrder
-    firstName?: SortOrderInput | SortOrder
-    middleName?: SortOrderInput | SortOrder
-    lastName?: SortOrderInput | SortOrder
-    suffix?: SortOrderInput | SortOrder
-    preferredName?: SortOrderInput | SortOrder
-    gender?: SortOrderInput | SortOrder
-    birthDate?: SortOrderInput | SortOrder
-    local?: SortOrderInput | SortOrder
-    timeZone?: SortOrderInput | SortOrder
-    lastLoginTime?: SortOrderInput | SortOrder
-    role?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrderInput | SortOrder
-    _count?: UserCountOrderByAggregateInput
-    _avg?: UserAvgOrderByAggregateInput
-    _max?: UserMaxOrderByAggregateInput
-    _min?: UserMinOrderByAggregateInput
-    _sum?: UserSumOrderByAggregateInput
-  }
-
-  export type UserScalarWhereWithAggregatesInput = {
-    AND?: UserScalarWhereWithAggregatesInput | UserScalarWhereWithAggregatesInput[]
-    OR?: UserScalarWhereWithAggregatesInput[]
-    NOT?: UserScalarWhereWithAggregatesInput | UserScalarWhereWithAggregatesInput[]
-    id?: IntWithAggregatesFilter<"User"> | number
-    email?: StringWithAggregatesFilter<"User"> | string
-    name?: StringNullableWithAggregatesFilter<"User"> | string | null
-    description?: StringNullableWithAggregatesFilter<"User"> | string | null
-    token?: StringNullableWithAggregatesFilter<"User"> | string | null
-    prefix?: StringNullableWithAggregatesFilter<"User"> | string | null
-    firstName?: StringNullableWithAggregatesFilter<"User"> | string | null
-    middleName?: StringNullableWithAggregatesFilter<"User"> | string | null
-    lastName?: StringNullableWithAggregatesFilter<"User"> | string | null
-    suffix?: StringNullableWithAggregatesFilter<"User"> | string | null
-    preferredName?: StringNullableWithAggregatesFilter<"User"> | string | null
-    gender?: StringNullableWithAggregatesFilter<"User"> | string | null
-    birthDate?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
-    local?: StringNullableWithAggregatesFilter<"User"> | string | null
-    timeZone?: StringNullableWithAggregatesFilter<"User"> | string | null
-    lastLoginTime?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
-    role?: EnumUserRoleWithAggregatesFilter<"User"> | $Enums.UserRole
-    createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
-    updatedAt?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
-  }
-
   export type CategoryWhereInput = {
     AND?: CategoryWhereInput | CategoryWhereInput[]
     OR?: CategoryWhereInput[]
@@ -18581,60 +17450,226 @@ export namespace Prisma {
     updatedAt?: DateTimeNullableWithAggregatesFilter<"Tag"> | Date | string | null
   }
 
+  export type UserCreateInput = {
+    email: string
+    name?: string | null
+    description?: string | null
+    token?: string | null
+    prefix?: string | null
+    firstName?: string | null
+    middleName?: string | null
+    lastName?: string | null
+    suffix?: string | null
+    preferredName?: string | null
+    gender?: string | null
+    birthDate?: Date | string | null
+    local?: string | null
+    timeZone?: string | null
+    lastLoginTime?: Date | string | null
+    role?: $Enums.UserRole
+    createdAt?: Date | string
+    updatedAt?: Date | string | null
+    contact?: UserContactCreateNestedOneWithoutUserInput
+    profile?: UserProfileCreateNestedOneWithoutUserInput
+    posts?: PostCreateNestedManyWithoutAuthorInput
+    pages?: PageCreateNestedManyWithoutAuthorInput
+    accounts?: AccountCreateNestedManyWithoutAdminInput
+  }
+
+  export type UserUncheckedCreateInput = {
+    id?: number
+    email: string
+    name?: string | null
+    description?: string | null
+    token?: string | null
+    prefix?: string | null
+    firstName?: string | null
+    middleName?: string | null
+    lastName?: string | null
+    suffix?: string | null
+    preferredName?: string | null
+    gender?: string | null
+    birthDate?: Date | string | null
+    local?: string | null
+    timeZone?: string | null
+    lastLoginTime?: Date | string | null
+    role?: $Enums.UserRole
+    createdAt?: Date | string
+    updatedAt?: Date | string | null
+    contact?: UserContactUncheckedCreateNestedOneWithoutUserInput
+    profile?: UserProfileUncheckedCreateNestedOneWithoutUserInput
+    posts?: PostUncheckedCreateNestedManyWithoutAuthorInput
+    pages?: PageUncheckedCreateNestedManyWithoutAuthorInput
+    accounts?: AccountUncheckedCreateNestedManyWithoutAdminInput
+  }
+
+  export type UserUpdateInput = {
+    email?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    token?: NullableStringFieldUpdateOperationsInput | string | null
+    prefix?: NullableStringFieldUpdateOperationsInput | string | null
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    middleName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    suffix?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredName?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    local?: NullableStringFieldUpdateOperationsInput | string | null
+    timeZone?: NullableStringFieldUpdateOperationsInput | string | null
+    lastLoginTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    contact?: UserContactUpdateOneWithoutUserNestedInput
+    profile?: UserProfileUpdateOneWithoutUserNestedInput
+    posts?: PostUpdateManyWithoutAuthorNestedInput
+    pages?: PageUpdateManyWithoutAuthorNestedInput
+    accounts?: AccountUpdateManyWithoutAdminNestedInput
+  }
+
+  export type UserUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    email?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    token?: NullableStringFieldUpdateOperationsInput | string | null
+    prefix?: NullableStringFieldUpdateOperationsInput | string | null
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    middleName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    suffix?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredName?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    local?: NullableStringFieldUpdateOperationsInput | string | null
+    timeZone?: NullableStringFieldUpdateOperationsInput | string | null
+    lastLoginTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    contact?: UserContactUncheckedUpdateOneWithoutUserNestedInput
+    profile?: UserProfileUncheckedUpdateOneWithoutUserNestedInput
+    posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput
+    pages?: PageUncheckedUpdateManyWithoutAuthorNestedInput
+    accounts?: AccountUncheckedUpdateManyWithoutAdminNestedInput
+  }
+
+  export type UserCreateManyInput = {
+    id?: number
+    email: string
+    name?: string | null
+    description?: string | null
+    token?: string | null
+    prefix?: string | null
+    firstName?: string | null
+    middleName?: string | null
+    lastName?: string | null
+    suffix?: string | null
+    preferredName?: string | null
+    gender?: string | null
+    birthDate?: Date | string | null
+    local?: string | null
+    timeZone?: string | null
+    lastLoginTime?: Date | string | null
+    role?: $Enums.UserRole
+    createdAt?: Date | string
+    updatedAt?: Date | string | null
+  }
+
+  export type UserUpdateManyMutationInput = {
+    email?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    token?: NullableStringFieldUpdateOperationsInput | string | null
+    prefix?: NullableStringFieldUpdateOperationsInput | string | null
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    middleName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    suffix?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredName?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    local?: NullableStringFieldUpdateOperationsInput | string | null
+    timeZone?: NullableStringFieldUpdateOperationsInput | string | null
+    lastLoginTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type UserUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    email?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    token?: NullableStringFieldUpdateOperationsInput | string | null
+    prefix?: NullableStringFieldUpdateOperationsInput | string | null
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    middleName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    suffix?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredName?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    local?: NullableStringFieldUpdateOperationsInput | string | null
+    timeZone?: NullableStringFieldUpdateOperationsInput | string | null
+    lastLoginTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
   export type AccountCreateInput = {
     name: string
-    slug?: string | null
     accountRef?: string
     createdAt?: Date | string
     updatedAt?: Date | string | null
-    users?: UserCreateNestedManyWithoutAccountsInput
-    subsites?: SubsiteCreateNestedManyWithoutAccountsInput
+    admin: UserCreateNestedOneWithoutAccountsInput
+    subsites?: SubsiteCreateNestedManyWithoutAccountInput
   }
 
   export type AccountUncheckedCreateInput = {
     id?: number
     name: string
-    slug?: string | null
     accountRef?: string
+    adminId: number
     createdAt?: Date | string
     updatedAt?: Date | string | null
-    users?: UserUncheckedCreateNestedManyWithoutAccountsInput
-    subsites?: SubsiteUncheckedCreateNestedManyWithoutAccountsInput
+    subsites?: SubsiteUncheckedCreateNestedManyWithoutAccountInput
   }
 
   export type AccountUpdateInput = {
     name?: StringFieldUpdateOperationsInput | string
-    slug?: NullableStringFieldUpdateOperationsInput | string | null
     accountRef?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    users?: UserUpdateManyWithoutAccountsNestedInput
-    subsites?: SubsiteUpdateManyWithoutAccountsNestedInput
+    admin?: UserUpdateOneRequiredWithoutAccountsNestedInput
+    subsites?: SubsiteUpdateManyWithoutAccountNestedInput
   }
 
   export type AccountUncheckedUpdateInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
-    slug?: NullableStringFieldUpdateOperationsInput | string | null
     accountRef?: StringFieldUpdateOperationsInput | string
+    adminId?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    users?: UserUncheckedUpdateManyWithoutAccountsNestedInput
-    subsites?: SubsiteUncheckedUpdateManyWithoutAccountsNestedInput
+    subsites?: SubsiteUncheckedUpdateManyWithoutAccountNestedInput
   }
 
   export type AccountCreateManyInput = {
     id?: number
     name: string
-    slug?: string | null
     accountRef?: string
+    adminId: number
     createdAt?: Date | string
     updatedAt?: Date | string | null
   }
 
   export type AccountUpdateManyMutationInput = {
     name?: StringFieldUpdateOperationsInput | string
-    slug?: NullableStringFieldUpdateOperationsInput | string | null
     accountRef?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -18643,8 +17678,8 @@ export namespace Prisma {
   export type AccountUncheckedUpdateManyInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
-    slug?: NullableStringFieldUpdateOperationsInput | string | null
     accountRef?: StringFieldUpdateOperationsInput | string
+    adminId?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
@@ -18653,13 +17688,21 @@ export namespace Prisma {
     name: string
     slug?: string | null
     subsiteRef?: string
+    logoUrl?: string | null
+    logoSvg?: string | null
+    navConfig?: string | null
+    headerConfig?: string | null
+    footerConfig?: string | null
+    siteVisibility?: string | null
+    siteLanguage?: string | null
     domainName?: string | null
     domainStatus?: string | null
     domainCreatedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string | null
-    accounts?: AccountCreateNestedManyWithoutSubsitesInput
-    config?: SubsiteConfigCreateNestedManyWithoutSubsiteInput
+    posts?: PostCreateNestedManyWithoutSubsiteInput
+    pages?: PageCreateNestedManyWithoutSubsiteInput
+    account: AccountCreateNestedOneWithoutSubsitesInput
   }
 
   export type SubsiteUncheckedCreateInput = {
@@ -18667,26 +17710,42 @@ export namespace Prisma {
     name: string
     slug?: string | null
     subsiteRef?: string
+    logoUrl?: string | null
+    logoSvg?: string | null
+    navConfig?: string | null
+    headerConfig?: string | null
+    footerConfig?: string | null
+    siteVisibility?: string | null
+    siteLanguage?: string | null
     domainName?: string | null
     domainStatus?: string | null
     domainCreatedAt?: Date | string | null
+    accountId: number
     createdAt?: Date | string
     updatedAt?: Date | string | null
-    accounts?: AccountUncheckedCreateNestedManyWithoutSubsitesInput
-    config?: SubsiteConfigUncheckedCreateNestedManyWithoutSubsiteInput
+    posts?: PostUncheckedCreateNestedManyWithoutSubsiteInput
+    pages?: PageUncheckedCreateNestedManyWithoutSubsiteInput
   }
 
   export type SubsiteUpdateInput = {
     name?: StringFieldUpdateOperationsInput | string
     slug?: NullableStringFieldUpdateOperationsInput | string | null
     subsiteRef?: StringFieldUpdateOperationsInput | string
+    logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    logoSvg?: NullableStringFieldUpdateOperationsInput | string | null
+    navConfig?: NullableStringFieldUpdateOperationsInput | string | null
+    headerConfig?: NullableStringFieldUpdateOperationsInput | string | null
+    footerConfig?: NullableStringFieldUpdateOperationsInput | string | null
+    siteVisibility?: NullableStringFieldUpdateOperationsInput | string | null
+    siteLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     domainName?: NullableStringFieldUpdateOperationsInput | string | null
     domainStatus?: NullableStringFieldUpdateOperationsInput | string | null
     domainCreatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    accounts?: AccountUpdateManyWithoutSubsitesNestedInput
-    config?: SubsiteConfigUpdateManyWithoutSubsiteNestedInput
+    posts?: PostUpdateManyWithoutSubsiteNestedInput
+    pages?: PageUpdateManyWithoutSubsiteNestedInput
+    account?: AccountUpdateOneRequiredWithoutSubsitesNestedInput
   }
 
   export type SubsiteUncheckedUpdateInput = {
@@ -18694,13 +17753,21 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: NullableStringFieldUpdateOperationsInput | string | null
     subsiteRef?: StringFieldUpdateOperationsInput | string
+    logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    logoSvg?: NullableStringFieldUpdateOperationsInput | string | null
+    navConfig?: NullableStringFieldUpdateOperationsInput | string | null
+    headerConfig?: NullableStringFieldUpdateOperationsInput | string | null
+    footerConfig?: NullableStringFieldUpdateOperationsInput | string | null
+    siteVisibility?: NullableStringFieldUpdateOperationsInput | string | null
+    siteLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     domainName?: NullableStringFieldUpdateOperationsInput | string | null
     domainStatus?: NullableStringFieldUpdateOperationsInput | string | null
     domainCreatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    accountId?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    accounts?: AccountUncheckedUpdateManyWithoutSubsitesNestedInput
-    config?: SubsiteConfigUncheckedUpdateManyWithoutSubsiteNestedInput
+    posts?: PostUncheckedUpdateManyWithoutSubsiteNestedInput
+    pages?: PageUncheckedUpdateManyWithoutSubsiteNestedInput
   }
 
   export type SubsiteCreateManyInput = {
@@ -18708,9 +17775,17 @@ export namespace Prisma {
     name: string
     slug?: string | null
     subsiteRef?: string
+    logoUrl?: string | null
+    logoSvg?: string | null
+    navConfig?: string | null
+    headerConfig?: string | null
+    footerConfig?: string | null
+    siteVisibility?: string | null
+    siteLanguage?: string | null
     domainName?: string | null
     domainStatus?: string | null
     domainCreatedAt?: Date | string | null
+    accountId: number
     createdAt?: Date | string
     updatedAt?: Date | string | null
   }
@@ -18719,6 +17794,13 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: NullableStringFieldUpdateOperationsInput | string | null
     subsiteRef?: StringFieldUpdateOperationsInput | string
+    logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    logoSvg?: NullableStringFieldUpdateOperationsInput | string | null
+    navConfig?: NullableStringFieldUpdateOperationsInput | string | null
+    headerConfig?: NullableStringFieldUpdateOperationsInput | string | null
+    footerConfig?: NullableStringFieldUpdateOperationsInput | string | null
+    siteVisibility?: NullableStringFieldUpdateOperationsInput | string | null
+    siteLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     domainName?: NullableStringFieldUpdateOperationsInput | string | null
     domainStatus?: NullableStringFieldUpdateOperationsInput | string | null
     domainCreatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -18731,110 +17813,17 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     slug?: NullableStringFieldUpdateOperationsInput | string | null
     subsiteRef?: StringFieldUpdateOperationsInput | string
+    logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    logoSvg?: NullableStringFieldUpdateOperationsInput | string | null
+    navConfig?: NullableStringFieldUpdateOperationsInput | string | null
+    headerConfig?: NullableStringFieldUpdateOperationsInput | string | null
+    footerConfig?: NullableStringFieldUpdateOperationsInput | string | null
+    siteVisibility?: NullableStringFieldUpdateOperationsInput | string | null
+    siteLanguage?: NullableStringFieldUpdateOperationsInput | string | null
     domainName?: NullableStringFieldUpdateOperationsInput | string | null
     domainStatus?: NullableStringFieldUpdateOperationsInput | string | null
     domainCreatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  }
-
-  export type SubsiteConfigCreateInput = {
-    name: string
-    logoUrl?: string | null
-    logoSvg?: string | null
-    navConfig?: string | null
-    headerConfig?: string | null
-    footerConfig?: string | null
-    siteVisibility?: string | null
-    siteLanguage?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string | null
-    subsite: SubsiteCreateNestedOneWithoutConfigInput
-  }
-
-  export type SubsiteConfigUncheckedCreateInput = {
-    id?: number
-    name: string
-    logoUrl?: string | null
-    logoSvg?: string | null
-    navConfig?: string | null
-    headerConfig?: string | null
-    footerConfig?: string | null
-    siteVisibility?: string | null
-    siteLanguage?: string | null
-    subsiteId: number
-    createdAt?: Date | string
-    updatedAt?: Date | string | null
-  }
-
-  export type SubsiteConfigUpdateInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    logoSvg?: NullableStringFieldUpdateOperationsInput | string | null
-    navConfig?: NullableStringFieldUpdateOperationsInput | string | null
-    headerConfig?: NullableStringFieldUpdateOperationsInput | string | null
-    footerConfig?: NullableStringFieldUpdateOperationsInput | string | null
-    siteVisibility?: NullableStringFieldUpdateOperationsInput | string | null
-    siteLanguage?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    subsite?: SubsiteUpdateOneRequiredWithoutConfigNestedInput
-  }
-
-  export type SubsiteConfigUncheckedUpdateInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    logoSvg?: NullableStringFieldUpdateOperationsInput | string | null
-    navConfig?: NullableStringFieldUpdateOperationsInput | string | null
-    headerConfig?: NullableStringFieldUpdateOperationsInput | string | null
-    footerConfig?: NullableStringFieldUpdateOperationsInput | string | null
-    siteVisibility?: NullableStringFieldUpdateOperationsInput | string | null
-    siteLanguage?: NullableStringFieldUpdateOperationsInput | string | null
-    subsiteId?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  }
-
-  export type SubsiteConfigCreateManyInput = {
-    id?: number
-    name: string
-    logoUrl?: string | null
-    logoSvg?: string | null
-    navConfig?: string | null
-    headerConfig?: string | null
-    footerConfig?: string | null
-    siteVisibility?: string | null
-    siteLanguage?: string | null
-    subsiteId: number
-    createdAt?: Date | string
-    updatedAt?: Date | string | null
-  }
-
-  export type SubsiteConfigUpdateManyMutationInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    logoSvg?: NullableStringFieldUpdateOperationsInput | string | null
-    navConfig?: NullableStringFieldUpdateOperationsInput | string | null
-    headerConfig?: NullableStringFieldUpdateOperationsInput | string | null
-    footerConfig?: NullableStringFieldUpdateOperationsInput | string | null
-    siteVisibility?: NullableStringFieldUpdateOperationsInput | string | null
-    siteLanguage?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  }
-
-  export type SubsiteConfigUncheckedUpdateManyInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    logoSvg?: NullableStringFieldUpdateOperationsInput | string | null
-    navConfig?: NullableStringFieldUpdateOperationsInput | string | null
-    headerConfig?: NullableStringFieldUpdateOperationsInput | string | null
-    footerConfig?: NullableStringFieldUpdateOperationsInput | string | null
-    siteVisibility?: NullableStringFieldUpdateOperationsInput | string | null
-    siteLanguage?: NullableStringFieldUpdateOperationsInput | string | null
-    subsiteId?: IntFieldUpdateOperationsInput | number
+    accountId?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
@@ -18849,14 +17838,12 @@ export namespace Prisma {
     published?: boolean
     publishedAt?: Date | string | null
     deleted?: boolean
-    accountRef?: string
-    subsiteRef?: string
-    contextUserId?: string
     createdAt?: Date | string
     updatedAt?: Date | string | null
     author: UserCreateNestedOneWithoutPostsInput
     categories?: CategoryCreateNestedManyWithoutPostsInput
     tags?: TagCreateNestedManyWithoutPostsInput
+    subsite: SubsiteCreateNestedOneWithoutPostsInput
   }
 
   export type PostUncheckedCreateInput = {
@@ -18871,9 +17858,7 @@ export namespace Prisma {
     publishedAt?: Date | string | null
     deleted?: boolean
     authorId: number
-    accountRef?: string
-    subsiteRef?: string
-    contextUserId?: string
+    subsiteId: number
     createdAt?: Date | string
     updatedAt?: Date | string | null
     categories?: CategoryUncheckedCreateNestedManyWithoutPostsInput
@@ -18890,14 +17875,12 @@ export namespace Prisma {
     published?: BoolFieldUpdateOperationsInput | boolean
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deleted?: BoolFieldUpdateOperationsInput | boolean
-    accountRef?: StringFieldUpdateOperationsInput | string
-    subsiteRef?: StringFieldUpdateOperationsInput | string
-    contextUserId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     author?: UserUpdateOneRequiredWithoutPostsNestedInput
     categories?: CategoryUpdateManyWithoutPostsNestedInput
     tags?: TagUpdateManyWithoutPostsNestedInput
+    subsite?: SubsiteUpdateOneRequiredWithoutPostsNestedInput
   }
 
   export type PostUncheckedUpdateInput = {
@@ -18912,9 +17895,7 @@ export namespace Prisma {
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deleted?: BoolFieldUpdateOperationsInput | boolean
     authorId?: IntFieldUpdateOperationsInput | number
-    accountRef?: StringFieldUpdateOperationsInput | string
-    subsiteRef?: StringFieldUpdateOperationsInput | string
-    contextUserId?: StringFieldUpdateOperationsInput | string
+    subsiteId?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     categories?: CategoryUncheckedUpdateManyWithoutPostsNestedInput
@@ -18933,9 +17914,7 @@ export namespace Prisma {
     publishedAt?: Date | string | null
     deleted?: boolean
     authorId: number
-    accountRef?: string
-    subsiteRef?: string
-    contextUserId?: string
+    subsiteId: number
     createdAt?: Date | string
     updatedAt?: Date | string | null
   }
@@ -18950,9 +17929,6 @@ export namespace Prisma {
     published?: BoolFieldUpdateOperationsInput | boolean
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deleted?: BoolFieldUpdateOperationsInput | boolean
-    accountRef?: StringFieldUpdateOperationsInput | string
-    subsiteRef?: StringFieldUpdateOperationsInput | string
-    contextUserId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
@@ -18969,9 +17945,7 @@ export namespace Prisma {
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deleted?: BoolFieldUpdateOperationsInput | boolean
     authorId?: IntFieldUpdateOperationsInput | number
-    accountRef?: StringFieldUpdateOperationsInput | string
-    subsiteRef?: StringFieldUpdateOperationsInput | string
-    contextUserId?: StringFieldUpdateOperationsInput | string
+    subsiteId?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
@@ -18992,13 +17966,12 @@ export namespace Prisma {
     analyticsCodes?: string | null
     showOnNav?: boolean
     deleted?: boolean
-    accountRef?: string
-    subsiteRef?: string
     createdAt?: Date | string
     updatedAt?: Date | string | null
     author: UserCreateNestedOneWithoutPagesInput
     categories?: CategoryCreateNestedManyWithoutPagesInput
     tags?: TagCreateNestedManyWithoutPagesInput
+    subsite: SubsiteCreateNestedOneWithoutPagesInput
   }
 
   export type PageUncheckedCreateInput = {
@@ -19019,8 +17992,7 @@ export namespace Prisma {
     showOnNav?: boolean
     deleted?: boolean
     authorId: number
-    accountRef?: string
-    subsiteRef?: string
+    subsiteId: number
     createdAt?: Date | string
     updatedAt?: Date | string | null
     categories?: CategoryUncheckedCreateNestedManyWithoutPagesInput
@@ -19043,13 +18015,12 @@ export namespace Prisma {
     analyticsCodes?: NullableStringFieldUpdateOperationsInput | string | null
     showOnNav?: BoolFieldUpdateOperationsInput | boolean
     deleted?: BoolFieldUpdateOperationsInput | boolean
-    accountRef?: StringFieldUpdateOperationsInput | string
-    subsiteRef?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     author?: UserUpdateOneRequiredWithoutPagesNestedInput
     categories?: CategoryUpdateManyWithoutPagesNestedInput
     tags?: TagUpdateManyWithoutPagesNestedInput
+    subsite?: SubsiteUpdateOneRequiredWithoutPagesNestedInput
   }
 
   export type PageUncheckedUpdateInput = {
@@ -19070,8 +18041,7 @@ export namespace Prisma {
     showOnNav?: BoolFieldUpdateOperationsInput | boolean
     deleted?: BoolFieldUpdateOperationsInput | boolean
     authorId?: IntFieldUpdateOperationsInput | number
-    accountRef?: StringFieldUpdateOperationsInput | string
-    subsiteRef?: StringFieldUpdateOperationsInput | string
+    subsiteId?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     categories?: CategoryUncheckedUpdateManyWithoutPagesNestedInput
@@ -19096,8 +18066,7 @@ export namespace Prisma {
     showOnNav?: boolean
     deleted?: boolean
     authorId: number
-    accountRef?: string
-    subsiteRef?: string
+    subsiteId: number
     createdAt?: Date | string
     updatedAt?: Date | string | null
   }
@@ -19118,8 +18087,6 @@ export namespace Prisma {
     analyticsCodes?: NullableStringFieldUpdateOperationsInput | string | null
     showOnNav?: BoolFieldUpdateOperationsInput | boolean
     deleted?: BoolFieldUpdateOperationsInput | boolean
-    accountRef?: StringFieldUpdateOperationsInput | string
-    subsiteRef?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
@@ -19142,8 +18109,7 @@ export namespace Prisma {
     showOnNav?: BoolFieldUpdateOperationsInput | boolean
     deleted?: BoolFieldUpdateOperationsInput | boolean
     authorId?: IntFieldUpdateOperationsInput | number
-    accountRef?: StringFieldUpdateOperationsInput | string
-    subsiteRef?: StringFieldUpdateOperationsInput | string
+    subsiteId?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
@@ -19637,177 +18603,6 @@ export namespace Prisma {
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
-  export type UserCreateInput = {
-    email: string
-    name?: string | null
-    description?: string | null
-    token?: string | null
-    prefix?: string | null
-    firstName?: string | null
-    middleName?: string | null
-    lastName?: string | null
-    suffix?: string | null
-    preferredName?: string | null
-    gender?: string | null
-    birthDate?: Date | string | null
-    local?: string | null
-    timeZone?: string | null
-    lastLoginTime?: Date | string | null
-    role?: $Enums.UserRole
-    createdAt?: Date | string
-    updatedAt?: Date | string | null
-    contact?: UserContactCreateNestedOneWithoutUserInput
-    posts?: PostCreateNestedManyWithoutAuthorInput
-    profile?: UserProfileCreateNestedOneWithoutUserInput
-    pages?: PageCreateNestedManyWithoutAuthorInput
-    accounts?: AccountCreateNestedManyWithoutUsersInput
-  }
-
-  export type UserUncheckedCreateInput = {
-    id?: number
-    email: string
-    name?: string | null
-    description?: string | null
-    token?: string | null
-    prefix?: string | null
-    firstName?: string | null
-    middleName?: string | null
-    lastName?: string | null
-    suffix?: string | null
-    preferredName?: string | null
-    gender?: string | null
-    birthDate?: Date | string | null
-    local?: string | null
-    timeZone?: string | null
-    lastLoginTime?: Date | string | null
-    role?: $Enums.UserRole
-    createdAt?: Date | string
-    updatedAt?: Date | string | null
-    contact?: UserContactUncheckedCreateNestedOneWithoutUserInput
-    posts?: PostUncheckedCreateNestedManyWithoutAuthorInput
-    profile?: UserProfileUncheckedCreateNestedOneWithoutUserInput
-    pages?: PageUncheckedCreateNestedManyWithoutAuthorInput
-    accounts?: AccountUncheckedCreateNestedManyWithoutUsersInput
-  }
-
-  export type UserUpdateInput = {
-    email?: StringFieldUpdateOperationsInput | string
-    name?: NullableStringFieldUpdateOperationsInput | string | null
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    token?: NullableStringFieldUpdateOperationsInput | string | null
-    prefix?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: NullableStringFieldUpdateOperationsInput | string | null
-    middleName?: NullableStringFieldUpdateOperationsInput | string | null
-    lastName?: NullableStringFieldUpdateOperationsInput | string | null
-    suffix?: NullableStringFieldUpdateOperationsInput | string | null
-    preferredName?: NullableStringFieldUpdateOperationsInput | string | null
-    gender?: NullableStringFieldUpdateOperationsInput | string | null
-    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    local?: NullableStringFieldUpdateOperationsInput | string | null
-    timeZone?: NullableStringFieldUpdateOperationsInput | string | null
-    lastLoginTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    contact?: UserContactUpdateOneWithoutUserNestedInput
-    posts?: PostUpdateManyWithoutAuthorNestedInput
-    profile?: UserProfileUpdateOneWithoutUserNestedInput
-    pages?: PageUpdateManyWithoutAuthorNestedInput
-    accounts?: AccountUpdateManyWithoutUsersNestedInput
-  }
-
-  export type UserUncheckedUpdateInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    email?: StringFieldUpdateOperationsInput | string
-    name?: NullableStringFieldUpdateOperationsInput | string | null
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    token?: NullableStringFieldUpdateOperationsInput | string | null
-    prefix?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: NullableStringFieldUpdateOperationsInput | string | null
-    middleName?: NullableStringFieldUpdateOperationsInput | string | null
-    lastName?: NullableStringFieldUpdateOperationsInput | string | null
-    suffix?: NullableStringFieldUpdateOperationsInput | string | null
-    preferredName?: NullableStringFieldUpdateOperationsInput | string | null
-    gender?: NullableStringFieldUpdateOperationsInput | string | null
-    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    local?: NullableStringFieldUpdateOperationsInput | string | null
-    timeZone?: NullableStringFieldUpdateOperationsInput | string | null
-    lastLoginTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    contact?: UserContactUncheckedUpdateOneWithoutUserNestedInput
-    posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput
-    profile?: UserProfileUncheckedUpdateOneWithoutUserNestedInput
-    pages?: PageUncheckedUpdateManyWithoutAuthorNestedInput
-    accounts?: AccountUncheckedUpdateManyWithoutUsersNestedInput
-  }
-
-  export type UserCreateManyInput = {
-    id?: number
-    email: string
-    name?: string | null
-    description?: string | null
-    token?: string | null
-    prefix?: string | null
-    firstName?: string | null
-    middleName?: string | null
-    lastName?: string | null
-    suffix?: string | null
-    preferredName?: string | null
-    gender?: string | null
-    birthDate?: Date | string | null
-    local?: string | null
-    timeZone?: string | null
-    lastLoginTime?: Date | string | null
-    role?: $Enums.UserRole
-    createdAt?: Date | string
-    updatedAt?: Date | string | null
-  }
-
-  export type UserUpdateManyMutationInput = {
-    email?: StringFieldUpdateOperationsInput | string
-    name?: NullableStringFieldUpdateOperationsInput | string | null
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    token?: NullableStringFieldUpdateOperationsInput | string | null
-    prefix?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: NullableStringFieldUpdateOperationsInput | string | null
-    middleName?: NullableStringFieldUpdateOperationsInput | string | null
-    lastName?: NullableStringFieldUpdateOperationsInput | string | null
-    suffix?: NullableStringFieldUpdateOperationsInput | string | null
-    preferredName?: NullableStringFieldUpdateOperationsInput | string | null
-    gender?: NullableStringFieldUpdateOperationsInput | string | null
-    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    local?: NullableStringFieldUpdateOperationsInput | string | null
-    timeZone?: NullableStringFieldUpdateOperationsInput | string | null
-    lastLoginTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  }
-
-  export type UserUncheckedUpdateManyInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    email?: StringFieldUpdateOperationsInput | string
-    name?: NullableStringFieldUpdateOperationsInput | string | null
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    token?: NullableStringFieldUpdateOperationsInput | string | null
-    prefix?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: NullableStringFieldUpdateOperationsInput | string | null
-    middleName?: NullableStringFieldUpdateOperationsInput | string | null
-    lastName?: NullableStringFieldUpdateOperationsInput | string | null
-    suffix?: NullableStringFieldUpdateOperationsInput | string | null
-    preferredName?: NullableStringFieldUpdateOperationsInput | string | null
-    gender?: NullableStringFieldUpdateOperationsInput | string | null
-    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    local?: NullableStringFieldUpdateOperationsInput | string | null
-    timeZone?: NullableStringFieldUpdateOperationsInput | string | null
-    lastLoginTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  }
-
   export type CategoryCreateInput = {
     name: string
     description?: string | null
@@ -19971,17 +18766,6 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
-  export type DateTimeFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
-  }
-
   export type DateTimeNullableFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
@@ -19993,16 +18777,50 @@ export namespace Prisma {
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
-  export type UserListRelationFilter = {
-    every?: UserWhereInput
-    some?: UserWhereInput
-    none?: UserWhereInput
+  export type EnumUserRoleFilter<$PrismaModel = never> = {
+    equals?: $Enums.UserRole | EnumUserRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumUserRoleFilter<$PrismaModel> | $Enums.UserRole
   }
 
-  export type SubsiteListRelationFilter = {
-    every?: SubsiteWhereInput
-    some?: SubsiteWhereInput
-    none?: SubsiteWhereInput
+  export type DateTimeFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
+  }
+
+  export type UserContactNullableRelationFilter = {
+    is?: UserContactWhereInput | null
+    isNot?: UserContactWhereInput | null
+  }
+
+  export type UserProfileNullableRelationFilter = {
+    is?: UserProfileWhereInput | null
+    isNot?: UserProfileWhereInput | null
+  }
+
+  export type PostListRelationFilter = {
+    every?: PostWhereInput
+    some?: PostWhereInput
+    none?: PostWhereInput
+  }
+
+  export type PageListRelationFilter = {
+    every?: PageWhereInput
+    some?: PageWhereInput
+    none?: PageWhereInput
+  }
+
+  export type AccountListRelationFilter = {
+    every?: AccountWhereInput
+    some?: AccountWhereInput
+    none?: AccountWhereInput
   }
 
   export type SortOrderInput = {
@@ -20010,46 +18828,89 @@ export namespace Prisma {
     nulls?: NullsOrder
   }
 
-  export type UserOrderByRelationAggregateInput = {
+  export type PostOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
-  export type SubsiteOrderByRelationAggregateInput = {
+  export type PageOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
-  export type AccountCountOrderByAggregateInput = {
+  export type AccountOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type UserCountOrderByAggregateInput = {
     id?: SortOrder
+    email?: SortOrder
     name?: SortOrder
-    slug?: SortOrder
-    accountRef?: SortOrder
+    description?: SortOrder
+    token?: SortOrder
+    prefix?: SortOrder
+    firstName?: SortOrder
+    middleName?: SortOrder
+    lastName?: SortOrder
+    suffix?: SortOrder
+    preferredName?: SortOrder
+    gender?: SortOrder
+    birthDate?: SortOrder
+    local?: SortOrder
+    timeZone?: SortOrder
+    lastLoginTime?: SortOrder
+    role?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
 
-  export type AccountAvgOrderByAggregateInput = {
+  export type UserAvgOrderByAggregateInput = {
     id?: SortOrder
   }
 
-  export type AccountMaxOrderByAggregateInput = {
+  export type UserMaxOrderByAggregateInput = {
     id?: SortOrder
+    email?: SortOrder
     name?: SortOrder
-    slug?: SortOrder
-    accountRef?: SortOrder
+    description?: SortOrder
+    token?: SortOrder
+    prefix?: SortOrder
+    firstName?: SortOrder
+    middleName?: SortOrder
+    lastName?: SortOrder
+    suffix?: SortOrder
+    preferredName?: SortOrder
+    gender?: SortOrder
+    birthDate?: SortOrder
+    local?: SortOrder
+    timeZone?: SortOrder
+    lastLoginTime?: SortOrder
+    role?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
 
-  export type AccountMinOrderByAggregateInput = {
+  export type UserMinOrderByAggregateInput = {
     id?: SortOrder
+    email?: SortOrder
     name?: SortOrder
-    slug?: SortOrder
-    accountRef?: SortOrder
+    description?: SortOrder
+    token?: SortOrder
+    prefix?: SortOrder
+    firstName?: SortOrder
+    middleName?: SortOrder
+    lastName?: SortOrder
+    suffix?: SortOrder
+    preferredName?: SortOrder
+    gender?: SortOrder
+    birthDate?: SortOrder
+    local?: SortOrder
+    timeZone?: SortOrder
+    lastLoginTime?: SortOrder
+    role?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
 
-  export type AccountSumOrderByAggregateInput = {
+  export type UserSumOrderByAggregateInput = {
     id?: SortOrder
   }
 
@@ -20105,20 +18966,6 @@ export namespace Prisma {
     _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
-  export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedDateTimeFilter<$PrismaModel>
-    _max?: NestedDateTimeFilter<$PrismaModel>
-  }
-
   export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
@@ -20133,24 +18980,85 @@ export namespace Prisma {
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
-  export type AccountListRelationFilter = {
-    every?: AccountWhereInput
-    some?: AccountWhereInput
-    none?: AccountWhereInput
+  export type EnumUserRoleWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.UserRole | EnumUserRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumUserRoleWithAggregatesFilter<$PrismaModel> | $Enums.UserRole
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumUserRoleFilter<$PrismaModel>
+    _max?: NestedEnumUserRoleFilter<$PrismaModel>
   }
 
-  export type SubsiteConfigListRelationFilter = {
-    every?: SubsiteConfigWhereInput
-    some?: SubsiteConfigWhereInput
-    none?: SubsiteConfigWhereInput
+  export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedDateTimeFilter<$PrismaModel>
+    _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
-  export type AccountOrderByRelationAggregateInput = {
+  export type UserRelationFilter = {
+    is?: UserWhereInput
+    isNot?: UserWhereInput
+  }
+
+  export type SubsiteListRelationFilter = {
+    every?: SubsiteWhereInput
+    some?: SubsiteWhereInput
+    none?: SubsiteWhereInput
+  }
+
+  export type SubsiteOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
-  export type SubsiteConfigOrderByRelationAggregateInput = {
-    _count?: SortOrder
+  export type AccountCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    accountRef?: SortOrder
+    adminId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AccountAvgOrderByAggregateInput = {
+    id?: SortOrder
+    adminId?: SortOrder
+  }
+
+  export type AccountMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    accountRef?: SortOrder
+    adminId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AccountMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    accountRef?: SortOrder
+    adminId?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type AccountSumOrderByAggregateInput = {
+    id?: SortOrder
+    adminId?: SortOrder
+  }
+
+  export type AccountRelationFilter = {
+    is?: AccountWhereInput
+    isNot?: AccountWhereInput
   }
 
   export type SubsiteCountOrderByAggregateInput = {
@@ -20158,15 +19066,24 @@ export namespace Prisma {
     name?: SortOrder
     slug?: SortOrder
     subsiteRef?: SortOrder
+    logoUrl?: SortOrder
+    logoSvg?: SortOrder
+    navConfig?: SortOrder
+    headerConfig?: SortOrder
+    footerConfig?: SortOrder
+    siteVisibility?: SortOrder
+    siteLanguage?: SortOrder
     domainName?: SortOrder
     domainStatus?: SortOrder
     domainCreatedAt?: SortOrder
+    accountId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
 
   export type SubsiteAvgOrderByAggregateInput = {
     id?: SortOrder
+    accountId?: SortOrder
   }
 
   export type SubsiteMaxOrderByAggregateInput = {
@@ -20174,9 +19091,17 @@ export namespace Prisma {
     name?: SortOrder
     slug?: SortOrder
     subsiteRef?: SortOrder
+    logoUrl?: SortOrder
+    logoSvg?: SortOrder
+    navConfig?: SortOrder
+    headerConfig?: SortOrder
+    footerConfig?: SortOrder
+    siteVisibility?: SortOrder
+    siteLanguage?: SortOrder
     domainName?: SortOrder
     domainStatus?: SortOrder
     domainCreatedAt?: SortOrder
+    accountId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -20186,75 +19111,24 @@ export namespace Prisma {
     name?: SortOrder
     slug?: SortOrder
     subsiteRef?: SortOrder
+    logoUrl?: SortOrder
+    logoSvg?: SortOrder
+    navConfig?: SortOrder
+    headerConfig?: SortOrder
+    footerConfig?: SortOrder
+    siteVisibility?: SortOrder
+    siteLanguage?: SortOrder
     domainName?: SortOrder
     domainStatus?: SortOrder
     domainCreatedAt?: SortOrder
+    accountId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
 
   export type SubsiteSumOrderByAggregateInput = {
     id?: SortOrder
-  }
-
-  export type SubsiteRelationFilter = {
-    is?: SubsiteWhereInput
-    isNot?: SubsiteWhereInput
-  }
-
-  export type SubsiteConfigCountOrderByAggregateInput = {
-    id?: SortOrder
-    name?: SortOrder
-    logoUrl?: SortOrder
-    logoSvg?: SortOrder
-    navConfig?: SortOrder
-    headerConfig?: SortOrder
-    footerConfig?: SortOrder
-    siteVisibility?: SortOrder
-    siteLanguage?: SortOrder
-    subsiteId?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-  }
-
-  export type SubsiteConfigAvgOrderByAggregateInput = {
-    id?: SortOrder
-    subsiteId?: SortOrder
-  }
-
-  export type SubsiteConfigMaxOrderByAggregateInput = {
-    id?: SortOrder
-    name?: SortOrder
-    logoUrl?: SortOrder
-    logoSvg?: SortOrder
-    navConfig?: SortOrder
-    headerConfig?: SortOrder
-    footerConfig?: SortOrder
-    siteVisibility?: SortOrder
-    siteLanguage?: SortOrder
-    subsiteId?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-  }
-
-  export type SubsiteConfigMinOrderByAggregateInput = {
-    id?: SortOrder
-    name?: SortOrder
-    logoUrl?: SortOrder
-    logoSvg?: SortOrder
-    navConfig?: SortOrder
-    headerConfig?: SortOrder
-    footerConfig?: SortOrder
-    siteVisibility?: SortOrder
-    siteLanguage?: SortOrder
-    subsiteId?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-  }
-
-  export type SubsiteConfigSumOrderByAggregateInput = {
-    id?: SortOrder
-    subsiteId?: SortOrder
+    accountId?: SortOrder
   }
 
   export type EnumContentStatusFilter<$PrismaModel = never> = {
@@ -20269,11 +19143,6 @@ export namespace Prisma {
     not?: NestedBoolFilter<$PrismaModel> | boolean
   }
 
-  export type UserRelationFilter = {
-    is?: UserWhereInput
-    isNot?: UserWhereInput
-  }
-
   export type CategoryListRelationFilter = {
     every?: CategoryWhereInput
     some?: CategoryWhereInput
@@ -20284,6 +19153,11 @@ export namespace Prisma {
     every?: TagWhereInput
     some?: TagWhereInput
     none?: TagWhereInput
+  }
+
+  export type SubsiteRelationFilter = {
+    is?: SubsiteWhereInput
+    isNot?: SubsiteWhereInput
   }
 
   export type CategoryOrderByRelationAggregateInput = {
@@ -20306,9 +19180,7 @@ export namespace Prisma {
     publishedAt?: SortOrder
     deleted?: SortOrder
     authorId?: SortOrder
-    accountRef?: SortOrder
-    subsiteRef?: SortOrder
-    contextUserId?: SortOrder
+    subsiteId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -20316,6 +19188,7 @@ export namespace Prisma {
   export type PostAvgOrderByAggregateInput = {
     id?: SortOrder
     authorId?: SortOrder
+    subsiteId?: SortOrder
   }
 
   export type PostMaxOrderByAggregateInput = {
@@ -20330,9 +19203,7 @@ export namespace Prisma {
     publishedAt?: SortOrder
     deleted?: SortOrder
     authorId?: SortOrder
-    accountRef?: SortOrder
-    subsiteRef?: SortOrder
-    contextUserId?: SortOrder
+    subsiteId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -20349,9 +19220,7 @@ export namespace Prisma {
     publishedAt?: SortOrder
     deleted?: SortOrder
     authorId?: SortOrder
-    accountRef?: SortOrder
-    subsiteRef?: SortOrder
-    contextUserId?: SortOrder
+    subsiteId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -20359,6 +19228,7 @@ export namespace Prisma {
   export type PostSumOrderByAggregateInput = {
     id?: SortOrder
     authorId?: SortOrder
+    subsiteId?: SortOrder
   }
 
   export type EnumContentStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -20397,8 +19267,7 @@ export namespace Prisma {
     showOnNav?: SortOrder
     deleted?: SortOrder
     authorId?: SortOrder
-    accountRef?: SortOrder
-    subsiteRef?: SortOrder
+    subsiteId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -20406,6 +19275,7 @@ export namespace Prisma {
   export type PageAvgOrderByAggregateInput = {
     id?: SortOrder
     authorId?: SortOrder
+    subsiteId?: SortOrder
   }
 
   export type PageMaxOrderByAggregateInput = {
@@ -20426,8 +19296,7 @@ export namespace Prisma {
     showOnNav?: SortOrder
     deleted?: SortOrder
     authorId?: SortOrder
-    accountRef?: SortOrder
-    subsiteRef?: SortOrder
+    subsiteId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -20450,8 +19319,7 @@ export namespace Prisma {
     showOnNav?: SortOrder
     deleted?: SortOrder
     authorId?: SortOrder
-    accountRef?: SortOrder
-    subsiteRef?: SortOrder
+    subsiteId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -20459,6 +19327,7 @@ export namespace Prisma {
   export type PageSumOrderByAggregateInput = {
     id?: SortOrder
     authorId?: SortOrder
+    subsiteId?: SortOrder
   }
 
   export type UserProfileCountOrderByAggregateInput = {
@@ -20759,127 +19628,6 @@ export namespace Prisma {
     userId?: SortOrder
   }
 
-  export type EnumUserRoleFilter<$PrismaModel = never> = {
-    equals?: $Enums.UserRole | EnumUserRoleFieldRefInput<$PrismaModel>
-    in?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
-    notIn?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
-    not?: NestedEnumUserRoleFilter<$PrismaModel> | $Enums.UserRole
-  }
-
-  export type UserContactNullableRelationFilter = {
-    is?: UserContactWhereInput | null
-    isNot?: UserContactWhereInput | null
-  }
-
-  export type PostListRelationFilter = {
-    every?: PostWhereInput
-    some?: PostWhereInput
-    none?: PostWhereInput
-  }
-
-  export type UserProfileNullableRelationFilter = {
-    is?: UserProfileWhereInput | null
-    isNot?: UserProfileWhereInput | null
-  }
-
-  export type PageListRelationFilter = {
-    every?: PageWhereInput
-    some?: PageWhereInput
-    none?: PageWhereInput
-  }
-
-  export type PostOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type PageOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type UserCountOrderByAggregateInput = {
-    id?: SortOrder
-    email?: SortOrder
-    name?: SortOrder
-    description?: SortOrder
-    token?: SortOrder
-    prefix?: SortOrder
-    firstName?: SortOrder
-    middleName?: SortOrder
-    lastName?: SortOrder
-    suffix?: SortOrder
-    preferredName?: SortOrder
-    gender?: SortOrder
-    birthDate?: SortOrder
-    local?: SortOrder
-    timeZone?: SortOrder
-    lastLoginTime?: SortOrder
-    role?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-  }
-
-  export type UserAvgOrderByAggregateInput = {
-    id?: SortOrder
-  }
-
-  export type UserMaxOrderByAggregateInput = {
-    id?: SortOrder
-    email?: SortOrder
-    name?: SortOrder
-    description?: SortOrder
-    token?: SortOrder
-    prefix?: SortOrder
-    firstName?: SortOrder
-    middleName?: SortOrder
-    lastName?: SortOrder
-    suffix?: SortOrder
-    preferredName?: SortOrder
-    gender?: SortOrder
-    birthDate?: SortOrder
-    local?: SortOrder
-    timeZone?: SortOrder
-    lastLoginTime?: SortOrder
-    role?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-  }
-
-  export type UserMinOrderByAggregateInput = {
-    id?: SortOrder
-    email?: SortOrder
-    name?: SortOrder
-    description?: SortOrder
-    token?: SortOrder
-    prefix?: SortOrder
-    firstName?: SortOrder
-    middleName?: SortOrder
-    lastName?: SortOrder
-    suffix?: SortOrder
-    preferredName?: SortOrder
-    gender?: SortOrder
-    birthDate?: SortOrder
-    local?: SortOrder
-    timeZone?: SortOrder
-    lastLoginTime?: SortOrder
-    role?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-  }
-
-  export type UserSumOrderByAggregateInput = {
-    id?: SortOrder
-  }
-
-  export type EnumUserRoleWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.UserRole | EnumUserRoleFieldRefInput<$PrismaModel>
-    in?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
-    notIn?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
-    not?: NestedEnumUserRoleWithAggregatesFilter<$PrismaModel> | $Enums.UserRole
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumUserRoleFilter<$PrismaModel>
-    _max?: NestedEnumUserRoleFilter<$PrismaModel>
-  }
-
   export type CategoryCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
@@ -20944,28 +19692,70 @@ export namespace Prisma {
     id?: SortOrder
   }
 
-  export type UserCreateNestedManyWithoutAccountsInput = {
-    create?: XOR<UserCreateWithoutAccountsInput, UserUncheckedCreateWithoutAccountsInput> | UserCreateWithoutAccountsInput[] | UserUncheckedCreateWithoutAccountsInput[]
-    connectOrCreate?: UserCreateOrConnectWithoutAccountsInput | UserCreateOrConnectWithoutAccountsInput[]
-    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+  export type UserContactCreateNestedOneWithoutUserInput = {
+    create?: XOR<UserContactCreateWithoutUserInput, UserContactUncheckedCreateWithoutUserInput>
+    connectOrCreate?: UserContactCreateOrConnectWithoutUserInput
+    connect?: UserContactWhereUniqueInput
   }
 
-  export type SubsiteCreateNestedManyWithoutAccountsInput = {
-    create?: XOR<SubsiteCreateWithoutAccountsInput, SubsiteUncheckedCreateWithoutAccountsInput> | SubsiteCreateWithoutAccountsInput[] | SubsiteUncheckedCreateWithoutAccountsInput[]
-    connectOrCreate?: SubsiteCreateOrConnectWithoutAccountsInput | SubsiteCreateOrConnectWithoutAccountsInput[]
-    connect?: SubsiteWhereUniqueInput | SubsiteWhereUniqueInput[]
+  export type UserProfileCreateNestedOneWithoutUserInput = {
+    create?: XOR<UserProfileCreateWithoutUserInput, UserProfileUncheckedCreateWithoutUserInput>
+    connectOrCreate?: UserProfileCreateOrConnectWithoutUserInput
+    connect?: UserProfileWhereUniqueInput
   }
 
-  export type UserUncheckedCreateNestedManyWithoutAccountsInput = {
-    create?: XOR<UserCreateWithoutAccountsInput, UserUncheckedCreateWithoutAccountsInput> | UserCreateWithoutAccountsInput[] | UserUncheckedCreateWithoutAccountsInput[]
-    connectOrCreate?: UserCreateOrConnectWithoutAccountsInput | UserCreateOrConnectWithoutAccountsInput[]
-    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
+  export type PostCreateNestedManyWithoutAuthorInput = {
+    create?: XOR<PostCreateWithoutAuthorInput, PostUncheckedCreateWithoutAuthorInput> | PostCreateWithoutAuthorInput[] | PostUncheckedCreateWithoutAuthorInput[]
+    connectOrCreate?: PostCreateOrConnectWithoutAuthorInput | PostCreateOrConnectWithoutAuthorInput[]
+    createMany?: PostCreateManyAuthorInputEnvelope
+    connect?: PostWhereUniqueInput | PostWhereUniqueInput[]
   }
 
-  export type SubsiteUncheckedCreateNestedManyWithoutAccountsInput = {
-    create?: XOR<SubsiteCreateWithoutAccountsInput, SubsiteUncheckedCreateWithoutAccountsInput> | SubsiteCreateWithoutAccountsInput[] | SubsiteUncheckedCreateWithoutAccountsInput[]
-    connectOrCreate?: SubsiteCreateOrConnectWithoutAccountsInput | SubsiteCreateOrConnectWithoutAccountsInput[]
-    connect?: SubsiteWhereUniqueInput | SubsiteWhereUniqueInput[]
+  export type PageCreateNestedManyWithoutAuthorInput = {
+    create?: XOR<PageCreateWithoutAuthorInput, PageUncheckedCreateWithoutAuthorInput> | PageCreateWithoutAuthorInput[] | PageUncheckedCreateWithoutAuthorInput[]
+    connectOrCreate?: PageCreateOrConnectWithoutAuthorInput | PageCreateOrConnectWithoutAuthorInput[]
+    createMany?: PageCreateManyAuthorInputEnvelope
+    connect?: PageWhereUniqueInput | PageWhereUniqueInput[]
+  }
+
+  export type AccountCreateNestedManyWithoutAdminInput = {
+    create?: XOR<AccountCreateWithoutAdminInput, AccountUncheckedCreateWithoutAdminInput> | AccountCreateWithoutAdminInput[] | AccountUncheckedCreateWithoutAdminInput[]
+    connectOrCreate?: AccountCreateOrConnectWithoutAdminInput | AccountCreateOrConnectWithoutAdminInput[]
+    createMany?: AccountCreateManyAdminInputEnvelope
+    connect?: AccountWhereUniqueInput | AccountWhereUniqueInput[]
+  }
+
+  export type UserContactUncheckedCreateNestedOneWithoutUserInput = {
+    create?: XOR<UserContactCreateWithoutUserInput, UserContactUncheckedCreateWithoutUserInput>
+    connectOrCreate?: UserContactCreateOrConnectWithoutUserInput
+    connect?: UserContactWhereUniqueInput
+  }
+
+  export type UserProfileUncheckedCreateNestedOneWithoutUserInput = {
+    create?: XOR<UserProfileCreateWithoutUserInput, UserProfileUncheckedCreateWithoutUserInput>
+    connectOrCreate?: UserProfileCreateOrConnectWithoutUserInput
+    connect?: UserProfileWhereUniqueInput
+  }
+
+  export type PostUncheckedCreateNestedManyWithoutAuthorInput = {
+    create?: XOR<PostCreateWithoutAuthorInput, PostUncheckedCreateWithoutAuthorInput> | PostCreateWithoutAuthorInput[] | PostUncheckedCreateWithoutAuthorInput[]
+    connectOrCreate?: PostCreateOrConnectWithoutAuthorInput | PostCreateOrConnectWithoutAuthorInput[]
+    createMany?: PostCreateManyAuthorInputEnvelope
+    connect?: PostWhereUniqueInput | PostWhereUniqueInput[]
+  }
+
+  export type PageUncheckedCreateNestedManyWithoutAuthorInput = {
+    create?: XOR<PageCreateWithoutAuthorInput, PageUncheckedCreateWithoutAuthorInput> | PageCreateWithoutAuthorInput[] | PageUncheckedCreateWithoutAuthorInput[]
+    connectOrCreate?: PageCreateOrConnectWithoutAuthorInput | PageCreateOrConnectWithoutAuthorInput[]
+    createMany?: PageCreateManyAuthorInputEnvelope
+    connect?: PageWhereUniqueInput | PageWhereUniqueInput[]
+  }
+
+  export type AccountUncheckedCreateNestedManyWithoutAdminInput = {
+    create?: XOR<AccountCreateWithoutAdminInput, AccountUncheckedCreateWithoutAdminInput> | AccountCreateWithoutAdminInput[] | AccountUncheckedCreateWithoutAdminInput[]
+    connectOrCreate?: AccountCreateOrConnectWithoutAdminInput | AccountCreateOrConnectWithoutAdminInput[]
+    createMany?: AccountCreateManyAdminInputEnvelope
+    connect?: AccountWhereUniqueInput | AccountWhereUniqueInput[]
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -20976,38 +19766,78 @@ export namespace Prisma {
     set?: string | null
   }
 
-  export type DateTimeFieldUpdateOperationsInput = {
-    set?: Date | string
-  }
-
   export type NullableDateTimeFieldUpdateOperationsInput = {
     set?: Date | string | null
   }
 
-  export type UserUpdateManyWithoutAccountsNestedInput = {
-    create?: XOR<UserCreateWithoutAccountsInput, UserUncheckedCreateWithoutAccountsInput> | UserCreateWithoutAccountsInput[] | UserUncheckedCreateWithoutAccountsInput[]
-    connectOrCreate?: UserCreateOrConnectWithoutAccountsInput | UserCreateOrConnectWithoutAccountsInput[]
-    upsert?: UserUpsertWithWhereUniqueWithoutAccountsInput | UserUpsertWithWhereUniqueWithoutAccountsInput[]
-    set?: UserWhereUniqueInput | UserWhereUniqueInput[]
-    disconnect?: UserWhereUniqueInput | UserWhereUniqueInput[]
-    delete?: UserWhereUniqueInput | UserWhereUniqueInput[]
-    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
-    update?: UserUpdateWithWhereUniqueWithoutAccountsInput | UserUpdateWithWhereUniqueWithoutAccountsInput[]
-    updateMany?: UserUpdateManyWithWhereWithoutAccountsInput | UserUpdateManyWithWhereWithoutAccountsInput[]
-    deleteMany?: UserScalarWhereInput | UserScalarWhereInput[]
+  export type EnumUserRoleFieldUpdateOperationsInput = {
+    set?: $Enums.UserRole
   }
 
-  export type SubsiteUpdateManyWithoutAccountsNestedInput = {
-    create?: XOR<SubsiteCreateWithoutAccountsInput, SubsiteUncheckedCreateWithoutAccountsInput> | SubsiteCreateWithoutAccountsInput[] | SubsiteUncheckedCreateWithoutAccountsInput[]
-    connectOrCreate?: SubsiteCreateOrConnectWithoutAccountsInput | SubsiteCreateOrConnectWithoutAccountsInput[]
-    upsert?: SubsiteUpsertWithWhereUniqueWithoutAccountsInput | SubsiteUpsertWithWhereUniqueWithoutAccountsInput[]
-    set?: SubsiteWhereUniqueInput | SubsiteWhereUniqueInput[]
-    disconnect?: SubsiteWhereUniqueInput | SubsiteWhereUniqueInput[]
-    delete?: SubsiteWhereUniqueInput | SubsiteWhereUniqueInput[]
-    connect?: SubsiteWhereUniqueInput | SubsiteWhereUniqueInput[]
-    update?: SubsiteUpdateWithWhereUniqueWithoutAccountsInput | SubsiteUpdateWithWhereUniqueWithoutAccountsInput[]
-    updateMany?: SubsiteUpdateManyWithWhereWithoutAccountsInput | SubsiteUpdateManyWithWhereWithoutAccountsInput[]
-    deleteMany?: SubsiteScalarWhereInput | SubsiteScalarWhereInput[]
+  export type DateTimeFieldUpdateOperationsInput = {
+    set?: Date | string
+  }
+
+  export type UserContactUpdateOneWithoutUserNestedInput = {
+    create?: XOR<UserContactCreateWithoutUserInput, UserContactUncheckedCreateWithoutUserInput>
+    connectOrCreate?: UserContactCreateOrConnectWithoutUserInput
+    upsert?: UserContactUpsertWithoutUserInput
+    disconnect?: UserContactWhereInput | boolean
+    delete?: UserContactWhereInput | boolean
+    connect?: UserContactWhereUniqueInput
+    update?: XOR<XOR<UserContactUpdateToOneWithWhereWithoutUserInput, UserContactUpdateWithoutUserInput>, UserContactUncheckedUpdateWithoutUserInput>
+  }
+
+  export type UserProfileUpdateOneWithoutUserNestedInput = {
+    create?: XOR<UserProfileCreateWithoutUserInput, UserProfileUncheckedCreateWithoutUserInput>
+    connectOrCreate?: UserProfileCreateOrConnectWithoutUserInput
+    upsert?: UserProfileUpsertWithoutUserInput
+    disconnect?: UserProfileWhereInput | boolean
+    delete?: UserProfileWhereInput | boolean
+    connect?: UserProfileWhereUniqueInput
+    update?: XOR<XOR<UserProfileUpdateToOneWithWhereWithoutUserInput, UserProfileUpdateWithoutUserInput>, UserProfileUncheckedUpdateWithoutUserInput>
+  }
+
+  export type PostUpdateManyWithoutAuthorNestedInput = {
+    create?: XOR<PostCreateWithoutAuthorInput, PostUncheckedCreateWithoutAuthorInput> | PostCreateWithoutAuthorInput[] | PostUncheckedCreateWithoutAuthorInput[]
+    connectOrCreate?: PostCreateOrConnectWithoutAuthorInput | PostCreateOrConnectWithoutAuthorInput[]
+    upsert?: PostUpsertWithWhereUniqueWithoutAuthorInput | PostUpsertWithWhereUniqueWithoutAuthorInput[]
+    createMany?: PostCreateManyAuthorInputEnvelope
+    set?: PostWhereUniqueInput | PostWhereUniqueInput[]
+    disconnect?: PostWhereUniqueInput | PostWhereUniqueInput[]
+    delete?: PostWhereUniqueInput | PostWhereUniqueInput[]
+    connect?: PostWhereUniqueInput | PostWhereUniqueInput[]
+    update?: PostUpdateWithWhereUniqueWithoutAuthorInput | PostUpdateWithWhereUniqueWithoutAuthorInput[]
+    updateMany?: PostUpdateManyWithWhereWithoutAuthorInput | PostUpdateManyWithWhereWithoutAuthorInput[]
+    deleteMany?: PostScalarWhereInput | PostScalarWhereInput[]
+  }
+
+  export type PageUpdateManyWithoutAuthorNestedInput = {
+    create?: XOR<PageCreateWithoutAuthorInput, PageUncheckedCreateWithoutAuthorInput> | PageCreateWithoutAuthorInput[] | PageUncheckedCreateWithoutAuthorInput[]
+    connectOrCreate?: PageCreateOrConnectWithoutAuthorInput | PageCreateOrConnectWithoutAuthorInput[]
+    upsert?: PageUpsertWithWhereUniqueWithoutAuthorInput | PageUpsertWithWhereUniqueWithoutAuthorInput[]
+    createMany?: PageCreateManyAuthorInputEnvelope
+    set?: PageWhereUniqueInput | PageWhereUniqueInput[]
+    disconnect?: PageWhereUniqueInput | PageWhereUniqueInput[]
+    delete?: PageWhereUniqueInput | PageWhereUniqueInput[]
+    connect?: PageWhereUniqueInput | PageWhereUniqueInput[]
+    update?: PageUpdateWithWhereUniqueWithoutAuthorInput | PageUpdateWithWhereUniqueWithoutAuthorInput[]
+    updateMany?: PageUpdateManyWithWhereWithoutAuthorInput | PageUpdateManyWithWhereWithoutAuthorInput[]
+    deleteMany?: PageScalarWhereInput | PageScalarWhereInput[]
+  }
+
+  export type AccountUpdateManyWithoutAdminNestedInput = {
+    create?: XOR<AccountCreateWithoutAdminInput, AccountUncheckedCreateWithoutAdminInput> | AccountCreateWithoutAdminInput[] | AccountUncheckedCreateWithoutAdminInput[]
+    connectOrCreate?: AccountCreateOrConnectWithoutAdminInput | AccountCreateOrConnectWithoutAdminInput[]
+    upsert?: AccountUpsertWithWhereUniqueWithoutAdminInput | AccountUpsertWithWhereUniqueWithoutAdminInput[]
+    createMany?: AccountCreateManyAdminInputEnvelope
+    set?: AccountWhereUniqueInput | AccountWhereUniqueInput[]
+    disconnect?: AccountWhereUniqueInput | AccountWhereUniqueInput[]
+    delete?: AccountWhereUniqueInput | AccountWhereUniqueInput[]
+    connect?: AccountWhereUniqueInput | AccountWhereUniqueInput[]
+    update?: AccountUpdateWithWhereUniqueWithoutAdminInput | AccountUpdateWithWhereUniqueWithoutAdminInput[]
+    updateMany?: AccountUpdateManyWithWhereWithoutAdminInput | AccountUpdateManyWithWhereWithoutAdminInput[]
+    deleteMany?: AccountScalarWhereInput | AccountScalarWhereInput[]
   }
 
   export type IntFieldUpdateOperationsInput = {
@@ -21018,124 +19848,220 @@ export namespace Prisma {
     divide?: number
   }
 
-  export type UserUncheckedUpdateManyWithoutAccountsNestedInput = {
-    create?: XOR<UserCreateWithoutAccountsInput, UserUncheckedCreateWithoutAccountsInput> | UserCreateWithoutAccountsInput[] | UserUncheckedCreateWithoutAccountsInput[]
-    connectOrCreate?: UserCreateOrConnectWithoutAccountsInput | UserCreateOrConnectWithoutAccountsInput[]
-    upsert?: UserUpsertWithWhereUniqueWithoutAccountsInput | UserUpsertWithWhereUniqueWithoutAccountsInput[]
-    set?: UserWhereUniqueInput | UserWhereUniqueInput[]
-    disconnect?: UserWhereUniqueInput | UserWhereUniqueInput[]
-    delete?: UserWhereUniqueInput | UserWhereUniqueInput[]
-    connect?: UserWhereUniqueInput | UserWhereUniqueInput[]
-    update?: UserUpdateWithWhereUniqueWithoutAccountsInput | UserUpdateWithWhereUniqueWithoutAccountsInput[]
-    updateMany?: UserUpdateManyWithWhereWithoutAccountsInput | UserUpdateManyWithWhereWithoutAccountsInput[]
-    deleteMany?: UserScalarWhereInput | UserScalarWhereInput[]
+  export type UserContactUncheckedUpdateOneWithoutUserNestedInput = {
+    create?: XOR<UserContactCreateWithoutUserInput, UserContactUncheckedCreateWithoutUserInput>
+    connectOrCreate?: UserContactCreateOrConnectWithoutUserInput
+    upsert?: UserContactUpsertWithoutUserInput
+    disconnect?: UserContactWhereInput | boolean
+    delete?: UserContactWhereInput | boolean
+    connect?: UserContactWhereUniqueInput
+    update?: XOR<XOR<UserContactUpdateToOneWithWhereWithoutUserInput, UserContactUpdateWithoutUserInput>, UserContactUncheckedUpdateWithoutUserInput>
   }
 
-  export type SubsiteUncheckedUpdateManyWithoutAccountsNestedInput = {
-    create?: XOR<SubsiteCreateWithoutAccountsInput, SubsiteUncheckedCreateWithoutAccountsInput> | SubsiteCreateWithoutAccountsInput[] | SubsiteUncheckedCreateWithoutAccountsInput[]
-    connectOrCreate?: SubsiteCreateOrConnectWithoutAccountsInput | SubsiteCreateOrConnectWithoutAccountsInput[]
-    upsert?: SubsiteUpsertWithWhereUniqueWithoutAccountsInput | SubsiteUpsertWithWhereUniqueWithoutAccountsInput[]
+  export type UserProfileUncheckedUpdateOneWithoutUserNestedInput = {
+    create?: XOR<UserProfileCreateWithoutUserInput, UserProfileUncheckedCreateWithoutUserInput>
+    connectOrCreate?: UserProfileCreateOrConnectWithoutUserInput
+    upsert?: UserProfileUpsertWithoutUserInput
+    disconnect?: UserProfileWhereInput | boolean
+    delete?: UserProfileWhereInput | boolean
+    connect?: UserProfileWhereUniqueInput
+    update?: XOR<XOR<UserProfileUpdateToOneWithWhereWithoutUserInput, UserProfileUpdateWithoutUserInput>, UserProfileUncheckedUpdateWithoutUserInput>
+  }
+
+  export type PostUncheckedUpdateManyWithoutAuthorNestedInput = {
+    create?: XOR<PostCreateWithoutAuthorInput, PostUncheckedCreateWithoutAuthorInput> | PostCreateWithoutAuthorInput[] | PostUncheckedCreateWithoutAuthorInput[]
+    connectOrCreate?: PostCreateOrConnectWithoutAuthorInput | PostCreateOrConnectWithoutAuthorInput[]
+    upsert?: PostUpsertWithWhereUniqueWithoutAuthorInput | PostUpsertWithWhereUniqueWithoutAuthorInput[]
+    createMany?: PostCreateManyAuthorInputEnvelope
+    set?: PostWhereUniqueInput | PostWhereUniqueInput[]
+    disconnect?: PostWhereUniqueInput | PostWhereUniqueInput[]
+    delete?: PostWhereUniqueInput | PostWhereUniqueInput[]
+    connect?: PostWhereUniqueInput | PostWhereUniqueInput[]
+    update?: PostUpdateWithWhereUniqueWithoutAuthorInput | PostUpdateWithWhereUniqueWithoutAuthorInput[]
+    updateMany?: PostUpdateManyWithWhereWithoutAuthorInput | PostUpdateManyWithWhereWithoutAuthorInput[]
+    deleteMany?: PostScalarWhereInput | PostScalarWhereInput[]
+  }
+
+  export type PageUncheckedUpdateManyWithoutAuthorNestedInput = {
+    create?: XOR<PageCreateWithoutAuthorInput, PageUncheckedCreateWithoutAuthorInput> | PageCreateWithoutAuthorInput[] | PageUncheckedCreateWithoutAuthorInput[]
+    connectOrCreate?: PageCreateOrConnectWithoutAuthorInput | PageCreateOrConnectWithoutAuthorInput[]
+    upsert?: PageUpsertWithWhereUniqueWithoutAuthorInput | PageUpsertWithWhereUniqueWithoutAuthorInput[]
+    createMany?: PageCreateManyAuthorInputEnvelope
+    set?: PageWhereUniqueInput | PageWhereUniqueInput[]
+    disconnect?: PageWhereUniqueInput | PageWhereUniqueInput[]
+    delete?: PageWhereUniqueInput | PageWhereUniqueInput[]
+    connect?: PageWhereUniqueInput | PageWhereUniqueInput[]
+    update?: PageUpdateWithWhereUniqueWithoutAuthorInput | PageUpdateWithWhereUniqueWithoutAuthorInput[]
+    updateMany?: PageUpdateManyWithWhereWithoutAuthorInput | PageUpdateManyWithWhereWithoutAuthorInput[]
+    deleteMany?: PageScalarWhereInput | PageScalarWhereInput[]
+  }
+
+  export type AccountUncheckedUpdateManyWithoutAdminNestedInput = {
+    create?: XOR<AccountCreateWithoutAdminInput, AccountUncheckedCreateWithoutAdminInput> | AccountCreateWithoutAdminInput[] | AccountUncheckedCreateWithoutAdminInput[]
+    connectOrCreate?: AccountCreateOrConnectWithoutAdminInput | AccountCreateOrConnectWithoutAdminInput[]
+    upsert?: AccountUpsertWithWhereUniqueWithoutAdminInput | AccountUpsertWithWhereUniqueWithoutAdminInput[]
+    createMany?: AccountCreateManyAdminInputEnvelope
+    set?: AccountWhereUniqueInput | AccountWhereUniqueInput[]
+    disconnect?: AccountWhereUniqueInput | AccountWhereUniqueInput[]
+    delete?: AccountWhereUniqueInput | AccountWhereUniqueInput[]
+    connect?: AccountWhereUniqueInput | AccountWhereUniqueInput[]
+    update?: AccountUpdateWithWhereUniqueWithoutAdminInput | AccountUpdateWithWhereUniqueWithoutAdminInput[]
+    updateMany?: AccountUpdateManyWithWhereWithoutAdminInput | AccountUpdateManyWithWhereWithoutAdminInput[]
+    deleteMany?: AccountScalarWhereInput | AccountScalarWhereInput[]
+  }
+
+  export type UserCreateNestedOneWithoutAccountsInput = {
+    create?: XOR<UserCreateWithoutAccountsInput, UserUncheckedCreateWithoutAccountsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutAccountsInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type SubsiteCreateNestedManyWithoutAccountInput = {
+    create?: XOR<SubsiteCreateWithoutAccountInput, SubsiteUncheckedCreateWithoutAccountInput> | SubsiteCreateWithoutAccountInput[] | SubsiteUncheckedCreateWithoutAccountInput[]
+    connectOrCreate?: SubsiteCreateOrConnectWithoutAccountInput | SubsiteCreateOrConnectWithoutAccountInput[]
+    createMany?: SubsiteCreateManyAccountInputEnvelope
+    connect?: SubsiteWhereUniqueInput | SubsiteWhereUniqueInput[]
+  }
+
+  export type SubsiteUncheckedCreateNestedManyWithoutAccountInput = {
+    create?: XOR<SubsiteCreateWithoutAccountInput, SubsiteUncheckedCreateWithoutAccountInput> | SubsiteCreateWithoutAccountInput[] | SubsiteUncheckedCreateWithoutAccountInput[]
+    connectOrCreate?: SubsiteCreateOrConnectWithoutAccountInput | SubsiteCreateOrConnectWithoutAccountInput[]
+    createMany?: SubsiteCreateManyAccountInputEnvelope
+    connect?: SubsiteWhereUniqueInput | SubsiteWhereUniqueInput[]
+  }
+
+  export type UserUpdateOneRequiredWithoutAccountsNestedInput = {
+    create?: XOR<UserCreateWithoutAccountsInput, UserUncheckedCreateWithoutAccountsInput>
+    connectOrCreate?: UserCreateOrConnectWithoutAccountsInput
+    upsert?: UserUpsertWithoutAccountsInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<XOR<UserUpdateToOneWithWhereWithoutAccountsInput, UserUpdateWithoutAccountsInput>, UserUncheckedUpdateWithoutAccountsInput>
+  }
+
+  export type SubsiteUpdateManyWithoutAccountNestedInput = {
+    create?: XOR<SubsiteCreateWithoutAccountInput, SubsiteUncheckedCreateWithoutAccountInput> | SubsiteCreateWithoutAccountInput[] | SubsiteUncheckedCreateWithoutAccountInput[]
+    connectOrCreate?: SubsiteCreateOrConnectWithoutAccountInput | SubsiteCreateOrConnectWithoutAccountInput[]
+    upsert?: SubsiteUpsertWithWhereUniqueWithoutAccountInput | SubsiteUpsertWithWhereUniqueWithoutAccountInput[]
+    createMany?: SubsiteCreateManyAccountInputEnvelope
     set?: SubsiteWhereUniqueInput | SubsiteWhereUniqueInput[]
     disconnect?: SubsiteWhereUniqueInput | SubsiteWhereUniqueInput[]
     delete?: SubsiteWhereUniqueInput | SubsiteWhereUniqueInput[]
     connect?: SubsiteWhereUniqueInput | SubsiteWhereUniqueInput[]
-    update?: SubsiteUpdateWithWhereUniqueWithoutAccountsInput | SubsiteUpdateWithWhereUniqueWithoutAccountsInput[]
-    updateMany?: SubsiteUpdateManyWithWhereWithoutAccountsInput | SubsiteUpdateManyWithWhereWithoutAccountsInput[]
+    update?: SubsiteUpdateWithWhereUniqueWithoutAccountInput | SubsiteUpdateWithWhereUniqueWithoutAccountInput[]
+    updateMany?: SubsiteUpdateManyWithWhereWithoutAccountInput | SubsiteUpdateManyWithWhereWithoutAccountInput[]
     deleteMany?: SubsiteScalarWhereInput | SubsiteScalarWhereInput[]
   }
 
-  export type AccountCreateNestedManyWithoutSubsitesInput = {
-    create?: XOR<AccountCreateWithoutSubsitesInput, AccountUncheckedCreateWithoutSubsitesInput> | AccountCreateWithoutSubsitesInput[] | AccountUncheckedCreateWithoutSubsitesInput[]
-    connectOrCreate?: AccountCreateOrConnectWithoutSubsitesInput | AccountCreateOrConnectWithoutSubsitesInput[]
-    connect?: AccountWhereUniqueInput | AccountWhereUniqueInput[]
+  export type SubsiteUncheckedUpdateManyWithoutAccountNestedInput = {
+    create?: XOR<SubsiteCreateWithoutAccountInput, SubsiteUncheckedCreateWithoutAccountInput> | SubsiteCreateWithoutAccountInput[] | SubsiteUncheckedCreateWithoutAccountInput[]
+    connectOrCreate?: SubsiteCreateOrConnectWithoutAccountInput | SubsiteCreateOrConnectWithoutAccountInput[]
+    upsert?: SubsiteUpsertWithWhereUniqueWithoutAccountInput | SubsiteUpsertWithWhereUniqueWithoutAccountInput[]
+    createMany?: SubsiteCreateManyAccountInputEnvelope
+    set?: SubsiteWhereUniqueInput | SubsiteWhereUniqueInput[]
+    disconnect?: SubsiteWhereUniqueInput | SubsiteWhereUniqueInput[]
+    delete?: SubsiteWhereUniqueInput | SubsiteWhereUniqueInput[]
+    connect?: SubsiteWhereUniqueInput | SubsiteWhereUniqueInput[]
+    update?: SubsiteUpdateWithWhereUniqueWithoutAccountInput | SubsiteUpdateWithWhereUniqueWithoutAccountInput[]
+    updateMany?: SubsiteUpdateManyWithWhereWithoutAccountInput | SubsiteUpdateManyWithWhereWithoutAccountInput[]
+    deleteMany?: SubsiteScalarWhereInput | SubsiteScalarWhereInput[]
   }
 
-  export type SubsiteConfigCreateNestedManyWithoutSubsiteInput = {
-    create?: XOR<SubsiteConfigCreateWithoutSubsiteInput, SubsiteConfigUncheckedCreateWithoutSubsiteInput> | SubsiteConfigCreateWithoutSubsiteInput[] | SubsiteConfigUncheckedCreateWithoutSubsiteInput[]
-    connectOrCreate?: SubsiteConfigCreateOrConnectWithoutSubsiteInput | SubsiteConfigCreateOrConnectWithoutSubsiteInput[]
-    createMany?: SubsiteConfigCreateManySubsiteInputEnvelope
-    connect?: SubsiteConfigWhereUniqueInput | SubsiteConfigWhereUniqueInput[]
+  export type PostCreateNestedManyWithoutSubsiteInput = {
+    create?: XOR<PostCreateWithoutSubsiteInput, PostUncheckedCreateWithoutSubsiteInput> | PostCreateWithoutSubsiteInput[] | PostUncheckedCreateWithoutSubsiteInput[]
+    connectOrCreate?: PostCreateOrConnectWithoutSubsiteInput | PostCreateOrConnectWithoutSubsiteInput[]
+    createMany?: PostCreateManySubsiteInputEnvelope
+    connect?: PostWhereUniqueInput | PostWhereUniqueInput[]
   }
 
-  export type AccountUncheckedCreateNestedManyWithoutSubsitesInput = {
-    create?: XOR<AccountCreateWithoutSubsitesInput, AccountUncheckedCreateWithoutSubsitesInput> | AccountCreateWithoutSubsitesInput[] | AccountUncheckedCreateWithoutSubsitesInput[]
-    connectOrCreate?: AccountCreateOrConnectWithoutSubsitesInput | AccountCreateOrConnectWithoutSubsitesInput[]
-    connect?: AccountWhereUniqueInput | AccountWhereUniqueInput[]
+  export type PageCreateNestedManyWithoutSubsiteInput = {
+    create?: XOR<PageCreateWithoutSubsiteInput, PageUncheckedCreateWithoutSubsiteInput> | PageCreateWithoutSubsiteInput[] | PageUncheckedCreateWithoutSubsiteInput[]
+    connectOrCreate?: PageCreateOrConnectWithoutSubsiteInput | PageCreateOrConnectWithoutSubsiteInput[]
+    createMany?: PageCreateManySubsiteInputEnvelope
+    connect?: PageWhereUniqueInput | PageWhereUniqueInput[]
   }
 
-  export type SubsiteConfigUncheckedCreateNestedManyWithoutSubsiteInput = {
-    create?: XOR<SubsiteConfigCreateWithoutSubsiteInput, SubsiteConfigUncheckedCreateWithoutSubsiteInput> | SubsiteConfigCreateWithoutSubsiteInput[] | SubsiteConfigUncheckedCreateWithoutSubsiteInput[]
-    connectOrCreate?: SubsiteConfigCreateOrConnectWithoutSubsiteInput | SubsiteConfigCreateOrConnectWithoutSubsiteInput[]
-    createMany?: SubsiteConfigCreateManySubsiteInputEnvelope
-    connect?: SubsiteConfigWhereUniqueInput | SubsiteConfigWhereUniqueInput[]
+  export type AccountCreateNestedOneWithoutSubsitesInput = {
+    create?: XOR<AccountCreateWithoutSubsitesInput, AccountUncheckedCreateWithoutSubsitesInput>
+    connectOrCreate?: AccountCreateOrConnectWithoutSubsitesInput
+    connect?: AccountWhereUniqueInput
   }
 
-  export type AccountUpdateManyWithoutSubsitesNestedInput = {
-    create?: XOR<AccountCreateWithoutSubsitesInput, AccountUncheckedCreateWithoutSubsitesInput> | AccountCreateWithoutSubsitesInput[] | AccountUncheckedCreateWithoutSubsitesInput[]
-    connectOrCreate?: AccountCreateOrConnectWithoutSubsitesInput | AccountCreateOrConnectWithoutSubsitesInput[]
-    upsert?: AccountUpsertWithWhereUniqueWithoutSubsitesInput | AccountUpsertWithWhereUniqueWithoutSubsitesInput[]
-    set?: AccountWhereUniqueInput | AccountWhereUniqueInput[]
-    disconnect?: AccountWhereUniqueInput | AccountWhereUniqueInput[]
-    delete?: AccountWhereUniqueInput | AccountWhereUniqueInput[]
-    connect?: AccountWhereUniqueInput | AccountWhereUniqueInput[]
-    update?: AccountUpdateWithWhereUniqueWithoutSubsitesInput | AccountUpdateWithWhereUniqueWithoutSubsitesInput[]
-    updateMany?: AccountUpdateManyWithWhereWithoutSubsitesInput | AccountUpdateManyWithWhereWithoutSubsitesInput[]
-    deleteMany?: AccountScalarWhereInput | AccountScalarWhereInput[]
+  export type PostUncheckedCreateNestedManyWithoutSubsiteInput = {
+    create?: XOR<PostCreateWithoutSubsiteInput, PostUncheckedCreateWithoutSubsiteInput> | PostCreateWithoutSubsiteInput[] | PostUncheckedCreateWithoutSubsiteInput[]
+    connectOrCreate?: PostCreateOrConnectWithoutSubsiteInput | PostCreateOrConnectWithoutSubsiteInput[]
+    createMany?: PostCreateManySubsiteInputEnvelope
+    connect?: PostWhereUniqueInput | PostWhereUniqueInput[]
   }
 
-  export type SubsiteConfigUpdateManyWithoutSubsiteNestedInput = {
-    create?: XOR<SubsiteConfigCreateWithoutSubsiteInput, SubsiteConfigUncheckedCreateWithoutSubsiteInput> | SubsiteConfigCreateWithoutSubsiteInput[] | SubsiteConfigUncheckedCreateWithoutSubsiteInput[]
-    connectOrCreate?: SubsiteConfigCreateOrConnectWithoutSubsiteInput | SubsiteConfigCreateOrConnectWithoutSubsiteInput[]
-    upsert?: SubsiteConfigUpsertWithWhereUniqueWithoutSubsiteInput | SubsiteConfigUpsertWithWhereUniqueWithoutSubsiteInput[]
-    createMany?: SubsiteConfigCreateManySubsiteInputEnvelope
-    set?: SubsiteConfigWhereUniqueInput | SubsiteConfigWhereUniqueInput[]
-    disconnect?: SubsiteConfigWhereUniqueInput | SubsiteConfigWhereUniqueInput[]
-    delete?: SubsiteConfigWhereUniqueInput | SubsiteConfigWhereUniqueInput[]
-    connect?: SubsiteConfigWhereUniqueInput | SubsiteConfigWhereUniqueInput[]
-    update?: SubsiteConfigUpdateWithWhereUniqueWithoutSubsiteInput | SubsiteConfigUpdateWithWhereUniqueWithoutSubsiteInput[]
-    updateMany?: SubsiteConfigUpdateManyWithWhereWithoutSubsiteInput | SubsiteConfigUpdateManyWithWhereWithoutSubsiteInput[]
-    deleteMany?: SubsiteConfigScalarWhereInput | SubsiteConfigScalarWhereInput[]
+  export type PageUncheckedCreateNestedManyWithoutSubsiteInput = {
+    create?: XOR<PageCreateWithoutSubsiteInput, PageUncheckedCreateWithoutSubsiteInput> | PageCreateWithoutSubsiteInput[] | PageUncheckedCreateWithoutSubsiteInput[]
+    connectOrCreate?: PageCreateOrConnectWithoutSubsiteInput | PageCreateOrConnectWithoutSubsiteInput[]
+    createMany?: PageCreateManySubsiteInputEnvelope
+    connect?: PageWhereUniqueInput | PageWhereUniqueInput[]
   }
 
-  export type AccountUncheckedUpdateManyWithoutSubsitesNestedInput = {
-    create?: XOR<AccountCreateWithoutSubsitesInput, AccountUncheckedCreateWithoutSubsitesInput> | AccountCreateWithoutSubsitesInput[] | AccountUncheckedCreateWithoutSubsitesInput[]
-    connectOrCreate?: AccountCreateOrConnectWithoutSubsitesInput | AccountCreateOrConnectWithoutSubsitesInput[]
-    upsert?: AccountUpsertWithWhereUniqueWithoutSubsitesInput | AccountUpsertWithWhereUniqueWithoutSubsitesInput[]
-    set?: AccountWhereUniqueInput | AccountWhereUniqueInput[]
-    disconnect?: AccountWhereUniqueInput | AccountWhereUniqueInput[]
-    delete?: AccountWhereUniqueInput | AccountWhereUniqueInput[]
-    connect?: AccountWhereUniqueInput | AccountWhereUniqueInput[]
-    update?: AccountUpdateWithWhereUniqueWithoutSubsitesInput | AccountUpdateWithWhereUniqueWithoutSubsitesInput[]
-    updateMany?: AccountUpdateManyWithWhereWithoutSubsitesInput | AccountUpdateManyWithWhereWithoutSubsitesInput[]
-    deleteMany?: AccountScalarWhereInput | AccountScalarWhereInput[]
+  export type PostUpdateManyWithoutSubsiteNestedInput = {
+    create?: XOR<PostCreateWithoutSubsiteInput, PostUncheckedCreateWithoutSubsiteInput> | PostCreateWithoutSubsiteInput[] | PostUncheckedCreateWithoutSubsiteInput[]
+    connectOrCreate?: PostCreateOrConnectWithoutSubsiteInput | PostCreateOrConnectWithoutSubsiteInput[]
+    upsert?: PostUpsertWithWhereUniqueWithoutSubsiteInput | PostUpsertWithWhereUniqueWithoutSubsiteInput[]
+    createMany?: PostCreateManySubsiteInputEnvelope
+    set?: PostWhereUniqueInput | PostWhereUniqueInput[]
+    disconnect?: PostWhereUniqueInput | PostWhereUniqueInput[]
+    delete?: PostWhereUniqueInput | PostWhereUniqueInput[]
+    connect?: PostWhereUniqueInput | PostWhereUniqueInput[]
+    update?: PostUpdateWithWhereUniqueWithoutSubsiteInput | PostUpdateWithWhereUniqueWithoutSubsiteInput[]
+    updateMany?: PostUpdateManyWithWhereWithoutSubsiteInput | PostUpdateManyWithWhereWithoutSubsiteInput[]
+    deleteMany?: PostScalarWhereInput | PostScalarWhereInput[]
   }
 
-  export type SubsiteConfigUncheckedUpdateManyWithoutSubsiteNestedInput = {
-    create?: XOR<SubsiteConfigCreateWithoutSubsiteInput, SubsiteConfigUncheckedCreateWithoutSubsiteInput> | SubsiteConfigCreateWithoutSubsiteInput[] | SubsiteConfigUncheckedCreateWithoutSubsiteInput[]
-    connectOrCreate?: SubsiteConfigCreateOrConnectWithoutSubsiteInput | SubsiteConfigCreateOrConnectWithoutSubsiteInput[]
-    upsert?: SubsiteConfigUpsertWithWhereUniqueWithoutSubsiteInput | SubsiteConfigUpsertWithWhereUniqueWithoutSubsiteInput[]
-    createMany?: SubsiteConfigCreateManySubsiteInputEnvelope
-    set?: SubsiteConfigWhereUniqueInput | SubsiteConfigWhereUniqueInput[]
-    disconnect?: SubsiteConfigWhereUniqueInput | SubsiteConfigWhereUniqueInput[]
-    delete?: SubsiteConfigWhereUniqueInput | SubsiteConfigWhereUniqueInput[]
-    connect?: SubsiteConfigWhereUniqueInput | SubsiteConfigWhereUniqueInput[]
-    update?: SubsiteConfigUpdateWithWhereUniqueWithoutSubsiteInput | SubsiteConfigUpdateWithWhereUniqueWithoutSubsiteInput[]
-    updateMany?: SubsiteConfigUpdateManyWithWhereWithoutSubsiteInput | SubsiteConfigUpdateManyWithWhereWithoutSubsiteInput[]
-    deleteMany?: SubsiteConfigScalarWhereInput | SubsiteConfigScalarWhereInput[]
+  export type PageUpdateManyWithoutSubsiteNestedInput = {
+    create?: XOR<PageCreateWithoutSubsiteInput, PageUncheckedCreateWithoutSubsiteInput> | PageCreateWithoutSubsiteInput[] | PageUncheckedCreateWithoutSubsiteInput[]
+    connectOrCreate?: PageCreateOrConnectWithoutSubsiteInput | PageCreateOrConnectWithoutSubsiteInput[]
+    upsert?: PageUpsertWithWhereUniqueWithoutSubsiteInput | PageUpsertWithWhereUniqueWithoutSubsiteInput[]
+    createMany?: PageCreateManySubsiteInputEnvelope
+    set?: PageWhereUniqueInput | PageWhereUniqueInput[]
+    disconnect?: PageWhereUniqueInput | PageWhereUniqueInput[]
+    delete?: PageWhereUniqueInput | PageWhereUniqueInput[]
+    connect?: PageWhereUniqueInput | PageWhereUniqueInput[]
+    update?: PageUpdateWithWhereUniqueWithoutSubsiteInput | PageUpdateWithWhereUniqueWithoutSubsiteInput[]
+    updateMany?: PageUpdateManyWithWhereWithoutSubsiteInput | PageUpdateManyWithWhereWithoutSubsiteInput[]
+    deleteMany?: PageScalarWhereInput | PageScalarWhereInput[]
   }
 
-  export type SubsiteCreateNestedOneWithoutConfigInput = {
-    create?: XOR<SubsiteCreateWithoutConfigInput, SubsiteUncheckedCreateWithoutConfigInput>
-    connectOrCreate?: SubsiteCreateOrConnectWithoutConfigInput
-    connect?: SubsiteWhereUniqueInput
+  export type AccountUpdateOneRequiredWithoutSubsitesNestedInput = {
+    create?: XOR<AccountCreateWithoutSubsitesInput, AccountUncheckedCreateWithoutSubsitesInput>
+    connectOrCreate?: AccountCreateOrConnectWithoutSubsitesInput
+    upsert?: AccountUpsertWithoutSubsitesInput
+    connect?: AccountWhereUniqueInput
+    update?: XOR<XOR<AccountUpdateToOneWithWhereWithoutSubsitesInput, AccountUpdateWithoutSubsitesInput>, AccountUncheckedUpdateWithoutSubsitesInput>
   }
 
-  export type SubsiteUpdateOneRequiredWithoutConfigNestedInput = {
-    create?: XOR<SubsiteCreateWithoutConfigInput, SubsiteUncheckedCreateWithoutConfigInput>
-    connectOrCreate?: SubsiteCreateOrConnectWithoutConfigInput
-    upsert?: SubsiteUpsertWithoutConfigInput
-    connect?: SubsiteWhereUniqueInput
-    update?: XOR<XOR<SubsiteUpdateToOneWithWhereWithoutConfigInput, SubsiteUpdateWithoutConfigInput>, SubsiteUncheckedUpdateWithoutConfigInput>
+  export type PostUncheckedUpdateManyWithoutSubsiteNestedInput = {
+    create?: XOR<PostCreateWithoutSubsiteInput, PostUncheckedCreateWithoutSubsiteInput> | PostCreateWithoutSubsiteInput[] | PostUncheckedCreateWithoutSubsiteInput[]
+    connectOrCreate?: PostCreateOrConnectWithoutSubsiteInput | PostCreateOrConnectWithoutSubsiteInput[]
+    upsert?: PostUpsertWithWhereUniqueWithoutSubsiteInput | PostUpsertWithWhereUniqueWithoutSubsiteInput[]
+    createMany?: PostCreateManySubsiteInputEnvelope
+    set?: PostWhereUniqueInput | PostWhereUniqueInput[]
+    disconnect?: PostWhereUniqueInput | PostWhereUniqueInput[]
+    delete?: PostWhereUniqueInput | PostWhereUniqueInput[]
+    connect?: PostWhereUniqueInput | PostWhereUniqueInput[]
+    update?: PostUpdateWithWhereUniqueWithoutSubsiteInput | PostUpdateWithWhereUniqueWithoutSubsiteInput[]
+    updateMany?: PostUpdateManyWithWhereWithoutSubsiteInput | PostUpdateManyWithWhereWithoutSubsiteInput[]
+    deleteMany?: PostScalarWhereInput | PostScalarWhereInput[]
+  }
+
+  export type PageUncheckedUpdateManyWithoutSubsiteNestedInput = {
+    create?: XOR<PageCreateWithoutSubsiteInput, PageUncheckedCreateWithoutSubsiteInput> | PageCreateWithoutSubsiteInput[] | PageUncheckedCreateWithoutSubsiteInput[]
+    connectOrCreate?: PageCreateOrConnectWithoutSubsiteInput | PageCreateOrConnectWithoutSubsiteInput[]
+    upsert?: PageUpsertWithWhereUniqueWithoutSubsiteInput | PageUpsertWithWhereUniqueWithoutSubsiteInput[]
+    createMany?: PageCreateManySubsiteInputEnvelope
+    set?: PageWhereUniqueInput | PageWhereUniqueInput[]
+    disconnect?: PageWhereUniqueInput | PageWhereUniqueInput[]
+    delete?: PageWhereUniqueInput | PageWhereUniqueInput[]
+    connect?: PageWhereUniqueInput | PageWhereUniqueInput[]
+    update?: PageUpdateWithWhereUniqueWithoutSubsiteInput | PageUpdateWithWhereUniqueWithoutSubsiteInput[]
+    updateMany?: PageUpdateManyWithWhereWithoutSubsiteInput | PageUpdateManyWithWhereWithoutSubsiteInput[]
+    deleteMany?: PageScalarWhereInput | PageScalarWhereInput[]
   }
 
   export type UserCreateNestedOneWithoutPostsInput = {
@@ -21154,6 +20080,12 @@ export namespace Prisma {
     create?: XOR<TagCreateWithoutPostsInput, TagUncheckedCreateWithoutPostsInput> | TagCreateWithoutPostsInput[] | TagUncheckedCreateWithoutPostsInput[]
     connectOrCreate?: TagCreateOrConnectWithoutPostsInput | TagCreateOrConnectWithoutPostsInput[]
     connect?: TagWhereUniqueInput | TagWhereUniqueInput[]
+  }
+
+  export type SubsiteCreateNestedOneWithoutPostsInput = {
+    create?: XOR<SubsiteCreateWithoutPostsInput, SubsiteUncheckedCreateWithoutPostsInput>
+    connectOrCreate?: SubsiteCreateOrConnectWithoutPostsInput
+    connect?: SubsiteWhereUniqueInput
   }
 
   export type CategoryUncheckedCreateNestedManyWithoutPostsInput = {
@@ -21210,6 +20142,14 @@ export namespace Prisma {
     deleteMany?: TagScalarWhereInput | TagScalarWhereInput[]
   }
 
+  export type SubsiteUpdateOneRequiredWithoutPostsNestedInput = {
+    create?: XOR<SubsiteCreateWithoutPostsInput, SubsiteUncheckedCreateWithoutPostsInput>
+    connectOrCreate?: SubsiteCreateOrConnectWithoutPostsInput
+    upsert?: SubsiteUpsertWithoutPostsInput
+    connect?: SubsiteWhereUniqueInput
+    update?: XOR<XOR<SubsiteUpdateToOneWithWhereWithoutPostsInput, SubsiteUpdateWithoutPostsInput>, SubsiteUncheckedUpdateWithoutPostsInput>
+  }
+
   export type CategoryUncheckedUpdateManyWithoutPostsNestedInput = {
     create?: XOR<CategoryCreateWithoutPostsInput, CategoryUncheckedCreateWithoutPostsInput> | CategoryCreateWithoutPostsInput[] | CategoryUncheckedCreateWithoutPostsInput[]
     connectOrCreate?: CategoryCreateOrConnectWithoutPostsInput | CategoryCreateOrConnectWithoutPostsInput[]
@@ -21252,6 +20192,12 @@ export namespace Prisma {
     create?: XOR<TagCreateWithoutPagesInput, TagUncheckedCreateWithoutPagesInput> | TagCreateWithoutPagesInput[] | TagUncheckedCreateWithoutPagesInput[]
     connectOrCreate?: TagCreateOrConnectWithoutPagesInput | TagCreateOrConnectWithoutPagesInput[]
     connect?: TagWhereUniqueInput | TagWhereUniqueInput[]
+  }
+
+  export type SubsiteCreateNestedOneWithoutPagesInput = {
+    create?: XOR<SubsiteCreateWithoutPagesInput, SubsiteUncheckedCreateWithoutPagesInput>
+    connectOrCreate?: SubsiteCreateOrConnectWithoutPagesInput
+    connect?: SubsiteWhereUniqueInput
   }
 
   export type CategoryUncheckedCreateNestedManyWithoutPagesInput = {
@@ -21298,6 +20244,14 @@ export namespace Prisma {
     update?: TagUpdateWithWhereUniqueWithoutPagesInput | TagUpdateWithWhereUniqueWithoutPagesInput[]
     updateMany?: TagUpdateManyWithWhereWithoutPagesInput | TagUpdateManyWithWhereWithoutPagesInput[]
     deleteMany?: TagScalarWhereInput | TagScalarWhereInput[]
+  }
+
+  export type SubsiteUpdateOneRequiredWithoutPagesNestedInput = {
+    create?: XOR<SubsiteCreateWithoutPagesInput, SubsiteUncheckedCreateWithoutPagesInput>
+    connectOrCreate?: SubsiteCreateOrConnectWithoutPagesInput
+    upsert?: SubsiteUpsertWithoutPagesInput
+    connect?: SubsiteWhereUniqueInput
+    update?: XOR<XOR<SubsiteUpdateToOneWithWhereWithoutPagesInput, SubsiteUpdateWithoutPagesInput>, SubsiteUncheckedUpdateWithoutPagesInput>
   }
 
   export type CategoryUncheckedUpdateManyWithoutPagesNestedInput = {
@@ -21538,196 +20492,6 @@ export namespace Prisma {
     update?: XOR<XOR<ContactWebsiteUpdateToOneWithWhereWithoutContactInput, ContactWebsiteUpdateWithoutContactInput>, ContactWebsiteUncheckedUpdateWithoutContactInput>
   }
 
-  export type UserContactCreateNestedOneWithoutUserInput = {
-    create?: XOR<UserContactCreateWithoutUserInput, UserContactUncheckedCreateWithoutUserInput>
-    connectOrCreate?: UserContactCreateOrConnectWithoutUserInput
-    connect?: UserContactWhereUniqueInput
-  }
-
-  export type PostCreateNestedManyWithoutAuthorInput = {
-    create?: XOR<PostCreateWithoutAuthorInput, PostUncheckedCreateWithoutAuthorInput> | PostCreateWithoutAuthorInput[] | PostUncheckedCreateWithoutAuthorInput[]
-    connectOrCreate?: PostCreateOrConnectWithoutAuthorInput | PostCreateOrConnectWithoutAuthorInput[]
-    createMany?: PostCreateManyAuthorInputEnvelope
-    connect?: PostWhereUniqueInput | PostWhereUniqueInput[]
-  }
-
-  export type UserProfileCreateNestedOneWithoutUserInput = {
-    create?: XOR<UserProfileCreateWithoutUserInput, UserProfileUncheckedCreateWithoutUserInput>
-    connectOrCreate?: UserProfileCreateOrConnectWithoutUserInput
-    connect?: UserProfileWhereUniqueInput
-  }
-
-  export type PageCreateNestedManyWithoutAuthorInput = {
-    create?: XOR<PageCreateWithoutAuthorInput, PageUncheckedCreateWithoutAuthorInput> | PageCreateWithoutAuthorInput[] | PageUncheckedCreateWithoutAuthorInput[]
-    connectOrCreate?: PageCreateOrConnectWithoutAuthorInput | PageCreateOrConnectWithoutAuthorInput[]
-    createMany?: PageCreateManyAuthorInputEnvelope
-    connect?: PageWhereUniqueInput | PageWhereUniqueInput[]
-  }
-
-  export type AccountCreateNestedManyWithoutUsersInput = {
-    create?: XOR<AccountCreateWithoutUsersInput, AccountUncheckedCreateWithoutUsersInput> | AccountCreateWithoutUsersInput[] | AccountUncheckedCreateWithoutUsersInput[]
-    connectOrCreate?: AccountCreateOrConnectWithoutUsersInput | AccountCreateOrConnectWithoutUsersInput[]
-    connect?: AccountWhereUniqueInput | AccountWhereUniqueInput[]
-  }
-
-  export type UserContactUncheckedCreateNestedOneWithoutUserInput = {
-    create?: XOR<UserContactCreateWithoutUserInput, UserContactUncheckedCreateWithoutUserInput>
-    connectOrCreate?: UserContactCreateOrConnectWithoutUserInput
-    connect?: UserContactWhereUniqueInput
-  }
-
-  export type PostUncheckedCreateNestedManyWithoutAuthorInput = {
-    create?: XOR<PostCreateWithoutAuthorInput, PostUncheckedCreateWithoutAuthorInput> | PostCreateWithoutAuthorInput[] | PostUncheckedCreateWithoutAuthorInput[]
-    connectOrCreate?: PostCreateOrConnectWithoutAuthorInput | PostCreateOrConnectWithoutAuthorInput[]
-    createMany?: PostCreateManyAuthorInputEnvelope
-    connect?: PostWhereUniqueInput | PostWhereUniqueInput[]
-  }
-
-  export type UserProfileUncheckedCreateNestedOneWithoutUserInput = {
-    create?: XOR<UserProfileCreateWithoutUserInput, UserProfileUncheckedCreateWithoutUserInput>
-    connectOrCreate?: UserProfileCreateOrConnectWithoutUserInput
-    connect?: UserProfileWhereUniqueInput
-  }
-
-  export type PageUncheckedCreateNestedManyWithoutAuthorInput = {
-    create?: XOR<PageCreateWithoutAuthorInput, PageUncheckedCreateWithoutAuthorInput> | PageCreateWithoutAuthorInput[] | PageUncheckedCreateWithoutAuthorInput[]
-    connectOrCreate?: PageCreateOrConnectWithoutAuthorInput | PageCreateOrConnectWithoutAuthorInput[]
-    createMany?: PageCreateManyAuthorInputEnvelope
-    connect?: PageWhereUniqueInput | PageWhereUniqueInput[]
-  }
-
-  export type AccountUncheckedCreateNestedManyWithoutUsersInput = {
-    create?: XOR<AccountCreateWithoutUsersInput, AccountUncheckedCreateWithoutUsersInput> | AccountCreateWithoutUsersInput[] | AccountUncheckedCreateWithoutUsersInput[]
-    connectOrCreate?: AccountCreateOrConnectWithoutUsersInput | AccountCreateOrConnectWithoutUsersInput[]
-    connect?: AccountWhereUniqueInput | AccountWhereUniqueInput[]
-  }
-
-  export type EnumUserRoleFieldUpdateOperationsInput = {
-    set?: $Enums.UserRole
-  }
-
-  export type UserContactUpdateOneWithoutUserNestedInput = {
-    create?: XOR<UserContactCreateWithoutUserInput, UserContactUncheckedCreateWithoutUserInput>
-    connectOrCreate?: UserContactCreateOrConnectWithoutUserInput
-    upsert?: UserContactUpsertWithoutUserInput
-    disconnect?: UserContactWhereInput | boolean
-    delete?: UserContactWhereInput | boolean
-    connect?: UserContactWhereUniqueInput
-    update?: XOR<XOR<UserContactUpdateToOneWithWhereWithoutUserInput, UserContactUpdateWithoutUserInput>, UserContactUncheckedUpdateWithoutUserInput>
-  }
-
-  export type PostUpdateManyWithoutAuthorNestedInput = {
-    create?: XOR<PostCreateWithoutAuthorInput, PostUncheckedCreateWithoutAuthorInput> | PostCreateWithoutAuthorInput[] | PostUncheckedCreateWithoutAuthorInput[]
-    connectOrCreate?: PostCreateOrConnectWithoutAuthorInput | PostCreateOrConnectWithoutAuthorInput[]
-    upsert?: PostUpsertWithWhereUniqueWithoutAuthorInput | PostUpsertWithWhereUniqueWithoutAuthorInput[]
-    createMany?: PostCreateManyAuthorInputEnvelope
-    set?: PostWhereUniqueInput | PostWhereUniqueInput[]
-    disconnect?: PostWhereUniqueInput | PostWhereUniqueInput[]
-    delete?: PostWhereUniqueInput | PostWhereUniqueInput[]
-    connect?: PostWhereUniqueInput | PostWhereUniqueInput[]
-    update?: PostUpdateWithWhereUniqueWithoutAuthorInput | PostUpdateWithWhereUniqueWithoutAuthorInput[]
-    updateMany?: PostUpdateManyWithWhereWithoutAuthorInput | PostUpdateManyWithWhereWithoutAuthorInput[]
-    deleteMany?: PostScalarWhereInput | PostScalarWhereInput[]
-  }
-
-  export type UserProfileUpdateOneWithoutUserNestedInput = {
-    create?: XOR<UserProfileCreateWithoutUserInput, UserProfileUncheckedCreateWithoutUserInput>
-    connectOrCreate?: UserProfileCreateOrConnectWithoutUserInput
-    upsert?: UserProfileUpsertWithoutUserInput
-    disconnect?: UserProfileWhereInput | boolean
-    delete?: UserProfileWhereInput | boolean
-    connect?: UserProfileWhereUniqueInput
-    update?: XOR<XOR<UserProfileUpdateToOneWithWhereWithoutUserInput, UserProfileUpdateWithoutUserInput>, UserProfileUncheckedUpdateWithoutUserInput>
-  }
-
-  export type PageUpdateManyWithoutAuthorNestedInput = {
-    create?: XOR<PageCreateWithoutAuthorInput, PageUncheckedCreateWithoutAuthorInput> | PageCreateWithoutAuthorInput[] | PageUncheckedCreateWithoutAuthorInput[]
-    connectOrCreate?: PageCreateOrConnectWithoutAuthorInput | PageCreateOrConnectWithoutAuthorInput[]
-    upsert?: PageUpsertWithWhereUniqueWithoutAuthorInput | PageUpsertWithWhereUniqueWithoutAuthorInput[]
-    createMany?: PageCreateManyAuthorInputEnvelope
-    set?: PageWhereUniqueInput | PageWhereUniqueInput[]
-    disconnect?: PageWhereUniqueInput | PageWhereUniqueInput[]
-    delete?: PageWhereUniqueInput | PageWhereUniqueInput[]
-    connect?: PageWhereUniqueInput | PageWhereUniqueInput[]
-    update?: PageUpdateWithWhereUniqueWithoutAuthorInput | PageUpdateWithWhereUniqueWithoutAuthorInput[]
-    updateMany?: PageUpdateManyWithWhereWithoutAuthorInput | PageUpdateManyWithWhereWithoutAuthorInput[]
-    deleteMany?: PageScalarWhereInput | PageScalarWhereInput[]
-  }
-
-  export type AccountUpdateManyWithoutUsersNestedInput = {
-    create?: XOR<AccountCreateWithoutUsersInput, AccountUncheckedCreateWithoutUsersInput> | AccountCreateWithoutUsersInput[] | AccountUncheckedCreateWithoutUsersInput[]
-    connectOrCreate?: AccountCreateOrConnectWithoutUsersInput | AccountCreateOrConnectWithoutUsersInput[]
-    upsert?: AccountUpsertWithWhereUniqueWithoutUsersInput | AccountUpsertWithWhereUniqueWithoutUsersInput[]
-    set?: AccountWhereUniqueInput | AccountWhereUniqueInput[]
-    disconnect?: AccountWhereUniqueInput | AccountWhereUniqueInput[]
-    delete?: AccountWhereUniqueInput | AccountWhereUniqueInput[]
-    connect?: AccountWhereUniqueInput | AccountWhereUniqueInput[]
-    update?: AccountUpdateWithWhereUniqueWithoutUsersInput | AccountUpdateWithWhereUniqueWithoutUsersInput[]
-    updateMany?: AccountUpdateManyWithWhereWithoutUsersInput | AccountUpdateManyWithWhereWithoutUsersInput[]
-    deleteMany?: AccountScalarWhereInput | AccountScalarWhereInput[]
-  }
-
-  export type UserContactUncheckedUpdateOneWithoutUserNestedInput = {
-    create?: XOR<UserContactCreateWithoutUserInput, UserContactUncheckedCreateWithoutUserInput>
-    connectOrCreate?: UserContactCreateOrConnectWithoutUserInput
-    upsert?: UserContactUpsertWithoutUserInput
-    disconnect?: UserContactWhereInput | boolean
-    delete?: UserContactWhereInput | boolean
-    connect?: UserContactWhereUniqueInput
-    update?: XOR<XOR<UserContactUpdateToOneWithWhereWithoutUserInput, UserContactUpdateWithoutUserInput>, UserContactUncheckedUpdateWithoutUserInput>
-  }
-
-  export type PostUncheckedUpdateManyWithoutAuthorNestedInput = {
-    create?: XOR<PostCreateWithoutAuthorInput, PostUncheckedCreateWithoutAuthorInput> | PostCreateWithoutAuthorInput[] | PostUncheckedCreateWithoutAuthorInput[]
-    connectOrCreate?: PostCreateOrConnectWithoutAuthorInput | PostCreateOrConnectWithoutAuthorInput[]
-    upsert?: PostUpsertWithWhereUniqueWithoutAuthorInput | PostUpsertWithWhereUniqueWithoutAuthorInput[]
-    createMany?: PostCreateManyAuthorInputEnvelope
-    set?: PostWhereUniqueInput | PostWhereUniqueInput[]
-    disconnect?: PostWhereUniqueInput | PostWhereUniqueInput[]
-    delete?: PostWhereUniqueInput | PostWhereUniqueInput[]
-    connect?: PostWhereUniqueInput | PostWhereUniqueInput[]
-    update?: PostUpdateWithWhereUniqueWithoutAuthorInput | PostUpdateWithWhereUniqueWithoutAuthorInput[]
-    updateMany?: PostUpdateManyWithWhereWithoutAuthorInput | PostUpdateManyWithWhereWithoutAuthorInput[]
-    deleteMany?: PostScalarWhereInput | PostScalarWhereInput[]
-  }
-
-  export type UserProfileUncheckedUpdateOneWithoutUserNestedInput = {
-    create?: XOR<UserProfileCreateWithoutUserInput, UserProfileUncheckedCreateWithoutUserInput>
-    connectOrCreate?: UserProfileCreateOrConnectWithoutUserInput
-    upsert?: UserProfileUpsertWithoutUserInput
-    disconnect?: UserProfileWhereInput | boolean
-    delete?: UserProfileWhereInput | boolean
-    connect?: UserProfileWhereUniqueInput
-    update?: XOR<XOR<UserProfileUpdateToOneWithWhereWithoutUserInput, UserProfileUpdateWithoutUserInput>, UserProfileUncheckedUpdateWithoutUserInput>
-  }
-
-  export type PageUncheckedUpdateManyWithoutAuthorNestedInput = {
-    create?: XOR<PageCreateWithoutAuthorInput, PageUncheckedCreateWithoutAuthorInput> | PageCreateWithoutAuthorInput[] | PageUncheckedCreateWithoutAuthorInput[]
-    connectOrCreate?: PageCreateOrConnectWithoutAuthorInput | PageCreateOrConnectWithoutAuthorInput[]
-    upsert?: PageUpsertWithWhereUniqueWithoutAuthorInput | PageUpsertWithWhereUniqueWithoutAuthorInput[]
-    createMany?: PageCreateManyAuthorInputEnvelope
-    set?: PageWhereUniqueInput | PageWhereUniqueInput[]
-    disconnect?: PageWhereUniqueInput | PageWhereUniqueInput[]
-    delete?: PageWhereUniqueInput | PageWhereUniqueInput[]
-    connect?: PageWhereUniqueInput | PageWhereUniqueInput[]
-    update?: PageUpdateWithWhereUniqueWithoutAuthorInput | PageUpdateWithWhereUniqueWithoutAuthorInput[]
-    updateMany?: PageUpdateManyWithWhereWithoutAuthorInput | PageUpdateManyWithWhereWithoutAuthorInput[]
-    deleteMany?: PageScalarWhereInput | PageScalarWhereInput[]
-  }
-
-  export type AccountUncheckedUpdateManyWithoutUsersNestedInput = {
-    create?: XOR<AccountCreateWithoutUsersInput, AccountUncheckedCreateWithoutUsersInput> | AccountCreateWithoutUsersInput[] | AccountUncheckedCreateWithoutUsersInput[]
-    connectOrCreate?: AccountCreateOrConnectWithoutUsersInput | AccountCreateOrConnectWithoutUsersInput[]
-    upsert?: AccountUpsertWithWhereUniqueWithoutUsersInput | AccountUpsertWithWhereUniqueWithoutUsersInput[]
-    set?: AccountWhereUniqueInput | AccountWhereUniqueInput[]
-    disconnect?: AccountWhereUniqueInput | AccountWhereUniqueInput[]
-    delete?: AccountWhereUniqueInput | AccountWhereUniqueInput[]
-    connect?: AccountWhereUniqueInput | AccountWhereUniqueInput[]
-    update?: AccountUpdateWithWhereUniqueWithoutUsersInput | AccountUpdateWithWhereUniqueWithoutUsersInput[]
-    updateMany?: AccountUpdateManyWithWhereWithoutUsersInput | AccountUpdateManyWithWhereWithoutUsersInput[]
-    deleteMany?: AccountScalarWhereInput | AccountScalarWhereInput[]
-  }
-
   export type PostCreateNestedManyWithoutCategoriesInput = {
     create?: XOR<PostCreateWithoutCategoriesInput, PostUncheckedCreateWithoutCategoriesInput> | PostCreateWithoutCategoriesInput[] | PostUncheckedCreateWithoutCategoriesInput[]
     connectOrCreate?: PostCreateOrConnectWithoutCategoriesInput | PostCreateOrConnectWithoutCategoriesInput[]
@@ -21919,17 +20683,6 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
-  export type NestedDateTimeFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
-  }
-
   export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
@@ -21939,6 +20692,24 @@ export namespace Prisma {
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
+  export type NestedEnumUserRoleFilter<$PrismaModel = never> = {
+    equals?: $Enums.UserRole | EnumUserRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumUserRoleFilter<$PrismaModel> | $Enums.UserRole
+  }
+
+  export type NestedDateTimeFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
   export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
@@ -22013,20 +20784,6 @@ export namespace Prisma {
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
-  export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedDateTimeFilter<$PrismaModel>
-    _max?: NestedDateTimeFilter<$PrismaModel>
-  }
-
   export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
@@ -22039,6 +20796,30 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedDateTimeNullableFilter<$PrismaModel>
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
+  export type NestedEnumUserRoleWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.UserRole | EnumUserRoleFieldRefInput<$PrismaModel>
+    in?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
+    notIn?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
+    not?: NestedEnumUserRoleWithAggregatesFilter<$PrismaModel> | $Enums.UserRole
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumUserRoleFilter<$PrismaModel>
+    _max?: NestedEnumUserRoleFilter<$PrismaModel>
+  }
+
+  export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeWithAggregatesFilter<$PrismaModel> | Date | string
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedDateTimeFilter<$PrismaModel>
+    _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
   export type NestedEnumContentStatusFilter<$PrismaModel = never> = {
@@ -22071,21 +20852,351 @@ export namespace Prisma {
     _max?: NestedBoolFilter<$PrismaModel>
   }
 
-  export type NestedEnumUserRoleFilter<$PrismaModel = never> = {
-    equals?: $Enums.UserRole | EnumUserRoleFieldRefInput<$PrismaModel>
-    in?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
-    notIn?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
-    not?: NestedEnumUserRoleFilter<$PrismaModel> | $Enums.UserRole
+  export type UserContactCreateWithoutUserInput = {
+    createdAt?: Date | string
+    updatedAt?: Date | string | null
+    email?: ContactEmailCreateNestedOneWithoutContactInput
+    phone?: ContactPhoneCreateNestedOneWithoutContactInput
+    address?: ContactAddressCreateNestedOneWithoutContactInput
+    website?: ContactWebsiteCreateNestedOneWithoutContactInput
   }
 
-  export type NestedEnumUserRoleWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.UserRole | EnumUserRoleFieldRefInput<$PrismaModel>
-    in?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
-    notIn?: $Enums.UserRole[] | ListEnumUserRoleFieldRefInput<$PrismaModel>
-    not?: NestedEnumUserRoleWithAggregatesFilter<$PrismaModel> | $Enums.UserRole
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumUserRoleFilter<$PrismaModel>
-    _max?: NestedEnumUserRoleFilter<$PrismaModel>
+  export type UserContactUncheckedCreateWithoutUserInput = {
+    id?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string | null
+    email?: ContactEmailUncheckedCreateNestedOneWithoutContactInput
+    phone?: ContactPhoneUncheckedCreateNestedOneWithoutContactInput
+    address?: ContactAddressUncheckedCreateNestedOneWithoutContactInput
+    website?: ContactWebsiteUncheckedCreateNestedOneWithoutContactInput
+  }
+
+  export type UserContactCreateOrConnectWithoutUserInput = {
+    where: UserContactWhereUniqueInput
+    create: XOR<UserContactCreateWithoutUserInput, UserContactUncheckedCreateWithoutUserInput>
+  }
+
+  export type UserProfileCreateWithoutUserInput = {
+    bio?: string | null
+    active?: boolean
+    slug?: string | null
+    imageUrl?: string | null
+    subsiteRef?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string | null
+  }
+
+  export type UserProfileUncheckedCreateWithoutUserInput = {
+    id?: number
+    bio?: string | null
+    active?: boolean
+    slug?: string | null
+    imageUrl?: string | null
+    subsiteRef?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string | null
+  }
+
+  export type UserProfileCreateOrConnectWithoutUserInput = {
+    where: UserProfileWhereUniqueInput
+    create: XOR<UserProfileCreateWithoutUserInput, UserProfileUncheckedCreateWithoutUserInput>
+  }
+
+  export type PostCreateWithoutAuthorInput = {
+    title: string
+    overview?: string
+    content?: string | null
+    slug?: string | null
+    coverImage?: string | null
+    status?: $Enums.ContentStatus
+    published?: boolean
+    publishedAt?: Date | string | null
+    deleted?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string | null
+    categories?: CategoryCreateNestedManyWithoutPostsInput
+    tags?: TagCreateNestedManyWithoutPostsInput
+    subsite: SubsiteCreateNestedOneWithoutPostsInput
+  }
+
+  export type PostUncheckedCreateWithoutAuthorInput = {
+    id?: number
+    title: string
+    overview?: string
+    content?: string | null
+    slug?: string | null
+    coverImage?: string | null
+    status?: $Enums.ContentStatus
+    published?: boolean
+    publishedAt?: Date | string | null
+    deleted?: boolean
+    subsiteId: number
+    createdAt?: Date | string
+    updatedAt?: Date | string | null
+    categories?: CategoryUncheckedCreateNestedManyWithoutPostsInput
+    tags?: TagUncheckedCreateNestedManyWithoutPostsInput
+  }
+
+  export type PostCreateOrConnectWithoutAuthorInput = {
+    where: PostWhereUniqueInput
+    create: XOR<PostCreateWithoutAuthorInput, PostUncheckedCreateWithoutAuthorInput>
+  }
+
+  export type PostCreateManyAuthorInputEnvelope = {
+    data: PostCreateManyAuthorInput | PostCreateManyAuthorInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type PageCreateWithoutAuthorInput = {
+    title: string
+    overview?: string
+    content?: string | null
+    slug?: string | null
+    status?: $Enums.ContentStatus
+    publishedAt?: Date | string | null
+    published?: boolean
+    coverImage?: string | null
+    layoutTemplate?: string | null
+    theme?: string | null
+    metaData?: string | null
+    seoSettings?: string | null
+    analyticsCodes?: string | null
+    showOnNav?: boolean
+    deleted?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string | null
+    categories?: CategoryCreateNestedManyWithoutPagesInput
+    tags?: TagCreateNestedManyWithoutPagesInput
+    subsite: SubsiteCreateNestedOneWithoutPagesInput
+  }
+
+  export type PageUncheckedCreateWithoutAuthorInput = {
+    id?: number
+    title: string
+    overview?: string
+    content?: string | null
+    slug?: string | null
+    status?: $Enums.ContentStatus
+    publishedAt?: Date | string | null
+    published?: boolean
+    coverImage?: string | null
+    layoutTemplate?: string | null
+    theme?: string | null
+    metaData?: string | null
+    seoSettings?: string | null
+    analyticsCodes?: string | null
+    showOnNav?: boolean
+    deleted?: boolean
+    subsiteId: number
+    createdAt?: Date | string
+    updatedAt?: Date | string | null
+    categories?: CategoryUncheckedCreateNestedManyWithoutPagesInput
+    tags?: TagUncheckedCreateNestedManyWithoutPagesInput
+  }
+
+  export type PageCreateOrConnectWithoutAuthorInput = {
+    where: PageWhereUniqueInput
+    create: XOR<PageCreateWithoutAuthorInput, PageUncheckedCreateWithoutAuthorInput>
+  }
+
+  export type PageCreateManyAuthorInputEnvelope = {
+    data: PageCreateManyAuthorInput | PageCreateManyAuthorInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type AccountCreateWithoutAdminInput = {
+    name: string
+    accountRef?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string | null
+    subsites?: SubsiteCreateNestedManyWithoutAccountInput
+  }
+
+  export type AccountUncheckedCreateWithoutAdminInput = {
+    id?: number
+    name: string
+    accountRef?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string | null
+    subsites?: SubsiteUncheckedCreateNestedManyWithoutAccountInput
+  }
+
+  export type AccountCreateOrConnectWithoutAdminInput = {
+    where: AccountWhereUniqueInput
+    create: XOR<AccountCreateWithoutAdminInput, AccountUncheckedCreateWithoutAdminInput>
+  }
+
+  export type AccountCreateManyAdminInputEnvelope = {
+    data: AccountCreateManyAdminInput | AccountCreateManyAdminInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type UserContactUpsertWithoutUserInput = {
+    update: XOR<UserContactUpdateWithoutUserInput, UserContactUncheckedUpdateWithoutUserInput>
+    create: XOR<UserContactCreateWithoutUserInput, UserContactUncheckedCreateWithoutUserInput>
+    where?: UserContactWhereInput
+  }
+
+  export type UserContactUpdateToOneWithWhereWithoutUserInput = {
+    where?: UserContactWhereInput
+    data: XOR<UserContactUpdateWithoutUserInput, UserContactUncheckedUpdateWithoutUserInput>
+  }
+
+  export type UserContactUpdateWithoutUserInput = {
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    email?: ContactEmailUpdateOneWithoutContactNestedInput
+    phone?: ContactPhoneUpdateOneWithoutContactNestedInput
+    address?: ContactAddressUpdateOneWithoutContactNestedInput
+    website?: ContactWebsiteUpdateOneWithoutContactNestedInput
+  }
+
+  export type UserContactUncheckedUpdateWithoutUserInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    email?: ContactEmailUncheckedUpdateOneWithoutContactNestedInput
+    phone?: ContactPhoneUncheckedUpdateOneWithoutContactNestedInput
+    address?: ContactAddressUncheckedUpdateOneWithoutContactNestedInput
+    website?: ContactWebsiteUncheckedUpdateOneWithoutContactNestedInput
+  }
+
+  export type UserProfileUpsertWithoutUserInput = {
+    update: XOR<UserProfileUpdateWithoutUserInput, UserProfileUncheckedUpdateWithoutUserInput>
+    create: XOR<UserProfileCreateWithoutUserInput, UserProfileUncheckedCreateWithoutUserInput>
+    where?: UserProfileWhereInput
+  }
+
+  export type UserProfileUpdateToOneWithWhereWithoutUserInput = {
+    where?: UserProfileWhereInput
+    data: XOR<UserProfileUpdateWithoutUserInput, UserProfileUncheckedUpdateWithoutUserInput>
+  }
+
+  export type UserProfileUpdateWithoutUserInput = {
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    subsiteRef?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type UserProfileUncheckedUpdateWithoutUserInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    active?: BoolFieldUpdateOperationsInput | boolean
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    subsiteRef?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type PostUpsertWithWhereUniqueWithoutAuthorInput = {
+    where: PostWhereUniqueInput
+    update: XOR<PostUpdateWithoutAuthorInput, PostUncheckedUpdateWithoutAuthorInput>
+    create: XOR<PostCreateWithoutAuthorInput, PostUncheckedCreateWithoutAuthorInput>
+  }
+
+  export type PostUpdateWithWhereUniqueWithoutAuthorInput = {
+    where: PostWhereUniqueInput
+    data: XOR<PostUpdateWithoutAuthorInput, PostUncheckedUpdateWithoutAuthorInput>
+  }
+
+  export type PostUpdateManyWithWhereWithoutAuthorInput = {
+    where: PostScalarWhereInput
+    data: XOR<PostUpdateManyMutationInput, PostUncheckedUpdateManyWithoutAuthorInput>
+  }
+
+  export type PostScalarWhereInput = {
+    AND?: PostScalarWhereInput | PostScalarWhereInput[]
+    OR?: PostScalarWhereInput[]
+    NOT?: PostScalarWhereInput | PostScalarWhereInput[]
+    id?: IntFilter<"Post"> | number
+    title?: StringFilter<"Post"> | string
+    overview?: StringFilter<"Post"> | string
+    content?: StringNullableFilter<"Post"> | string | null
+    slug?: StringNullableFilter<"Post"> | string | null
+    coverImage?: StringNullableFilter<"Post"> | string | null
+    status?: EnumContentStatusFilter<"Post"> | $Enums.ContentStatus
+    published?: BoolFilter<"Post"> | boolean
+    publishedAt?: DateTimeNullableFilter<"Post"> | Date | string | null
+    deleted?: BoolFilter<"Post"> | boolean
+    authorId?: IntFilter<"Post"> | number
+    subsiteId?: IntFilter<"Post"> | number
+    createdAt?: DateTimeFilter<"Post"> | Date | string
+    updatedAt?: DateTimeNullableFilter<"Post"> | Date | string | null
+  }
+
+  export type PageUpsertWithWhereUniqueWithoutAuthorInput = {
+    where: PageWhereUniqueInput
+    update: XOR<PageUpdateWithoutAuthorInput, PageUncheckedUpdateWithoutAuthorInput>
+    create: XOR<PageCreateWithoutAuthorInput, PageUncheckedCreateWithoutAuthorInput>
+  }
+
+  export type PageUpdateWithWhereUniqueWithoutAuthorInput = {
+    where: PageWhereUniqueInput
+    data: XOR<PageUpdateWithoutAuthorInput, PageUncheckedUpdateWithoutAuthorInput>
+  }
+
+  export type PageUpdateManyWithWhereWithoutAuthorInput = {
+    where: PageScalarWhereInput
+    data: XOR<PageUpdateManyMutationInput, PageUncheckedUpdateManyWithoutAuthorInput>
+  }
+
+  export type PageScalarWhereInput = {
+    AND?: PageScalarWhereInput | PageScalarWhereInput[]
+    OR?: PageScalarWhereInput[]
+    NOT?: PageScalarWhereInput | PageScalarWhereInput[]
+    id?: IntFilter<"Page"> | number
+    title?: StringFilter<"Page"> | string
+    overview?: StringFilter<"Page"> | string
+    content?: StringNullableFilter<"Page"> | string | null
+    slug?: StringNullableFilter<"Page"> | string | null
+    status?: EnumContentStatusFilter<"Page"> | $Enums.ContentStatus
+    publishedAt?: DateTimeNullableFilter<"Page"> | Date | string | null
+    published?: BoolFilter<"Page"> | boolean
+    coverImage?: StringNullableFilter<"Page"> | string | null
+    layoutTemplate?: StringNullableFilter<"Page"> | string | null
+    theme?: StringNullableFilter<"Page"> | string | null
+    metaData?: StringNullableFilter<"Page"> | string | null
+    seoSettings?: StringNullableFilter<"Page"> | string | null
+    analyticsCodes?: StringNullableFilter<"Page"> | string | null
+    showOnNav?: BoolFilter<"Page"> | boolean
+    deleted?: BoolFilter<"Page"> | boolean
+    authorId?: IntFilter<"Page"> | number
+    subsiteId?: IntFilter<"Page"> | number
+    createdAt?: DateTimeFilter<"Page"> | Date | string
+    updatedAt?: DateTimeNullableFilter<"Page"> | Date | string | null
+  }
+
+  export type AccountUpsertWithWhereUniqueWithoutAdminInput = {
+    where: AccountWhereUniqueInput
+    update: XOR<AccountUpdateWithoutAdminInput, AccountUncheckedUpdateWithoutAdminInput>
+    create: XOR<AccountCreateWithoutAdminInput, AccountUncheckedCreateWithoutAdminInput>
+  }
+
+  export type AccountUpdateWithWhereUniqueWithoutAdminInput = {
+    where: AccountWhereUniqueInput
+    data: XOR<AccountUpdateWithoutAdminInput, AccountUncheckedUpdateWithoutAdminInput>
+  }
+
+  export type AccountUpdateManyWithWhereWithoutAdminInput = {
+    where: AccountScalarWhereInput
+    data: XOR<AccountUpdateManyMutationInput, AccountUncheckedUpdateManyWithoutAdminInput>
+  }
+
+  export type AccountScalarWhereInput = {
+    AND?: AccountScalarWhereInput | AccountScalarWhereInput[]
+    OR?: AccountScalarWhereInput[]
+    NOT?: AccountScalarWhereInput | AccountScalarWhereInput[]
+    id?: IntFilter<"Account"> | number
+    name?: StringFilter<"Account"> | string
+    accountRef?: StringFilter<"Account"> | string
+    adminId?: IntFilter<"Account"> | number
+    createdAt?: DateTimeFilter<"Account"> | Date | string
+    updatedAt?: DateTimeNullableFilter<"Account"> | Date | string | null
   }
 
   export type UserCreateWithoutAccountsInput = {
@@ -22108,8 +21219,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string | null
     contact?: UserContactCreateNestedOneWithoutUserInput
-    posts?: PostCreateNestedManyWithoutAuthorInput
     profile?: UserProfileCreateNestedOneWithoutUserInput
+    posts?: PostCreateNestedManyWithoutAuthorInput
     pages?: PageCreateNestedManyWithoutAuthorInput
   }
 
@@ -22134,8 +21245,8 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string | null
     contact?: UserContactUncheckedCreateNestedOneWithoutUserInput
-    posts?: PostUncheckedCreateNestedManyWithoutAuthorInput
     profile?: UserProfileUncheckedCreateNestedOneWithoutUserInput
+    posts?: PostUncheckedCreateNestedManyWithoutAuthorInput
     pages?: PageUncheckedCreateNestedManyWithoutAuthorInput
   }
 
@@ -22144,91 +21255,133 @@ export namespace Prisma {
     create: XOR<UserCreateWithoutAccountsInput, UserUncheckedCreateWithoutAccountsInput>
   }
 
-  export type SubsiteCreateWithoutAccountsInput = {
+  export type SubsiteCreateWithoutAccountInput = {
     name: string
     slug?: string | null
     subsiteRef?: string
+    logoUrl?: string | null
+    logoSvg?: string | null
+    navConfig?: string | null
+    headerConfig?: string | null
+    footerConfig?: string | null
+    siteVisibility?: string | null
+    siteLanguage?: string | null
     domainName?: string | null
     domainStatus?: string | null
     domainCreatedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string | null
-    config?: SubsiteConfigCreateNestedManyWithoutSubsiteInput
+    posts?: PostCreateNestedManyWithoutSubsiteInput
+    pages?: PageCreateNestedManyWithoutSubsiteInput
   }
 
-  export type SubsiteUncheckedCreateWithoutAccountsInput = {
+  export type SubsiteUncheckedCreateWithoutAccountInput = {
     id?: number
     name: string
     slug?: string | null
     subsiteRef?: string
+    logoUrl?: string | null
+    logoSvg?: string | null
+    navConfig?: string | null
+    headerConfig?: string | null
+    footerConfig?: string | null
+    siteVisibility?: string | null
+    siteLanguage?: string | null
     domainName?: string | null
     domainStatus?: string | null
     domainCreatedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string | null
-    config?: SubsiteConfigUncheckedCreateNestedManyWithoutSubsiteInput
+    posts?: PostUncheckedCreateNestedManyWithoutSubsiteInput
+    pages?: PageUncheckedCreateNestedManyWithoutSubsiteInput
   }
 
-  export type SubsiteCreateOrConnectWithoutAccountsInput = {
+  export type SubsiteCreateOrConnectWithoutAccountInput = {
     where: SubsiteWhereUniqueInput
-    create: XOR<SubsiteCreateWithoutAccountsInput, SubsiteUncheckedCreateWithoutAccountsInput>
+    create: XOR<SubsiteCreateWithoutAccountInput, SubsiteUncheckedCreateWithoutAccountInput>
   }
 
-  export type UserUpsertWithWhereUniqueWithoutAccountsInput = {
-    where: UserWhereUniqueInput
+  export type SubsiteCreateManyAccountInputEnvelope = {
+    data: SubsiteCreateManyAccountInput | SubsiteCreateManyAccountInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type UserUpsertWithoutAccountsInput = {
     update: XOR<UserUpdateWithoutAccountsInput, UserUncheckedUpdateWithoutAccountsInput>
     create: XOR<UserCreateWithoutAccountsInput, UserUncheckedCreateWithoutAccountsInput>
+    where?: UserWhereInput
   }
 
-  export type UserUpdateWithWhereUniqueWithoutAccountsInput = {
-    where: UserWhereUniqueInput
+  export type UserUpdateToOneWithWhereWithoutAccountsInput = {
+    where?: UserWhereInput
     data: XOR<UserUpdateWithoutAccountsInput, UserUncheckedUpdateWithoutAccountsInput>
   }
 
-  export type UserUpdateManyWithWhereWithoutAccountsInput = {
-    where: UserScalarWhereInput
-    data: XOR<UserUpdateManyMutationInput, UserUncheckedUpdateManyWithoutAccountsInput>
+  export type UserUpdateWithoutAccountsInput = {
+    email?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    token?: NullableStringFieldUpdateOperationsInput | string | null
+    prefix?: NullableStringFieldUpdateOperationsInput | string | null
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    middleName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    suffix?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredName?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    local?: NullableStringFieldUpdateOperationsInput | string | null
+    timeZone?: NullableStringFieldUpdateOperationsInput | string | null
+    lastLoginTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    contact?: UserContactUpdateOneWithoutUserNestedInput
+    profile?: UserProfileUpdateOneWithoutUserNestedInput
+    posts?: PostUpdateManyWithoutAuthorNestedInput
+    pages?: PageUpdateManyWithoutAuthorNestedInput
   }
 
-  export type UserScalarWhereInput = {
-    AND?: UserScalarWhereInput | UserScalarWhereInput[]
-    OR?: UserScalarWhereInput[]
-    NOT?: UserScalarWhereInput | UserScalarWhereInput[]
-    id?: IntFilter<"User"> | number
-    email?: StringFilter<"User"> | string
-    name?: StringNullableFilter<"User"> | string | null
-    description?: StringNullableFilter<"User"> | string | null
-    token?: StringNullableFilter<"User"> | string | null
-    prefix?: StringNullableFilter<"User"> | string | null
-    firstName?: StringNullableFilter<"User"> | string | null
-    middleName?: StringNullableFilter<"User"> | string | null
-    lastName?: StringNullableFilter<"User"> | string | null
-    suffix?: StringNullableFilter<"User"> | string | null
-    preferredName?: StringNullableFilter<"User"> | string | null
-    gender?: StringNullableFilter<"User"> | string | null
-    birthDate?: DateTimeNullableFilter<"User"> | Date | string | null
-    local?: StringNullableFilter<"User"> | string | null
-    timeZone?: StringNullableFilter<"User"> | string | null
-    lastLoginTime?: DateTimeNullableFilter<"User"> | Date | string | null
-    role?: EnumUserRoleFilter<"User"> | $Enums.UserRole
-    createdAt?: DateTimeFilter<"User"> | Date | string
-    updatedAt?: DateTimeNullableFilter<"User"> | Date | string | null
+  export type UserUncheckedUpdateWithoutAccountsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    email?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    token?: NullableStringFieldUpdateOperationsInput | string | null
+    prefix?: NullableStringFieldUpdateOperationsInput | string | null
+    firstName?: NullableStringFieldUpdateOperationsInput | string | null
+    middleName?: NullableStringFieldUpdateOperationsInput | string | null
+    lastName?: NullableStringFieldUpdateOperationsInput | string | null
+    suffix?: NullableStringFieldUpdateOperationsInput | string | null
+    preferredName?: NullableStringFieldUpdateOperationsInput | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    local?: NullableStringFieldUpdateOperationsInput | string | null
+    timeZone?: NullableStringFieldUpdateOperationsInput | string | null
+    lastLoginTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    contact?: UserContactUncheckedUpdateOneWithoutUserNestedInput
+    profile?: UserProfileUncheckedUpdateOneWithoutUserNestedInput
+    posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput
+    pages?: PageUncheckedUpdateManyWithoutAuthorNestedInput
   }
 
-  export type SubsiteUpsertWithWhereUniqueWithoutAccountsInput = {
+  export type SubsiteUpsertWithWhereUniqueWithoutAccountInput = {
     where: SubsiteWhereUniqueInput
-    update: XOR<SubsiteUpdateWithoutAccountsInput, SubsiteUncheckedUpdateWithoutAccountsInput>
-    create: XOR<SubsiteCreateWithoutAccountsInput, SubsiteUncheckedCreateWithoutAccountsInput>
+    update: XOR<SubsiteUpdateWithoutAccountInput, SubsiteUncheckedUpdateWithoutAccountInput>
+    create: XOR<SubsiteCreateWithoutAccountInput, SubsiteUncheckedCreateWithoutAccountInput>
   }
 
-  export type SubsiteUpdateWithWhereUniqueWithoutAccountsInput = {
+  export type SubsiteUpdateWithWhereUniqueWithoutAccountInput = {
     where: SubsiteWhereUniqueInput
-    data: XOR<SubsiteUpdateWithoutAccountsInput, SubsiteUncheckedUpdateWithoutAccountsInput>
+    data: XOR<SubsiteUpdateWithoutAccountInput, SubsiteUncheckedUpdateWithoutAccountInput>
   }
 
-  export type SubsiteUpdateManyWithWhereWithoutAccountsInput = {
+  export type SubsiteUpdateManyWithWhereWithoutAccountInput = {
     where: SubsiteScalarWhereInput
-    data: XOR<SubsiteUpdateManyMutationInput, SubsiteUncheckedUpdateManyWithoutAccountsInput>
+    data: XOR<SubsiteUpdateManyMutationInput, SubsiteUncheckedUpdateManyWithoutAccountInput>
   }
 
   export type SubsiteScalarWhereInput = {
@@ -22239,30 +21392,138 @@ export namespace Prisma {
     name?: StringFilter<"Subsite"> | string
     slug?: StringNullableFilter<"Subsite"> | string | null
     subsiteRef?: StringFilter<"Subsite"> | string
+    logoUrl?: StringNullableFilter<"Subsite"> | string | null
+    logoSvg?: StringNullableFilter<"Subsite"> | string | null
+    navConfig?: StringNullableFilter<"Subsite"> | string | null
+    headerConfig?: StringNullableFilter<"Subsite"> | string | null
+    footerConfig?: StringNullableFilter<"Subsite"> | string | null
+    siteVisibility?: StringNullableFilter<"Subsite"> | string | null
+    siteLanguage?: StringNullableFilter<"Subsite"> | string | null
     domainName?: StringNullableFilter<"Subsite"> | string | null
     domainStatus?: StringNullableFilter<"Subsite"> | string | null
     domainCreatedAt?: DateTimeNullableFilter<"Subsite"> | Date | string | null
+    accountId?: IntFilter<"Subsite"> | number
     createdAt?: DateTimeFilter<"Subsite"> | Date | string
     updatedAt?: DateTimeNullableFilter<"Subsite"> | Date | string | null
   }
 
+  export type PostCreateWithoutSubsiteInput = {
+    title: string
+    overview?: string
+    content?: string | null
+    slug?: string | null
+    coverImage?: string | null
+    status?: $Enums.ContentStatus
+    published?: boolean
+    publishedAt?: Date | string | null
+    deleted?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string | null
+    author: UserCreateNestedOneWithoutPostsInput
+    categories?: CategoryCreateNestedManyWithoutPostsInput
+    tags?: TagCreateNestedManyWithoutPostsInput
+  }
+
+  export type PostUncheckedCreateWithoutSubsiteInput = {
+    id?: number
+    title: string
+    overview?: string
+    content?: string | null
+    slug?: string | null
+    coverImage?: string | null
+    status?: $Enums.ContentStatus
+    published?: boolean
+    publishedAt?: Date | string | null
+    deleted?: boolean
+    authorId: number
+    createdAt?: Date | string
+    updatedAt?: Date | string | null
+    categories?: CategoryUncheckedCreateNestedManyWithoutPostsInput
+    tags?: TagUncheckedCreateNestedManyWithoutPostsInput
+  }
+
+  export type PostCreateOrConnectWithoutSubsiteInput = {
+    where: PostWhereUniqueInput
+    create: XOR<PostCreateWithoutSubsiteInput, PostUncheckedCreateWithoutSubsiteInput>
+  }
+
+  export type PostCreateManySubsiteInputEnvelope = {
+    data: PostCreateManySubsiteInput | PostCreateManySubsiteInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type PageCreateWithoutSubsiteInput = {
+    title: string
+    overview?: string
+    content?: string | null
+    slug?: string | null
+    status?: $Enums.ContentStatus
+    publishedAt?: Date | string | null
+    published?: boolean
+    coverImage?: string | null
+    layoutTemplate?: string | null
+    theme?: string | null
+    metaData?: string | null
+    seoSettings?: string | null
+    analyticsCodes?: string | null
+    showOnNav?: boolean
+    deleted?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string | null
+    author: UserCreateNestedOneWithoutPagesInput
+    categories?: CategoryCreateNestedManyWithoutPagesInput
+    tags?: TagCreateNestedManyWithoutPagesInput
+  }
+
+  export type PageUncheckedCreateWithoutSubsiteInput = {
+    id?: number
+    title: string
+    overview?: string
+    content?: string | null
+    slug?: string | null
+    status?: $Enums.ContentStatus
+    publishedAt?: Date | string | null
+    published?: boolean
+    coverImage?: string | null
+    layoutTemplate?: string | null
+    theme?: string | null
+    metaData?: string | null
+    seoSettings?: string | null
+    analyticsCodes?: string | null
+    showOnNav?: boolean
+    deleted?: boolean
+    authorId: number
+    createdAt?: Date | string
+    updatedAt?: Date | string | null
+    categories?: CategoryUncheckedCreateNestedManyWithoutPagesInput
+    tags?: TagUncheckedCreateNestedManyWithoutPagesInput
+  }
+
+  export type PageCreateOrConnectWithoutSubsiteInput = {
+    where: PageWhereUniqueInput
+    create: XOR<PageCreateWithoutSubsiteInput, PageUncheckedCreateWithoutSubsiteInput>
+  }
+
+  export type PageCreateManySubsiteInputEnvelope = {
+    data: PageCreateManySubsiteInput | PageCreateManySubsiteInput[]
+    skipDuplicates?: boolean
+  }
+
   export type AccountCreateWithoutSubsitesInput = {
     name: string
-    slug?: string | null
     accountRef?: string
     createdAt?: Date | string
     updatedAt?: Date | string | null
-    users?: UserCreateNestedManyWithoutAccountsInput
+    admin: UserCreateNestedOneWithoutAccountsInput
   }
 
   export type AccountUncheckedCreateWithoutSubsitesInput = {
     id?: number
     name: string
-    slug?: string | null
     accountRef?: string
+    adminId: number
     createdAt?: Date | string
     updatedAt?: Date | string | null
-    users?: UserUncheckedCreateNestedManyWithoutAccountsInput
   }
 
   export type AccountCreateOrConnectWithoutSubsitesInput = {
@@ -22270,169 +21531,64 @@ export namespace Prisma {
     create: XOR<AccountCreateWithoutSubsitesInput, AccountUncheckedCreateWithoutSubsitesInput>
   }
 
-  export type SubsiteConfigCreateWithoutSubsiteInput = {
-    name: string
-    logoUrl?: string | null
-    logoSvg?: string | null
-    navConfig?: string | null
-    headerConfig?: string | null
-    footerConfig?: string | null
-    siteVisibility?: string | null
-    siteLanguage?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string | null
+  export type PostUpsertWithWhereUniqueWithoutSubsiteInput = {
+    where: PostWhereUniqueInput
+    update: XOR<PostUpdateWithoutSubsiteInput, PostUncheckedUpdateWithoutSubsiteInput>
+    create: XOR<PostCreateWithoutSubsiteInput, PostUncheckedCreateWithoutSubsiteInput>
   }
 
-  export type SubsiteConfigUncheckedCreateWithoutSubsiteInput = {
-    id?: number
-    name: string
-    logoUrl?: string | null
-    logoSvg?: string | null
-    navConfig?: string | null
-    headerConfig?: string | null
-    footerConfig?: string | null
-    siteVisibility?: string | null
-    siteLanguage?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string | null
+  export type PostUpdateWithWhereUniqueWithoutSubsiteInput = {
+    where: PostWhereUniqueInput
+    data: XOR<PostUpdateWithoutSubsiteInput, PostUncheckedUpdateWithoutSubsiteInput>
   }
 
-  export type SubsiteConfigCreateOrConnectWithoutSubsiteInput = {
-    where: SubsiteConfigWhereUniqueInput
-    create: XOR<SubsiteConfigCreateWithoutSubsiteInput, SubsiteConfigUncheckedCreateWithoutSubsiteInput>
+  export type PostUpdateManyWithWhereWithoutSubsiteInput = {
+    where: PostScalarWhereInput
+    data: XOR<PostUpdateManyMutationInput, PostUncheckedUpdateManyWithoutSubsiteInput>
   }
 
-  export type SubsiteConfigCreateManySubsiteInputEnvelope = {
-    data: SubsiteConfigCreateManySubsiteInput | SubsiteConfigCreateManySubsiteInput[]
-    skipDuplicates?: boolean
+  export type PageUpsertWithWhereUniqueWithoutSubsiteInput = {
+    where: PageWhereUniqueInput
+    update: XOR<PageUpdateWithoutSubsiteInput, PageUncheckedUpdateWithoutSubsiteInput>
+    create: XOR<PageCreateWithoutSubsiteInput, PageUncheckedCreateWithoutSubsiteInput>
   }
 
-  export type AccountUpsertWithWhereUniqueWithoutSubsitesInput = {
-    where: AccountWhereUniqueInput
+  export type PageUpdateWithWhereUniqueWithoutSubsiteInput = {
+    where: PageWhereUniqueInput
+    data: XOR<PageUpdateWithoutSubsiteInput, PageUncheckedUpdateWithoutSubsiteInput>
+  }
+
+  export type PageUpdateManyWithWhereWithoutSubsiteInput = {
+    where: PageScalarWhereInput
+    data: XOR<PageUpdateManyMutationInput, PageUncheckedUpdateManyWithoutSubsiteInput>
+  }
+
+  export type AccountUpsertWithoutSubsitesInput = {
     update: XOR<AccountUpdateWithoutSubsitesInput, AccountUncheckedUpdateWithoutSubsitesInput>
     create: XOR<AccountCreateWithoutSubsitesInput, AccountUncheckedCreateWithoutSubsitesInput>
+    where?: AccountWhereInput
   }
 
-  export type AccountUpdateWithWhereUniqueWithoutSubsitesInput = {
-    where: AccountWhereUniqueInput
+  export type AccountUpdateToOneWithWhereWithoutSubsitesInput = {
+    where?: AccountWhereInput
     data: XOR<AccountUpdateWithoutSubsitesInput, AccountUncheckedUpdateWithoutSubsitesInput>
   }
 
-  export type AccountUpdateManyWithWhereWithoutSubsitesInput = {
-    where: AccountScalarWhereInput
-    data: XOR<AccountUpdateManyMutationInput, AccountUncheckedUpdateManyWithoutSubsitesInput>
-  }
-
-  export type AccountScalarWhereInput = {
-    AND?: AccountScalarWhereInput | AccountScalarWhereInput[]
-    OR?: AccountScalarWhereInput[]
-    NOT?: AccountScalarWhereInput | AccountScalarWhereInput[]
-    id?: IntFilter<"Account"> | number
-    name?: StringFilter<"Account"> | string
-    slug?: StringNullableFilter<"Account"> | string | null
-    accountRef?: StringFilter<"Account"> | string
-    createdAt?: DateTimeFilter<"Account"> | Date | string
-    updatedAt?: DateTimeNullableFilter<"Account"> | Date | string | null
-  }
-
-  export type SubsiteConfigUpsertWithWhereUniqueWithoutSubsiteInput = {
-    where: SubsiteConfigWhereUniqueInput
-    update: XOR<SubsiteConfigUpdateWithoutSubsiteInput, SubsiteConfigUncheckedUpdateWithoutSubsiteInput>
-    create: XOR<SubsiteConfigCreateWithoutSubsiteInput, SubsiteConfigUncheckedCreateWithoutSubsiteInput>
-  }
-
-  export type SubsiteConfigUpdateWithWhereUniqueWithoutSubsiteInput = {
-    where: SubsiteConfigWhereUniqueInput
-    data: XOR<SubsiteConfigUpdateWithoutSubsiteInput, SubsiteConfigUncheckedUpdateWithoutSubsiteInput>
-  }
-
-  export type SubsiteConfigUpdateManyWithWhereWithoutSubsiteInput = {
-    where: SubsiteConfigScalarWhereInput
-    data: XOR<SubsiteConfigUpdateManyMutationInput, SubsiteConfigUncheckedUpdateManyWithoutSubsiteInput>
-  }
-
-  export type SubsiteConfigScalarWhereInput = {
-    AND?: SubsiteConfigScalarWhereInput | SubsiteConfigScalarWhereInput[]
-    OR?: SubsiteConfigScalarWhereInput[]
-    NOT?: SubsiteConfigScalarWhereInput | SubsiteConfigScalarWhereInput[]
-    id?: IntFilter<"SubsiteConfig"> | number
-    name?: StringFilter<"SubsiteConfig"> | string
-    logoUrl?: StringNullableFilter<"SubsiteConfig"> | string | null
-    logoSvg?: StringNullableFilter<"SubsiteConfig"> | string | null
-    navConfig?: StringNullableFilter<"SubsiteConfig"> | string | null
-    headerConfig?: StringNullableFilter<"SubsiteConfig"> | string | null
-    footerConfig?: StringNullableFilter<"SubsiteConfig"> | string | null
-    siteVisibility?: StringNullableFilter<"SubsiteConfig"> | string | null
-    siteLanguage?: StringNullableFilter<"SubsiteConfig"> | string | null
-    subsiteId?: IntFilter<"SubsiteConfig"> | number
-    createdAt?: DateTimeFilter<"SubsiteConfig"> | Date | string
-    updatedAt?: DateTimeNullableFilter<"SubsiteConfig"> | Date | string | null
-  }
-
-  export type SubsiteCreateWithoutConfigInput = {
-    name: string
-    slug?: string | null
-    subsiteRef?: string
-    domainName?: string | null
-    domainStatus?: string | null
-    domainCreatedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string | null
-    accounts?: AccountCreateNestedManyWithoutSubsitesInput
-  }
-
-  export type SubsiteUncheckedCreateWithoutConfigInput = {
-    id?: number
-    name: string
-    slug?: string | null
-    subsiteRef?: string
-    domainName?: string | null
-    domainStatus?: string | null
-    domainCreatedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string | null
-    accounts?: AccountUncheckedCreateNestedManyWithoutSubsitesInput
-  }
-
-  export type SubsiteCreateOrConnectWithoutConfigInput = {
-    where: SubsiteWhereUniqueInput
-    create: XOR<SubsiteCreateWithoutConfigInput, SubsiteUncheckedCreateWithoutConfigInput>
-  }
-
-  export type SubsiteUpsertWithoutConfigInput = {
-    update: XOR<SubsiteUpdateWithoutConfigInput, SubsiteUncheckedUpdateWithoutConfigInput>
-    create: XOR<SubsiteCreateWithoutConfigInput, SubsiteUncheckedCreateWithoutConfigInput>
-    where?: SubsiteWhereInput
-  }
-
-  export type SubsiteUpdateToOneWithWhereWithoutConfigInput = {
-    where?: SubsiteWhereInput
-    data: XOR<SubsiteUpdateWithoutConfigInput, SubsiteUncheckedUpdateWithoutConfigInput>
-  }
-
-  export type SubsiteUpdateWithoutConfigInput = {
+  export type AccountUpdateWithoutSubsitesInput = {
     name?: StringFieldUpdateOperationsInput | string
-    slug?: NullableStringFieldUpdateOperationsInput | string | null
-    subsiteRef?: StringFieldUpdateOperationsInput | string
-    domainName?: NullableStringFieldUpdateOperationsInput | string | null
-    domainStatus?: NullableStringFieldUpdateOperationsInput | string | null
-    domainCreatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    accountRef?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    accounts?: AccountUpdateManyWithoutSubsitesNestedInput
+    admin?: UserUpdateOneRequiredWithoutAccountsNestedInput
   }
 
-  export type SubsiteUncheckedUpdateWithoutConfigInput = {
+  export type AccountUncheckedUpdateWithoutSubsitesInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
-    slug?: NullableStringFieldUpdateOperationsInput | string | null
-    subsiteRef?: StringFieldUpdateOperationsInput | string
-    domainName?: NullableStringFieldUpdateOperationsInput | string | null
-    domainStatus?: NullableStringFieldUpdateOperationsInput | string | null
-    domainCreatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    accountRef?: StringFieldUpdateOperationsInput | string
+    adminId?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    accounts?: AccountUncheckedUpdateManyWithoutSubsitesNestedInput
   }
 
   export type UserCreateWithoutPostsInput = {
@@ -22457,7 +21613,7 @@ export namespace Prisma {
     contact?: UserContactCreateNestedOneWithoutUserInput
     profile?: UserProfileCreateNestedOneWithoutUserInput
     pages?: PageCreateNestedManyWithoutAuthorInput
-    accounts?: AccountCreateNestedManyWithoutUsersInput
+    accounts?: AccountCreateNestedManyWithoutAdminInput
   }
 
   export type UserUncheckedCreateWithoutPostsInput = {
@@ -22483,7 +21639,7 @@ export namespace Prisma {
     contact?: UserContactUncheckedCreateNestedOneWithoutUserInput
     profile?: UserProfileUncheckedCreateNestedOneWithoutUserInput
     pages?: PageUncheckedCreateNestedManyWithoutAuthorInput
-    accounts?: AccountUncheckedCreateNestedManyWithoutUsersInput
+    accounts?: AccountUncheckedCreateNestedManyWithoutAdminInput
   }
 
   export type UserCreateOrConnectWithoutPostsInput = {
@@ -22535,6 +21691,52 @@ export namespace Prisma {
     create: XOR<TagCreateWithoutPostsInput, TagUncheckedCreateWithoutPostsInput>
   }
 
+  export type SubsiteCreateWithoutPostsInput = {
+    name: string
+    slug?: string | null
+    subsiteRef?: string
+    logoUrl?: string | null
+    logoSvg?: string | null
+    navConfig?: string | null
+    headerConfig?: string | null
+    footerConfig?: string | null
+    siteVisibility?: string | null
+    siteLanguage?: string | null
+    domainName?: string | null
+    domainStatus?: string | null
+    domainCreatedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string | null
+    pages?: PageCreateNestedManyWithoutSubsiteInput
+    account: AccountCreateNestedOneWithoutSubsitesInput
+  }
+
+  export type SubsiteUncheckedCreateWithoutPostsInput = {
+    id?: number
+    name: string
+    slug?: string | null
+    subsiteRef?: string
+    logoUrl?: string | null
+    logoSvg?: string | null
+    navConfig?: string | null
+    headerConfig?: string | null
+    footerConfig?: string | null
+    siteVisibility?: string | null
+    siteLanguage?: string | null
+    domainName?: string | null
+    domainStatus?: string | null
+    domainCreatedAt?: Date | string | null
+    accountId: number
+    createdAt?: Date | string
+    updatedAt?: Date | string | null
+    pages?: PageUncheckedCreateNestedManyWithoutSubsiteInput
+  }
+
+  export type SubsiteCreateOrConnectWithoutPostsInput = {
+    where: SubsiteWhereUniqueInput
+    create: XOR<SubsiteCreateWithoutPostsInput, SubsiteUncheckedCreateWithoutPostsInput>
+  }
+
   export type UserUpsertWithoutPostsInput = {
     update: XOR<UserUpdateWithoutPostsInput, UserUncheckedUpdateWithoutPostsInput>
     create: XOR<UserCreateWithoutPostsInput, UserUncheckedCreateWithoutPostsInput>
@@ -22568,7 +21770,7 @@ export namespace Prisma {
     contact?: UserContactUpdateOneWithoutUserNestedInput
     profile?: UserProfileUpdateOneWithoutUserNestedInput
     pages?: PageUpdateManyWithoutAuthorNestedInput
-    accounts?: AccountUpdateManyWithoutUsersNestedInput
+    accounts?: AccountUpdateManyWithoutAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPostsInput = {
@@ -22594,7 +21796,7 @@ export namespace Prisma {
     contact?: UserContactUncheckedUpdateOneWithoutUserNestedInput
     profile?: UserProfileUncheckedUpdateOneWithoutUserNestedInput
     pages?: PageUncheckedUpdateManyWithoutAuthorNestedInput
-    accounts?: AccountUncheckedUpdateManyWithoutUsersNestedInput
+    accounts?: AccountUncheckedUpdateManyWithoutAdminNestedInput
   }
 
   export type CategoryUpsertWithWhereUniqueWithoutPostsInput = {
@@ -22651,6 +21853,58 @@ export namespace Prisma {
     updatedAt?: DateTimeNullableFilter<"Tag"> | Date | string | null
   }
 
+  export type SubsiteUpsertWithoutPostsInput = {
+    update: XOR<SubsiteUpdateWithoutPostsInput, SubsiteUncheckedUpdateWithoutPostsInput>
+    create: XOR<SubsiteCreateWithoutPostsInput, SubsiteUncheckedCreateWithoutPostsInput>
+    where?: SubsiteWhereInput
+  }
+
+  export type SubsiteUpdateToOneWithWhereWithoutPostsInput = {
+    where?: SubsiteWhereInput
+    data: XOR<SubsiteUpdateWithoutPostsInput, SubsiteUncheckedUpdateWithoutPostsInput>
+  }
+
+  export type SubsiteUpdateWithoutPostsInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    subsiteRef?: StringFieldUpdateOperationsInput | string
+    logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    logoSvg?: NullableStringFieldUpdateOperationsInput | string | null
+    navConfig?: NullableStringFieldUpdateOperationsInput | string | null
+    headerConfig?: NullableStringFieldUpdateOperationsInput | string | null
+    footerConfig?: NullableStringFieldUpdateOperationsInput | string | null
+    siteVisibility?: NullableStringFieldUpdateOperationsInput | string | null
+    siteLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    domainName?: NullableStringFieldUpdateOperationsInput | string | null
+    domainStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    domainCreatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    pages?: PageUpdateManyWithoutSubsiteNestedInput
+    account?: AccountUpdateOneRequiredWithoutSubsitesNestedInput
+  }
+
+  export type SubsiteUncheckedUpdateWithoutPostsInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    subsiteRef?: StringFieldUpdateOperationsInput | string
+    logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    logoSvg?: NullableStringFieldUpdateOperationsInput | string | null
+    navConfig?: NullableStringFieldUpdateOperationsInput | string | null
+    headerConfig?: NullableStringFieldUpdateOperationsInput | string | null
+    footerConfig?: NullableStringFieldUpdateOperationsInput | string | null
+    siteVisibility?: NullableStringFieldUpdateOperationsInput | string | null
+    siteLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    domainName?: NullableStringFieldUpdateOperationsInput | string | null
+    domainStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    domainCreatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    accountId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    pages?: PageUncheckedUpdateManyWithoutSubsiteNestedInput
+  }
+
   export type UserCreateWithoutPagesInput = {
     email: string
     name?: string | null
@@ -22671,9 +21925,9 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string | null
     contact?: UserContactCreateNestedOneWithoutUserInput
-    posts?: PostCreateNestedManyWithoutAuthorInput
     profile?: UserProfileCreateNestedOneWithoutUserInput
-    accounts?: AccountCreateNestedManyWithoutUsersInput
+    posts?: PostCreateNestedManyWithoutAuthorInput
+    accounts?: AccountCreateNestedManyWithoutAdminInput
   }
 
   export type UserUncheckedCreateWithoutPagesInput = {
@@ -22697,9 +21951,9 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string | null
     contact?: UserContactUncheckedCreateNestedOneWithoutUserInput
-    posts?: PostUncheckedCreateNestedManyWithoutAuthorInput
     profile?: UserProfileUncheckedCreateNestedOneWithoutUserInput
-    accounts?: AccountUncheckedCreateNestedManyWithoutUsersInput
+    posts?: PostUncheckedCreateNestedManyWithoutAuthorInput
+    accounts?: AccountUncheckedCreateNestedManyWithoutAdminInput
   }
 
   export type UserCreateOrConnectWithoutPagesInput = {
@@ -22751,6 +22005,52 @@ export namespace Prisma {
     create: XOR<TagCreateWithoutPagesInput, TagUncheckedCreateWithoutPagesInput>
   }
 
+  export type SubsiteCreateWithoutPagesInput = {
+    name: string
+    slug?: string | null
+    subsiteRef?: string
+    logoUrl?: string | null
+    logoSvg?: string | null
+    navConfig?: string | null
+    headerConfig?: string | null
+    footerConfig?: string | null
+    siteVisibility?: string | null
+    siteLanguage?: string | null
+    domainName?: string | null
+    domainStatus?: string | null
+    domainCreatedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string | null
+    posts?: PostCreateNestedManyWithoutSubsiteInput
+    account: AccountCreateNestedOneWithoutSubsitesInput
+  }
+
+  export type SubsiteUncheckedCreateWithoutPagesInput = {
+    id?: number
+    name: string
+    slug?: string | null
+    subsiteRef?: string
+    logoUrl?: string | null
+    logoSvg?: string | null
+    navConfig?: string | null
+    headerConfig?: string | null
+    footerConfig?: string | null
+    siteVisibility?: string | null
+    siteLanguage?: string | null
+    domainName?: string | null
+    domainStatus?: string | null
+    domainCreatedAt?: Date | string | null
+    accountId: number
+    createdAt?: Date | string
+    updatedAt?: Date | string | null
+    posts?: PostUncheckedCreateNestedManyWithoutSubsiteInput
+  }
+
+  export type SubsiteCreateOrConnectWithoutPagesInput = {
+    where: SubsiteWhereUniqueInput
+    create: XOR<SubsiteCreateWithoutPagesInput, SubsiteUncheckedCreateWithoutPagesInput>
+  }
+
   export type UserUpsertWithoutPagesInput = {
     update: XOR<UserUpdateWithoutPagesInput, UserUncheckedUpdateWithoutPagesInput>
     create: XOR<UserCreateWithoutPagesInput, UserUncheckedCreateWithoutPagesInput>
@@ -22782,9 +22082,9 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     contact?: UserContactUpdateOneWithoutUserNestedInput
-    posts?: PostUpdateManyWithoutAuthorNestedInput
     profile?: UserProfileUpdateOneWithoutUserNestedInput
-    accounts?: AccountUpdateManyWithoutUsersNestedInput
+    posts?: PostUpdateManyWithoutAuthorNestedInput
+    accounts?: AccountUpdateManyWithoutAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutPagesInput = {
@@ -22808,9 +22108,9 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     contact?: UserContactUncheckedUpdateOneWithoutUserNestedInput
-    posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput
     profile?: UserProfileUncheckedUpdateOneWithoutUserNestedInput
-    accounts?: AccountUncheckedUpdateManyWithoutUsersNestedInput
+    posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput
+    accounts?: AccountUncheckedUpdateManyWithoutAdminNestedInput
   }
 
   export type CategoryUpsertWithWhereUniqueWithoutPagesInput = {
@@ -22845,6 +22145,58 @@ export namespace Prisma {
     data: XOR<TagUpdateManyMutationInput, TagUncheckedUpdateManyWithoutPagesInput>
   }
 
+  export type SubsiteUpsertWithoutPagesInput = {
+    update: XOR<SubsiteUpdateWithoutPagesInput, SubsiteUncheckedUpdateWithoutPagesInput>
+    create: XOR<SubsiteCreateWithoutPagesInput, SubsiteUncheckedCreateWithoutPagesInput>
+    where?: SubsiteWhereInput
+  }
+
+  export type SubsiteUpdateToOneWithWhereWithoutPagesInput = {
+    where?: SubsiteWhereInput
+    data: XOR<SubsiteUpdateWithoutPagesInput, SubsiteUncheckedUpdateWithoutPagesInput>
+  }
+
+  export type SubsiteUpdateWithoutPagesInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    subsiteRef?: StringFieldUpdateOperationsInput | string
+    logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    logoSvg?: NullableStringFieldUpdateOperationsInput | string | null
+    navConfig?: NullableStringFieldUpdateOperationsInput | string | null
+    headerConfig?: NullableStringFieldUpdateOperationsInput | string | null
+    footerConfig?: NullableStringFieldUpdateOperationsInput | string | null
+    siteVisibility?: NullableStringFieldUpdateOperationsInput | string | null
+    siteLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    domainName?: NullableStringFieldUpdateOperationsInput | string | null
+    domainStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    domainCreatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    posts?: PostUpdateManyWithoutSubsiteNestedInput
+    account?: AccountUpdateOneRequiredWithoutSubsitesNestedInput
+  }
+
+  export type SubsiteUncheckedUpdateWithoutPagesInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    subsiteRef?: StringFieldUpdateOperationsInput | string
+    logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    logoSvg?: NullableStringFieldUpdateOperationsInput | string | null
+    navConfig?: NullableStringFieldUpdateOperationsInput | string | null
+    headerConfig?: NullableStringFieldUpdateOperationsInput | string | null
+    footerConfig?: NullableStringFieldUpdateOperationsInput | string | null
+    siteVisibility?: NullableStringFieldUpdateOperationsInput | string | null
+    siteLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    domainName?: NullableStringFieldUpdateOperationsInput | string | null
+    domainStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    domainCreatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    accountId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    posts?: PostUncheckedUpdateManyWithoutSubsiteNestedInput
+  }
+
   export type UserCreateWithoutProfileInput = {
     email: string
     name?: string | null
@@ -22867,7 +22219,7 @@ export namespace Prisma {
     contact?: UserContactCreateNestedOneWithoutUserInput
     posts?: PostCreateNestedManyWithoutAuthorInput
     pages?: PageCreateNestedManyWithoutAuthorInput
-    accounts?: AccountCreateNestedManyWithoutUsersInput
+    accounts?: AccountCreateNestedManyWithoutAdminInput
   }
 
   export type UserUncheckedCreateWithoutProfileInput = {
@@ -22893,7 +22245,7 @@ export namespace Prisma {
     contact?: UserContactUncheckedCreateNestedOneWithoutUserInput
     posts?: PostUncheckedCreateNestedManyWithoutAuthorInput
     pages?: PageUncheckedCreateNestedManyWithoutAuthorInput
-    accounts?: AccountUncheckedCreateNestedManyWithoutUsersInput
+    accounts?: AccountUncheckedCreateNestedManyWithoutAdminInput
   }
 
   export type UserCreateOrConnectWithoutProfileInput = {
@@ -22934,7 +22286,7 @@ export namespace Prisma {
     contact?: UserContactUpdateOneWithoutUserNestedInput
     posts?: PostUpdateManyWithoutAuthorNestedInput
     pages?: PageUpdateManyWithoutAuthorNestedInput
-    accounts?: AccountUpdateManyWithoutUsersNestedInput
+    accounts?: AccountUpdateManyWithoutAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutProfileInput = {
@@ -22960,7 +22312,7 @@ export namespace Prisma {
     contact?: UserContactUncheckedUpdateOneWithoutUserNestedInput
     posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput
     pages?: PageUncheckedUpdateManyWithoutAuthorNestedInput
-    accounts?: AccountUncheckedUpdateManyWithoutUsersNestedInput
+    accounts?: AccountUncheckedUpdateManyWithoutAdminNestedInput
   }
 
   export type UserContactCreateWithoutAddressInput = {
@@ -23310,10 +22662,10 @@ export namespace Prisma {
     role?: $Enums.UserRole
     createdAt?: Date | string
     updatedAt?: Date | string | null
-    posts?: PostCreateNestedManyWithoutAuthorInput
     profile?: UserProfileCreateNestedOneWithoutUserInput
+    posts?: PostCreateNestedManyWithoutAuthorInput
     pages?: PageCreateNestedManyWithoutAuthorInput
-    accounts?: AccountCreateNestedManyWithoutUsersInput
+    accounts?: AccountCreateNestedManyWithoutAdminInput
   }
 
   export type UserUncheckedCreateWithoutContactInput = {
@@ -23336,10 +22688,10 @@ export namespace Prisma {
     role?: $Enums.UserRole
     createdAt?: Date | string
     updatedAt?: Date | string | null
-    posts?: PostUncheckedCreateNestedManyWithoutAuthorInput
     profile?: UserProfileUncheckedCreateNestedOneWithoutUserInput
+    posts?: PostUncheckedCreateNestedManyWithoutAuthorInput
     pages?: PageUncheckedCreateNestedManyWithoutAuthorInput
-    accounts?: AccountUncheckedCreateNestedManyWithoutUsersInput
+    accounts?: AccountUncheckedCreateNestedManyWithoutAdminInput
   }
 
   export type UserCreateOrConnectWithoutContactInput = {
@@ -23513,10 +22865,10 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    posts?: PostUpdateManyWithoutAuthorNestedInput
     profile?: UserProfileUpdateOneWithoutUserNestedInput
+    posts?: PostUpdateManyWithoutAuthorNestedInput
     pages?: PageUpdateManyWithoutAuthorNestedInput
-    accounts?: AccountUpdateManyWithoutUsersNestedInput
+    accounts?: AccountUpdateManyWithoutAdminNestedInput
   }
 
   export type UserUncheckedUpdateWithoutContactInput = {
@@ -23539,351 +22891,10 @@ export namespace Prisma {
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput
     profile?: UserProfileUncheckedUpdateOneWithoutUserNestedInput
+    posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput
     pages?: PageUncheckedUpdateManyWithoutAuthorNestedInput
-    accounts?: AccountUncheckedUpdateManyWithoutUsersNestedInput
-  }
-
-  export type UserContactCreateWithoutUserInput = {
-    createdAt?: Date | string
-    updatedAt?: Date | string | null
-    email?: ContactEmailCreateNestedOneWithoutContactInput
-    phone?: ContactPhoneCreateNestedOneWithoutContactInput
-    address?: ContactAddressCreateNestedOneWithoutContactInput
-    website?: ContactWebsiteCreateNestedOneWithoutContactInput
-  }
-
-  export type UserContactUncheckedCreateWithoutUserInput = {
-    id?: number
-    createdAt?: Date | string
-    updatedAt?: Date | string | null
-    email?: ContactEmailUncheckedCreateNestedOneWithoutContactInput
-    phone?: ContactPhoneUncheckedCreateNestedOneWithoutContactInput
-    address?: ContactAddressUncheckedCreateNestedOneWithoutContactInput
-    website?: ContactWebsiteUncheckedCreateNestedOneWithoutContactInput
-  }
-
-  export type UserContactCreateOrConnectWithoutUserInput = {
-    where: UserContactWhereUniqueInput
-    create: XOR<UserContactCreateWithoutUserInput, UserContactUncheckedCreateWithoutUserInput>
-  }
-
-  export type PostCreateWithoutAuthorInput = {
-    title: string
-    overview?: string
-    content?: string | null
-    slug?: string | null
-    coverImage?: string | null
-    status?: $Enums.ContentStatus
-    published?: boolean
-    publishedAt?: Date | string | null
-    deleted?: boolean
-    accountRef?: string
-    subsiteRef?: string
-    contextUserId?: string
-    createdAt?: Date | string
-    updatedAt?: Date | string | null
-    categories?: CategoryCreateNestedManyWithoutPostsInput
-    tags?: TagCreateNestedManyWithoutPostsInput
-  }
-
-  export type PostUncheckedCreateWithoutAuthorInput = {
-    id?: number
-    title: string
-    overview?: string
-    content?: string | null
-    slug?: string | null
-    coverImage?: string | null
-    status?: $Enums.ContentStatus
-    published?: boolean
-    publishedAt?: Date | string | null
-    deleted?: boolean
-    accountRef?: string
-    subsiteRef?: string
-    contextUserId?: string
-    createdAt?: Date | string
-    updatedAt?: Date | string | null
-    categories?: CategoryUncheckedCreateNestedManyWithoutPostsInput
-    tags?: TagUncheckedCreateNestedManyWithoutPostsInput
-  }
-
-  export type PostCreateOrConnectWithoutAuthorInput = {
-    where: PostWhereUniqueInput
-    create: XOR<PostCreateWithoutAuthorInput, PostUncheckedCreateWithoutAuthorInput>
-  }
-
-  export type PostCreateManyAuthorInputEnvelope = {
-    data: PostCreateManyAuthorInput | PostCreateManyAuthorInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type UserProfileCreateWithoutUserInput = {
-    bio?: string | null
-    active?: boolean
-    slug?: string | null
-    imageUrl?: string | null
-    subsiteRef?: string
-    createdAt?: Date | string
-    updatedAt?: Date | string | null
-  }
-
-  export type UserProfileUncheckedCreateWithoutUserInput = {
-    id?: number
-    bio?: string | null
-    active?: boolean
-    slug?: string | null
-    imageUrl?: string | null
-    subsiteRef?: string
-    createdAt?: Date | string
-    updatedAt?: Date | string | null
-  }
-
-  export type UserProfileCreateOrConnectWithoutUserInput = {
-    where: UserProfileWhereUniqueInput
-    create: XOR<UserProfileCreateWithoutUserInput, UserProfileUncheckedCreateWithoutUserInput>
-  }
-
-  export type PageCreateWithoutAuthorInput = {
-    title: string
-    overview?: string
-    content?: string | null
-    slug?: string | null
-    status?: $Enums.ContentStatus
-    publishedAt?: Date | string | null
-    published?: boolean
-    coverImage?: string | null
-    layoutTemplate?: string | null
-    theme?: string | null
-    metaData?: string | null
-    seoSettings?: string | null
-    analyticsCodes?: string | null
-    showOnNav?: boolean
-    deleted?: boolean
-    accountRef?: string
-    subsiteRef?: string
-    createdAt?: Date | string
-    updatedAt?: Date | string | null
-    categories?: CategoryCreateNestedManyWithoutPagesInput
-    tags?: TagCreateNestedManyWithoutPagesInput
-  }
-
-  export type PageUncheckedCreateWithoutAuthorInput = {
-    id?: number
-    title: string
-    overview?: string
-    content?: string | null
-    slug?: string | null
-    status?: $Enums.ContentStatus
-    publishedAt?: Date | string | null
-    published?: boolean
-    coverImage?: string | null
-    layoutTemplate?: string | null
-    theme?: string | null
-    metaData?: string | null
-    seoSettings?: string | null
-    analyticsCodes?: string | null
-    showOnNav?: boolean
-    deleted?: boolean
-    accountRef?: string
-    subsiteRef?: string
-    createdAt?: Date | string
-    updatedAt?: Date | string | null
-    categories?: CategoryUncheckedCreateNestedManyWithoutPagesInput
-    tags?: TagUncheckedCreateNestedManyWithoutPagesInput
-  }
-
-  export type PageCreateOrConnectWithoutAuthorInput = {
-    where: PageWhereUniqueInput
-    create: XOR<PageCreateWithoutAuthorInput, PageUncheckedCreateWithoutAuthorInput>
-  }
-
-  export type PageCreateManyAuthorInputEnvelope = {
-    data: PageCreateManyAuthorInput | PageCreateManyAuthorInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type AccountCreateWithoutUsersInput = {
-    name: string
-    slug?: string | null
-    accountRef?: string
-    createdAt?: Date | string
-    updatedAt?: Date | string | null
-    subsites?: SubsiteCreateNestedManyWithoutAccountsInput
-  }
-
-  export type AccountUncheckedCreateWithoutUsersInput = {
-    id?: number
-    name: string
-    slug?: string | null
-    accountRef?: string
-    createdAt?: Date | string
-    updatedAt?: Date | string | null
-    subsites?: SubsiteUncheckedCreateNestedManyWithoutAccountsInput
-  }
-
-  export type AccountCreateOrConnectWithoutUsersInput = {
-    where: AccountWhereUniqueInput
-    create: XOR<AccountCreateWithoutUsersInput, AccountUncheckedCreateWithoutUsersInput>
-  }
-
-  export type UserContactUpsertWithoutUserInput = {
-    update: XOR<UserContactUpdateWithoutUserInput, UserContactUncheckedUpdateWithoutUserInput>
-    create: XOR<UserContactCreateWithoutUserInput, UserContactUncheckedCreateWithoutUserInput>
-    where?: UserContactWhereInput
-  }
-
-  export type UserContactUpdateToOneWithWhereWithoutUserInput = {
-    where?: UserContactWhereInput
-    data: XOR<UserContactUpdateWithoutUserInput, UserContactUncheckedUpdateWithoutUserInput>
-  }
-
-  export type UserContactUpdateWithoutUserInput = {
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    email?: ContactEmailUpdateOneWithoutContactNestedInput
-    phone?: ContactPhoneUpdateOneWithoutContactNestedInput
-    address?: ContactAddressUpdateOneWithoutContactNestedInput
-    website?: ContactWebsiteUpdateOneWithoutContactNestedInput
-  }
-
-  export type UserContactUncheckedUpdateWithoutUserInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    email?: ContactEmailUncheckedUpdateOneWithoutContactNestedInput
-    phone?: ContactPhoneUncheckedUpdateOneWithoutContactNestedInput
-    address?: ContactAddressUncheckedUpdateOneWithoutContactNestedInput
-    website?: ContactWebsiteUncheckedUpdateOneWithoutContactNestedInput
-  }
-
-  export type PostUpsertWithWhereUniqueWithoutAuthorInput = {
-    where: PostWhereUniqueInput
-    update: XOR<PostUpdateWithoutAuthorInput, PostUncheckedUpdateWithoutAuthorInput>
-    create: XOR<PostCreateWithoutAuthorInput, PostUncheckedCreateWithoutAuthorInput>
-  }
-
-  export type PostUpdateWithWhereUniqueWithoutAuthorInput = {
-    where: PostWhereUniqueInput
-    data: XOR<PostUpdateWithoutAuthorInput, PostUncheckedUpdateWithoutAuthorInput>
-  }
-
-  export type PostUpdateManyWithWhereWithoutAuthorInput = {
-    where: PostScalarWhereInput
-    data: XOR<PostUpdateManyMutationInput, PostUncheckedUpdateManyWithoutAuthorInput>
-  }
-
-  export type PostScalarWhereInput = {
-    AND?: PostScalarWhereInput | PostScalarWhereInput[]
-    OR?: PostScalarWhereInput[]
-    NOT?: PostScalarWhereInput | PostScalarWhereInput[]
-    id?: IntFilter<"Post"> | number
-    title?: StringFilter<"Post"> | string
-    overview?: StringFilter<"Post"> | string
-    content?: StringNullableFilter<"Post"> | string | null
-    slug?: StringNullableFilter<"Post"> | string | null
-    coverImage?: StringNullableFilter<"Post"> | string | null
-    status?: EnumContentStatusFilter<"Post"> | $Enums.ContentStatus
-    published?: BoolFilter<"Post"> | boolean
-    publishedAt?: DateTimeNullableFilter<"Post"> | Date | string | null
-    deleted?: BoolFilter<"Post"> | boolean
-    authorId?: IntFilter<"Post"> | number
-    accountRef?: StringFilter<"Post"> | string
-    subsiteRef?: StringFilter<"Post"> | string
-    contextUserId?: StringFilter<"Post"> | string
-    createdAt?: DateTimeFilter<"Post"> | Date | string
-    updatedAt?: DateTimeNullableFilter<"Post"> | Date | string | null
-  }
-
-  export type UserProfileUpsertWithoutUserInput = {
-    update: XOR<UserProfileUpdateWithoutUserInput, UserProfileUncheckedUpdateWithoutUserInput>
-    create: XOR<UserProfileCreateWithoutUserInput, UserProfileUncheckedCreateWithoutUserInput>
-    where?: UserProfileWhereInput
-  }
-
-  export type UserProfileUpdateToOneWithWhereWithoutUserInput = {
-    where?: UserProfileWhereInput
-    data: XOR<UserProfileUpdateWithoutUserInput, UserProfileUncheckedUpdateWithoutUserInput>
-  }
-
-  export type UserProfileUpdateWithoutUserInput = {
-    bio?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    slug?: NullableStringFieldUpdateOperationsInput | string | null
-    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    subsiteRef?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  }
-
-  export type UserProfileUncheckedUpdateWithoutUserInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    bio?: NullableStringFieldUpdateOperationsInput | string | null
-    active?: BoolFieldUpdateOperationsInput | boolean
-    slug?: NullableStringFieldUpdateOperationsInput | string | null
-    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    subsiteRef?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  }
-
-  export type PageUpsertWithWhereUniqueWithoutAuthorInput = {
-    where: PageWhereUniqueInput
-    update: XOR<PageUpdateWithoutAuthorInput, PageUncheckedUpdateWithoutAuthorInput>
-    create: XOR<PageCreateWithoutAuthorInput, PageUncheckedCreateWithoutAuthorInput>
-  }
-
-  export type PageUpdateWithWhereUniqueWithoutAuthorInput = {
-    where: PageWhereUniqueInput
-    data: XOR<PageUpdateWithoutAuthorInput, PageUncheckedUpdateWithoutAuthorInput>
-  }
-
-  export type PageUpdateManyWithWhereWithoutAuthorInput = {
-    where: PageScalarWhereInput
-    data: XOR<PageUpdateManyMutationInput, PageUncheckedUpdateManyWithoutAuthorInput>
-  }
-
-  export type PageScalarWhereInput = {
-    AND?: PageScalarWhereInput | PageScalarWhereInput[]
-    OR?: PageScalarWhereInput[]
-    NOT?: PageScalarWhereInput | PageScalarWhereInput[]
-    id?: IntFilter<"Page"> | number
-    title?: StringFilter<"Page"> | string
-    overview?: StringFilter<"Page"> | string
-    content?: StringNullableFilter<"Page"> | string | null
-    slug?: StringNullableFilter<"Page"> | string | null
-    status?: EnumContentStatusFilter<"Page"> | $Enums.ContentStatus
-    publishedAt?: DateTimeNullableFilter<"Page"> | Date | string | null
-    published?: BoolFilter<"Page"> | boolean
-    coverImage?: StringNullableFilter<"Page"> | string | null
-    layoutTemplate?: StringNullableFilter<"Page"> | string | null
-    theme?: StringNullableFilter<"Page"> | string | null
-    metaData?: StringNullableFilter<"Page"> | string | null
-    seoSettings?: StringNullableFilter<"Page"> | string | null
-    analyticsCodes?: StringNullableFilter<"Page"> | string | null
-    showOnNav?: BoolFilter<"Page"> | boolean
-    deleted?: BoolFilter<"Page"> | boolean
-    authorId?: IntFilter<"Page"> | number
-    accountRef?: StringFilter<"Page"> | string
-    subsiteRef?: StringFilter<"Page"> | string
-    createdAt?: DateTimeFilter<"Page"> | Date | string
-    updatedAt?: DateTimeNullableFilter<"Page"> | Date | string | null
-  }
-
-  export type AccountUpsertWithWhereUniqueWithoutUsersInput = {
-    where: AccountWhereUniqueInput
-    update: XOR<AccountUpdateWithoutUsersInput, AccountUncheckedUpdateWithoutUsersInput>
-    create: XOR<AccountCreateWithoutUsersInput, AccountUncheckedCreateWithoutUsersInput>
-  }
-
-  export type AccountUpdateWithWhereUniqueWithoutUsersInput = {
-    where: AccountWhereUniqueInput
-    data: XOR<AccountUpdateWithoutUsersInput, AccountUncheckedUpdateWithoutUsersInput>
-  }
-
-  export type AccountUpdateManyWithWhereWithoutUsersInput = {
-    where: AccountScalarWhereInput
-    data: XOR<AccountUpdateManyMutationInput, AccountUncheckedUpdateManyWithoutUsersInput>
+    accounts?: AccountUncheckedUpdateManyWithoutAdminNestedInput
   }
 
   export type PostCreateWithoutCategoriesInput = {
@@ -23896,13 +22907,11 @@ export namespace Prisma {
     published?: boolean
     publishedAt?: Date | string | null
     deleted?: boolean
-    accountRef?: string
-    subsiteRef?: string
-    contextUserId?: string
     createdAt?: Date | string
     updatedAt?: Date | string | null
     author: UserCreateNestedOneWithoutPostsInput
     tags?: TagCreateNestedManyWithoutPostsInput
+    subsite: SubsiteCreateNestedOneWithoutPostsInput
   }
 
   export type PostUncheckedCreateWithoutCategoriesInput = {
@@ -23917,9 +22926,7 @@ export namespace Prisma {
     publishedAt?: Date | string | null
     deleted?: boolean
     authorId: number
-    accountRef?: string
-    subsiteRef?: string
-    contextUserId?: string
+    subsiteId: number
     createdAt?: Date | string
     updatedAt?: Date | string | null
     tags?: TagUncheckedCreateNestedManyWithoutPostsInput
@@ -23946,12 +22953,11 @@ export namespace Prisma {
     analyticsCodes?: string | null
     showOnNav?: boolean
     deleted?: boolean
-    accountRef?: string
-    subsiteRef?: string
     createdAt?: Date | string
     updatedAt?: Date | string | null
     author: UserCreateNestedOneWithoutPagesInput
     tags?: TagCreateNestedManyWithoutPagesInput
+    subsite: SubsiteCreateNestedOneWithoutPagesInput
   }
 
   export type PageUncheckedCreateWithoutCategoriesInput = {
@@ -23972,8 +22978,7 @@ export namespace Prisma {
     showOnNav?: boolean
     deleted?: boolean
     authorId: number
-    accountRef?: string
-    subsiteRef?: string
+    subsiteId: number
     createdAt?: Date | string
     updatedAt?: Date | string | null
     tags?: TagUncheckedCreateNestedManyWithoutPagesInput
@@ -24026,13 +23031,11 @@ export namespace Prisma {
     published?: boolean
     publishedAt?: Date | string | null
     deleted?: boolean
-    accountRef?: string
-    subsiteRef?: string
-    contextUserId?: string
     createdAt?: Date | string
     updatedAt?: Date | string | null
     author: UserCreateNestedOneWithoutPostsInput
     categories?: CategoryCreateNestedManyWithoutPostsInput
+    subsite: SubsiteCreateNestedOneWithoutPostsInput
   }
 
   export type PostUncheckedCreateWithoutTagsInput = {
@@ -24047,9 +23050,7 @@ export namespace Prisma {
     publishedAt?: Date | string | null
     deleted?: boolean
     authorId: number
-    accountRef?: string
-    subsiteRef?: string
-    contextUserId?: string
+    subsiteId: number
     createdAt?: Date | string
     updatedAt?: Date | string | null
     categories?: CategoryUncheckedCreateNestedManyWithoutPostsInput
@@ -24076,12 +23077,11 @@ export namespace Prisma {
     analyticsCodes?: string | null
     showOnNav?: boolean
     deleted?: boolean
-    accountRef?: string
-    subsiteRef?: string
     createdAt?: Date | string
     updatedAt?: Date | string | null
     author: UserCreateNestedOneWithoutPagesInput
     categories?: CategoryCreateNestedManyWithoutPagesInput
+    subsite: SubsiteCreateNestedOneWithoutPagesInput
   }
 
   export type PageUncheckedCreateWithoutTagsInput = {
@@ -24102,8 +23102,7 @@ export namespace Prisma {
     showOnNav?: boolean
     deleted?: boolean
     authorId: number
-    accountRef?: string
-    subsiteRef?: string
+    subsiteId: number
     createdAt?: Date | string
     updatedAt?: Date | string | null
     categories?: CategoryUncheckedCreateNestedManyWithoutPagesInput
@@ -24146,119 +23145,202 @@ export namespace Prisma {
     data: XOR<PageUpdateManyMutationInput, PageUncheckedUpdateManyWithoutTagsInput>
   }
 
-  export type UserUpdateWithoutAccountsInput = {
-    email?: StringFieldUpdateOperationsInput | string
-    name?: NullableStringFieldUpdateOperationsInput | string | null
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    token?: NullableStringFieldUpdateOperationsInput | string | null
-    prefix?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: NullableStringFieldUpdateOperationsInput | string | null
-    middleName?: NullableStringFieldUpdateOperationsInput | string | null
-    lastName?: NullableStringFieldUpdateOperationsInput | string | null
-    suffix?: NullableStringFieldUpdateOperationsInput | string | null
-    preferredName?: NullableStringFieldUpdateOperationsInput | string | null
-    gender?: NullableStringFieldUpdateOperationsInput | string | null
-    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    local?: NullableStringFieldUpdateOperationsInput | string | null
-    timeZone?: NullableStringFieldUpdateOperationsInput | string | null
-    lastLoginTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    contact?: UserContactUpdateOneWithoutUserNestedInput
-    posts?: PostUpdateManyWithoutAuthorNestedInput
-    profile?: UserProfileUpdateOneWithoutUserNestedInput
-    pages?: PageUpdateManyWithoutAuthorNestedInput
+  export type PostCreateManyAuthorInput = {
+    id?: number
+    title: string
+    overview?: string
+    content?: string | null
+    slug?: string | null
+    coverImage?: string | null
+    status?: $Enums.ContentStatus
+    published?: boolean
+    publishedAt?: Date | string | null
+    deleted?: boolean
+    subsiteId: number
+    createdAt?: Date | string
+    updatedAt?: Date | string | null
   }
 
-  export type UserUncheckedUpdateWithoutAccountsInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    email?: StringFieldUpdateOperationsInput | string
-    name?: NullableStringFieldUpdateOperationsInput | string | null
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    token?: NullableStringFieldUpdateOperationsInput | string | null
-    prefix?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: NullableStringFieldUpdateOperationsInput | string | null
-    middleName?: NullableStringFieldUpdateOperationsInput | string | null
-    lastName?: NullableStringFieldUpdateOperationsInput | string | null
-    suffix?: NullableStringFieldUpdateOperationsInput | string | null
-    preferredName?: NullableStringFieldUpdateOperationsInput | string | null
-    gender?: NullableStringFieldUpdateOperationsInput | string | null
-    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    local?: NullableStringFieldUpdateOperationsInput | string | null
-    timeZone?: NullableStringFieldUpdateOperationsInput | string | null
-    lastLoginTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    contact?: UserContactUncheckedUpdateOneWithoutUserNestedInput
-    posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput
-    profile?: UserProfileUncheckedUpdateOneWithoutUserNestedInput
-    pages?: PageUncheckedUpdateManyWithoutAuthorNestedInput
+  export type PageCreateManyAuthorInput = {
+    id?: number
+    title: string
+    overview?: string
+    content?: string | null
+    slug?: string | null
+    status?: $Enums.ContentStatus
+    publishedAt?: Date | string | null
+    published?: boolean
+    coverImage?: string | null
+    layoutTemplate?: string | null
+    theme?: string | null
+    metaData?: string | null
+    seoSettings?: string | null
+    analyticsCodes?: string | null
+    showOnNav?: boolean
+    deleted?: boolean
+    subsiteId: number
+    createdAt?: Date | string
+    updatedAt?: Date | string | null
   }
 
-  export type UserUncheckedUpdateManyWithoutAccountsInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    email?: StringFieldUpdateOperationsInput | string
-    name?: NullableStringFieldUpdateOperationsInput | string | null
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    token?: NullableStringFieldUpdateOperationsInput | string | null
-    prefix?: NullableStringFieldUpdateOperationsInput | string | null
-    firstName?: NullableStringFieldUpdateOperationsInput | string | null
-    middleName?: NullableStringFieldUpdateOperationsInput | string | null
-    lastName?: NullableStringFieldUpdateOperationsInput | string | null
-    suffix?: NullableStringFieldUpdateOperationsInput | string | null
-    preferredName?: NullableStringFieldUpdateOperationsInput | string | null
-    gender?: NullableStringFieldUpdateOperationsInput | string | null
-    birthDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    local?: NullableStringFieldUpdateOperationsInput | string | null
-    timeZone?: NullableStringFieldUpdateOperationsInput | string | null
-    lastLoginTime?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  }
-
-  export type SubsiteUpdateWithoutAccountsInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    slug?: NullableStringFieldUpdateOperationsInput | string | null
-    subsiteRef?: StringFieldUpdateOperationsInput | string
-    domainName?: NullableStringFieldUpdateOperationsInput | string | null
-    domainStatus?: NullableStringFieldUpdateOperationsInput | string | null
-    domainCreatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    config?: SubsiteConfigUpdateManyWithoutSubsiteNestedInput
-  }
-
-  export type SubsiteUncheckedUpdateWithoutAccountsInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    slug?: NullableStringFieldUpdateOperationsInput | string | null
-    subsiteRef?: StringFieldUpdateOperationsInput | string
-    domainName?: NullableStringFieldUpdateOperationsInput | string | null
-    domainStatus?: NullableStringFieldUpdateOperationsInput | string | null
-    domainCreatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    config?: SubsiteConfigUncheckedUpdateManyWithoutSubsiteNestedInput
-  }
-
-  export type SubsiteUncheckedUpdateManyWithoutAccountsInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    slug?: NullableStringFieldUpdateOperationsInput | string | null
-    subsiteRef?: StringFieldUpdateOperationsInput | string
-    domainName?: NullableStringFieldUpdateOperationsInput | string | null
-    domainStatus?: NullableStringFieldUpdateOperationsInput | string | null
-    domainCreatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  }
-
-  export type SubsiteConfigCreateManySubsiteInput = {
+  export type AccountCreateManyAdminInput = {
     id?: number
     name: string
+    accountRef?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string | null
+  }
+
+  export type PostUpdateWithoutAuthorInput = {
+    title?: StringFieldUpdateOperationsInput | string
+    overview?: StringFieldUpdateOperationsInput | string
+    content?: NullableStringFieldUpdateOperationsInput | string | null
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    coverImage?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumContentStatusFieldUpdateOperationsInput | $Enums.ContentStatus
+    published?: BoolFieldUpdateOperationsInput | boolean
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deleted?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    categories?: CategoryUpdateManyWithoutPostsNestedInput
+    tags?: TagUpdateManyWithoutPostsNestedInput
+    subsite?: SubsiteUpdateOneRequiredWithoutPostsNestedInput
+  }
+
+  export type PostUncheckedUpdateWithoutAuthorInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    overview?: StringFieldUpdateOperationsInput | string
+    content?: NullableStringFieldUpdateOperationsInput | string | null
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    coverImage?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumContentStatusFieldUpdateOperationsInput | $Enums.ContentStatus
+    published?: BoolFieldUpdateOperationsInput | boolean
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deleted?: BoolFieldUpdateOperationsInput | boolean
+    subsiteId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    categories?: CategoryUncheckedUpdateManyWithoutPostsNestedInput
+    tags?: TagUncheckedUpdateManyWithoutPostsNestedInput
+  }
+
+  export type PostUncheckedUpdateManyWithoutAuthorInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    overview?: StringFieldUpdateOperationsInput | string
+    content?: NullableStringFieldUpdateOperationsInput | string | null
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    coverImage?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumContentStatusFieldUpdateOperationsInput | $Enums.ContentStatus
+    published?: BoolFieldUpdateOperationsInput | boolean
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deleted?: BoolFieldUpdateOperationsInput | boolean
+    subsiteId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type PageUpdateWithoutAuthorInput = {
+    title?: StringFieldUpdateOperationsInput | string
+    overview?: StringFieldUpdateOperationsInput | string
+    content?: NullableStringFieldUpdateOperationsInput | string | null
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumContentStatusFieldUpdateOperationsInput | $Enums.ContentStatus
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    published?: BoolFieldUpdateOperationsInput | boolean
+    coverImage?: NullableStringFieldUpdateOperationsInput | string | null
+    layoutTemplate?: NullableStringFieldUpdateOperationsInput | string | null
+    theme?: NullableStringFieldUpdateOperationsInput | string | null
+    metaData?: NullableStringFieldUpdateOperationsInput | string | null
+    seoSettings?: NullableStringFieldUpdateOperationsInput | string | null
+    analyticsCodes?: NullableStringFieldUpdateOperationsInput | string | null
+    showOnNav?: BoolFieldUpdateOperationsInput | boolean
+    deleted?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    categories?: CategoryUpdateManyWithoutPagesNestedInput
+    tags?: TagUpdateManyWithoutPagesNestedInput
+    subsite?: SubsiteUpdateOneRequiredWithoutPagesNestedInput
+  }
+
+  export type PageUncheckedUpdateWithoutAuthorInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    overview?: StringFieldUpdateOperationsInput | string
+    content?: NullableStringFieldUpdateOperationsInput | string | null
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumContentStatusFieldUpdateOperationsInput | $Enums.ContentStatus
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    published?: BoolFieldUpdateOperationsInput | boolean
+    coverImage?: NullableStringFieldUpdateOperationsInput | string | null
+    layoutTemplate?: NullableStringFieldUpdateOperationsInput | string | null
+    theme?: NullableStringFieldUpdateOperationsInput | string | null
+    metaData?: NullableStringFieldUpdateOperationsInput | string | null
+    seoSettings?: NullableStringFieldUpdateOperationsInput | string | null
+    analyticsCodes?: NullableStringFieldUpdateOperationsInput | string | null
+    showOnNav?: BoolFieldUpdateOperationsInput | boolean
+    deleted?: BoolFieldUpdateOperationsInput | boolean
+    subsiteId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    categories?: CategoryUncheckedUpdateManyWithoutPagesNestedInput
+    tags?: TagUncheckedUpdateManyWithoutPagesNestedInput
+  }
+
+  export type PageUncheckedUpdateManyWithoutAuthorInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    overview?: StringFieldUpdateOperationsInput | string
+    content?: NullableStringFieldUpdateOperationsInput | string | null
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumContentStatusFieldUpdateOperationsInput | $Enums.ContentStatus
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    published?: BoolFieldUpdateOperationsInput | boolean
+    coverImage?: NullableStringFieldUpdateOperationsInput | string | null
+    layoutTemplate?: NullableStringFieldUpdateOperationsInput | string | null
+    theme?: NullableStringFieldUpdateOperationsInput | string | null
+    metaData?: NullableStringFieldUpdateOperationsInput | string | null
+    seoSettings?: NullableStringFieldUpdateOperationsInput | string | null
+    analyticsCodes?: NullableStringFieldUpdateOperationsInput | string | null
+    showOnNav?: BoolFieldUpdateOperationsInput | boolean
+    deleted?: BoolFieldUpdateOperationsInput | boolean
+    subsiteId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type AccountUpdateWithoutAdminInput = {
+    name?: StringFieldUpdateOperationsInput | string
+    accountRef?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    subsites?: SubsiteUpdateManyWithoutAccountNestedInput
+  }
+
+  export type AccountUncheckedUpdateWithoutAdminInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    accountRef?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    subsites?: SubsiteUncheckedUpdateManyWithoutAccountNestedInput
+  }
+
+  export type AccountUncheckedUpdateManyWithoutAdminInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    name?: StringFieldUpdateOperationsInput | string
+    accountRef?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type SubsiteCreateManyAccountInput = {
+    id?: number
+    name: string
+    slug?: string | null
+    subsiteRef?: string
     logoUrl?: string | null
     logoSvg?: string | null
     navConfig?: string | null
@@ -24266,40 +23348,17 @@ export namespace Prisma {
     footerConfig?: string | null
     siteVisibility?: string | null
     siteLanguage?: string | null
+    domainName?: string | null
+    domainStatus?: string | null
+    domainCreatedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string | null
   }
 
-  export type AccountUpdateWithoutSubsitesInput = {
+  export type SubsiteUpdateWithoutAccountInput = {
     name?: StringFieldUpdateOperationsInput | string
     slug?: NullableStringFieldUpdateOperationsInput | string | null
-    accountRef?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    users?: UserUpdateManyWithoutAccountsNestedInput
-  }
-
-  export type AccountUncheckedUpdateWithoutSubsitesInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    slug?: NullableStringFieldUpdateOperationsInput | string | null
-    accountRef?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    users?: UserUncheckedUpdateManyWithoutAccountsNestedInput
-  }
-
-  export type AccountUncheckedUpdateManyWithoutSubsitesInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    slug?: NullableStringFieldUpdateOperationsInput | string | null
-    accountRef?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  }
-
-  export type SubsiteConfigUpdateWithoutSubsiteInput = {
-    name?: StringFieldUpdateOperationsInput | string
+    subsiteRef?: StringFieldUpdateOperationsInput | string
     logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     logoSvg?: NullableStringFieldUpdateOperationsInput | string | null
     navConfig?: NullableStringFieldUpdateOperationsInput | string | null
@@ -24307,13 +23366,20 @@ export namespace Prisma {
     footerConfig?: NullableStringFieldUpdateOperationsInput | string | null
     siteVisibility?: NullableStringFieldUpdateOperationsInput | string | null
     siteLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    domainName?: NullableStringFieldUpdateOperationsInput | string | null
+    domainStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    domainCreatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    posts?: PostUpdateManyWithoutSubsiteNestedInput
+    pages?: PageUpdateManyWithoutSubsiteNestedInput
   }
 
-  export type SubsiteConfigUncheckedUpdateWithoutSubsiteInput = {
+  export type SubsiteUncheckedUpdateWithoutAccountInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    subsiteRef?: StringFieldUpdateOperationsInput | string
     logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     logoSvg?: NullableStringFieldUpdateOperationsInput | string | null
     navConfig?: NullableStringFieldUpdateOperationsInput | string | null
@@ -24321,13 +23387,20 @@ export namespace Prisma {
     footerConfig?: NullableStringFieldUpdateOperationsInput | string | null
     siteVisibility?: NullableStringFieldUpdateOperationsInput | string | null
     siteLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    domainName?: NullableStringFieldUpdateOperationsInput | string | null
+    domainStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    domainCreatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    posts?: PostUncheckedUpdateManyWithoutSubsiteNestedInput
+    pages?: PageUncheckedUpdateManyWithoutSubsiteNestedInput
   }
 
-  export type SubsiteConfigUncheckedUpdateManyWithoutSubsiteInput = {
+  export type SubsiteUncheckedUpdateManyWithoutAccountInput = {
     id?: IntFieldUpdateOperationsInput | number
     name?: StringFieldUpdateOperationsInput | string
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    subsiteRef?: StringFieldUpdateOperationsInput | string
     logoUrl?: NullableStringFieldUpdateOperationsInput | string | null
     logoSvg?: NullableStringFieldUpdateOperationsInput | string | null
     navConfig?: NullableStringFieldUpdateOperationsInput | string | null
@@ -24335,6 +23408,167 @@ export namespace Prisma {
     footerConfig?: NullableStringFieldUpdateOperationsInput | string | null
     siteVisibility?: NullableStringFieldUpdateOperationsInput | string | null
     siteLanguage?: NullableStringFieldUpdateOperationsInput | string | null
+    domainName?: NullableStringFieldUpdateOperationsInput | string | null
+    domainStatus?: NullableStringFieldUpdateOperationsInput | string | null
+    domainCreatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type PostCreateManySubsiteInput = {
+    id?: number
+    title: string
+    overview?: string
+    content?: string | null
+    slug?: string | null
+    coverImage?: string | null
+    status?: $Enums.ContentStatus
+    published?: boolean
+    publishedAt?: Date | string | null
+    deleted?: boolean
+    authorId: number
+    createdAt?: Date | string
+    updatedAt?: Date | string | null
+  }
+
+  export type PageCreateManySubsiteInput = {
+    id?: number
+    title: string
+    overview?: string
+    content?: string | null
+    slug?: string | null
+    status?: $Enums.ContentStatus
+    publishedAt?: Date | string | null
+    published?: boolean
+    coverImage?: string | null
+    layoutTemplate?: string | null
+    theme?: string | null
+    metaData?: string | null
+    seoSettings?: string | null
+    analyticsCodes?: string | null
+    showOnNav?: boolean
+    deleted?: boolean
+    authorId: number
+    createdAt?: Date | string
+    updatedAt?: Date | string | null
+  }
+
+  export type PostUpdateWithoutSubsiteInput = {
+    title?: StringFieldUpdateOperationsInput | string
+    overview?: StringFieldUpdateOperationsInput | string
+    content?: NullableStringFieldUpdateOperationsInput | string | null
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    coverImage?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumContentStatusFieldUpdateOperationsInput | $Enums.ContentStatus
+    published?: BoolFieldUpdateOperationsInput | boolean
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deleted?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    author?: UserUpdateOneRequiredWithoutPostsNestedInput
+    categories?: CategoryUpdateManyWithoutPostsNestedInput
+    tags?: TagUpdateManyWithoutPostsNestedInput
+  }
+
+  export type PostUncheckedUpdateWithoutSubsiteInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    overview?: StringFieldUpdateOperationsInput | string
+    content?: NullableStringFieldUpdateOperationsInput | string | null
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    coverImage?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumContentStatusFieldUpdateOperationsInput | $Enums.ContentStatus
+    published?: BoolFieldUpdateOperationsInput | boolean
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deleted?: BoolFieldUpdateOperationsInput | boolean
+    authorId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    categories?: CategoryUncheckedUpdateManyWithoutPostsNestedInput
+    tags?: TagUncheckedUpdateManyWithoutPostsNestedInput
+  }
+
+  export type PostUncheckedUpdateManyWithoutSubsiteInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    overview?: StringFieldUpdateOperationsInput | string
+    content?: NullableStringFieldUpdateOperationsInput | string | null
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    coverImage?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumContentStatusFieldUpdateOperationsInput | $Enums.ContentStatus
+    published?: BoolFieldUpdateOperationsInput | boolean
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deleted?: BoolFieldUpdateOperationsInput | boolean
+    authorId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type PageUpdateWithoutSubsiteInput = {
+    title?: StringFieldUpdateOperationsInput | string
+    overview?: StringFieldUpdateOperationsInput | string
+    content?: NullableStringFieldUpdateOperationsInput | string | null
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumContentStatusFieldUpdateOperationsInput | $Enums.ContentStatus
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    published?: BoolFieldUpdateOperationsInput | boolean
+    coverImage?: NullableStringFieldUpdateOperationsInput | string | null
+    layoutTemplate?: NullableStringFieldUpdateOperationsInput | string | null
+    theme?: NullableStringFieldUpdateOperationsInput | string | null
+    metaData?: NullableStringFieldUpdateOperationsInput | string | null
+    seoSettings?: NullableStringFieldUpdateOperationsInput | string | null
+    analyticsCodes?: NullableStringFieldUpdateOperationsInput | string | null
+    showOnNav?: BoolFieldUpdateOperationsInput | boolean
+    deleted?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    author?: UserUpdateOneRequiredWithoutPagesNestedInput
+    categories?: CategoryUpdateManyWithoutPagesNestedInput
+    tags?: TagUpdateManyWithoutPagesNestedInput
+  }
+
+  export type PageUncheckedUpdateWithoutSubsiteInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    overview?: StringFieldUpdateOperationsInput | string
+    content?: NullableStringFieldUpdateOperationsInput | string | null
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumContentStatusFieldUpdateOperationsInput | $Enums.ContentStatus
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    published?: BoolFieldUpdateOperationsInput | boolean
+    coverImage?: NullableStringFieldUpdateOperationsInput | string | null
+    layoutTemplate?: NullableStringFieldUpdateOperationsInput | string | null
+    theme?: NullableStringFieldUpdateOperationsInput | string | null
+    metaData?: NullableStringFieldUpdateOperationsInput | string | null
+    seoSettings?: NullableStringFieldUpdateOperationsInput | string | null
+    analyticsCodes?: NullableStringFieldUpdateOperationsInput | string | null
+    showOnNav?: BoolFieldUpdateOperationsInput | boolean
+    deleted?: BoolFieldUpdateOperationsInput | boolean
+    authorId?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    categories?: CategoryUncheckedUpdateManyWithoutPagesNestedInput
+    tags?: TagUncheckedUpdateManyWithoutPagesNestedInput
+  }
+
+  export type PageUncheckedUpdateManyWithoutSubsiteInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    title?: StringFieldUpdateOperationsInput | string
+    overview?: StringFieldUpdateOperationsInput | string
+    content?: NullableStringFieldUpdateOperationsInput | string | null
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumContentStatusFieldUpdateOperationsInput | $Enums.ContentStatus
+    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    published?: BoolFieldUpdateOperationsInput | boolean
+    coverImage?: NullableStringFieldUpdateOperationsInput | string | null
+    layoutTemplate?: NullableStringFieldUpdateOperationsInput | string | null
+    theme?: NullableStringFieldUpdateOperationsInput | string | null
+    metaData?: NullableStringFieldUpdateOperationsInput | string | null
+    seoSettings?: NullableStringFieldUpdateOperationsInput | string | null
+    analyticsCodes?: NullableStringFieldUpdateOperationsInput | string | null
+    showOnNav?: BoolFieldUpdateOperationsInput | boolean
+    deleted?: BoolFieldUpdateOperationsInput | boolean
+    authorId?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
@@ -24439,204 +23673,6 @@ export namespace Prisma {
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
-  export type PostCreateManyAuthorInput = {
-    id?: number
-    title: string
-    overview?: string
-    content?: string | null
-    slug?: string | null
-    coverImage?: string | null
-    status?: $Enums.ContentStatus
-    published?: boolean
-    publishedAt?: Date | string | null
-    deleted?: boolean
-    accountRef?: string
-    subsiteRef?: string
-    contextUserId?: string
-    createdAt?: Date | string
-    updatedAt?: Date | string | null
-  }
-
-  export type PageCreateManyAuthorInput = {
-    id?: number
-    title: string
-    overview?: string
-    content?: string | null
-    slug?: string | null
-    status?: $Enums.ContentStatus
-    publishedAt?: Date | string | null
-    published?: boolean
-    coverImage?: string | null
-    layoutTemplate?: string | null
-    theme?: string | null
-    metaData?: string | null
-    seoSettings?: string | null
-    analyticsCodes?: string | null
-    showOnNav?: boolean
-    deleted?: boolean
-    accountRef?: string
-    subsiteRef?: string
-    createdAt?: Date | string
-    updatedAt?: Date | string | null
-  }
-
-  export type PostUpdateWithoutAuthorInput = {
-    title?: StringFieldUpdateOperationsInput | string
-    overview?: StringFieldUpdateOperationsInput | string
-    content?: NullableStringFieldUpdateOperationsInput | string | null
-    slug?: NullableStringFieldUpdateOperationsInput | string | null
-    coverImage?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumContentStatusFieldUpdateOperationsInput | $Enums.ContentStatus
-    published?: BoolFieldUpdateOperationsInput | boolean
-    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    deleted?: BoolFieldUpdateOperationsInput | boolean
-    accountRef?: StringFieldUpdateOperationsInput | string
-    subsiteRef?: StringFieldUpdateOperationsInput | string
-    contextUserId?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    categories?: CategoryUpdateManyWithoutPostsNestedInput
-    tags?: TagUpdateManyWithoutPostsNestedInput
-  }
-
-  export type PostUncheckedUpdateWithoutAuthorInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    title?: StringFieldUpdateOperationsInput | string
-    overview?: StringFieldUpdateOperationsInput | string
-    content?: NullableStringFieldUpdateOperationsInput | string | null
-    slug?: NullableStringFieldUpdateOperationsInput | string | null
-    coverImage?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumContentStatusFieldUpdateOperationsInput | $Enums.ContentStatus
-    published?: BoolFieldUpdateOperationsInput | boolean
-    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    deleted?: BoolFieldUpdateOperationsInput | boolean
-    accountRef?: StringFieldUpdateOperationsInput | string
-    subsiteRef?: StringFieldUpdateOperationsInput | string
-    contextUserId?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    categories?: CategoryUncheckedUpdateManyWithoutPostsNestedInput
-    tags?: TagUncheckedUpdateManyWithoutPostsNestedInput
-  }
-
-  export type PostUncheckedUpdateManyWithoutAuthorInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    title?: StringFieldUpdateOperationsInput | string
-    overview?: StringFieldUpdateOperationsInput | string
-    content?: NullableStringFieldUpdateOperationsInput | string | null
-    slug?: NullableStringFieldUpdateOperationsInput | string | null
-    coverImage?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumContentStatusFieldUpdateOperationsInput | $Enums.ContentStatus
-    published?: BoolFieldUpdateOperationsInput | boolean
-    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    deleted?: BoolFieldUpdateOperationsInput | boolean
-    accountRef?: StringFieldUpdateOperationsInput | string
-    subsiteRef?: StringFieldUpdateOperationsInput | string
-    contextUserId?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  }
-
-  export type PageUpdateWithoutAuthorInput = {
-    title?: StringFieldUpdateOperationsInput | string
-    overview?: StringFieldUpdateOperationsInput | string
-    content?: NullableStringFieldUpdateOperationsInput | string | null
-    slug?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumContentStatusFieldUpdateOperationsInput | $Enums.ContentStatus
-    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    published?: BoolFieldUpdateOperationsInput | boolean
-    coverImage?: NullableStringFieldUpdateOperationsInput | string | null
-    layoutTemplate?: NullableStringFieldUpdateOperationsInput | string | null
-    theme?: NullableStringFieldUpdateOperationsInput | string | null
-    metaData?: NullableStringFieldUpdateOperationsInput | string | null
-    seoSettings?: NullableStringFieldUpdateOperationsInput | string | null
-    analyticsCodes?: NullableStringFieldUpdateOperationsInput | string | null
-    showOnNav?: BoolFieldUpdateOperationsInput | boolean
-    deleted?: BoolFieldUpdateOperationsInput | boolean
-    accountRef?: StringFieldUpdateOperationsInput | string
-    subsiteRef?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    categories?: CategoryUpdateManyWithoutPagesNestedInput
-    tags?: TagUpdateManyWithoutPagesNestedInput
-  }
-
-  export type PageUncheckedUpdateWithoutAuthorInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    title?: StringFieldUpdateOperationsInput | string
-    overview?: StringFieldUpdateOperationsInput | string
-    content?: NullableStringFieldUpdateOperationsInput | string | null
-    slug?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumContentStatusFieldUpdateOperationsInput | $Enums.ContentStatus
-    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    published?: BoolFieldUpdateOperationsInput | boolean
-    coverImage?: NullableStringFieldUpdateOperationsInput | string | null
-    layoutTemplate?: NullableStringFieldUpdateOperationsInput | string | null
-    theme?: NullableStringFieldUpdateOperationsInput | string | null
-    metaData?: NullableStringFieldUpdateOperationsInput | string | null
-    seoSettings?: NullableStringFieldUpdateOperationsInput | string | null
-    analyticsCodes?: NullableStringFieldUpdateOperationsInput | string | null
-    showOnNav?: BoolFieldUpdateOperationsInput | boolean
-    deleted?: BoolFieldUpdateOperationsInput | boolean
-    accountRef?: StringFieldUpdateOperationsInput | string
-    subsiteRef?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    categories?: CategoryUncheckedUpdateManyWithoutPagesNestedInput
-    tags?: TagUncheckedUpdateManyWithoutPagesNestedInput
-  }
-
-  export type PageUncheckedUpdateManyWithoutAuthorInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    title?: StringFieldUpdateOperationsInput | string
-    overview?: StringFieldUpdateOperationsInput | string
-    content?: NullableStringFieldUpdateOperationsInput | string | null
-    slug?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumContentStatusFieldUpdateOperationsInput | $Enums.ContentStatus
-    publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    published?: BoolFieldUpdateOperationsInput | boolean
-    coverImage?: NullableStringFieldUpdateOperationsInput | string | null
-    layoutTemplate?: NullableStringFieldUpdateOperationsInput | string | null
-    theme?: NullableStringFieldUpdateOperationsInput | string | null
-    metaData?: NullableStringFieldUpdateOperationsInput | string | null
-    seoSettings?: NullableStringFieldUpdateOperationsInput | string | null
-    analyticsCodes?: NullableStringFieldUpdateOperationsInput | string | null
-    showOnNav?: BoolFieldUpdateOperationsInput | boolean
-    deleted?: BoolFieldUpdateOperationsInput | boolean
-    accountRef?: StringFieldUpdateOperationsInput | string
-    subsiteRef?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  }
-
-  export type AccountUpdateWithoutUsersInput = {
-    name?: StringFieldUpdateOperationsInput | string
-    slug?: NullableStringFieldUpdateOperationsInput | string | null
-    accountRef?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    subsites?: SubsiteUpdateManyWithoutAccountsNestedInput
-  }
-
-  export type AccountUncheckedUpdateWithoutUsersInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    slug?: NullableStringFieldUpdateOperationsInput | string | null
-    accountRef?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    subsites?: SubsiteUncheckedUpdateManyWithoutAccountsNestedInput
-  }
-
-  export type AccountUncheckedUpdateManyWithoutUsersInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    name?: StringFieldUpdateOperationsInput | string
-    slug?: NullableStringFieldUpdateOperationsInput | string | null
-    accountRef?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  }
-
   export type PostUpdateWithoutCategoriesInput = {
     title?: StringFieldUpdateOperationsInput | string
     overview?: StringFieldUpdateOperationsInput | string
@@ -24647,13 +23683,11 @@ export namespace Prisma {
     published?: BoolFieldUpdateOperationsInput | boolean
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deleted?: BoolFieldUpdateOperationsInput | boolean
-    accountRef?: StringFieldUpdateOperationsInput | string
-    subsiteRef?: StringFieldUpdateOperationsInput | string
-    contextUserId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     author?: UserUpdateOneRequiredWithoutPostsNestedInput
     tags?: TagUpdateManyWithoutPostsNestedInput
+    subsite?: SubsiteUpdateOneRequiredWithoutPostsNestedInput
   }
 
   export type PostUncheckedUpdateWithoutCategoriesInput = {
@@ -24668,9 +23702,7 @@ export namespace Prisma {
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deleted?: BoolFieldUpdateOperationsInput | boolean
     authorId?: IntFieldUpdateOperationsInput | number
-    accountRef?: StringFieldUpdateOperationsInput | string
-    subsiteRef?: StringFieldUpdateOperationsInput | string
-    contextUserId?: StringFieldUpdateOperationsInput | string
+    subsiteId?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     tags?: TagUncheckedUpdateManyWithoutPostsNestedInput
@@ -24688,9 +23720,7 @@ export namespace Prisma {
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deleted?: BoolFieldUpdateOperationsInput | boolean
     authorId?: IntFieldUpdateOperationsInput | number
-    accountRef?: StringFieldUpdateOperationsInput | string
-    subsiteRef?: StringFieldUpdateOperationsInput | string
-    contextUserId?: StringFieldUpdateOperationsInput | string
+    subsiteId?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
@@ -24711,12 +23741,11 @@ export namespace Prisma {
     analyticsCodes?: NullableStringFieldUpdateOperationsInput | string | null
     showOnNav?: BoolFieldUpdateOperationsInput | boolean
     deleted?: BoolFieldUpdateOperationsInput | boolean
-    accountRef?: StringFieldUpdateOperationsInput | string
-    subsiteRef?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     author?: UserUpdateOneRequiredWithoutPagesNestedInput
     tags?: TagUpdateManyWithoutPagesNestedInput
+    subsite?: SubsiteUpdateOneRequiredWithoutPagesNestedInput
   }
 
   export type PageUncheckedUpdateWithoutCategoriesInput = {
@@ -24737,8 +23766,7 @@ export namespace Prisma {
     showOnNav?: BoolFieldUpdateOperationsInput | boolean
     deleted?: BoolFieldUpdateOperationsInput | boolean
     authorId?: IntFieldUpdateOperationsInput | number
-    accountRef?: StringFieldUpdateOperationsInput | string
-    subsiteRef?: StringFieldUpdateOperationsInput | string
+    subsiteId?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     tags?: TagUncheckedUpdateManyWithoutPagesNestedInput
@@ -24762,8 +23790,7 @@ export namespace Prisma {
     showOnNav?: BoolFieldUpdateOperationsInput | boolean
     deleted?: BoolFieldUpdateOperationsInput | boolean
     authorId?: IntFieldUpdateOperationsInput | number
-    accountRef?: StringFieldUpdateOperationsInput | string
-    subsiteRef?: StringFieldUpdateOperationsInput | string
+    subsiteId?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
@@ -24778,13 +23805,11 @@ export namespace Prisma {
     published?: BoolFieldUpdateOperationsInput | boolean
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deleted?: BoolFieldUpdateOperationsInput | boolean
-    accountRef?: StringFieldUpdateOperationsInput | string
-    subsiteRef?: StringFieldUpdateOperationsInput | string
-    contextUserId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     author?: UserUpdateOneRequiredWithoutPostsNestedInput
     categories?: CategoryUpdateManyWithoutPostsNestedInput
+    subsite?: SubsiteUpdateOneRequiredWithoutPostsNestedInput
   }
 
   export type PostUncheckedUpdateWithoutTagsInput = {
@@ -24799,9 +23824,7 @@ export namespace Prisma {
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deleted?: BoolFieldUpdateOperationsInput | boolean
     authorId?: IntFieldUpdateOperationsInput | number
-    accountRef?: StringFieldUpdateOperationsInput | string
-    subsiteRef?: StringFieldUpdateOperationsInput | string
-    contextUserId?: StringFieldUpdateOperationsInput | string
+    subsiteId?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     categories?: CategoryUncheckedUpdateManyWithoutPostsNestedInput
@@ -24819,9 +23842,7 @@ export namespace Prisma {
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deleted?: BoolFieldUpdateOperationsInput | boolean
     authorId?: IntFieldUpdateOperationsInput | number
-    accountRef?: StringFieldUpdateOperationsInput | string
-    subsiteRef?: StringFieldUpdateOperationsInput | string
-    contextUserId?: StringFieldUpdateOperationsInput | string
+    subsiteId?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
@@ -24842,12 +23863,11 @@ export namespace Prisma {
     analyticsCodes?: NullableStringFieldUpdateOperationsInput | string | null
     showOnNav?: BoolFieldUpdateOperationsInput | boolean
     deleted?: BoolFieldUpdateOperationsInput | boolean
-    accountRef?: StringFieldUpdateOperationsInput | string
-    subsiteRef?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     author?: UserUpdateOneRequiredWithoutPagesNestedInput
     categories?: CategoryUpdateManyWithoutPagesNestedInput
+    subsite?: SubsiteUpdateOneRequiredWithoutPagesNestedInput
   }
 
   export type PageUncheckedUpdateWithoutTagsInput = {
@@ -24868,8 +23888,7 @@ export namespace Prisma {
     showOnNav?: BoolFieldUpdateOperationsInput | boolean
     deleted?: BoolFieldUpdateOperationsInput | boolean
     authorId?: IntFieldUpdateOperationsInput | number
-    accountRef?: StringFieldUpdateOperationsInput | string
-    subsiteRef?: StringFieldUpdateOperationsInput | string
+    subsiteId?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     categories?: CategoryUncheckedUpdateManyWithoutPagesNestedInput
@@ -24893,8 +23912,7 @@ export namespace Prisma {
     showOnNav?: BoolFieldUpdateOperationsInput | boolean
     deleted?: BoolFieldUpdateOperationsInput | boolean
     authorId?: IntFieldUpdateOperationsInput | number
-    accountRef?: StringFieldUpdateOperationsInput | string
-    subsiteRef?: StringFieldUpdateOperationsInput | string
+    subsiteId?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
@@ -24904,6 +23922,10 @@ export namespace Prisma {
   /**
    * Aliases for legacy arg types
    */
+    /**
+     * @deprecated Use UserCountOutputTypeDefaultArgs instead
+     */
+    export type UserCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = UserCountOutputTypeDefaultArgs<ExtArgs>
     /**
      * @deprecated Use AccountCountOutputTypeDefaultArgs instead
      */
@@ -24921,10 +23943,6 @@ export namespace Prisma {
      */
     export type PageCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = PageCountOutputTypeDefaultArgs<ExtArgs>
     /**
-     * @deprecated Use UserCountOutputTypeDefaultArgs instead
-     */
-    export type UserCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = UserCountOutputTypeDefaultArgs<ExtArgs>
-    /**
      * @deprecated Use CategoryCountOutputTypeDefaultArgs instead
      */
     export type CategoryCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = CategoryCountOutputTypeDefaultArgs<ExtArgs>
@@ -24933,6 +23951,10 @@ export namespace Prisma {
      */
     export type TagCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = TagCountOutputTypeDefaultArgs<ExtArgs>
     /**
+     * @deprecated Use UserDefaultArgs instead
+     */
+    export type UserArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = UserDefaultArgs<ExtArgs>
+    /**
      * @deprecated Use AccountDefaultArgs instead
      */
     export type AccountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = AccountDefaultArgs<ExtArgs>
@@ -24940,10 +23962,6 @@ export namespace Prisma {
      * @deprecated Use SubsiteDefaultArgs instead
      */
     export type SubsiteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = SubsiteDefaultArgs<ExtArgs>
-    /**
-     * @deprecated Use SubsiteConfigDefaultArgs instead
-     */
-    export type SubsiteConfigArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = SubsiteConfigDefaultArgs<ExtArgs>
     /**
      * @deprecated Use PostDefaultArgs instead
      */
@@ -24976,10 +23994,6 @@ export namespace Prisma {
      * @deprecated Use UserContactDefaultArgs instead
      */
     export type UserContactArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = UserContactDefaultArgs<ExtArgs>
-    /**
-     * @deprecated Use UserDefaultArgs instead
-     */
-    export type UserArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = UserDefaultArgs<ExtArgs>
     /**
      * @deprecated Use CategoryDefaultArgs instead
      */
