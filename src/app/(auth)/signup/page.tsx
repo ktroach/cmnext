@@ -19,7 +19,7 @@ import { Block } from "@/components/containers/block"
 export const metadata: Metadata = {
   metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
   title: "Sign Up",
-  description: "Sign up for an account",
+  description: "Sign up for a new account (Free)",
 }
 
 export default async function SignUpPage() {
@@ -32,7 +32,7 @@ export default async function SignUpPage() {
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl">Sign up</CardTitle>
           <CardDescription>
-            Choose your preferred sign up method
+            Choose your preferred Sign Up method
           </CardDescription>
         </CardHeader>
         <CardContent className="grid gap-4">

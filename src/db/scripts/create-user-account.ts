@@ -1,14 +1,15 @@
 import { prisma } from "../";
 
 async function main() {
+  // Randomly generated user name, email, and company name 
   const user = await prisma.user.create({
     data: {
-      email: 'bob.smith@cmnext.io',
-      name: 'Bob Smith',
+      name: 'Lawrence Fishbourne',
+      email: 'someuser@example.com',
       accounts: {
         create: [
           {
-            name: "Bob's Auto Paint LLC",
+            name: "NeoTech Solutions",
           }
         ]
       },
