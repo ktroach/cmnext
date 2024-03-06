@@ -1,5 +1,5 @@
 # cmnext
- Taking Content Management to the next level 
+ Taking Content Management to the Next level 
 
 Built with:
 - Bun Package Manager
