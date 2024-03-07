@@ -26,7 +26,7 @@ export default function IndexPage() {
         </div>
 
         <h1 className="md:text-7xl text-3xl lg:text-6xl font-bold text-center text-white relative z-20">
-          Content Creation Made Easy
+          Taking Content Management to the "Next" Level
         </h1>
 
         <section className="mx-auto flex w-full max-w-5xl flex-col items-center justify-center gap-4 text-center">
@@ -46,14 +46,14 @@ export default function IndexPage() {
             >
               <Button asChild>
                 <Link href="/product-features" className="mx-[5px]">
-                  See Features
-                  <span className="sr-only">See Features</span>
+                  Learn More...
+                  <span className="sr-only">Learn More...</span>
                 </Link>
               </Button>
               <Button variant="outline" asChild>
                 <Link href="/get-started">
                   Start Writing
-                  <span className="sr-only">Start Writing</span>
+                  <span className="sr-only">Start Creating!</span>
                 </Link>
               </Button>
             </Wavy>
@@ -64,7 +64,7 @@ export default function IndexPage() {
         <ContentSection
           title="Featured Blogs"
           description="Explore blogs from featured writers"
-          href="/blogs"
+          href="/topblogs"
           linkText="View all Blogs"
           className="pt-8 md:pt-10 lg:pt-12"
         >
@@ -73,12 +73,21 @@ export default function IndexPage() {
         <ContentSection
           title="Featured Sites"
           description="Explore sites from featured content creators"
-          href="/sites"
+          href="/topsites"
           linkText="View all Sites"
           className="py-8 md:py-10 lg:py-12"
         >
           <FeaturedSites takeLimit={4} />
         </ContentSection>
+        <ContentSection
+          title="Featured Writers"
+          description="Explore the works from the top content creators"
+          href="/topcreators"
+          linkText="View All Writers"
+          className="py-8 md:py-10 lg:py-12"
+        >
+          <FeaturedSites takeLimit={8} />
+        </ContentSection>        
       </Block>
     </>
   )

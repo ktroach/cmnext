@@ -47,3 +47,12 @@ export interface FeaturedItem extends FeaturedItemTypes {
 }
 
 export type FeaturedItemType = FeaturedItem
+
+export interface UserSignUp  {
+  username: string | null;
+  emailAddress: string | null;  
+  createdSessionId: string | null;
+  createdUserId: string | null;  
+}
+
+export type UserSignUpType = UserSignUp

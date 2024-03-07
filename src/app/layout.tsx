@@ -1,6 +1,6 @@
 import { ClerkProvider } from '@clerk/nextjs'
 import { cn } from '@/lib/utils'
-import { Toaster } from '@/components/ui/toaster'
+import { Toaster } from 'sonner'
 import { ThemeProvider } from '@/components/theme-provider'
 import { TRPCReactProvider } from '@/trpc/provider'
 import { fontMono, fontSans } from '@/styles/fonts'
@@ -24,6 +24,13 @@ export default function RootLayout({ children }: RootLayoutProps) {
             )}
           >
             <TRPCReactProvider>
+              <Toaster
+                expand
+                visibleToasts={4}
+                position="bottom-right"
+                invert={true}
+                closeButton={true}
+              />
               <ThemeProvider
                 attribute="class"
                 defaultTheme="system"
@@ -32,7 +39,6 @@ export default function RootLayout({ children }: RootLayoutProps) {
                 {children}
               </ThemeProvider>
             </TRPCReactProvider>
-            <Toaster />
           </body>
         </html>
       </ClerkProvider>
