@@ -1,5 +1,5 @@
 # cmnext
- "Content Creation Made Easy" in Next.js 
+ Taking Content Management to the Next level 
 
 Built with:
 - Bun Package Manager
