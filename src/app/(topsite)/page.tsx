@@ -3,46 +3,58 @@ import Link from 'next/link'
 import { Block } from '@/components/containers/block'
 import { Button } from '@/components/ui/button'
 import { ContentSection } from '@/components/containers/content-section'
-import { Sparkles } from '@/components/animations/sparkles'
+import { Starfield } from '@/components/animations/starfield'
 import { Wavy } from '@/components/animations/wavy'
 import { TextGenerator } from '@/components/animations/text-generator'
-import { FeaturedPosts, FeaturedSites } from '@/components/templates/featured-content'
+import {
+  FeaturedPosts,
+  FeaturedSites,
+} from '@/components/templates/featured-content'
+import { FloatingNavTemplate } from '@/components/templates/floating-nav'
 
 export default function IndexPage() {
   return (
     <>
       <div className="h-[40rem] relative w-full bg-transparent flex flex-col items-center justify-center overflow-hidden rounded-md">
+        <FloatingNavTemplate className="top-2" />
         <div className="w-full absolute inset-0 h-screen">
-          <Sparkles
-            id="tsparticlesfullpage"
+          <Starfield
+            id="starfield-2"
             background="transparent"
-            minSize={0.6}
-            maxSize={1.4}
-            particleDensity={100}
+            minSize={1.6}
+            maxSize={2.4}
+            particleDensity={50}
             className="w-full h-full"
-            particleColor="#38bdf8"
-            speed={1.5}
-          />
+            particleColor="#ffffff"
+            speed={0.00}
+          ></Starfield>
         </div>
 
         <h1 className="md:text-7xl text-3xl lg:text-6xl font-bold text-center text-white relative z-20">
-          Taking Content Management to the "Next" Level
+          Taking your Content to the Next level
         </h1>
 
         <section className="mx-auto flex w-full max-w-5xl flex-col items-center justify-center gap-4 text-center">
           <TextGenerator
             className="mt-5"
-            words="Build sites, write blogs, create your digital dreams without paywalls and subscriptions"
+            words="Create Blogs, Create Sites, Create your Dreams"
           />
 
           <div className="flex flex-wrap items-center justify-center gap-4 mt-10 z-40">
             <Wavy
-              className="max-w-4xl mt-10"
+              animationTimeoutMs={4000}
+              backgroundFill="transparent"            
               blur={0.0}
-              backgroundFill="transparent"
+              className="max-w-4xl mt-10"
+              colors={[
+                "#38bdf8",
+                "#818cf8",
+                "#c084fc",
+                "#e879f9",
+                "#22d3ee",
+              ]}
               waveOpacity={0.015}
               waveWidth={2}
-              animationTimeoutMs={4000}
             >
               <Button asChild>
                 <Link href="/product-features" className="mx-[5px]">
@@ -87,7 +99,7 @@ export default function IndexPage() {
           className="py-8 md:py-10 lg:py-12"
         >
           <FeaturedSites takeLimit={8} />
-        </ContentSection>        
+        </ContentSection>
       </Block>
     </>
   )

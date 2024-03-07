@@ -103,9 +103,18 @@ export const Wavy = ({
     };
   }, []);
 
+  const stopAnimation = () => {
+    timedOut = true
+    try {
+      cancelAnimationFrame(animationId);
+    } catch(ex) { 
+      // defer exceptions
+    }
+  }
+
   let timedOut = false
   setTimeout(() => {
-    timedOut = true
+    stopAnimation()
   }, animationTimeoutMs)
 
   return (

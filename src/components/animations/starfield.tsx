@@ -1,6 +1,6 @@
 "use client";
 import type { NextPage } from "next";
-import React from "react";
+import React, { ReactNode } from "react";
 import { useEffect, useState } from "react";
 import Particles, { initParticlesEngine } from "@tsparticles/react";
 import type { Container, Engine } from "@tsparticles/engine";
@@ -19,7 +19,7 @@ type ParticlesProps = {
   particleColor?: string;
   particleDensity?: number;
 };
-export const Sparkles = (props: ParticlesProps) => {
+export const Starfield = (props: ParticlesProps) => {
   const {
     id,
     className,
@@ -66,7 +66,7 @@ export const Sparkles = (props: ParticlesProps) => {
               },
             },
             fullScreen: {
-              enable: false,
+              enable: true,
               zIndex: 1,
             },
 
@@ -104,7 +104,7 @@ export const Sparkles = (props: ParticlesProps) => {
               },
               collisions: {
                 absorb: {
-                  speed: 2,
+                  speed: 0.2,
                 },
                 bounce: {
                   horizontal: {
@@ -115,7 +115,7 @@ export const Sparkles = (props: ParticlesProps) => {
                   },
                 },
                 enable: false,
-                maxSpeed: 50,
+                maxSpeed: 0.5,
                 mode: "bounce",
                 overlap: {
                   enable: true,
@@ -128,7 +128,7 @@ export const Sparkles = (props: ParticlesProps) => {
                   h: {
                     count: 0,
                     enable: false,
-                    speed: 1,
+                    speed: 0.1,
                     decay: 0,
                     delay: 0,
                     sync: true,
@@ -137,7 +137,7 @@ export const Sparkles = (props: ParticlesProps) => {
                   s: {
                     count: 0,
                     enable: false,
-                    speed: 1,
+                    speed: 0.1,
                     decay: 0,
                     delay: 0,
                     sync: true,
@@ -146,7 +146,7 @@ export const Sparkles = (props: ParticlesProps) => {
                   l: {
                     count: 0,
                     enable: false,
-                    speed: 1,
+                    speed: 0.1,
                     decay: 0,
                     delay: 0,
                     sync: true,
@@ -168,7 +168,7 @@ export const Sparkles = (props: ParticlesProps) => {
                 },
                 attract: {
                   distance: 200,
-                  enable: false,
+                  enable: true,
                   rotate: {
                     x: 3000,
                     y: 3000,
@@ -186,10 +186,10 @@ export const Sparkles = (props: ParticlesProps) => {
                 drift: 0,
                 enable: true,
                 gravity: {
-                  acceleration: 9.81,
+                  acceleration: 0.5,
                   enable: false,
                   inverse: false,
-                  maxSpeed: 50,
+                  maxSpeed: 0.9,
                 },
                 path: {
                   clamp: true,
@@ -206,7 +206,7 @@ export const Sparkles = (props: ParticlesProps) => {
                 size: false,
                 speed: {
                   min: 0.1,
-                  max: 1,
+                  max: 0.2,
                 },
                 spin: {
                   acceleration: 0,
@@ -276,7 +276,7 @@ export const Sparkles = (props: ParticlesProps) => {
                 animation: {
                   count: 0,
                   enable: false,
-                  speed: 5,
+                  speed: 0.1,
                   decay: 0,
                   delay: 0,
                   sync: false,
@@ -322,7 +322,7 @@ export const Sparkles = (props: ParticlesProps) => {
                   value: 0,
                 },
                 mode: "vertical",
-                speed: 25,
+                speed: 0.1,
               },
               tilt: {
                 value: 0,
@@ -338,12 +338,12 @@ export const Sparkles = (props: ParticlesProps) => {
               twinkle: {
                 lines: {
                   enable: false,
-                  frequency: 0.05,
+                  frequency: 0.5,
                   opacity: 1,
                 },
                 particles: {
-                  enable: false,
-                  frequency: 0.05,
+                  enable: true,
+                  frequency: 0.5,
                   opacity: 1,
                 },
               },
@@ -351,7 +351,7 @@ export const Sparkles = (props: ParticlesProps) => {
                 distance: 5,
                 enable: false,
                 speed: {
-                  angle: 50,
+                  angle: 0.5,
                   move: 10,
                 },
               },
@@ -379,14 +379,14 @@ export const Sparkles = (props: ParticlesProps) => {
               },
               orbit: {
                 animation: {
-                  count: 0,
-                  enable: false,
-                  speed: 1,
+                  count: 20,
+                  enable: true,
+                  speed: 0.1,
                   decay: 0,
                   delay: 0,
                   sync: false,
                 },
-                enable: false,
+                enable: true,
                 opacity: 1,
                 rotation: {
                   value: 45,
@@ -419,16 +419,17 @@ export const Sparkles = (props: ParticlesProps) => {
               },
               repulse: {
                 value: 0,
-                enabled: false,
+                enabled: true,
                 distance: 1,
                 duration: 1,
                 factor: 1,
-                speed: 1,
+                speed: 0.1,
               },
             },
             detectRetina: true,
           }}
-        />
+        >
+        </Particles>
       )}
     </motion.div>
   );
