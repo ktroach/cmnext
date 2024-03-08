@@ -1,4 +1,4 @@
-// Creator Layout
+// Admin Layout
 import { redirect } from 'next/navigation'
 import { currentUser } from '@clerk/nextjs'
 
@@ -16,9 +16,10 @@ export default async function AdminLayout({ children }: CreatorLayoutProps) {
   const user = await currentUser()
 
   // Using Clerk Auth SDK redirect unauthorized users
-  if (!user) {
-    redirect('/signin')
-  }
+  // TODO: Uncomment before committing to branch  
+  // if (!user) {
+  //   redirect('/signin')
+  // }
 
   // TODO: Fetch the User from the database and redirect if the user is not in the ADMIN role
   // if (!fetchedUser.role !== "ADMIN") {

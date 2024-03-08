@@ -2,13 +2,14 @@ import { Block } from '@/components/containers/block'
 
 interface SubsitePageProps {
   params: {
-    subsiteId: string
+    slug: string[]
   }
 }
 
 export default function SubsiteHome({params}: SubsitePageProps) {
-  const subsiteId = Number(params.subsiteId);
-  const siteTitle = `Subsite ${subsiteId}`
+  const slug = params?.slug?.join("/")
+  // const subsiteId = Number(params.subsiteId);
+  const siteTitle = `Subsite ${slug}`
 
   return (
     <Block as="div" className="gap-12">

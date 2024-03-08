@@ -56,3 +56,17 @@ export interface UserSignUp  {
 }
 
 export type UserSignUpType = UserSignUp
+
+export type Blog = {
+  _id: string
+  authors: string[]
+  title: string
+  description?: string | undefined
+  date: string
+  published: boolean 
+  readingTime: number
+  slug: string
+  slugAsParams: string
+}
+
+
