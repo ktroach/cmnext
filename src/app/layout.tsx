@@ -1,9 +1,9 @@
 import { ClerkProvider } from '@clerk/nextjs'
 import { cn } from '@/lib/utils'
 import { Toaster } from 'sonner'
-import { ThemeProvider } from '@/components/theme-provider'
+import { ThemeProvider } from '@/components/themes/theme-provider'
 import { TRPCReactProvider } from '@/trpc/provider'
-import { fontSans, KaiseiDecolRegular, TheLastShuriken } from '@/styles/fonts'
+import { fontSans } from '@/styles/fonts'
 import '@/styles/globals.css'
 
 interface RootLayoutProps {

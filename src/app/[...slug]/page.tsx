@@ -1,9 +1,9 @@
-import { notFound } from "next/navigation"
-import { Metadata } from "next"
-// import { allPosts } from "contentlayer/generated"
-import { allPages } from "contentlayer/generated"
-
-import { Mdx } from "@/components/mdx"
+import { notFound } from 'next/navigation'
+import { Metadata } from 'next'
+import { Block } from '@/components/containers/block'
+import { allPages } from 'contentlayer/generated'
+import { Header } from '@/components/layouts/header'
+import { Mdx } from '@/components/mdx'
 
 interface PageProps {
   params: {
@@ -11,8 +11,8 @@ interface PageProps {
   }
 }
 
-async function getPageFromParams(params: PageProps["params"]) {
-  const slug = params?.slug?.join("/")
+async function getPageFromParams(params: PageProps['params']) {
+  const slug = params?.slug?.join('/')
   const page = allPages.find((page) => page.slugAsParams === slug)
 
   if (!page) {
@@ -37,9 +37,9 @@ export async function generateMetadata({
   }
 }
 
-export async function generateStaticParams(): Promise<PageProps["params"][]> {
+export async function generateStaticParams(): Promise<PageProps['params'][]> {
   return allPages.map((page) => ({
-    slug: page.slugAsParams.split("/"),
+    slug: page.slugAsParams.split('/'),
   }))
 }
 
@@ -51,11 +51,15 @@ export default async function PagePage({ params }: PageProps) {
   }
 
   return (
-    <article className="py-6 prose dark:prose-invert">
-      <h1>{page.title}</h1>
-      {page.description && <p className="text-xl">{page.description}</p>}
-      <hr />
-      <Mdx code={page.body.code} />
-    </article>
+    <Block>
+      <div className="w-full overflow-hidden flex flex-col items-center justify-center">
+        <article className="py-6 prose dark:prose-invert">
+          <h1>{page.title}</h1>
+          {page.description && <p className="text-xl">{page.description}</p>}
+          <hr />
+          <Mdx code={page.body.code} />
+        </article>
+      </div>
+    </Block>
   )
 }
