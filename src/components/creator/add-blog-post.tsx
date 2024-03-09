@@ -144,11 +144,6 @@ export function AddBlogPostForm() {
           />
 
           <Separator />
-          {/* <p className='text-sm text-mute'>
-            Here is where you will start typing the actual content for your blog post. 
-            Notice that there are two sections. The section to the left is the editor window where you can type, and the section to the right is the preview window. 
-            In the editor window, you can type your content using Markdown syntax.  
-          </p> */}
           <Label>Body</Label>
           <MdEditor modelValue={body} onChange={setBody} language='en-US' onSave={handleSave} toolbars={toolbarOptions} />
 
