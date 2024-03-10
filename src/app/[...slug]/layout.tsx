@@ -13,7 +13,7 @@ export default async function PagePageLayout({ children }: CreatorLayoutProps) {
     <div className="flex min-h-screen flex-col">
       <SiteHeader user={user} />
       <div className="container flex-1 ">
-        <main className="flex w-full flex-col overflow-hidden ">{children}</main>
+        <main className="flex w-full flex-col overflow-hidden">{children}</main>
       </div>
       <SiteFooter />
     </div>
