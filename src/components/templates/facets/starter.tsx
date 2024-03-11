@@ -14,21 +14,21 @@ import { FloatingNavTemplate } from '@/components/templates/floating-nav'
 export interface StarterTemplateProps {
   line: string
   words: string
-  waves: []
+  waves: any
   leftAction: any // TODO: use explicit type
   rightAction: any // TODO: use explicit type
   sections: any // TODO: use explicit type and sections will be stored in the database 
 }
 
 // TODO: This Starter Template facet will be used later. This is just a spike.
-export const StarterTemplate = ({
+export default function StarterTemplate({
   line,
   words,
   waves,
   leftAction,
   rightAction,
   sections,
-}: StarterTemplateProps) => {
+}: StarterTemplateProps) {
   const BuildSections = () => {
     if (!sections) {
       return
