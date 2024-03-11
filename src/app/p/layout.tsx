@@ -7,7 +7,7 @@ interface SubsiteLayoutProps {
 export default async function SubsiteLayout({ children }: SubsiteLayoutProps) {
   return (
     <div className="relative flex min-h-screen flex-col">
-      products route layout
+      subs route layout
       <main className="flex-1">{children}</main>{' '}
     </div>
   )

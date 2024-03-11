@@ -5,7 +5,7 @@ export default async function PagePage({ params }: any) {
   return (
     <Block>
      <div className="w-full overflow-hidden flex flex-col items-center justify-center">
-        all reviews route page 
+        sub: {params.subId} - blogs/{params.slug}
       </div>
     </Block>
   )
