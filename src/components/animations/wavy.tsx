@@ -29,6 +29,7 @@ export const Wavy = ({
   [key: string]: any;
 }) => {
   const noise = createNoise3D();
+  let timedOut = false
   let w: number,
     h: number,
     nt: number,
@@ -89,10 +90,13 @@ export const Wavy = ({
   let animationId: number;
 
   const render = () => {
+    if (timedOut) {
+      return
+    }
     ctx.fillStyle = backgroundFill || "black";
     ctx.globalAlpha = waveOpacity || 0.5;
     ctx.fillRect(0, 0, w, h);
-    drawWave(10);
+    drawWave(6);
     animationId = requestAnimationFrame(render);
   };
 
@@ -103,9 +107,17 @@ export const Wavy = ({
     };
   }, []);
 
-  let timedOut = false
-  setTimeout(() => {
+  const stopAnimation = () => {
     timedOut = true
+    try {
+      cancelAnimationFrame(animationId);
+    } catch(ex) { 
+      // defer exceptions
+    }
+  }
+
+  setTimeout(() => {
+    stopAnimation()
   }, animationTimeoutMs)
 
   return (

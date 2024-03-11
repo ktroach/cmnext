@@ -11,8 +11,7 @@ declare global {
 
 export const prisma = globalThis.prisma ?? prismaClientSingleton();
 
-// This will prevent new connection creation on hot reload
-
+// If connection already exists, use existing connection
 if (process.env.NODE_ENV !== "production") {
   globalThis.prisma = prisma;
 }

@@ -3,7 +3,6 @@ import Link from "next/link"
 import { redirect } from "next/navigation"
 import { env } from "@/env.mjs"
 import { currentUser } from "@clerk/nextjs"
-
 import {
   Card,
   CardContent,
@@ -24,7 +23,7 @@ export const metadata: Metadata = {
 
 export default async function SignUpPage() {
   const user = await currentUser()
-//   if (user) redirect("/")
+  if (user) redirect("/")
 
   return (
     <Block className="max-w-lg">

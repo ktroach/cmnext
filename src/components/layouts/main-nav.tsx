@@ -35,7 +35,7 @@ export function MainNav({ items }: MainNavProps) {
         href="/"
         className="hidden items-center lg:flex"
       >
-        <Icons.product className="h-6 w-6" aria-hidden="true" />
+        <Icons.nextjs className="h-6 w-6" aria-hidden="true" />
         <span className="hidden font-bold lg:inline-block">
           {staticConfig.name}
         </span>

@@ -27,7 +27,11 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'source.unsplash.com',
-      },            
+      },
+      {
+        protocol: 'https',
+        hostname: 'assets.aceternity.com',
+      },                  
     ],
   },
   eslint: { ignoreDuringBuilds: true },
