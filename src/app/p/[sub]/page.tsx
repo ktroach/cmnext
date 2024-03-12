@@ -1,24 +1,71 @@
+import React from 'react'
+import { allPages } from 'contentlayer/generated'
 import { Block } from '@/components/containers/block'
-import { FloatingNavTemplate } from '@/components/templates/floating-nav'
+import MenuContainer from '@/components/containers/menu'
+import { MenuItemType } from '@/components/templates/navmenuthing'
 
 export default async function PagePage({ params }: any) {
   console.log('params: ', params)
 
-  const menuItems = [
+  let m: any = []
+  const menu = allPages.map((page) => (m.push({
+    label: page.title,
+    href: page.slug,
+    slug: page.slugAsParams.split('/'),
+  })))
+
+  console.log("menu >>> ", m)
+
+  const menuItems: MenuItemType[] = [
     {
-      title: "products"
+      label: 'Item 1',
+      type: 'group',
+      href: '',
+      items: [
+        {
+          label: 'Sub Item 1.1',
+          href: '',
+          type: 'navlink',
+        },
+        {
+          label: 'Sub Item 1.2',
+          href: '',
+          type: 'navlink',
+        },
+        {
+          label: 'Sub Item 1.3',
+          href: '',
+          type: 'navlink',
+        },
+      ],
     },
     {
-      title: "services"
+      label: 'Item 2',
+      type: 'group',
+      href: '',
+      items: [
+        {
+          label: 'Sub Item 2.1',
+          href: '',
+          type: 'navlink',
+        },
+        {
+          label: 'Sub Item 2.2',
+          href: '',
+          type: 'navlink',
+        },
+      ],
     },
     {
-      title: "blogs"
+      label: 'Item 3',
+      href: '',
+      type: 'group',
     },
   ]
 
   return (
     <Block>
-      <FloatingNavTemplate className="top-2" menuItems={menuItems} />
+      <MenuContainer menuItems={menuItems} />
       <div className="w-full py-8 overflow-hidden flex flex-col items-center justify-center">
         sub: {params.subId} - sub Home
       </div>

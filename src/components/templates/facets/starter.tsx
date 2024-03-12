@@ -1,6 +1,6 @@
 'use client'
 
-import * as React from 'react'
+import React, { useState } from 'react'
 import Link from 'next/link'
 import { Block } from '@/components/containers/block'
 import { Button } from '@/components/ui/button'
@@ -8,16 +8,16 @@ import { ContentSection } from '@/components/containers/content-section'
 import { Starfield } from '@/components/animations/starfield'
 import { Wavy } from '@/components/animations/wavy'
 import { TextGenerator } from '@/components/animations/text-generator'
-import { FloatingNavTemplate } from '@/components/templates/floating-nav'
+import { NavMenuThing, MenuItemType } from '@/components/templates/navmenuthing'
 
-// TODO: pass in this data props from the server compoinent. this data will be stored in the db at the subsite account level 
+// TODO: pass in this data props from the server compoinent. this data will be stored in the db at the subsite account level
 export interface StarterTemplateProps {
   line: string
   words: string
   waves: any
   leftAction: any // TODO: use explicit type
   rightAction: any // TODO: use explicit type
-  sections: any // TODO: use explicit type and sections will be stored in the database 
+  sections: any // TODO: use explicit type and sections will be stored in the database
 }
 
 // TODO: This Starter Template facet will be used later. This is just a spike.
@@ -29,16 +29,60 @@ export default function StarterTemplate({
   rightAction,
   sections,
 }: StarterTemplateProps) {
+  const [active, setActive] = useState<string | null>(null)
 
-  const menuItems = [
+  // TODO: Get from the config
+  const menuItems: MenuItemType[] = [
     {
-      title: "products"
+      label: 'Item 1',
+      type: 'group',
+      href: '',
+      items: [
+        {
+          label: 'Sub Item 1.1',
+          href: '',
+          type: 'navlink',
+        },
+        {
+          label: 'Sub Item 1.2',
+          href: '',
+          type: 'navlink',
+        },
+        {
+          label: 'Sub Item 1.3',
+          href: '',
+          type: 'navlink',
+        },
+      ],
     },
     {
-      title: "services"
+      label: 'Item 2',
+      type: 'group',
+      href: '',
+      items: [
+        {
+          label: 'Sub Item 2.1',
+          href: '',
+          type: 'navlink',
+        },
+        {
+          label: 'Sub Item 2.2',
+          href: '',
+          type: 'navlink',
+        },
+      ],
     },
     {
-      title: "blogs"
+      label: 'Item 3',
+      href: '',
+      type: 'group',
+      items: [
+        {
+          label: 'Sub Item 3.1',
+          href: '',
+          type: 'navlink',
+        },
+      ],      
     },
   ]
 
@@ -79,9 +123,14 @@ export default function StarterTemplate({
   return (
     <>
       <div className="h-[40rem] relative w-full bg-transparent flex flex-col items-center justify-center overflow-hidden rounded-md">
-        <FloatingNavTemplate className="top-2" menuItems={menuItems} />
+        <NavMenuThing
+          className="top-2"
+          menuItems={menuItems}
+          active={active}
+          setActive={setActive}
+        />
         <div className="w-full absolute inset-0 h-screen">
-          <Starfield
+          {/* <Starfield
             id="starfield-2"
             background="transparent"
             minSize={1.6}
@@ -90,7 +139,7 @@ export default function StarterTemplate({
             className="w-full h-full"
             particleColor="#ffffff"
             speed={0.0}
-          ></Starfield>
+          ></Starfield> */}
         </div>
 
         <h1 className="md:text-7xl text-3xl lg:text-6xl font-bold text-center text-white relative z-20">
@@ -101,7 +150,7 @@ export default function StarterTemplate({
           <TextGenerator className="mt-5" words={words} />
 
           <div className="flex flex-wrap items-center justify-center gap-4 mt-10 z-40">
-            <Wavy
+            {/* <Wavy
               animationTimeoutMs={4000}
               backgroundFill="transparent"
               blur={0.0}
@@ -109,7 +158,7 @@ export default function StarterTemplate({
               colors={waves}
               waveOpacity={0.015}
               waveWidth={2}
-            >
+            > */}
               <Button asChild>
                 <Link href={leftAction.href} className="mx-[5px]">
                   {leftAction.title}
@@ -122,17 +171,11 @@ export default function StarterTemplate({
                   <span className="sr-only">{rightAction.title}</span>
                 </Link>
               </Button>
-            </Wavy>
+            {/* </Wavy> */}
           </div>
         </section>
       </div>
-      <Block>
-        {sections ? (
-          <BuildSections />
-        ) : (
-          <></>
-        )}
-      </Block>
+      <Block>{sections ? <BuildSections /> : <></>}</Block>
     </>
   )
 }
