@@ -29,6 +29,19 @@ export default function StarterTemplate({
   rightAction,
   sections,
 }: StarterTemplateProps) {
+
+  const menuItems = [
+    {
+      title: "products"
+    },
+    {
+      title: "services"
+    },
+    {
+      title: "blogs"
+    },
+  ]
+
   const BuildSections = () => {
     if (!sections) {
       return
@@ -66,7 +79,7 @@ export default function StarterTemplate({
   return (
     <>
       <div className="h-[40rem] relative w-full bg-transparent flex flex-col items-center justify-center overflow-hidden rounded-md">
-        <FloatingNavTemplate className="top-2" />
+        <FloatingNavTemplate className="top-2" menuItems={menuItems} />
         <div className="w-full absolute inset-0 h-screen">
           <Starfield
             id="starfield-2"
