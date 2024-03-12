@@ -23,3 +23,5 @@ echo "pushing to branch $current_branch"
 git push origin $current_branch
 
 echo "pushed to $current_branch at $timestamp"
+
+bash ./restore-env.sh
