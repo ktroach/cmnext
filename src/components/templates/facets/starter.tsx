@@ -8,7 +8,7 @@ import { ContentSection } from '@/components/containers/content-section'
 import { Starfield } from '@/components/animations/starfield'
 import { Wavy } from '@/components/animations/wavy'
 import { TextGenerator } from '@/components/animations/text-generator'
-import { NavMenuThing, MenuItemType } from '@/components/templates/navmenuthing'
+import { DynamicNavMenu, MenuItemType } from '@/components/templates/dynamic-navmenu'
 
 // TODO: pass in this data props from the server compoinent. this data will be stored in the db at the subsite account level
 export interface StarterTemplateProps {
@@ -123,7 +123,7 @@ export default function StarterTemplate({
   return (
     <>
       <div className="h-[40rem] relative w-full bg-transparent flex flex-col items-center justify-center overflow-hidden rounded-md">
-        <NavMenuThing
+        <DynamicNavMenu
           className="top-2"
           menuItems={menuItems}
           active={active}
@@ -150,7 +150,7 @@ export default function StarterTemplate({
           <TextGenerator className="mt-5" words={words} />
 
           <div className="flex flex-wrap items-center justify-center gap-4 mt-10 z-40">
-            {/* <Wavy
+            <Wavy
               animationTimeoutMs={4000}
               backgroundFill="transparent"
               blur={0.0}
@@ -158,7 +158,7 @@ export default function StarterTemplate({
               colors={waves}
               waveOpacity={0.015}
               waveWidth={2}
-            > */}
+            >
               <Button asChild>
                 <Link href={leftAction.href} className="mx-[5px]">
                   {leftAction.title}
@@ -171,7 +171,7 @@ export default function StarterTemplate({
                   <span className="sr-only">{rightAction.title}</span>
                 </Link>
               </Button>
-            {/* </Wavy> */}
+            </Wavy>
           </div>
         </section>
       </div>

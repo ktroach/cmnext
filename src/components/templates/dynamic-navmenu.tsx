@@ -27,14 +27,14 @@ export interface NavMenuProps {
     setActive: any | undefined     
 }
 
-export interface MenuThingProps {
+export interface DynamicNavMenuProps {
     className: string | undefined
     menuItems: MenuItemType[]
     active: string | null
     setActive: any | undefined    
 }
 
-const NavMenuItem: React.FC<MenuItemProps> = ({ item, setActive, active }) => {
+export const NavMenuItem = ({ item, setActive, active }: MenuItemProps) => {
   const subMenu = item.items ? (
     <div className="flex flex-col space-y-4 text-sm">
       {item.items.map((subItem, index) => (
@@ -54,7 +54,7 @@ const NavMenuItem: React.FC<MenuItemProps> = ({ item, setActive, active }) => {
   )
 }
 
-const NavMenu: React.FC<NavMenuProps> = ({ menuItems, setActive, active }) => {
+export const NavMenu = ({ menuItems, setActive, active }: NavMenuProps) => {
   return (
     <>
       {menuItems.map((item, index) => (
@@ -64,13 +64,13 @@ const NavMenu: React.FC<NavMenuProps> = ({ menuItems, setActive, active }) => {
   )
 }
 
-export const NavMenuThing = (props: MenuThingProps) => {
+export const DynamicNavMenu = ({className, menuItems, active, setActive }: DynamicNavMenuProps) => {
   return (
     <div
-      className={cn('fixed top-10 inset-x-0 max-w-2xl mx-auto z-50', props?.className)}
+      className={cn('fixed top-10 inset-x-0 max-w-2xl mx-auto z-50', className)}
     >
-      <Menu setActive={props?.setActive}>
-        <NavMenu menuItems={props?.menuItems} setActive={props?.setActive} active={props?.active} />
+      <Menu setActive={setActive}>
+        <NavMenu menuItems={menuItems} setActive={setActive} active={active} />
       </Menu>
     </div>
   )
