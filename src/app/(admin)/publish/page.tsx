@@ -30,7 +30,7 @@ export default async function AdminPage() {
   return (
     <Block variant="sidebar">
       <Header
-        title="Admin Dashboard"
+        title="Creator Dashboard"
         description="Manage your Site"
         size="sm"
       />
