@@ -40,7 +40,7 @@ export const MenuItem = ({
         transition={{ duration: 0.3 }}
         className="cursor-pointer text-black hover:opacity-[0.9] dark:text-white"
       >
-        {linkUrl && (
+        {linkUrl && linkUrl?.href && (
           <Link href={linkUrl.href} legacyBehavior>
             {item}
           </Link>
