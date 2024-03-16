@@ -16,6 +16,17 @@ export default async function PagePage({ params }: any) {
     })
   )
 
+  const getHref = (menuProps: any): any => {
+    const subRef: string | undefined = params?.sub ? params.sub : undefined
+    const subPath: string | undefined = subRef
+      ? `http://localhost:3000/p/${subRef}/pages/`
+      : undefined
+    const menuItemHref = menuProps?.href ? menuProps.href : undefined
+    const hrefResult =
+      menuItemHref && subPath ? menuItemHref.replace('/pages/', subPath) : '#'
+    console.log('>>> hrefResult >>> ', hrefResult)
+  }
+
   let menuItems: MenuItemType[] = []
   let groupName: string = ''
 
@@ -23,7 +34,7 @@ export default async function PagePage({ params }: any) {
     let menuProps = menus[i]
     let slugItems = menuProps?.slug ? menuProps.slug : undefined
     // TODO: replace '/page/' in href with '/p/[sub]/pages/'
-    let subRef = `/p/${params.sub}/pages/`
+    // let subRef = `/p/${params.sub}/pages/`
     if (slugItems && slugItems.length > 0) {
       if (slugItems.length > 1) {
         if (groupName !== slugItems[0]) {
@@ -34,7 +45,7 @@ export default async function PagePage({ params }: any) {
             const slugItem = slugItems[j]
             subMenus.push({
               label: slugItem,
-              href: menuProps?.href,
+              href: getHref(menuProps),
               type: 'navlink',
               items: [],
             })
@@ -42,16 +53,33 @@ export default async function PagePage({ params }: any) {
           // create the group at the top level
           menuItems.push({
             label: groupName,
-            href: menuProps?.href, // parse the href
+            href: getHref(menuProps), // parse the href
             type: 'group',
             items: subMenus,
           })
         }
       } else {
-        // slugItem.length === 1 (one top menu item)
+        // one top menu item
+        // let topMenuItemHref: string = ''
+        // const topMenuItemLabel: string = menuProps?.label
+        //   ? menuProps.label.toUpperCase()
+          // : ''
+        // let menuItemHref: string = ''
+        // let subRef: string | undefined = params?.sub ? params.sub : undefined
+        // let subPath: string | undefined = subRef
+        //   ? `/p/${subRef}/pages/`
+        //   : undefined
+        // menuItemHref = menuProps?.href ? menuProps.href : undefined
+        // if (menuItemHref && subPath) {
+        //   topMenuItemHref = menuItemHref.replace('/pages/', subPath)
+        //   topMenuItemHref = `http://localhost:3000${topMenuItemHref}`
+        //   console.log('>>> topMenuItemHref >>> ', topMenuItemHref)
+        // }
         menuItems.push({
-          label: menuProps?.label,
-          href: menuProps?.href,
+          label: menuProps?.label
+          ? menuProps.label.toUpperCase()
+          : '',
+          href: getHref(menuProps),
           type: 'group',
           items: [],
         })

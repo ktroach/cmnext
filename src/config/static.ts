@@ -4,7 +4,7 @@ import type { FooterItem, MainNavItem, SidebarNavItem } from "@/types"
 export const metaConfig = {
   name: 'cmnext',
   description: 'The "Next" Content Management solution',
-};
+}
 
 export const staticConfig = {
     name: "",

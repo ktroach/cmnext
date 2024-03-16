@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { RootConfig } from '@/config/root-config'
 import {
   FeaturedPosts,
   FeaturedSites,
@@ -6,28 +7,36 @@ import {
 import StarterTemplate from '@/components/templates/facets/starter'
 
 export default function IndexPage() {
-  const line = 'Taking your Content to the Next level'
-  const words = 'Create Blogs, Create Sites, Create your Dreams'
-  const waves = ['#38bfff', '#818cf8', '#c084fc', '#e879f9', '#22d3ee']
-  const leftAction = {title: 'Learn More...', href: ''}
-  const rightAction = {title: 'Start Creating', href: ''}
-  const sections = [{
-    title: "Blogs",
-    description: "Featured Blog Posts",
-    href: "http://localhost:3000/blogs",
-    linkText: "View all Blogs",
-    content: <FeaturedPosts takeLimit={4} />,    
-  }, {
-    title: "Sites",
-    description: "Featured Sites",
-    href: "http://localhost:3000/sites",
-    linkText: "View all Sites",
-    content: <FeaturedSites takeLimit={4} />,     
-  }, ]
+  const buildSections = (sectionContent: any) => {
+    let sections: any = []
+    const sectionsConfig = RootConfig.sections ? RootConfig.sections : undefined
+    if (!sectionsConfig) return []
+    for (let i = 0; i < sectionsConfig.length; i++) {
+      const sectionConf = sectionsConfig[i]
+      sections.push({
+        ...sectionConf,
+        content: sectionContent[i],
+      })
+    }
+    return sections
+  }
+
+  const mainSections =  buildSections([
+     <FeaturedPosts takeLimit={RootConfig.featureBlogsLimit} />,
+     <FeaturedSites takeLimit={RootConfig.featureSitesLimit} />,
+  ])
 
   return (
     <>
-      <StarterTemplate line={line} words={words} waves={waves} leftAction={leftAction} rightAction={rightAction} sections={sections}  />
+      <StarterTemplate
+        line={RootConfig.description}
+        words={RootConfig.pitch}
+        waves={RootConfig.waveAnimationColors}
+        leftAction={RootConfig.leftAction}
+        rightAction={RootConfig.rightAction}
+        sections={mainSections}
+        menuConfig={RootConfig.mainNav}
+      />
     </>
   )
 }

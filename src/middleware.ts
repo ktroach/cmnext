@@ -7,7 +7,11 @@ export default authMiddleware({
 
   publicRoutes: [
     "/",
-    "/console(.*)",
+    "/products(.*)",
+    "/features(.*)",
+    "/pricing(.*)",
+    "/resources(.*)",
+    "/get-started(.*)",
     "/dashboard(.*)",
     "/signin(.*)",
     "/signup(.*)",
