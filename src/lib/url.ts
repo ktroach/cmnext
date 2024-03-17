@@ -12,7 +12,7 @@ export const getFrontendBaseUrl = () => {
     }
   
     return `http://localhost:3000`;
-  };
+  }
   
   export const getBackendBaseUrl = () => {
     // If this is browser environment, return empty string
@@ -25,5 +25,9 @@ export const getFrontendBaseUrl = () => {
   
   export const getTRPCUrl = () => {
     return getBackendBaseUrl() + "/api/trpc";
-  };
+  }
+
+  export function absoluteUrl(path: string) {
+    return `${getFrontendBaseUrl()}${path}`
+  }
   

@@ -40,6 +40,9 @@ export const Author = defineDocumentType(() => ({
       type: "string",
       required: true,
     },
+    url: {
+      type: "string",
+    },    
   },
   computedFields,
 }))
