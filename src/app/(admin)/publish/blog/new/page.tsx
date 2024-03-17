@@ -5,7 +5,7 @@ import { currentUser } from "@clerk/nextjs"
 import { AddBlogPostForm } from "@/components/creator/add-blog-post"
 import { Block } from "@/components/containers/block"
 
-// http://localhost:3000/blog/1704226991729f44
+// http://localhost:3000/p/2222/blogs/1704226991729f44
 
 export const metadata: Metadata = {
   metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),

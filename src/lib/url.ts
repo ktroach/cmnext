@@ -1,17 +1,16 @@
 export const getFrontendBaseUrl = () => {
     // If App url is defined (Production), return it
-    const appUrl = process.env.NEXT_PUBLIC_APP_URL;
+    let appUrl = process.env.NEXT_PUBLIC_APP_URL;
     if (appUrl) {
       return appUrl;
     }
   
-    // Else if it is vercel deployment, return the preview url
-    const vc = process.env.VERCEL_URL;
-    if (vc) {
-      return `https://${vc}`;
+    // If this is the vercel deployment, return the preview url
+    const vercelUrl = process.env.VERCEL_URL;
+    if (vercelUrl) {
+      return `https://${vercelUrl}`;
     }
   
-    // else return localhost url
     return `http://localhost:3000`;
   };
   

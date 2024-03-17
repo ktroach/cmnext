@@ -1,24 +1,22 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { getFrontendBaseUrl } from '@/lib/url'
 
 const useHref = (menuProps: any) => {
-  // TODO: Fix the base Url
-  const [hrefResult, setHrefResult] = useState('http://localhost:3000')
+  const BaseUrl = getFrontendBaseUrl()
+  const [hrefResult, setHrefResult] = useState(BaseUrl)
 
   useEffect(() => {
     const { sub, href } = menuProps
-
     const subRef = sub || undefined
-    const subPath = subRef
-      ? `http://localhost:3000/p/${subRef}/pages/`
-      : undefined
+    const subPath = subRef ? `${BaseUrl}/p/${subRef}/pages/` : undefined
     const menuItemHref = href || undefined
 
     const newHrefResult =
       menuItemHref && subPath
         ? menuItemHref.replace('/pages/', subPath)
-        : `http://localhost:3000/p/${subRef}`
+        : `${BaseUrl}/p/${subRef}`
 
     setHrefResult(newHrefResult)
   }, [menuProps])

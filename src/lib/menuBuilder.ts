@@ -8,7 +8,29 @@ export const buildDyanmicMenus = (menuData: any) => {
       for (let i = 0; i < menuData.length; i++) {
         const menuProps = menuData[i];
         const slugItems = menuProps?.slug ? menuProps.slug : undefined;
-        if (slugItems && slugItems.length > 0) {
+        const superGroup = menuProps && menuProps?.type === 'super-group' ? menuProps : undefined
+        if (superGroup) {
+          const subMenus = [];
+          const superGroupItems = superGroup?.items ? superGroup.items : undefined
+          if (superGroupItems && superGroupItems.length > 0) {
+            for (let j = 0; j < superGroupItems.length; j++) {
+              const superGroupItem = superGroupItems[j];
+              subMenus.push({
+                label: superGroupItem.label,
+                href: useHref(superGroupItem),
+                type: 'navlink',
+                items: [],
+              });
+            }
+          }
+          menuItems.push({
+            label: superGroup.label.toUpperCase(),
+            href: useHref(menuProps),
+            type: 'super-group',
+            items: subMenus,
+          });
+        }
+        if (!superGroup && slugItems && slugItems.length > 0) {
           if (slugItems.length > 1) {
             if (groupName !== slugItems[0]) {
               groupName = slugItems[0];
@@ -30,6 +52,7 @@ export const buildDyanmicMenus = (menuData: any) => {
               });
             }
           } else {
+            // this will appear at the top of the menu as a single menu item
             menuItems.push({
               label: menuProps?.label ? menuProps.label.toUpperCase() : '',
               href: useHref(menuProps),
