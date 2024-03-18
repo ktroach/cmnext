@@ -1,5 +1,12 @@
+import { type SidebarNavItem } from "@/types"
 
-export const CreatorConfig = {
+export interface CreatorConfigProps {
+  sidebarNav: SidebarNavItem[]
+}
+
+export type CreatorConfigType = CreatorConfigProps
+
+export const CreatorConfig: CreatorConfigType = {
     sidebarNav: [
         {
           title: "Dashboard",

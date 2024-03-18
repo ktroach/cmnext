@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { api } from '@/trpc/client'
-import { useRouter } from 'next/navigation'
+import { redirect, useRouter } from 'next/navigation'
 import { ClerkLoading, useSignUp } from '@clerk/nextjs'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
@@ -26,6 +26,7 @@ import {
   SignUpResource,
 } from '@clerk/types'
 import { Skeleton } from '../ui/skeleton'
+import { getFrontendBaseUrl } from '@/lib/url'
 
 type Inputs = z.infer<typeof verfifyEmailSchema>
 
@@ -161,6 +162,28 @@ export function VerifyEmailForm() {
     }
 
     toast('Account created. Thank you for joining!')
+
+    toast.message('Hang tight while we generate your site...', {
+      description: "This usually takes a few seconds.",
+    })
+
+    const baseUrl = getFrontendBaseUrl()
+    const subRef = userSubSite?.subsiteRef ? userSubSite.subsiteRef : undefined
+    const creatorUrl: string | undefined = baseUrl && subRef ? `${baseUrl}/publish/${subRef}` : undefined
+    // Most likely this would not occur, but we handle this rare scenario as gracefully as we can 
+    if (!creatorUrl) {
+      // toast.error('There was a problem generating your site. Please check your email for further instructions.')
+      toast.error('There was a problem generating your site.', {
+        description: "Please check your email for further instructions.",
+      })      
+      return 
+    }
+
+    // TODO: Send Email to the new user: thank you for signing up, here is your subsite URL to start creating, here is how to get started create a blog, create a web page, create etc..
+
+    setTimeout(() => {
+      redirect(creatorUrl)
+    }, 3000)
   }
 
   const validateUser = (userName: unknown, userEmail: unknown) => {

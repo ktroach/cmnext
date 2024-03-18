@@ -29,6 +29,7 @@ export default async function AdminPage() {
 
       <div className="w-full overflow-hidden">
         Here are some shortcuts to get you going...
+        [Cards]
       </div>
     </Block>
   )
