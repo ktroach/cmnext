@@ -75,7 +75,7 @@ export function AddBlogPostForm() {
           body: JSON.stringify({
             title: data.title,
             description: data.description,
-            image: "/_next/image?url=%2Fimages%2Fblog%2Fblog-two.webp&w=750&q=75",
+            image: "/_next/image?url=%2Fimages%2Fblog%2Fblog-two.jpg&w=750&q=75",
             body: body
           }),
         });

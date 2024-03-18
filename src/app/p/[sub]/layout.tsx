@@ -55,8 +55,8 @@ export default async function SubsiteLayout({
   return (
     <div className="relative flex min-h-screen flex-col">
       <SubsiteMenu sub={params.sub} menuData={menuData} />
-      subs route layout - sub: {params.sub}
-      <main className="flex-1">{children}</main>{' '}
+      {/* subs route layout - sub: {params.sub} */}
+      <main className="flex-1 my-20">{children}</main>{' '}
     </div>
   )
 }

@@ -11,24 +11,14 @@ import { Separator } from '@/components/ui/separator'
 import { Icons } from '@/styles/icons'
 import { Mdx } from '@/components/mdx'
 import { Block } from '@/components/containers/block'
+import '@/styles/mdx.css'
 
 interface PostPageProps {
   params: {
-    slug: string[]
+    slug: string[] | string
+    sub: string
   }
 }
-
-// eslint-disable-next-line @typescript-eslint/require-await
-// async function getPostFromParams(params: PostPageProps['params']) {
-//   const slug = params?.slug?.join('/')
-//   const post = allPosts.find((post) => post.slugAsParams === slug)
-
-//   if (!post) {
-//     null
-//   }
-
-//   return post
-// }
 
 async function getPostFromParams(params: PostPageProps['params']) {
   const slug = params?.slug
@@ -36,7 +26,7 @@ async function getPostFromParams(params: PostPageProps['params']) {
   const postPage = allPosts.find((post) => post.slugAsParams === slug)
 
   if (!postPage) {
-    console.log("page not found")
+    console.log("page not found: ", slug)
     null
   }
 
@@ -53,12 +43,11 @@ export async function generateMetadata({
   }
 
   const baseUrl = getFrontendBaseUrl()
-  // const url = env.NEXT_PUBLIC_APP_URL
 
-  const ogUrl = new URL(`${baseUrl}/api/og`)
-  ogUrl.searchParams.set('title', post.title)
-  ogUrl.searchParams.set('type', 'Blog Post')
-  ogUrl.searchParams.set('mode', 'dark')
+  const openGraphUrl = new URL(`${baseUrl}/api/og`)
+  openGraphUrl.searchParams.set('title', post.title)
+  openGraphUrl.searchParams.set('type', 'Blog Post')
+  openGraphUrl.searchParams.set('mode', 'dark')
 
   return {
     title: post.title,
@@ -73,7 +62,7 @@ export async function generateMetadata({
       url: absoluteUrl(post.slug),
       images: [
         {
-          url: ogUrl.toString(),
+          url: openGraphUrl.toString(),
           width: 1200,
           height: 630,
           alt: post.title,
@@ -82,12 +71,6 @@ export async function generateMetadata({
     },
   }
 }
-
-// export async function generateStaticParams(): Promise<any> {
-//   return allPosts.map((post) => ({
-//     slug: post.slugAsParams.split('/'),
-//   }))
-// }
 
 export default async function PostPage({ params }: PostPageProps) {
   const post = await getPostFromParams(params)
@@ -101,7 +84,7 @@ export default async function PostPage({ params }: PostPageProps) {
     allAuthors.find((a) => a.title === author?.replace(/\r$/, ''))
   )
 
-  const subRef = params?.sub ? params.sub : ''
+  const subRef = params && params?.sub ? params.sub : ''
   const allPostsUrl = `${baseUrl}/p/${subRef}/blogs`
 
   return (
@@ -126,11 +109,11 @@ export default async function PostPage({ params }: PostPageProps) {
           {post.date ? <div>•</div> : null}
           <div>{post.readingTime}min</div>
         </div>
-        <h1 className="mt-2 inline-block text-4xl font-bold leading-tight lg:text-5xl">
+        <h1 className="mt-8 inline-block text-4xl font-bold leading-tight lg:text-5xl">
           {post.title}
         </h1>
         {authors?.length ? (
-          <div className="mt-4 flex space-x-4">
+          <div className="mt-8 flex space-x-4">
             {authors.map((author) =>
               author ? (
                 <Link
@@ -160,11 +143,11 @@ export default async function PostPage({ params }: PostPageProps) {
           alt={post.title}
           width={720}
           height={405}
-          className="my-8 rounded-md border bg-muted transition-colors"
+          className="mt-8 rounded-md border bg-muted transition-colors"
           priority
         />
       )}
-      <Mdx code={post.body.code} />
+      <Mdx className="mt-8" code={post.body.code} />
       <Separator className="my-10" />
       <div className="flex justify-center py-5">
         <Link href={allPostsUrl} className={cn(buttonVariants({ variant: 'ghost' }))}>

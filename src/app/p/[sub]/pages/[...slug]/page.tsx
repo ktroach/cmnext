@@ -7,7 +7,7 @@ import { Mdx } from '@/components/mdx'
 
 interface PageProps {
   params: {
-    slug: string[]
+    slug: string[] 
   }
 }
 
