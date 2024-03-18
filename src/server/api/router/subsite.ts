@@ -18,7 +18,7 @@ export const subsiteRouter = createTRPCRouter({
         data: {
           name: input.name,
           accountId: input.accountId,
-          subsiteRef: subsiteRef,
+        //   subsiteRef: subsiteRef is automatically created by prisma 
         },
       })
       return newSubSite

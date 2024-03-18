@@ -1,6 +1,7 @@
 'use client'
 
 import React from 'react'
+import { api } from '@/trpc/client'
 import { useRouter } from 'next/navigation'
 import { ClerkLoading, useSignUp } from '@clerk/nextjs'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -19,7 +20,6 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Icons } from '@/styles/icons'
-import { api } from '@/trpc/client'
 import { toast } from 'sonner'
 import {
   AttemptEmailAddressVerificationParams,
@@ -83,7 +83,7 @@ export function VerifyEmailForm() {
       console.log('onSuccess >>> newSubSite >>> ', newSubSite)
     },
     onError: (error) =>
-      toast('Failed to Create Account', {
+      toast('Failed to Create Site!', {
         duration: 2000,
         description: error.message,
       }),
