@@ -21,7 +21,6 @@ import {
 import { Input } from "@/components/ui/input"
 import { Icons } from "@/styles/icons"
 import { PasswordInput } from "@/components/secure/password-input"
-// import { v4 as uuidv4 } from 'uuid'
 import { SignUpResource } from "@clerk/types"
 import { useUserSignUpStore } from "@/stores/user"
 import { UserSignUpType } from '@/types'

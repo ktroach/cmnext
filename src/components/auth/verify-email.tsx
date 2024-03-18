@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useCallback, useMemo } from 'react'
+import React from 'react'
 import { useRouter } from 'next/navigation'
 import { ClerkLoading, useSignUp } from '@clerk/nextjs'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -37,8 +37,6 @@ export function VerifyEmailForm() {
   const createUserMutation = api.users.create.useMutation({
     onSuccess: (newUser) => {
       console.log('onSuccess >>> newUser >>> ', newUser)
-      // TODO: Do we need this toast to the user?
-      toast('User created')
     },
     onError: (error) =>
       toast('Failed to Create User', {
@@ -57,11 +55,10 @@ export function VerifyEmailForm() {
     })
   }
 
+
   const createAccountMutation = api.accounts.create.useMutation({
     onSuccess: (newAccount) => {
       console.log('onSuccess >>> newAccount >>> ', newAccount)
-      // TODO: Do we need this toast to the user?
-      toast('Account created')
     },
     onError: (error) =>
       toast('Failed to Create Account', {
@@ -80,6 +77,28 @@ export function VerifyEmailForm() {
     })
   }
 
+
+  const createSubSiteMutation = api.subsites.create.useMutation({
+    onSuccess: (newSubSite) => {
+      console.log('onSuccess >>> newSubSite >>> ', newSubSite)
+    },
+    onError: (error) =>
+      toast('Failed to Create Account', {
+        duration: 2000,
+        description: error.message,
+      }),
+  })
+
+  const isCreatingSubSite = createSubSiteMutation.isLoading
+
+  const CreateSubSite = async (name: any, accountId: any) => {
+    console.log('Entered: CreateSubSite')
+    return await createSubSiteMutation.mutateAsync({
+      name: name,
+      accountId: accountId,
+    })
+  }
+
   const createUserAccount = async (signupResource: SignUpResource) => {
     const userEmail: unknown = signupResource?.emailAddress
       ? signupResource.emailAddress
@@ -89,7 +108,7 @@ export function VerifyEmailForm() {
       : ''
 
     // we shouldn't run into this scenario
-    if (!validateUnlikelyScenario(userName, userEmail)) {
+    if (!validateUser(userName, userEmail)) {
       return
     }
 
@@ -128,10 +147,23 @@ export function VerifyEmailForm() {
       return
     }
 
-    toast('Account created. Enjoy!')
+    // TODO: Now create the initial Subsite for this User Account
+    // This is where the Subsite Id is initially created for the user
+    const userSubSite = await CreateSubSite(userAccount.name, userAccount.id)
+    console.log('userSubSite: ', userSubSite)
+    if (!userSubSite) {
+      console.log(
+        'There was a problem creating the Sub-Site while signing up user account: ',
+        userAccount
+      )
+      toast('There was a problem signing up. Please try again.')
+      return
+    }
+
+    toast('Account created. Thank you for joining!')
   }
 
-  const validateUnlikelyScenario = (userName: unknown, userEmail: unknown) => {
+  const validateUser = (userName: unknown, userEmail: unknown) => {
     if (!userName) {
       console.log('Invalid username in user signup for ', userEmail)
       return false
@@ -236,7 +268,8 @@ export function VerifyEmailForm() {
           <Button disabled={isPending} onClick={handleGoBack}>
             {isPending ||
               isCreatingUser ||
-              (isCreatingAccount && (
+              isCreatingAccount ||
+              (isCreatingSubSite && (
                 <Icons.spinner
                   className="mr-2 h-4 w-4 animate-spin"
                   aria-hidden="true"
