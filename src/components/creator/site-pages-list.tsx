@@ -41,6 +41,7 @@ import {
 import { humanizeDate } from "@/lib/dates"
 import { Icons } from "@/styles/icons"
 
+// TODO: Change to Page 
 export const columns: ColumnDef<Blog>[] = [
   {
     accessorKey: "slug",
@@ -104,11 +105,11 @@ export const columns: ColumnDef<Blog>[] = [
   },
 ]
 
-interface PublisherListBlogsProps {
+interface PublisherListPagesProps {
     allPosts: any
 }
 
-export function PublisherListBlogs({ allPosts }: PublisherListBlogsProps) {
+export function PublisherListPages({ allPosts }: PublisherListPagesProps) {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []

@@ -27,6 +27,7 @@ import {
 } from '@clerk/types'
 import { Skeleton } from '../ui/skeleton'
 import { getFrontendBaseUrl } from '@/lib/url'
+import { sendEmail } from '@/lib/email'
 
 type Inputs = z.infer<typeof verfifyEmailSchema>
 
@@ -179,21 +180,33 @@ export function VerifyEmailForm() {
       return 
     }
 
-    // TODO: Send Email to the new user: thank you for signing up, here is your subsite URL to start creating, here is how to get started create a blog, create a web page, create etc..
+   /***
+     * TODO: Send Email to the new user: 
+     * thank you for signing up, here is your 
+     * Site's URL to start creating, here is 
+     * how to get started create a blog, 
+     * create a web page, create etc..
+     */
+    if (userEmail) {
+      // TODO: Need Email Templates
+      const emailBody = `<div><p>Thank you for joining! Here is </p><a href='${creatorUrl}'>Your Site URL</a></div>`
+      console.log('emailBody: ', emailBody)
+      await sendEmail(user.email, "Start Creating", emailBody, true)    
+    }
 
     setTimeout(() => {
-      redirect(creatorUrl)
+      // redirect(creatorUrl)
     }, 3000)
   }
 
-  const validateUser = (userName: unknown, userEmail: unknown) => {
-    if (!userName) {
-      console.log('Invalid username in user signup for ', userEmail)
+  const validateUser = (username: unknown, email: unknown) => {
+    if (!username) {
+      console.log('Invalid user_name in user signup for ', email)
       return false
     }
 
-    if (!userEmail) {
-      console.log('Invalid username in user signup for ', userName)
+    if (!email) {
+      console.log('Invalid user_email in user signup for ', username)
       return false
     }
     return true

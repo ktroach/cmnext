@@ -1,49 +1,52 @@
-import type { Metadata } from "next";
-import { env } from "@/env.mjs";
+// Keep this Page here for now. We might need it for a SuperAdmin view
 
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { Header } from "@/components/layouts/header";
-import { Block } from "@/components/containers/block";
+// import type { Metadata } from "next";
+// import { env } from "@/env.mjs";
 
-// import { OrganizationList } from "@/components/admin/org-list";
-import { currentUser } from "@clerk/nextjs";
+// import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+// import { Header } from "@/components/layouts/header";
+// import { Block } from "@/components/containers/block";
 
-export const metadata: Metadata = {
-  metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
-  title: "Admin Dashboard",
-  description: "Manage your Site",
-}
+// // import { OrganizationList } from "@/components/admin/org-list";
+// import { currentUser } from "@clerk/nextjs";
 
-export default async function AdminPage() {
-  const user = await currentUser()
-  console.log(">>>> admin page >> user >>>> ", user)
+// export const metadata: Metadata = {
+//   metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
+//   title: "Publisher Dashboard",
+//   description: "Manage your Site",
+// }
 
-  const email =
-    user?.emailAddresses?.find((e) => e.id === user.primaryEmailAddressId)
-      ?.emailAddress ?? "";
+// export default async function PublisherDashboard() {
+//   const user = await currentUser()
+//   console.log(">>>> admin page >> user >>>> ", user)
 
-  console.log(">>>> admin page >>>>  user email >>> ", email);
+//   const email =
+//     user?.emailAddresses?.find((e) => e.id === user.primaryEmailAddressId)
+//       ?.emailAddress ?? "";
 
-  const firstName = user?.firstName ? user.firstName : "" ;
-  console.log(">>>> admin page >>>>  first name >>> ", firstName);
+//   console.log(">>>> admin page >>>>  user email >>> ", email);
 
-  return (
-    <Block variant="sidebar">
-      <Header
-        title="Creator Dashboard"
-        description="Manage your Site"
-        size="sm"
-      />
+//   const firstName = user?.firstName ? user.firstName : "" ;
+//   console.log(">>>> admin page >>>>  first name >>> ", firstName);
 
-      <div className="w-full overflow-hidden">
-      <Alert>
-        <AlertTitle>Welcome, {firstName}!</AlertTitle>
-        <AlertDescription>
-          You are currently in the Admin Dashboard where you can manage the content and settings of your site. 
-        </AlertDescription>
-      </Alert>        
-      </div>
-        {/* <OrganizationList /> */}
-    </Block>
-  )
-}
+//   // TODO: Render Card Layout
+//   return (
+//     <Block variant="sidebar">
+//       <Header
+//         title="Creator Dashboard"
+//         description="Manage your Site"
+//         size="sm"
+//       />
+
+//       <div className="w-full overflow-hidden">
+//       <Alert>
+//         <AlertTitle>Welcome, {firstName}!</AlertTitle>
+//         <AlertDescription>
+//           You are currently in the Publisher Dashboard where you can manage the content and settings of your site. 
+//         </AlertDescription>
+//       </Alert>        
+//       </div>
+//         {/* List all of their Subsites (they can have multiple) */}
+//     </Block>
+//   )
+// }

@@ -1,82 +1,80 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
-/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */
+import type { Metadata } from 'next'
+import Image from 'next/image'
+import Link from 'next/link'
+import { env } from '@/env.mjs'
+import { type Post, allPosts } from 'contentlayer/generated'
+import dayjs from 'dayjs'
 
-import type { Metadata } from "next"
-import Image from "next/image"
-import Link from "next/link"
-import { env } from "@/env.mjs"
-import { type Post, allPosts } from "contentlayer/generated"
-import dayjs from "dayjs"
+import { humanizeDate } from '@/lib/dates'
+import { Header } from '@/components/layouts/header'
+import { Block } from '@/components/containers/block'
+import { AspectRatio } from '@/components/ui/aspect-ratio'
+import { Icons } from '@/styles/icons'
 
-import { humanizeDate } from "@/lib/dates"
-import { Header } from "@/components/layouts/header"
-import { Block } from "@/components/containers/block"
-import { AspectRatio } from "@/components/ui/aspect-ratio"
-import { Icons } from "@/styles/icons"
-
-import { AdminBlogPosts } from "@/components/creator/blog-list"
-import { CreateBlogAction } from "@/components/creator/create-blog-action"
-
-import type { Blog } from "@/types"
+import type { Blog } from '@/types'
+import { CreateNewPageAction } from '@/components/creator/create-page-action'
+import { PublisherListPages } from '@/components/creator/site-pages-list'
 
 export const metadata: Metadata = {
   metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
-  title: "Blog Posts", 
-  description: "Manage your Blog Posts",
+  title: 'Site Pages',
+  description: 'Manage your Site Pages',
 }
 
-export default function AdminBlogPage() {
-  const blogPosts: Blog[] = [];
-  let mostRecentPosts: Post[] = [];
+export default function PublisherManagePages({ params }: any) {
+  // TODO: Change to Pages not Posts
+  const blogPosts: Blog[] = []
+  let mostRecentPosts: Post[] = []
 
-  // conver to tRPC call 
+  // TODO: query for the pages that belong to this subsite
+
+  // conver to tRPC call
   const mapPosts = (posts: string | any[]) => {
     if (posts && posts.length > 0) {
       for (let i = 0; i < posts.length; i++) {
-        const p = posts[i];
+        const p = posts[i]
         if (p) {
           blogPosts.push({
-            _id: p._id, 
-            authors: p.authors, 
+            _id: p._id,
+            authors: p.authors,
             title: p.title,
             description: p?.description,
-            date: p.date, 
-            published: p.published, 
-            readingTime: p.readingTime, 
-            slug: p.slug, 
-            slugAsParams: p.slugAsParams
-          });
+            date: p.date,
+            published: p.published,
+            readingTime: p.readingTime,
+            slug: p.slug,
+            slugAsParams: p.slugAsParams,
+          })
         }
-      }    
+      }
     }
-  };
+  }
 
   // filters the posts that have been published
   // const posts = allPosts.filter((post) => post.published);
-  const posts = allPosts && allPosts.length > 0 ? allPosts : [];
-  // you need to check for null or empty array 
+  const posts = allPosts && allPosts.length > 0 ? allPosts : []
+  // you need to check for null or empty array
   if (posts && posts.length > 0) {
-    // sorts by date posted 
-    posts.sort((a, b) => (dayjs(a.date).isAfter(dayjs(b.date)) ? 1 : -1));
+    // sorts by date posted
+    posts.sort((a, b) => (dayjs(a.date).isAfter(dayjs(b.date)) ? 1 : -1))
     // sort descending
-    posts.reverse();
-    // slice the first 4 posts 
-    mostRecentPosts = posts ? posts.slice(0, 4) : [];
-    mapPosts(posts);
+    posts.reverse()
+    // slice the first 4 posts
+    mostRecentPosts = posts ? posts.slice(0, 4) : []
+    mapPosts(posts)
   }
 
   return (
     <Block variant="sidebar">
+      <p>Sub: {params.sub} - Publisher - Manage Site Pages</p>
       <Header
-        title="Blog Posts"
-        description="Manage your Blog Posts"
+        title="Site Pages"
+        description="Manage your Site's Pages"
         size="sm"
       />
       <div className="w-full overflow-hidden">
-        <CreateBlogAction />
-        <h2 className="py-4 font-bold">Recent Posts</h2>
+        <CreateNewPageAction />
+        <h2 className="py-4 font-bold">Recent Pages</h2>
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
           {mostRecentPosts.map((post, i) => (
             <Link key={post.slug} href={post.slug}>
@@ -105,9 +103,7 @@ export default function AdminBlogPage() {
                     </div>
                   )}
                 </AspectRatio>
-                <h5 className="line-clamp-1 font-semibold">
-                  {post.title}
-                </h5>
+                <h5 className="line-clamp-1 font-semibold">{post.title}</h5>
                 <p className="line-clamp-2 text-sm text-muted-foreground">
                   {post.description}
                 </p>
@@ -120,8 +116,8 @@ export default function AdminBlogPage() {
             </Link>
           ))}
         </div>
-        <h2 className="py-4 font-bold">All Posts</h2>        
-        {blogPosts ? <AdminBlogPosts allPosts={blogPosts} /> : <></>}
+        <h2 className="py-4 font-bold">All Site Pages</h2>
+        {blogPosts ? <PublisherListPages allPosts={blogPosts} /> : <></>}
       </div>
     </Block>
   )

@@ -26,7 +26,7 @@ type Inputs = z.infer<typeof blogSchema>
 import { MdEditor, type ToolbarNames } from 'md-editor-rt';
 import 'md-editor-rt/lib/style.css';
 
-export function AddBlogPostForm() {
+export function AddNewSitePageForm() {
   const router = useRouter();
   const [isPending, startTransition] = React.useTransition();
   const [body, setBody] = useState("");
@@ -108,7 +108,7 @@ export function AddBlogPostForm() {
             name="title"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Blog Title</FormLabel>
+                <FormLabel>Page Title</FormLabel>
                 <FormControl>
                   <Input placeholder="Title goes here..." {...field} />
                 </FormControl>
@@ -121,7 +121,7 @@ export function AddBlogPostForm() {
             name="description"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Blog Description</FormLabel>
+                <FormLabel>Page Description</FormLabel>
                 <FormControl>
                   <Input placeholder="Give your blog a description..." {...field} />
                 </FormControl>
@@ -144,7 +144,7 @@ export function AddBlogPostForm() {
           />
 
           <Separator />
-          <Label>Blog Content (Markdown)</Label>
+          <Label>Page Content (Markdown)</Label>
           <MdEditor modelValue={body} onChange={setBody} language='en-US' onSave={handleSave} toolbars={toolbarOptions} />
 
           <Button className='h-auto bg-blue-500 hover:bg-blue-700' disabled={isPending}>
