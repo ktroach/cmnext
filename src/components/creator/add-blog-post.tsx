@@ -1,14 +1,15 @@
-"use client"
+'use client'
 
-import React, { useState, useEffect } from 'react';
-import { useRouter } from "next/navigation"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import type { z } from "zod"
-import { toast } from "sonner"
-import { Button } from "@/components/ui/button"
-import { Label } from "@/components/ui/label"
-import { Separator } from "@/components/ui/separator"
+import React, { useState, useEffect } from 'react'
+import MDEditor from '@uiw/react-md-editor'
+import { useRouter } from 'next/navigation'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
+import type { z } from 'zod'
+import { toast } from 'sonner'
+import { Button } from '@/components/ui/button'
+import { Label } from '@/components/ui/label'
+import { Separator } from '@/components/ui/separator'
 import {
   Form,
   FormControl,
@@ -16,74 +17,35 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { Icons } from "@/styles/icons"
-import { blogSchema } from "@/validations/blog"
+} from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
+import { Icons } from '@/styles/icons'
+import { blogSchema } from '@/validations/blog'
 
 type Inputs = z.infer<typeof blogSchema>
 
-import { MdEditor, type ToolbarNames } from 'md-editor-rt';
-import 'md-editor-rt/lib/style.css';
-
 export function AddBlogPostForm() {
-  const router = useRouter();
-  const [isPending, startTransition] = React.useTransition();
-  const [body, setBody] = useState("");
-  const [isGenerating, setIsGenerating] = useState(false); 
-  const [image, setImage] = useState("");
-
-  const toolbarOptions: ToolbarNames[] = [
-    'bold',
-    'underline',
-    'italic',
-    '-',
-    'strikeThrough',
-    'title',
-    'sub',
-    'sup',
-    'quote',
-    'unorderedList',
-    'orderedList',    
-    '-',
-    'revoke',
-    'next',    
-    '-',
-    'pageFullscreen',
-    'fullscreen',
-    'preview',
-    'htmlPreview',
-    'catalog',    
-  ]; 
+  const router = useRouter()
+  const [isPending, startTransition] = React.useTransition()
+  // const [body, setBody] = useState('')
+  // const [isGenerating, setIsGenerating] = useState(false)
+  // const [image, setImage] = useState('')
+  const [value, setValue] = React.useState('**Just start typing!**')
 
   const form = useForm<Inputs>({
     resolver: zodResolver(blogSchema),
     defaultValues: {
-      title: "",
-      description: "",
-      image: "",
-      body: "",
+      title: '',
+      description: '',
+      image: '',
+      body: '',
     },
   })
 
   function onSubmit(data: Inputs) {
     startTransition(async () => {
       try {
-        // console.log(">>> onSubmit >>> input data >>> ", data);
-        // const response = await fetch("/api/blog/create", {
-        //   method: "POST",
-        //   body: JSON.stringify({
-        //     title: data.title,
-        //     description: data.description,
-        //     image: "/_next/image?url=%2Fimages%2Fblog%2Fblog-two.jpg&w=750&q=75",
-        //     body: body
-        //   }),
-        // });
-
-        // console.log(">>> response >>> ", response);
-        // toast.success("Blog added successfully.")
-        // form.reset()
-        // router.push("/admin/blog")
+        // TODO: tRPC call
       } catch (err) {
         console.error(err)
       }
@@ -91,9 +53,9 @@ export function AddBlogPostForm() {
   }
 
   function handleSave() {
-    console.log(">>> form.getValues() >>> ", form.getValues());
+    console.log('>>> form.getValues() >>> ', form.getValues())
     // form.getValues()
-    // onSubmit(inputs); 
+    // onSubmit(inputs);
   }
 
   return (
@@ -123,7 +85,10 @@ export function AddBlogPostForm() {
               <FormItem>
                 <FormLabel>Blog Description</FormLabel>
                 <FormControl>
-                  <Input placeholder="Give your blog a description..." {...field} />
+                  <Input
+                    placeholder="Give your blog a description..."
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -136,7 +101,10 @@ export function AddBlogPostForm() {
               <FormItem>
                 <FormLabel>Cover Image (URL)</FormLabel>
                 <FormControl>
-                  <Input placeholder="Type in the Image URL or Keywords..." {...field} />
+                  <Input
+                    placeholder="Type in the Image URL or Keywords..."
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -145,9 +113,12 @@ export function AddBlogPostForm() {
 
           <Separator />
           <Label>Blog Content (Markdown)</Label>
-          <MdEditor modelValue={body} onChange={setBody} language='en-US' onSave={handleSave} toolbars={toolbarOptions} />
+          <MDEditor value={value} onChange={setValue} />
 
-          <Button className='h-auto bg-blue-500 hover:bg-blue-700' disabled={isPending}>
+          <Button
+            className="h-auto bg-blue-500 hover:bg-blue-700"
+            disabled={isPending}
+          >
             {isPending && (
               <Icons.spinner
                 className="mr-2 h-4 w-4 animate-spin"
@@ -157,7 +128,6 @@ export function AddBlogPostForm() {
             Save Draft
             <span className="sr-only">Submit</span>
           </Button>
-
         </form>
       </Form>
     </>
