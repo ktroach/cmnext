@@ -1,8 +1,8 @@
-import { type Metadata } from "next"
-import Link from "next/link"
-import { redirect } from "next/navigation"
-import { env } from "@/env.mjs"
-import { currentUser } from "@clerk/nextjs"
+import { type Metadata } from 'next'
+import Link from 'next/link'
+import { redirect } from 'next/navigation'
+import { env } from '@/env.mjs'
+import { currentUser } from '@clerk/nextjs'
 
 import {
   Card,
@@ -11,26 +11,40 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { OAuthSignIn } from "@/components/auth/oauth-signin"
-import { SignInForm } from "@/components/auth/signin-form"
-import { Block } from "@/components/containers/block"
+} from '@/components/ui/card'
+import { OAuthSignIn } from '@/components/auth/oauth-signin'
+import { SignInForm } from '@/components/auth/signin-form'
+import { Block } from '@/components/containers/block'
 
 export const metadata: Metadata = {
   metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
-  title: "Sign In",
-  description: "Sign in to your account",
+  title: 'Sign In',
+  description: 'Sign in to your account',
 }
 
 export default async function SignInPage() {
   const user = await currentUser()
-  
-  // TODO: Uncomment this line 
+  // TODO: Make this Optional 
   // if (user) redirect("/")
 
   return (
     <Block className="max-w-lg">
-      <Card>
+      {user ? (
+        <Card>
+          <CardHeader className="space-y-4">
+            <CardTitle className="text-2xl">Sign Out</CardTitle>
+            <CardDescription>
+              You are already signed in. Do you want to sign out?{' '}
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="grid gap-4">
+            <div className="relative">
+              <Link href="/signout">Click here to Sign Out</Link>
+            </div>
+          </CardContent>
+        </Card>
+      ) : (
+        <Card>
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl">Sign in</CardTitle>
           <CardDescription>
@@ -73,6 +87,8 @@ export default async function SignInPage() {
           </Link>
         </CardFooter>
       </Card>
+      )}
+
     </Block>
   )
 }

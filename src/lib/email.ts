@@ -1,4 +1,17 @@
 import { toast } from 'sonner'
+// import { validate as validateEmail } from 'deep-email-validator'
+
+export const isEmailValid = async (emailAddress: string) => {
+  return true
+  // return validateEmail({
+  //   email: emailAddress,
+  //   validateRegex: false,
+  //   validateMx: false,
+  //   validateTypo: false,
+  //   validateDisposable: false,
+  //   validateSMTP: false,
+  // })
+}
 
 export const sendEmail = async (
   to: string,
@@ -7,7 +20,11 @@ export const sendEmail = async (
   showAlerts: boolean = false
 ) => {
   try {
-    const emailUrl: string = 'https://react.email/api/send/test' //process.env.REACT_MAIL_URL;
+    const emailUrl: string | undefined = process.env?.NEXT_PUBLIC_REACT_EMAIL_URL ? process.env?.NEXT_PUBLIC_REACT_EMAIL_URL : undefined;
+    if (!emailUrl) {
+      console.log("Failed to send email >> NEXT_PUBLIC_REACT_EMAIL_URL is missing")
+      return
+    }
     const response = await fetch(emailUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

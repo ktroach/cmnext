@@ -3,7 +3,7 @@ import { z } from 'zod'
 import { createTRPCRouter, protectedProcedure, publicProcedure } from '../trpc'
 import { ContentStatus } from '@/db'
 
-export const postRouter = createTRPCRouter({
+export const pagesRouter = createTRPCRouter({
   create: protectedProcedure
     .input(
       z.object({
@@ -15,7 +15,7 @@ export const postRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ input, ctx }) => {
-      return await ctx.db.post.create({
+      return await ctx.db.page.create({
         data: {
           title: input.title,
           content: input.content,
@@ -36,7 +36,7 @@ export const postRouter = createTRPCRouter({
     )
     .query(async ({ input, ctx }) => {
       console.log({ 'input.limit': input.limit })
-      return await ctx.db.post.findMany({
+      return await ctx.db.page.findMany({
         take: input.limit,
         orderBy: {
           createdAt: 'desc',
@@ -55,7 +55,7 @@ export const postRouter = createTRPCRouter({
       const getAllWhere = {
         subsiteId: input.subsiteId,
       }
-      return await ctx.db.post.findMany({
+      return await ctx.db.page.findMany({
         where: getAllWhere,
         orderBy: {
           createdAt: 'desc',
@@ -70,14 +70,14 @@ export const postRouter = createTRPCRouter({
       })
     )
     .query(async ({ input, ctx }) => {
-      return await ctx.db.post.findFirst({
+      return await ctx.db.page.findFirst({
         where: {
           id: input.id,
         },
       })
     }),
 
-    setStatusDraft: protectedProcedure
+  setStatusDraft: protectedProcedure
     .input(
       z.object({
         id: z.number().min(1),
@@ -190,7 +190,7 @@ export const postRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ input, ctx }) => {
-      return await ctx.db.post.delete({
+      return await ctx.db.page.delete({
         where: {
           id: input.id,
         },
@@ -207,7 +207,7 @@ export const postRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ input, ctx }) => {
-      return await ctx.db.post.update({
+      return await ctx.db.page.update({
         where: {
           id: input.id,
         },

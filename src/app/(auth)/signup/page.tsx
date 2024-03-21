@@ -18,7 +18,7 @@ import { Block } from "@/components/containers/block"
 export const metadata: Metadata = {
   metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
   title: "Sign Up",
-  description: "Sign up for a new account (Free)",
+  description: "Sign up for a new account",
 }
 
 export default async function SignUpPage() {
@@ -27,6 +27,13 @@ export default async function SignUpPage() {
 
   return (
     <Block className="max-w-lg">
+      {/* <Card>
+        <CardHeader>
+          <CardTitle>We are so glad to have you join!</CardTitle>
+          <CardDescription>
+          </CardDescription>
+        </CardHeader>
+      </Card> */}
       <Card>
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl">Sign up</CardTitle>

@@ -85,6 +85,7 @@
     "contentlayer": "latest",
     "date-fns": "^2.30.0",
     "dayjs": "^1.11.9",
+    "deep-email-validator": "^0.1.21",
     "embla-carousel-react": "8.0.0-rc11",
     "framer-motion": "^11.0.6",
     "jspdf": "^2.5.1",
