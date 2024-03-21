@@ -25,7 +25,7 @@ import { SignUpResource } from '@clerk/types'
 import { useUserSignUpStore } from '@/stores/user'
 import { UserSignUpType } from '@/types'
 import { generateFromEmail } from 'unique-username-generator'
-import { isEmailValid } from '@/lib/email'
+// import { isEmailValid } from '@/lib/email'
 
 type Inputs = z.infer<typeof authSchema>
 
@@ -65,20 +65,20 @@ export function SignUpForm() {
           return
         }
 
-        const { valid, reason, validators } = await isEmailValid(email)
-        console.log('valid: ', valid)
-        console.log('reason: ', reason)
-        console.log('validators: ', validators)
-        const validatorResults: any = validators ? validators : undefined 
-        if (!valid && reason && validatorResults) {
-          const emailFailedMsg: string = validatorResults[reason] ? validatorResults[reason] : ""
-          if (emailFailedMsg) {
-            toast.error('Please provide a valid email address.', {description: emailFailedMsg, important: true})
-            return
-          }
-          toast.error('Please provide a valid email address.', {description: emailFailedMsg, important: true})
-          return
-        }
+        // const { valid, reason, validators } = await isEmailValid(email)
+        // console.log('valid: ', valid)
+        // console.log('reason: ', reason)
+        // console.log('validators: ', validators)
+        // const validatorResults: any = validators ? validators : undefined 
+        // if (!valid && reason && validatorResults) {
+        //   const emailFailedMsg: string = validatorResults[reason] ? validatorResults[reason] : ""
+        //   if (emailFailedMsg) {
+        //     toast.error('Please provide a valid email address.', {description: emailFailedMsg, important: true})
+        //     return
+        //   }
+        //   toast.error('Please provide a valid email address.', {description: emailFailedMsg, important: true})
+        //   return
+        // }
 
         const username = generateFromEmail(email)
         const signUpReturn: SignUpResource = await signUp.create({
