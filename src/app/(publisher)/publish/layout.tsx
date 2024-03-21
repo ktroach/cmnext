@@ -1,4 +1,4 @@
-// Admin Layout
+// Publisher Layout
 import { redirect } from 'next/navigation'
 import { currentUser } from '@clerk/nextjs'
 
@@ -12,11 +12,13 @@ interface CreatorLayoutProps {
   children: React.ReactNode
 }
 
-export default async function AdminLayout({ children }: CreatorLayoutProps) {
+export default async function AdminLayout({
+  children,
+}: CreatorLayoutProps) {
   const user = await currentUser()
 
   // Using Clerk Auth SDK redirect unauthorized users
-  // TODO: Uncomment before committing to branch  
+  // TODO: Uncomment before committing to branch
   // if (!user) {
   //   redirect('/signin')
   // }
@@ -28,6 +30,7 @@ export default async function AdminLayout({ children }: CreatorLayoutProps) {
 
   return (
     <div className="flex min-h-screen flex-col">
+      {/* Sub: {params.sub} - Publisher Layout */}
       <SiteHeader user={user} />
       {/* TODO: Aside and Sidebar will probably need to go up to the top level layout to support responsive mobile resolution */}
       <div className="container flex-1 items-start md:grid md:grid-cols-[220px_minmax(0,1fr)] md:gap-6 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-10">

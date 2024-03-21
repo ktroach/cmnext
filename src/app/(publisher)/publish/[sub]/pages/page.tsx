@@ -12,8 +12,8 @@ import { AspectRatio } from '@/components/ui/aspect-ratio'
 import { Icons } from '@/styles/icons'
 
 import type { Blog } from '@/types'
-import { CreateNewPageAction } from '@/components/creator/create-page-action'
-import { PublisherListPages } from '@/components/creator/site-pages-list'
+import { CreateNewPageAction } from '@/components/publisher/create-page-action'
+import { PublisherListPages } from '@/components/publisher/site-pages-list'
 
 export const metadata: Metadata = {
   metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),

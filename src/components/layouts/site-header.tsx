@@ -1,7 +1,7 @@
-import Link from "next/link"
-import type { User } from "@clerk/nextjs/dist/types/server"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Button, buttonVariants } from "@/components/ui/button"
+import Link from 'next/link'
+import type { User } from '@clerk/nextjs/dist/types/server'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Button, buttonVariants } from '@/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,24 +11,34 @@ import {
   DropdownMenuSeparator,
   DropdownMenuShortcut,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Icons } from "@/styles/icons"
-import { ThemeToggle } from "./theme-toggle"
-import { staticConfig } from '@/config/static'
-import { MainNav } from "./main-nav"
+} from '@/components/ui/dropdown-menu'
+import { Icons } from '@/styles/icons'
+import { ThemeToggle } from './theme-toggle'
+import { RootConfig } from '@/config/root-config'
+import { MainNav } from './main-nav'
 
 interface SiteHeaderProps {
   user: User | null
 }
 
 export function SiteHeader({ user }: SiteHeaderProps) {
-  const initials: string = "KR";
-  const email: string = "botbrixx@gmail.com";
+  let accountInitials: string | undefined = ''
+  let accountEmail: string | undefined = ''
+
+  if (user) {
+    accountInitials = `${user?.firstName?.charAt(0) ?? ''} ${
+      user?.lastName?.charAt(0) ?? user?.username
+    }`
+
+    accountEmail =
+      user?.emailAddresses?.find((e) => e.id === user.primaryEmailAddressId)
+        ?.emailAddress ?? ''
+  }
 
   return (
     <header className="sticky top-0 z-[1000] w-full border-b bg-white dark:bg-black">
       <div className="container flex h-16 items-center">
-        <MainNav items={staticConfig.mainNav} />
+        <MainNav items={RootConfig.mainNav} />
         <div className="flex flex-1 items-center justify-end space-x-4">
           <nav className="flex items-center space-x-2">
             <ThemeToggle />
@@ -42,20 +52,24 @@ export function SiteHeader({ user }: SiteHeaderProps) {
                     <Avatar className="h-8 w-8">
                       <AvatarImage
                         src={user.imageUrl}
-                        alt={user.username ?? ""}
+                        alt={user.username ?? ''}
                       />
-                      <AvatarFallback>{initials}</AvatarFallback>
+                      <AvatarFallback>{accountInitials}</AvatarFallback>
                     </Avatar>
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-56 my-3" align="end" forceMount>
+                <DropdownMenuContent
+                  className="w-56 my-3"
+                  align="end"
+                  forceMount
+                >
                   <DropdownMenuLabel className="font-normal">
                     <div className="flex flex-col space-y-1">
                       <p className="text-sm font-medium leading-none">
                         {user.firstName} {user.lastName}
                       </p>
                       <p className="text-xs leading-none text-muted-foreground">
-                        {email}
+                        {accountEmail}
                       </p>
                     </div>
                   </DropdownMenuLabel>
@@ -89,7 +103,7 @@ export function SiteHeader({ user }: SiteHeaderProps) {
               <Link href="/signin">
                 <div
                   className={buttonVariants({
-                    size: "sm",
+                    size: 'sm',
                   })}
                 >
                   Sign In

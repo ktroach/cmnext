@@ -1,4 +1,5 @@
 import { toast } from 'sonner'
+// TODO: Fix issue with deep-email-validator DNS 
 // import { validate as validateEmail } from 'deep-email-validator'
 
 export const isEmailValid = async (emailAddress: string) => {

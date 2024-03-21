@@ -11,8 +11,8 @@ import { Block } from "@/components/containers/block"
 import { AspectRatio } from "@/components/ui/aspect-ratio"
 import { Icons } from "@/styles/icons"
 
-import { PublisherListBlogs } from "@/components/creator/blog-list"
-import { CreateBlogAction } from "@/components/creator/create-blog-action"
+import { PublisherListBlogs } from "@/components/publisher/blog-list"
+import { CreateBlogAction } from "@/components/publisher/create-blog-action"
 
 import type { Blog } from "@/types"
 

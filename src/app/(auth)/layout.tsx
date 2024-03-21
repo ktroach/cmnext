@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 
-import { staticConfig } from '@/config/static'
+import { RootConfig } from '@/config/root-config'
 import { AspectRatio } from '@/components/ui/aspect-ratio'
 import { Icons } from '@/styles/icons'
 
@@ -29,7 +29,7 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
           className="absolute left-8 top-6 z-20 flex items-center text-lg font-bold tracking-tight"
         >
           <Icons.logo className="mr-2 h-6 w-6" aria-hidden="true" />
-          <span>{staticConfig.description}</span>
+          <span>{RootConfig.description}</span>
         </Link>
       </AspectRatio>
 

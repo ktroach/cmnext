@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { staticConfig } from '@/config/static'
+import { RootConfig } from '@/config/root-config'
 import { Block } from '@/components/containers/block'
 
 export function SiteFooter() {
@@ -17,7 +17,7 @@ export function SiteFooter() {
               aria-labelledby="footer-links-heading"
               className="grid flex-1 grid-cols-1 gap-10 xs:grid-cols-2 sm:grid-cols-4"
             >
-              {staticConfig.footerNav.map((item) => (
+              {RootConfig.footerNav.map((item) => (
                 <div key={item.title} className="space-y-3">
                   <h4 className="text-base font-medium">{item.title}</h4>
                   <ul className="space-y-3">

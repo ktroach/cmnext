@@ -5,7 +5,7 @@ import { type z } from "zod"
 export type UserRole = z.infer<typeof userPrivateMetadataSchema.shape.role>
 
 export interface NavItem {
-  title: string
+  name: string
   href?: string
   disabled?: boolean
   external?: boolean
@@ -22,9 +22,27 @@ export interface NavItemWithOptionalChildren extends NavItem {
   items?: NavItemWithChildren[]
 }
 
-export type SidebarNavItem = NavItemWithChildren
-
 export type MainNavItem = NavItemWithOptionalChildren
+
+export interface SideNavItem {
+  title: string
+  href?: string
+  disabled?: boolean
+  external?: boolean
+  icon?: keyof typeof Icons
+  label?: string
+  description?: string
+}
+
+export interface SideNavItemWithChildren extends SideNavItem {
+  items: SideNavItemWithChildren[]
+}
+
+export interface SideNavItemWithOptionalChildren extends SideNavItem {
+  items?: SideNavItemWithChildren[]
+}
+
+export type SidebarNavItem = SideNavItemWithChildren
 
 export interface FooterItem {
   title: string
