@@ -108,7 +108,7 @@ export function AddBlogPostForm() {
           <Label>Blog Content (Markdown)</Label>
         </form>
       </Form>
-      <MarkdownEditor value={editorValue} onChange={setEditorValue} editorHeight={1600} hideToolbar={false}  />
+      <MarkdownEditor value={editorValue} onChange={setEditorValue} editorHeight={750} hideToolbar={false}  />
     </>
   )
 }

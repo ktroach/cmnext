@@ -105,6 +105,7 @@ export function AddNewSitePageForm() {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
+                    <SelectItem value=""></SelectItem>
                     <SelectItem value="page-1">Home</SelectItem>
                     {/* {allPages?.map((pageItem: any) => {
                         <SelectItem value={pageItem.value}>
@@ -170,10 +171,9 @@ export function AddNewSitePageForm() {
           <MarkdownEditor
             value={editorValue}
             onChange={setEditorValue}
-            editorHeight={1600}
+            editorHeight={750}
             hideToolbar={false}
           />
-          {/* <Button type="submit">Submit</Button> */}
         </form>
       </Form>
     </>
