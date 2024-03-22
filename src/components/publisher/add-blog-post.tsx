@@ -1,7 +1,6 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import MDEditor, { ICommand, commands } from '@uiw/react-md-editor'
 import { useRouter } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
@@ -54,7 +53,7 @@ export function AddBlogPostForm() {
 
   return (
     <>
-      <PublisherToolbar />
+      <PublisherToolbar editorValue={editorValue} isPage={false} />
       <Form {...form}>
         <form
           className="grid gap-4"
@@ -105,23 +104,8 @@ export function AddBlogPostForm() {
               </FormItem>
             )}
           />
-
           <Separator />
           <Label>Blog Content (Markdown)</Label>
-
-          {/* <Button
-            className="h-auto bg-blue-500 hover:bg-blue-700"
-            disabled={isPending}
-          >
-            {isPending && (
-              <Icons.spinner
-                className="mr-2 h-4 w-4 animate-spin"
-                aria-hidden="true"
-              />
-            )}
-            Save Draft
-            <span className="sr-only">Submit</span>
-          </Button> */}
         </form>
       </Form>
       <MarkdownEditor value={editorValue} onChange={setEditorValue} editorHeight={1600} hideToolbar={false}  />
