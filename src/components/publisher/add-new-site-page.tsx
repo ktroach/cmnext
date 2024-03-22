@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import type { z } from "zod"
-import { toast } from "sonner"
+// import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Separator } from "@/components/ui/separator"
@@ -25,6 +25,7 @@ type Inputs = z.infer<typeof blogSchema>
 
 import { MdEditor, type ToolbarNames } from 'md-editor-rt';
 import 'md-editor-rt/lib/style.css';
+import { PublisherToolbar } from './publisher-toolbar';
 
 export function AddNewSitePageForm() {
   const router = useRouter();
@@ -98,6 +99,7 @@ export function AddNewSitePageForm() {
 
   return (
     <>
+      <PublisherToolbar />
       <Form {...form}>
         <form
           className="grid gap-4"

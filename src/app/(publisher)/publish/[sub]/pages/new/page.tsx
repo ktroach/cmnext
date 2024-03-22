@@ -17,7 +17,7 @@ export default async function PublisherNewBlog({ params }: any) {
 
   return (
     <Block variant="sidebar">
-      <p>Sub: {params.sub} - Publisher - Create New Site Page</p>
+      {/* <p>Sub: {params.sub} - Publisher - Create New Site Page</p> */}
       <AddNewSitePageForm />
     </Block>
   )

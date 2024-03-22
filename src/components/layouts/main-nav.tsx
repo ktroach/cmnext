@@ -18,7 +18,7 @@ import {
 import { Icons } from "@/styles/icons"
 
 interface MainNavProps {
-  items?: MainNavItem[]
+  items?: any
 }
 
 export function MainNav({ items }: MainNavProps) {

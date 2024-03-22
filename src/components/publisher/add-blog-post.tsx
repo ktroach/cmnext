@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import MDEditor from '@uiw/react-md-editor'
+import MDEditor, { ICommand, commands } from '@uiw/react-md-editor'
 import { useRouter } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
@@ -21,16 +21,15 @@ import {
 import { Input } from '@/components/ui/input'
 import { Icons } from '@/styles/icons'
 import { blogSchema } from '@/validations/blog'
+import { PublisherToolbar } from '@/components/publisher/publisher-toolbar'
+import { MarkdownEditor } from '@/components/editor'
 
 type Inputs = z.infer<typeof blogSchema>
 
 export function AddBlogPostForm() {
   const router = useRouter()
   const [isPending, startTransition] = React.useTransition()
-  // const [body, setBody] = useState('')
-  // const [isGenerating, setIsGenerating] = useState(false)
-  // const [image, setImage] = useState('')
-  const [value, setValue] = React.useState('**Just start typing!**')
+  const [editorValue, setEditorValue] = React.useState<any>('Just start typing!')
 
   const form = useForm<Inputs>({
     resolver: zodResolver(blogSchema),
@@ -45,21 +44,17 @@ export function AddBlogPostForm() {
   function onSubmit(data: Inputs) {
     startTransition(async () => {
       try {
-        // TODO: tRPC call
+        // TODO: TRPC call
+        console.log(">>> editorValue >>> ", editorValue)
       } catch (err) {
         console.error(err)
       }
     })
   }
 
-  function handleSave() {
-    console.log('>>> form.getValues() >>> ', form.getValues())
-    // form.getValues()
-    // onSubmit(inputs);
-  }
-
   return (
     <>
+      <PublisherToolbar />
       <Form {...form}>
         <form
           className="grid gap-4"
@@ -113,9 +108,8 @@ export function AddBlogPostForm() {
 
           <Separator />
           <Label>Blog Content (Markdown)</Label>
-          <MDEditor value={value} onChange={setValue} />
 
-          <Button
+          {/* <Button
             className="h-auto bg-blue-500 hover:bg-blue-700"
             disabled={isPending}
           >
@@ -127,9 +121,10 @@ export function AddBlogPostForm() {
             )}
             Save Draft
             <span className="sr-only">Submit</span>
-          </Button>
+          </Button> */}
         </form>
       </Form>
+      <MarkdownEditor value={editorValue} onChange={setEditorValue} editorHeight={1600} hideToolbar={false}  />
     </>
   )
 }
