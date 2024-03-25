@@ -1,9 +1,9 @@
 import { z } from 'zod'
 
-import { createTRPCRouter, protectedProcedure } from '../trpc'
+import { createTRPCRouter, protectedProcedure, publicProcedure } from '../trpc'
 
 export const userRouter = createTRPCRouter({
-  create: protectedProcedure
+  create: publicProcedure
     .input(
       z.object({
         name: z.string().min(1),
@@ -20,7 +20,7 @@ export const userRouter = createTRPCRouter({
       return newUser
     }),
 
-  getAll: protectedProcedure
+  getAll: publicProcedure
     .input(z.object({}))
     .query(async ({ input, ctx }) => {
       return await ctx.db.user.findMany({
@@ -30,7 +30,7 @@ export const userRouter = createTRPCRouter({
       })
     }),
 
-  getOne: protectedProcedure
+  getOne: publicProcedure
     .input(
       z.object({
         id: z.number().min(1),

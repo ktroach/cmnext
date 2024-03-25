@@ -23,14 +23,14 @@ export interface MenuItemType {
 }
 
 export interface NavMenuProps {
-    menuItems: MenuItemType[]
+    menuItems: MenuItemType[] | null
     active: string | null
     setActive: any | undefined     
 }
 
 export interface DynamicNavMenuProps {
     className: string | undefined
-    menuItems: MenuItemType[]
+    menuItems: MenuItemType[] | null
     active: string | null
     setActive: any | undefined    
 }
@@ -59,6 +59,9 @@ export const NavMenuItem = ({ item, setActive, active }: MenuItemProps) => {
 }
 
 export const NavMenu = ({ menuItems, setActive, active }: NavMenuProps) => {
+  if (!menuItems) {
+    return null
+  }
   return (
     <>
       {menuItems.map((item, index) => (

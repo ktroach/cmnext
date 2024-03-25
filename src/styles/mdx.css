@@ -1,0 +1,19 @@
+[data-theme='light'] {
+  display: block;
+}
+
+[data-theme='dark'] {
+  display: none;
+}
+
+.dark [data-theme='light'] {
+  display: none;
+}
+
+.dark [data-theme='dark'] {
+  display: block;
+}
+
+.mdx > .steps:first-child > h3:first-child {
+  @apply mt-0;
+}

@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { currentUser } from '@clerk/nextjs/server'
 import { RootConfig } from '@/config/root-config'
 import {
   FeaturedPosts,
@@ -6,8 +7,10 @@ import {
 } from '@/components/templates/featured-content'
 import StarterTemplate from '@/components/templates/facets/starter'
 
-export default function IndexPage() {
-  const buildSections = (sectionContent: any) => {
+export default async function IndexPage() {
+  const user = await currentUser()
+
+  const buildFeaturedSections = (sectionContent: any) => {
     let sections: any = []
     const sectionsConfig = RootConfig.sections ? RootConfig.sections : undefined
     if (!sectionsConfig) return []
@@ -21,7 +24,7 @@ export default function IndexPage() {
     return sections
   }
 
-  const mainSections =  buildSections([
+  const mainSections =  buildFeaturedSections([
      <FeaturedPosts takeLimit={RootConfig.featureBlogsLimit} />,
      <FeaturedSites takeLimit={RootConfig.featureSitesLimit} />,
   ])

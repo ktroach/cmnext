@@ -1,7 +1,8 @@
 'use client'
 
-import React, { useCallback, useMemo } from 'react'
-import { useRouter } from 'next/navigation'
+import React from 'react'
+import { api } from '@/trpc/client'
+import { redirect, useRouter } from 'next/navigation'
 import { ClerkLoading, useSignUp } from '@clerk/nextjs'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
@@ -19,13 +20,14 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Icons } from '@/styles/icons'
-import { api } from '@/trpc/client'
 import { toast } from 'sonner'
 import {
   AttemptEmailAddressVerificationParams,
   SignUpResource,
 } from '@clerk/types'
-import { Skeleton } from '../ui/skeleton'
+import { Skeleton } from '@/components/ui/skeleton'
+import { getFrontendBaseUrl } from '@/lib/url'
+import { sendEmail } from '@/lib/email'
 
 type Inputs = z.infer<typeof verfifyEmailSchema>
 
@@ -37,8 +39,6 @@ export function VerifyEmailForm() {
   const createUserMutation = api.users.create.useMutation({
     onSuccess: (newUser) => {
       console.log('onSuccess >>> newUser >>> ', newUser)
-      // TODO: Do we need this toast to the user?
-      toast('User created')
     },
     onError: (error) =>
       toast('Failed to Create User', {
@@ -57,11 +57,10 @@ export function VerifyEmailForm() {
     })
   }
 
+
   const createAccountMutation = api.accounts.create.useMutation({
     onSuccess: (newAccount) => {
       console.log('onSuccess >>> newAccount >>> ', newAccount)
-      // TODO: Do we need this toast to the user?
-      toast('Account created')
     },
     onError: (error) =>
       toast('Failed to Create Account', {
@@ -80,6 +79,28 @@ export function VerifyEmailForm() {
     })
   }
 
+
+  const createSubSiteMutation = api.subsites.create.useMutation({
+    onSuccess: (newSubSite) => {
+      console.log('onSuccess >>> newSubSite >>> ', newSubSite)
+    },
+    onError: (error) =>
+      toast('Failed to Create Site!', {
+        duration: 2000,
+        description: error.message,
+      }),
+  })
+
+  const isCreatingSubSite = createSubSiteMutation.isLoading
+
+  const CreateSubSite = async (name: any, accountId: any) => {
+    console.log('Entered: CreateSubSite')
+    return await createSubSiteMutation.mutateAsync({
+      name: name,
+      accountId: accountId,
+    })
+  }
+
   const createUserAccount = async (signupResource: SignUpResource) => {
     const userEmail: unknown = signupResource?.emailAddress
       ? signupResource.emailAddress
@@ -89,7 +110,7 @@ export function VerifyEmailForm() {
       : ''
 
     // we shouldn't run into this scenario
-    if (!validateUnlikelyScenario(userName, userEmail)) {
+    if (!validateUser(userName, userEmail)) {
       return
     }
 
@@ -128,17 +149,64 @@ export function VerifyEmailForm() {
       return
     }
 
-    toast('Account created. Enjoy!')
+    // TODO: Now create the initial Subsite for this User Account
+    // This is where the Subsite Id is initially created for the user
+    const userSubSite = await CreateSubSite(userAccount.name, userAccount.id)
+    console.log('userSubSite: ', userSubSite)
+    if (!userSubSite) {
+      console.log(
+        'There was a problem creating the Sub-Site while signing up user account: ',
+        userAccount
+      )
+      toast('There was a problem signing up. Please try again.')
+      return
+    }
+
+    toast('Account created. Thank you for joining!')
+
+    toast.message('Hang tight while we generate your site...', {
+      description: "This usually takes a few seconds.",
+    })
+
+    const baseUrl = getFrontendBaseUrl()
+    const subRef = userSubSite?.subsiteRef ? userSubSite.subsiteRef : undefined
+    const creatorUrl: string | undefined = baseUrl && subRef ? `${baseUrl}/publish/${subRef}` : undefined
+    // Most likely this would not occur, but we handle this rare scenario as gracefully as we can 
+    if (!creatorUrl) {
+      // toast.error('There was a problem generating your site. Please check your email for further instructions.')
+      toast.error('There was a problem generating your site.', {
+        description: "Please check your email for further instructions.",
+      })      
+      return 
+    }
+
+   /***
+     * TODO: Send Email to the new user: 
+     * thank you for signing up, here is your 
+     * Site's URL to start creating, here is 
+     * how to get started create a blog, 
+     * create a web page, create etc..
+     */
+    if (userEmail) {
+      // TODO: Need Email Templates
+      const emailBody = `<div><p>Thank you for joining! Here is </p><a href='${creatorUrl}'>Your Site URL</a></div>`
+      console.log('emailBody: ', emailBody)
+      await sendEmail(user.email, "Start Creating", emailBody, true)    
+    }
+
+    setTimeout(() => {
+      // redirect(creatorUrl)
+    }, 3000)
   }
 
-  const validateUnlikelyScenario = (userName: unknown, userEmail: unknown) => {
-    if (!userName) {
-      console.log('Invalid username in user signup for ', userEmail)
+  const validateUser = (username: unknown, email: unknown) => {
+    if (!username) {
+      console.log('Invalid user_name in user signup for ', email)
       return false
     }
 
-    if (!userEmail) {
-      console.log('Invalid username in user signup for ', userName)
+    if (!email) {
+      console.log('Invalid user_email in user signup for ', username)
       return false
     }
     return true
@@ -236,7 +304,8 @@ export function VerifyEmailForm() {
           <Button disabled={isPending} onClick={handleGoBack}>
             {isPending ||
               isCreatingUser ||
-              (isCreatingAccount && (
+              isCreatingAccount ||
+              (isCreatingSubSite && (
                 <Icons.spinner
                   className="mr-2 h-4 w-4 animate-spin"
                   aria-hidden="true"

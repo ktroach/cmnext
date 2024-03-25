@@ -4,7 +4,7 @@
   "description": "",
   "scripts": {
     "dev": "next",
-    "build": "next build",
+    "build": "next build && npx prisma generate",
     "start": "next start",
     "test": "jest --silent",
     "contentlayer:dev": "contentlayer dev",
@@ -22,7 +22,7 @@
   "author": "ktroach",
   "license": "MIT",
   "dependencies": {
-    "@clerk/nextjs": "^4.27.2",
+    "@clerk/nextjs": "^4.29.9",
     "@clerk/themes": "^1.7.9",
     "@faker-js/faker": "^8.4.1",
     "@hookform/resolvers": "^3.3.4",
@@ -74,6 +74,7 @@
     "@types/bcryptjs": "^2.4.6",
     "@types/lodash-es": "^4.17.12",
     "@types/uuid": "^9.0.8",
+    "@uiw/react-md-editor": "^4.0.4",
     "@uploadthing/react": "^5.2.0",
     "@vercel/og": "^0.5.9",
     "bcryptjs": "^2.4.3",
@@ -84,6 +85,7 @@
     "contentlayer": "latest",
     "date-fns": "^2.30.0",
     "dayjs": "^1.11.9",
+    "deep-email-validator": "^0.1.21",
     "embla-carousel-react": "8.0.0-rc11",
     "framer-motion": "^11.0.6",
     "jspdf": "^2.5.1",
@@ -92,7 +94,7 @@
     "lodash-es": "^4.17.21",
     "lucide-react": "^0.263.0",
     "md-editor-rt": "^4.6.1",
-    "next": "14.0.4-canary.36",
+    "next": "^14.1.1",
     "next-contentlayer": "latest",
     "next-themes": "^0.2.1",
     "openai": "3.1.0",
@@ -129,7 +131,7 @@
     "zustand": "4.3.7"
   },
   "devDependencies": {
-    "@clerk/types": "^3.58.0",
+    "@clerk/types": "^3.62.1",
     "@ianvs/prettier-plugin-sort-imports": "^4.1.0",
     "@types/eslint": "^8.44.0",
     "@types/jest": "^29.5.3",

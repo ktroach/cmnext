@@ -7,13 +7,13 @@ import { Mdx } from '@/components/mdx'
 
 interface PageProps {
   params: {
-    slug: string[]
+    slug: string[] 
   }
 }
 
 async function getPageFromSlug(params: PageProps['params']) {
   const slug = params?.slug?.join('/')
-  console.log("slug >>> ", slug)  
+  // console.log("slug >>> ", slug)  
   const page = allPages.find((page) => page.slugAsParams === slug)
 
   if (!page) {

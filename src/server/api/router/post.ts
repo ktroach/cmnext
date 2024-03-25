@@ -1,6 +1,7 @@
 import { z } from 'zod'
 
 import { createTRPCRouter, protectedProcedure, publicProcedure } from '../trpc'
+import { ContentStatus } from '@/db'
 
 export const postRouter = createTRPCRouter({
   create: protectedProcedure
@@ -72,6 +73,112 @@ export const postRouter = createTRPCRouter({
       return await ctx.db.post.findFirst({
         where: {
           id: input.id,
+        },
+      })
+    }),
+
+    setStatusDraft: protectedProcedure
+    .input(
+      z.object({
+        id: z.number().min(1),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      return await ctx.db.page.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          status: ContentStatus.DRAFT,
+        },
+      })
+    }),
+
+  setStatusPublished: protectedProcedure
+    .input(
+      z.object({
+        id: z.number().min(1),  
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      return await ctx.db.page.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          published: true, 
+          publishedAt: new Date(), 
+          status: ContentStatus.PUBLISHED,
+        },
+      })
+    }),  
+    
+  setStatusPending: protectedProcedure
+    .input(
+      z.object({
+        id: z.number().min(1),  
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      return await ctx.db.page.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          status: ContentStatus.PENDING,
+        },
+      })
+    }),  
+    
+  setStatusReview: protectedProcedure
+    .input(
+      z.object({
+        id: z.number().min(1),  
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      return await ctx.db.page.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          status: ContentStatus.REVIEW,
+        },
+      })
+    }),      
+
+  show: protectedProcedure
+    .input(
+      z.object({
+        id: z.number().min(1),
+        showOnNav: z.boolean().default(true)     
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      return await ctx.db.page.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          showOnNav: input.showOnNav,
+        },
+      })
+    }),
+
+  softDelete: protectedProcedure
+    .input(
+      z.object({
+        id: z.number().min(1),
+        softDeleted: z.boolean().default(true)     
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      return await ctx.db.page.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          deleted: input.softDeleted,
         },
       })
     }),

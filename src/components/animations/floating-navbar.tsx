@@ -40,7 +40,7 @@ export const MenuItem = ({
         transition={{ duration: 0.3 }}
         className="cursor-pointer text-black hover:opacity-[0.9] dark:text-white"
       >
-        {linkUrl && (
+        {linkUrl && linkUrl?.href && (
           <Link href={linkUrl.href} legacyBehavior>
             {item}
           </Link>
@@ -84,7 +84,7 @@ export const Menu = ({
   return (
     <nav
       onMouseLeave={() => setActive(null)}
-      className="relative border border-transparent rounded-full dark:bg-transparent dark:border-white/[0.2] bg-white shadow-input flex justify-center space-x-8 px-8 py-6 "
+      className="relative border border-transparent rounded-full dark:bg-[#09090b] dark:border-white/[0.2] bg-white shadow-input flex justify-center space-x-8 px-8 py-6 "
     >
       {children}
     </nav>
@@ -95,7 +95,7 @@ export const HoveredLink = ({ children, ...rest }: any) => {
   return (
     <Link
       {...rest}
-      className="text-neutral-700 dark:text-neutral-200 hover:text-black dark:bg-transparent bg-white "
+      className="text-neutral-700 dark:text-neutral-200 hover:text-black dark:bg-[#09090b] bg-white "
       title="todo: description..."
     >
       {children}

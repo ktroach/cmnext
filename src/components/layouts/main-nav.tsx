@@ -4,7 +4,7 @@ import * as React from "react"
 import Link from "next/link"
 import type { MainNavItem } from "@/types"
 import { useUser } from "@clerk/nextjs"
-import { staticConfig } from "@/config/static"
+import { RootConfig } from "@/config/root-config"
 import { cn } from "@/lib/utils"
 import {
   NavigationMenu,
@@ -18,7 +18,7 @@ import {
 import { Icons } from "@/styles/icons"
 
 interface MainNavProps {
-  items?: MainNavItem[]
+  items?: any
 }
 
 export function MainNav({ items }: MainNavProps) {
@@ -36,8 +36,8 @@ export function MainNav({ items }: MainNavProps) {
         className="hidden items-center lg:flex"
       >
         <Icons.nextjs className="h-6 w-6" aria-hidden="true" />
-        <span className="hidden font-bold lg:inline-block">
-          {staticConfig.name}
+        <span className="hidden font-bold lg:inline-block mx-2">
+          {RootConfig?.name}
         </span>
       </Link>
       <NavigationMenu>

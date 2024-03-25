@@ -1,5 +1,6 @@
-import type { FooterItem, MainNavItem, SidebarNavItem } from "@/types"
-import { MenuItemType } from '@/components/templates/dynamic-navmenu'
+import { getFrontendBaseUrl } from "@/lib/url"
+
+export const BaseUrl = getFrontendBaseUrl() 
 
 export const RootConfig = {
     name: "CMNexT",
@@ -11,17 +12,20 @@ export const RootConfig = {
     featureBlogsLimit: 4,  
     featureSitesLimit: 4,  
     logoImage: "",
+    signoutOptions: {
+      signOutOptionText: "Sign Out"
+    },
     sections:  [
         {
           title: 'Blogs',
           description: 'Featured Blog Posts',
-          href: 'http://localhost:3000/blogs',
+          href: `${BaseUrl}/featured-blogs`, //'http://localhost:3000/blogs',
           linkText: 'View all Blogs',
         },
         {
           title: 'Sites',
           description: 'Featured Sites',
-          href: 'http://localhost:3000/sites',
+          href: `${BaseUrl}/featured-sites`, //'http://localhost:3000/sites',
           linkText: 'View all Sites',
         },
       ],     
