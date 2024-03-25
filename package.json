@@ -4,7 +4,7 @@
   "description": "",
   "scripts": {
     "dev": "next",
-    "build": "next build",
+    "build": "next build && npx prisma generate",
     "start": "next start",
     "test": "jest --silent",
     "contentlayer:dev": "contentlayer dev",
