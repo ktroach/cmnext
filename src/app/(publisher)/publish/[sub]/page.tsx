@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation'
 import { env } from '@/env.mjs'
 import { Header } from '@/components/layouts/header'
 import { Block } from '@/components/containers/block'
-import { currentUser } from '@clerk/nextjs'
+import { currentUser } from '@clerk/nextjs/server'
 // import  from '@/trpc'
 
 export const metadata: Metadata = {

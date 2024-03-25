@@ -1,7 +1,7 @@
 import { type Metadata } from 'next'
 import { redirect } from 'next/navigation'
 import { env } from '@/env.mjs'
-import { currentUser } from '@clerk/nextjs'
+import { currentUser } from '@clerk/nextjs/server'
 import { AddBlogPostForm } from '@/components/publisher/add-blog-post'
 import { Block } from '@/components/containers/block'
 

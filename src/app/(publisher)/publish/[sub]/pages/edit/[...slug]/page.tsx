@@ -1,7 +1,7 @@
 import { type Metadata } from 'next'
 import { redirect } from 'next/navigation'
 import { env } from '@/env.mjs'
-import { currentUser } from '@clerk/nextjs'
+import { currentUser } from '@clerk/nextjs/server'
 import { EditSitePageForm } from '@/components/publisher/edit-site-page'
 import { Block } from '@/components/containers/block'
 
