@@ -22,7 +22,7 @@
   "author": "ktroach",
   "license": "MIT",
   "dependencies": {
-    "@clerk/nextjs": "^4.27.2",
+    "@clerk/nextjs": "^4.29.9",
     "@clerk/themes": "^1.7.9",
     "@faker-js/faker": "^8.4.1",
     "@hookform/resolvers": "^3.3.4",
@@ -94,7 +94,7 @@
     "lodash-es": "^4.17.21",
     "lucide-react": "^0.263.0",
     "md-editor-rt": "^4.6.1",
-    "next": "14.0.4-canary.36",
+    "next": "^14.1.1",
     "next-contentlayer": "latest",
     "next-themes": "^0.2.1",
     "openai": "3.1.0",

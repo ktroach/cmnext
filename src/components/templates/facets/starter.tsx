@@ -69,25 +69,24 @@ export default function StarterTemplate({
 
   return (
     <>
-      <div className="h-[40rem] relative w-full bg-transparent flex flex-col items-center justify-center overflow-hidden rounded-md">
+      <div className="h-[60rem] relative w-full bg-transparent flex flex-col items-center justify-center overflow-hidden rounded-md">
         <DynamicNavMenu
           className="top-2"
           menuItems={menuItems}
           active={active}
           setActive={setActive}
         />
-        <h1 className="md:text-7xl text-3xl lg:text-6xl font-bold text-center text-white relative z-20">
+        <h1 className="mt-[-150px] md:text-7xl text-3xl lg:text-6xl font-bold text-center text-white relative z-20">
           {line}
         </h1>
         <section className="mx-auto flex w-full max-w-5xl flex-col items-center justify-center gap-4 text-center">
           <TextGenerator className="mt-5" words={words} />
-
           <div className="flex flex-wrap items-center justify-center gap-4 mt-10 z-40">
             <Wavy
               animationTimeoutMs={4000}
               backgroundFill="transparent"
               blur={0.0}
-              className="max-w-4xl mt-10"
+              className="max-w-4xl mt-[-15px] "
               colors={waves}
               waveOpacity={0.015}
               waveWidth={2}

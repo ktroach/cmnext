@@ -12,6 +12,9 @@ export const RootConfig = {
     featureBlogsLimit: 4,  
     featureSitesLimit: 4,  
     logoImage: "",
+    signoutOptions: {
+      signOutOptionText: "Sign Out"
+    },
     sections:  [
         {
           title: 'Blogs',

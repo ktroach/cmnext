@@ -25,7 +25,7 @@ import {
   AttemptEmailAddressVerificationParams,
   SignUpResource,
 } from '@clerk/types'
-import { Skeleton } from '../ui/skeleton'
+import { Skeleton } from '@/components/ui/skeleton'
 import { getFrontendBaseUrl } from '@/lib/url'
 import { sendEmail } from '@/lib/email'
 

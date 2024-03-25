@@ -1,4 +1,4 @@
-import { LogOutButtons } from "@/components/auth/logout-buttons"
+import { SignoutOptions } from "@/components/auth/signout-options"
 import { Header } from "@/components/layouts/header"
 import { Block } from "@/components/containers/block"
 
@@ -14,7 +14,7 @@ export default function SignOutPage() {
         size="sm"
         className="text-center"
       />
-      <LogOutButtons />
+      <SignoutOptions />
     </Block>
   )
 }

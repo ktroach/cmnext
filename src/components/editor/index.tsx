@@ -23,8 +23,9 @@ export const MarkdownEditor = ({
   className,
   ...props
 }: MarkdownEditorProps) => {
+  // TODO: These default settings may need to go in the RootConfig
   let mdHideToolbar = false
-  let mdEditorHeight = 1500 // TODO: calculate the height of the window
+  let mdEditorHeight = 1500 // TODO: Dont harcode this value. Calculate this based on the height of the window
   let svgIconHeight = '32'
   let svgIconWidth = '32'
   if (iconHeight) {

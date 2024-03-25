@@ -1,4 +1,4 @@
-// Publisher Layout
+// Top Publisher Layout
 import { redirect } from 'next/navigation'
 import { currentUser } from '@clerk/nextjs'
 

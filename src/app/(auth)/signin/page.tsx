@@ -14,6 +14,7 @@ import {
 } from '@/components/ui/card'
 import { OAuthSignIn } from '@/components/auth/oauth-signin'
 import { SignInForm } from '@/components/auth/signin-form'
+import { SignoutOptions } from "@/components/auth/signout-options"
 import { Block } from '@/components/containers/block'
 
 export const metadata: Metadata = {
@@ -30,19 +31,7 @@ export default async function SignInPage() {
   return (
     <Block className="max-w-lg">
       {user ? (
-        <Card>
-          <CardHeader className="space-y-4">
-            <CardTitle className="text-2xl">Sign Out</CardTitle>
-            <CardDescription>
-              You are already signed in. Do you want to sign out?{' '}
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="grid gap-4">
-            <div className="relative">
-              <Link href="/signout">Click here to Sign Out</Link>
-            </div>
-          </CardContent>
-        </Card>
+        <SignoutOptions />
       ) : (
         <Card>
         <CardHeader className="space-y-1">
