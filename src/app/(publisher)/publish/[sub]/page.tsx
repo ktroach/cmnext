@@ -4,10 +4,10 @@ import { env } from '@/env.mjs'
 import { Header } from '@/components/layouts/header'
 import { Block } from '@/components/containers/block'
 import { currentUser } from '@clerk/nextjs/server'
-// import  from '@/trpc'
+import { getFrontendBaseUrl } from '@/lib/url'
 
 export const metadata: Metadata = {
-  metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
+  metadataBase: new URL(getFrontendBaseUrl()),
   title: 'Publisher Dashboard',
   description: 'Publish content to your site',
 }

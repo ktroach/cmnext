@@ -16,9 +16,10 @@ import { OAuthSignIn } from '@/components/auth/oauth-signin'
 import { SignInForm } from '@/components/auth/signin-form'
 import { SignoutOptions } from "@/components/auth/signout-options"
 import { Block } from '@/components/containers/block'
+import { getFrontendBaseUrl } from '@/lib/url'
 
 export const metadata: Metadata = {
-  metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
+  metadataBase: new URL(getFrontendBaseUrl()),
   title: 'Sign In',
   description: 'Sign in to your account',
 }

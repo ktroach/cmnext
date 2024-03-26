@@ -4,9 +4,10 @@ import { env } from '@/env.mjs'
 import { currentUser } from '@clerk/nextjs/server'
 import { Block } from '@/components/containers/block'
 import { AddNewSitePageForm } from '@/components/publisher/add-new-site-page'
+import { getFrontendBaseUrl } from '@/lib/url'
 
 export const metadata: Metadata = {
-  metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
+  metadataBase: new URL(getFrontendBaseUrl()),
   title: 'Create New Page',
   description: 'Create a new page for this site',
 }

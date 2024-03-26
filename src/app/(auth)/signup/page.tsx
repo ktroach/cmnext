@@ -14,9 +14,10 @@ import {
 import { OAuthSignIn } from "@/components/auth/oauth-signin"
 import { SignUpForm } from "@/components/auth/signup-form"
 import { Block } from "@/components/containers/block"
+import { getFrontendBaseUrl } from "@/lib/url"
 
 export const metadata: Metadata = {
-  metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
+  metadataBase: new URL(getFrontendBaseUrl()),
   title: "Sign Up",
   description: "Sign up for a new account",
 }

@@ -15,9 +15,10 @@ import { PublisherListBlogs } from "@/components/publisher/blog-list"
 import { CreateBlogAction } from "@/components/publisher/create-blog-action"
 
 import type { Blog } from "@/types"
+import { getFrontendBaseUrl } from "@/lib/url"
 
 export const metadata: Metadata = {
-  metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
+  metadataBase: new URL(getFrontendBaseUrl()),
   title: "Blog Posts", 
   description: "Manage your Blog Posts",
 }

@@ -1,9 +1,10 @@
 import type { Metadata } from 'next';
 import { env } from '@/env.mjs';
 import { metaConfig } from "@/config/static";
+import { getFrontendBaseUrl } from '@/lib/url'
 
 export const metadata: Metadata = {
-    metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
+    metadataBase: new URL(getFrontendBaseUrl()),
     title: {
         default: metaConfig.name,
         template: `%s - ${metaConfig.name}`,

@@ -13,7 +13,7 @@ import { Block } from "@/components/containers/block"
 import { getFrontendBaseUrl } from "@/lib/url"
 
 export const metadata: Metadata = {
-  metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
+  metadataBase: new URL(getFrontendBaseUrl()),
   title: "Blogs",
   description: "Explore the latest updates",
 }

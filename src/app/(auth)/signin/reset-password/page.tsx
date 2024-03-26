@@ -10,9 +10,10 @@ import {
 } from "@/components/ui/card"
 // import { ResetPasswordForm } from "@/components/forms/reset-password-form"
 import { Block } from "@/components/containers/block"
+import { getFrontendBaseUrl } from "@/lib/url"
 
 export const metadata: Metadata = {
-  metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
+  metadataBase: new URL(getFrontendBaseUrl()),
   title: "Reset Password",
   description: "Enter your email to reset your password",
 }

@@ -4,9 +4,10 @@ import { env } from '@/env.mjs'
 import { currentUser } from '@clerk/nextjs/server'
 import { EditBlogPostForm } from '@/components/publisher/edit-blog-post'
 import { Block } from '@/components/containers/block'
+import { getFrontendBaseUrl } from '@/lib/url'
 
 export const metadata: Metadata = {
-  metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
+  metadataBase: new URL(getFrontendBaseUrl()),
   title: 'Edit Blog',
   description: 'Edit a new blog post',
 }

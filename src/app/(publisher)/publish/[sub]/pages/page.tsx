@@ -14,9 +14,10 @@ import { Icons } from '@/styles/icons'
 import type { Blog } from '@/types'
 import { CreateNewPageAction } from '@/components/publisher/create-page-action'
 import { PublisherListPages } from '@/components/publisher/site-pages-list'
+import { getFrontendBaseUrl } from '@/lib/url'
 
 export const metadata: Metadata = {
-  metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
+  metadataBase: new URL(getFrontendBaseUrl()),
   title: 'Site Pages',
   description: 'Manage your Site Pages',
 }
