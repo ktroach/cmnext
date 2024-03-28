@@ -6,7 +6,7 @@
     "dev": "next",
     "build": "next build",
     "prebuild": "echo Press CTRL-C to cancel",
-    "postbuild": "npx prisma generate", 
+    "postbuild": "npx prisma generate",
     "start": "next start",
     "test": "jest --silent",
     "contentlayer:dev": "contentlayer dev",
@@ -15,7 +15,8 @@
     "typecheck": "contentlayer build && tsc --noEmit",
     "prettier-check": "prettier --check .",
     "lint": "next lint",
-    "lint:fix": "next lint --fix"
+    "lint:fix": "next lint --fix",
+    "gen-lic": "npx license-generator install mit -y 2024 -n \"Kyle Roach\" -e txt" 
   },
   "prisma": {
     "seed": "ts-node --transpile-only prisma/seed.ts"
@@ -92,6 +93,7 @@
     "framer-motion": "^11.0.6",
     "jspdf": "^2.5.1",
     "jspdf-autotable": "^3.5.31",
+    "license-generator": "^0.0.13",
     "lodash": "4.17.21",
     "lodash-es": "^4.17.21",
     "lucide-react": "^0.263.0",

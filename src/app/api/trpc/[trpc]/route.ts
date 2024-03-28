@@ -1,8 +1,8 @@
-import { getAuth } from "@clerk/nextjs/server";
-import { appRouter } from "@/server/api/router/root";
-import { createTRPCContext } from "@/server";
-import { fetchRequestHandler } from "@trpc/server/adapters/fetch";
-import { type NextRequest } from "next/server";
+import { getAuth } from "@clerk/nextjs/server"
+import { appRouter } from "@/server/api/router/root"
+import { createTRPCContext } from "@/server"
+import { fetchRequestHandler } from "@trpc/server/adapters/fetch"
+import { type NextRequest } from "next/server"
 
 // You need this to be "edge" runtime for production on vercel so that it can properly resolve the trpc endpoint:
 // If this is not set, you will get the following Error: Failed to collect page data for /api/trpc/[trpc]

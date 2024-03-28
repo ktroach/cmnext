@@ -20,15 +20,10 @@ export const userRouter = createTRPCRouter({
       return newUser
     }),
 
-  getAll: publicProcedure
-    .input(z.object({}))
-    .query(async ({ input, ctx }) => {
-      return await ctx.db.user.findMany({
-        orderBy: {
-          name: 'asc',
-        },
-      })
-    }),
+  getAll: publicProcedure.input(z.object({})).query(async ({ input, ctx }) => {
+    return await ctx.db.user.findMany({
+    })
+  }),
 
   getOne: publicProcedure
     .input(
@@ -42,6 +37,64 @@ export const userRouter = createTRPCRouter({
           id: input.id,
         },
       })
+    }),
+
+  getByName: publicProcedure
+    .input(
+      z.object({
+        username: z.string().min(1),
+      })
+    )
+    .query(async ({ input, ctx }) => {
+      return await ctx.db.user.findFirst({
+        where: {
+          name: input.username,
+        },
+      })
+    }),
+
+  getUserSubRef: publicProcedure
+    .input(
+      z.object({
+        username: z.string().min(1),
+      })
+    )
+    .query(async ({ input, ctx }) => {
+      const userData = await ctx.db.user.findFirst({
+        where: { name: input.username },
+      })
+      
+      if (!userData) {
+        return null
+      }
+      const adminId = userData?.id ? userData.id : undefined
+      if (!adminId) {
+        return null
+      }
+      const accountData = await ctx.db.account.findFirst({
+        where: { adminId: adminId },
+      })
+      if (!accountData) {
+        return null
+      }
+      const accountId = accountData?.id ? accountData.id : undefined
+      if (!accountId) {
+        return null
+      }
+
+      const subsiteData = await ctx.db.subsite.findFirst({
+        where: { accountId: accountId },
+      })
+      if (!subsiteData) {
+        return null
+      }
+      const subsiteRef = subsiteData?.subsiteRef
+        ? subsiteData.subsiteRef
+        : undefined
+      if (!subsiteRef) {
+        return null
+      }
+      return subsiteRef
     }),
 
   delete: protectedProcedure

@@ -1,16 +1,16 @@
 # cmnext
- Taking Content Management to the Next level 
+ > Taking Content Management to the Next level 
 
-Built with:
+I built this project from the ground-up with:
 - Bun Package Manager
 - Typescript
 - Next.js (14 using App Router)
-- tRPC
+- TRPC
 - React-Query
 - Prisma
 - Clerk Auth
 - ContentLayer
-- MD Editor
+- Markdown Editor 
 - React Hook Form
 - Zod Validations
 - Framer Motion
@@ -25,6 +25,9 @@ Features
  - Modern stack with Framer Motion animations
  - Security via tRPC and Clerk
  - Includes boilerplates, examples, and templates
+ - I used the @uiw/react-md-editor package for editing Markdown in place. The library is great but did require quite alot of work to customize the toolbar for this app. Also, plans are in place to possibly integrate the novel editor which will provide notion-style slash commands in place while live editing markdown. 
+
+## Summary 
 
 1) Clone this repo
 2) Install dependencies 
@@ -213,6 +216,6 @@ http://localhost:3000/
 This application has been deployed and tested on the Vercel Platform (recommended). You should be able to deploy this application to other supported platforms, including: Digital Ocean, Heroku, AWS, Google Cloud, etc.
 
 
-
+This project is under the MIT license. Only ask that you please include attribution or credit if you use this for your own purposes. 
 
 

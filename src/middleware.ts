@@ -4,7 +4,6 @@ import { clerkClient } from "@clerk/nextjs"
 import { authMiddleware } from "@clerk/nextjs/server"
 
 export default authMiddleware({
-
   publicRoutes: [
     "/",
     "/p(.*)",
