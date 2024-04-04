@@ -64,9 +64,9 @@ export function AddBlogPostForm() {
             name="title"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Blog Title</FormLabel>
+                <FormLabel className='text-lg'>Blog Title</FormLabel>
                 <FormControl>
-                  <Input placeholder="Title goes here..." {...field} />
+                  <Input placeholder="Title goes here..." {...field}  className='hover:border-blue-500 border-blue-400' />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -77,9 +77,10 @@ export function AddBlogPostForm() {
             name="description"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Blog Description</FormLabel>
+                <FormLabel className='text-lg'>Blog Description</FormLabel>
                 <FormControl>
                   <Input
+                  className='hover:border-blue-500 border-blue-400'
                     placeholder="Give your blog a description..."
                     {...field}
                   />
@@ -93,9 +94,11 @@ export function AddBlogPostForm() {
             name="image"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Cover Image (URL)</FormLabel>
+                <FormLabel className='text-lg' title='If blank, AI will generate cover image based on title'>Cover Image URL (Optional)</FormLabel>
                 <FormControl>
-                  <Input
+                  <Input 
+                    className='hover:border-blue-500 border-blue-400'
+                    title='If blank, AI will generate cover image based on title'
                     placeholder="Type in the Image URL or Keywords..."
                     {...field}
                   />
@@ -105,10 +108,11 @@ export function AddBlogPostForm() {
             )}
           />
           <Separator />
-          <Label>Blog Content (Markdown)</Label>
+          <Label className='text-lg' >Blog Content</Label>
+
         </form>
       </Form>
-      <MarkdownEditor value={editorValue} onChange={setEditorValue} editorHeight={750} hideToolbar={false}  />
+      <MarkdownEditor value={editorValue} onChange={setEditorValue} editorHeight={750} />
     </>
   )
 }

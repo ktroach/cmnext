@@ -2,11 +2,19 @@
 
 import React from 'react'
 import MDEditor, { ICommand, commands } from '@uiw/react-md-editor'
+import {
+  Menubar,
+  MenubarContent,
+  MenubarItem,
+  MenubarMenu,
+  MenubarSeparator,
+  MenubarShortcut,
+  MenubarTrigger,
+} from '@/components/ui/menubar'
 
 interface MarkdownEditorProps {
   value: any
   onChange: any
-  hideToolbar: boolean
   editorHeight?: number
   iconHeight?: string
   iconWidth?: string
@@ -16,7 +24,6 @@ interface MarkdownEditorProps {
 export const MarkdownEditor = ({
   value,
   onChange,
-  hideToolbar,
   editorHeight,
   iconHeight,
   iconWidth,
@@ -24,10 +31,10 @@ export const MarkdownEditor = ({
   ...props
 }: MarkdownEditorProps) => {
   // TODO: These default settings may need to go in the RootConfig
-  let mdHideToolbar = false
+  const [toolbarVisible, setToolbarVisible] = React.useState<boolean>(false)
   let mdEditorHeight = 1500 // TODO: Dont harcode this value. Calculate this based on the height of the window
-  let svgIconHeight = '32'
-  let svgIconWidth = '32'
+  let svgIconHeight = '0'
+  let svgIconWidth = '0'
   if (iconHeight) {
     svgIconHeight = iconHeight
   }
@@ -36,9 +43,6 @@ export const MarkdownEditor = ({
   }
   if (editorHeight) {
     mdEditorHeight = editorHeight
-  }
-  if (hideToolbar) {
-    mdHideToolbar = hideToolbar
   }
 
   let newCommands: any = []
@@ -88,7 +92,14 @@ export const MarkdownEditor = ({
 
   const allCommands: any = Object.values(commands)
   allCommands.map(
-    (item: { name: string | undefined; icon: { props: any } }) => {
+    (
+      item: {
+        name: string | undefined
+        buttonProps: any
+        icon: { props: any }
+      },
+      index: number
+    ) => {
       const cmdKey: string | undefined = item?.name ? item.name : undefined
       if (cmdKey && !omitKeys.includes(cmdKey)) {
         if (typeof item === 'object') {
@@ -179,21 +190,92 @@ export const MarkdownEditor = ({
     return <></>
   }
 
+  const fullScreenClick = () => {
+    const element = document.querySelector('[data-name="fullscreen"]')
+    if (!element) return
+    // @ts-ignore eslint-disable-next-line
+    element.click()
+  }
+
+  const titleClick = (dataName: string) => {
+    const element = document.querySelector(`[data-name="${dataName}"]`)
+    if (!element) return
+    // @ts-ignore eslint-disable-next-line
+    element.click()
+  }
+
+  const boldClick = () => {
+    const element = document.querySelector('[data-name="bold"]')
+    if (!element) return
+    // @ts-ignore eslint-disable-next-line
+    element.click()
+  }
+
+  const OnTitle1Select = (event: any) => {
+    titleClick('title1')
+  }
+  const OnTitle2Select = (event: any) => {
+    titleClick('title2')
+  }
+  const OnTitle3Select = (event: any) => {
+    titleClick('title3')
+  }
+  const OnTitle4Select = (event: any) => {
+    titleClick('title4')
+  }
+  const OnTitle5Select = (event: any) => {
+    titleClick('title5')
+  }
+  const OnTitle6Select = (event: any) => {
+    titleClick('title6')
+  }
+
   return (
-    <MDEditor
-      height={mdEditorHeight}
-      hideToolbar={mdHideToolbar}
-      value={value}
-      onChange={onChange}
-      extraCommands={[
-        commands.divider,
-        customCodeEditCommand,
-        customCodeLiveCommand,
-        customCodePreviewCommand,
-        commands.divider,
-        customFullscreenCommand,
-      ]}
-      commands={newCommands}
-    />
+    <>
+      <Menubar>
+        <MenubarMenu>
+          <MenubarTrigger className="bg-blue-500">
+            Title / Header
+          </MenubarTrigger>
+          <MenubarContent>
+            <MenubarItem onSelect={OnTitle1Select}>
+              Title 1 (H1) <MenubarShortcut>⌘1</MenubarShortcut>
+            </MenubarItem>
+            <MenubarItem onSelect={OnTitle2Select}>
+              Title 2 (H2) <MenubarShortcut>⌘2</MenubarShortcut>
+            </MenubarItem>
+            <MenubarItem onSelect={OnTitle3Select}>
+              Title 3 (H3) <MenubarShortcut>⌘3</MenubarShortcut>
+            </MenubarItem>
+            <MenubarItem onSelect={OnTitle4Select}>
+              Title 4 (H4) <MenubarShortcut>⌘4</MenubarShortcut>
+            </MenubarItem>
+            <MenubarItem onSelect={OnTitle5Select}>
+              Title 5 (H5) <MenubarShortcut>⌘5</MenubarShortcut>
+            </MenubarItem>
+            <MenubarItem onSelect={OnTitle6Select}>
+              Title 6 (H6) <MenubarShortcut>⌘6</MenubarShortcut>
+            </MenubarItem>
+          </MenubarContent>
+        </MenubarMenu>
+      </Menubar>
+      <MDEditor
+        className="text-lg"
+        height={mdEditorHeight}
+        hideToolbar={toolbarVisible}
+        toolbarBottom={true}
+        value={value}
+        onChange={onChange}
+        extraCommands={[
+          commands.divider,
+          customCodeEditCommand,
+          customCodeLiveCommand,
+          customCodePreviewCommand,
+          commands.divider,
+          customFullscreenCommand,
+        ]}
+        commands={newCommands}
+      />
+    </>
   )
 }

@@ -36,11 +36,11 @@ export function MainNav({ items }: MainNavProps) {
         className="hidden items-center lg:flex"
       >
         <Icons.nextjs className="h-6 w-6" aria-hidden="true" />
-        <span className="hidden font-bold lg:inline-block mx-2">
+        {/* <span className="hidden font-bold lg:inline-block mx-2">
           {RootConfig?.name}
-        </span>
+        </span> */}
       </Link>
-      <NavigationMenu>
+      {/* <NavigationMenu>
         <NavigationMenuList>
        <NavigationMenuItem key="blog-nav">
           <Link href="/blog" legacyBehavior passHref>
@@ -52,7 +52,7 @@ export function MainNav({ items }: MainNavProps) {
           </Link>
         </NavigationMenuItem>   
        </NavigationMenuList>
-      </NavigationMenu>
+      </NavigationMenu> */}
     </div>
   )
 }
