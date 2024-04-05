@@ -112,7 +112,7 @@ export function AddBlogPostForm() {
 
         </form>
       </Form>
-      <MarkdownEditor value={editorValue} onChange={setEditorValue} editorHeight={750} />
+      <MarkdownEditor value={editorValue} onChange={setEditorValue} editorHeight="calc(100vh / 3)" />
     </>
   )
 }

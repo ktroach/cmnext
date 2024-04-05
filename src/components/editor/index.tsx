@@ -15,7 +15,7 @@ import {
 interface MarkdownEditorProps {
   value: any
   onChange: any
-  editorHeight?: number
+  editorHeight?: any
   iconHeight?: string
   iconWidth?: string
   className?: string
