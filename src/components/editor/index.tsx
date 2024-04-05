@@ -267,6 +267,10 @@ export const MarkdownEditor = ({
       "items": [
         { "title": "Add Table (1x1)", "onSelect": (event: any) => {executeCommand('table')}, "shortcut": "⌘^1" },
         { "title": "Add Table (2x2)", "onSelect": (event: any) => {executeCommand('table')}, "shortcut": "⌘^2" },
+        { "title": "Add Table (3x3)", "onSelect": (event: any) => {executeCommand('table')}, "shortcut": "⌘^3" },
+        { "title": "Add Table (4x4)", "onSelect": (event: any) => {executeCommand('table')}, "shortcut": "⌘^4" },        
+        { "title": "Add Table (5x5)", "onSelect": (event: any) => {executeCommand('table')}, "shortcut": "⌘^5" },        
+        { "title": "Add Table (6x6)", "onSelect": (event: any) => {executeCommand('table')}, "shortcut": "⌘^6" },        
       ]
     }, 
     {
