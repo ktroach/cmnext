@@ -62,7 +62,7 @@ export const PublisherToolbar = ({
   return (
     <header className="sticky top-0 z-[1000] w-full border-b bg-white dark:bg-transparent">
       <div className="container flex flex-row h-16 items-center">
-        <div className="flex flex-1 justify-start items-start">
+        <div className="mx-[-32px]">
           Status: {statusHeader}
         </div>
         {/* {isPage && allPages && allPages.length > 0 && (
@@ -80,17 +80,17 @@ export const PublisherToolbar = ({
           </div>
         )} */}
         <div className="flex flex-1 justify-end space-x-4">
-          <Button className="" onClick={CloseEditor}>
+          <Button className="lg:text-lg" onClick={CloseEditor}>
             Close Editor
           </Button>
           <Button
-            className="bg-blue-800 hover:bg-blue-600 text-white"
+            className="bg-blue-800 hover:bg-blue-600 text-white lg:text-lg"
             onClick={SaveDraft}
           >
             Save Draft
           </Button>
           <Button
-            className="bg-green-800 hover:bg-green-600 text-white"
+            className="bg-green-800 hover:bg-green-600 text-white lg:text-lg"
             onClick={PublishPage}
           >
             Publish

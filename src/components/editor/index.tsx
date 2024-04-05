@@ -30,8 +30,12 @@ export const MarkdownEditor = ({
   className,
   ...props
 }: MarkdownEditorProps) => {
-  // TODO: These default settings may need to go in the RootConfig
-  const [toolbarVisible, setToolbarVisible] = React.useState<boolean>(false)
+  const [toolbarVisible] = React.useState<boolean>(false)
+  const [showBottomPreview, setShowBottomPreview] = React.useState<boolean>(true)
+  const rootMenubarClassName: string = "xs:h-10 sm:h-12 md:h-12 lg:h-14 xl:h-14"
+  const menubarTriggerClassName: string = "text-white bg-blue-500 dark:hover:bg-blue-600 h-full xs:text-xs sm:text-xs md:text-sm lg:text-md xl:text-md"
+  const menubarItemClassName: string = "dark:hover:bg-blue-600"
+
   let mdEditorHeight = 1500 // TODO: Dont harcode this value. Calculate this based on the height of the window
   let svgIconHeight = '0'
   let svgIconWidth = '0'
@@ -186,81 +190,125 @@ export const MarkdownEditor = ({
     )
   }
 
+  const help = {
+    name: "help",
+    keyCommand: "help",
+    buttonProps: { "aria-label": "Get Help" },
+    icon: (
+      <svg viewBox="0 0 16 16" width="16px" height="16px">
+        <path
+          d="M8 0C3.6 0 0 3.6 0 8s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8Zm.9 13H7v-1.8h1.9V13Zm-.1-3.6v.5H7.1v-.6c.2-2.1 2-1.9 1.9-3.2.1-.7-.3-1.1-1-1.1-.8 0-1.2.7-1.2 1.6H5c0-1.7 1.2-3 2.9-3 2.3 0 3 1.4 3 2.3.1 2.3-1.9 2-2.1 3.5Z"
+          fill="currentColor"
+        />
+      </svg>
+    ),
+    execute: (state: any, api: any) => {
+      window.open("https://www.markdownguide.org/basic-syntax/", "_blank");
+    }
+  };  
+
   if (!onChange) {
     return <></>
   }
 
-  const fullScreenClick = () => {
-    const element = document.querySelector('[data-name="fullscreen"]')
-    if (!element) return
-    // @ts-ignore eslint-disable-next-line
-    element.click()
-  }
-
-  const titleClick = (dataName: string) => {
+  const executeCommand = (dataName: string) => {
     const element = document.querySelector(`[data-name="${dataName}"]`)
     if (!element) return
     // @ts-ignore eslint-disable-next-line
     element.click()
   }
 
-  const boldClick = () => {
-    const element = document.querySelector('[data-name="bold"]')
-    if (!element) return
-    // @ts-ignore eslint-disable-next-line
-    element.click()
-  }
-
-  const OnTitle1Select = (event: any) => {
-    titleClick('title1')
-  }
-  const OnTitle2Select = (event: any) => {
-    titleClick('title2')
-  }
-  const OnTitle3Select = (event: any) => {
-    titleClick('title3')
-  }
-  const OnTitle4Select = (event: any) => {
-    titleClick('title4')
-  }
-  const OnTitle5Select = (event: any) => {
-    titleClick('title5')
-  }
-  const OnTitle6Select = (event: any) => {
-    titleClick('title6')
-  }
+  const menuData = [
+    {
+      "trigger": "Add Title / Header",
+      "items": [
+        { "title": "Title 1 (H1)", "onSelect": (event: any) => {executeCommand('title1')}, "shortcut": "⌘1" },
+        { "title": "Title 2 (H2)", "onSelect": (event: any) => {executeCommand('title2')}, "shortcut": "⌘2" },
+        { "title": "Title 3 (H3)", "onSelect": (event: any) => {executeCommand('title3')}, "shortcut": "⌘3" },
+        { "title": "Title 4 (H4)", "onSelect": (event: any) => {executeCommand('title4')}, "shortcut": "⌘4" },
+        { "title": "Title 5 (H5)", "onSelect": (event: any) => {executeCommand('title5')}, "shortcut": "⌘5" },
+        { "title": "Title 6 (H6)", "onSelect": (event: any) => {executeCommand('title6')}, "shortcut": "⌘6" },
+      ]
+    },
+    {
+      "trigger": "Format Text",
+      "items": [
+        { "title": "Bold Text", "onSelect": (event: any) => {executeCommand('bold')}, "shortcut": "⌘b" },
+        { "title": "Italic Text", "onSelect": (event: any) => {executeCommand('italic')}, "shortcut": "⌘i" },
+        { "title": "Strikethrough Text", "onSelect": (event: any) => {executeCommand('strikethrough')}, "shortcut": "⌘x" },
+        { "title": "Quote Text", "onSelect": (event: any) => {executeCommand('quote')}, "shortcut": "⌘q" },
+        { "title": "Insert HR (Line)", "onSelect": (event: any) => {executeCommand('hr')}, "shortcut": "⌘h" },
+      ]
+    },
+    {
+      "trigger": "Add List",
+      "items": [
+        { "title": "Add Checklist (checkboxes)", "onSelect": (event: any) => {executeCommand('checked-list')}, "shortcut": "⌘b" },
+        { "title": "Add Ordered List (numbered)", "onSelect": (event: any) => {executeCommand('ordered-list')}, "shortcut": "⌘i" },
+        { "title": "Add Unordered List (bullets)", "onSelect": (event: any) => {executeCommand('unordered-list')}, "shortcut": "⌘x" },
+      ]
+    },
+    {
+      "trigger": "Links",
+      "items": [
+        { "title": "Add Hyperlink (external)", "onSelect": (event: any) => {executeCommand('link')}, "shortcut": "⌘l" },
+        { "title": "Add Document Link (internal)", "onSelect": (event: any) => {executeCommand('link')}, "shortcut": "⌘^l" },
+      ]
+    }, 
+    {
+      "trigger": "Images",
+      "items": [
+        { "title": "Add Image (url)", "onSelect": (event: any) => {executeCommand('image')}, "shortcut": "⌘k" },
+        { "title": "Add Image (browse)", "onSelect": (event: any) => {executeCommand('image')}, "shortcut": "⌘k" },
+      ]
+    },        
+    {
+      "trigger": "Tables",
+      "items": [
+        { "title": "Add Table (1x1)", "onSelect": (event: any) => {executeCommand('table')}, "shortcut": "⌘^1" },
+        { "title": "Add Table (2x2)", "onSelect": (event: any) => {executeCommand('table')}, "shortcut": "⌘^2" },
+      ]
+    }, 
+    {
+      "trigger": "Preview",
+      "items": [
+        { "title": "None", "onSelect": (event: any) => {executeCommand('edit')}, "shortcut": "⌘^1" },
+        { "title": "Full Preview", "onSelect": (event: any) => {executeCommand('preview')}, "shortcut": "⌘^2" },
+        { "title": "Side Preview", "onSelect": (event: any) => {executeCommand('live')}, "shortcut": "⌘^2" },
+        { "title": "Live Preview (Below Editor)", "onSelect": (event: any) => {setShowBottomPreview(!showBottomPreview)}, "shortcut": "⌘^2" },
+      ]
+    }, 
+    {
+      "trigger": "Help",
+      "items": [
+        { "title": "Get Help", "onSelect": (event: any) => {executeCommand('help')}, "shortcut": "⌘^h" },
+      ]
+    },           
+  ];  
 
   return (
     <>
-      <Menubar>
-        <MenubarMenu>
-          <MenubarTrigger className="bg-blue-500">
-            Title / Header
-          </MenubarTrigger>
-          <MenubarContent>
-            <MenubarItem onSelect={OnTitle1Select}>
-              Title 1 (H1) <MenubarShortcut>⌘1</MenubarShortcut>
-            </MenubarItem>
-            <MenubarItem onSelect={OnTitle2Select}>
-              Title 2 (H2) <MenubarShortcut>⌘2</MenubarShortcut>
-            </MenubarItem>
-            <MenubarItem onSelect={OnTitle3Select}>
-              Title 3 (H3) <MenubarShortcut>⌘3</MenubarShortcut>
-            </MenubarItem>
-            <MenubarItem onSelect={OnTitle4Select}>
-              Title 4 (H4) <MenubarShortcut>⌘4</MenubarShortcut>
-            </MenubarItem>
-            <MenubarItem onSelect={OnTitle5Select}>
-              Title 5 (H5) <MenubarShortcut>⌘5</MenubarShortcut>
-            </MenubarItem>
-            <MenubarItem onSelect={OnTitle6Select}>
-              Title 6 (H6) <MenubarShortcut>⌘6</MenubarShortcut>
-            </MenubarItem>
-          </MenubarContent>
-        </MenubarMenu>
+      <Menubar className={rootMenubarClassName}>
+        {menuData.map((menu, index) => (
+          <MenubarMenu key={index}>
+            <MenubarTrigger className={menubarTriggerClassName}>
+              {menu.trigger}
+            </MenubarTrigger>
+            <MenubarContent>
+              {menu.items.map((item, itemIndex) => (
+                <MenubarItem
+                  key={itemIndex}
+                  className={menubarItemClassName}
+                  onSelect={item.onSelect} 
+                >
+                  {item.title} <MenubarShortcut>{item.shortcut}</MenubarShortcut>
+                </MenubarItem>
+              ))}
+            </MenubarContent>
+          </MenubarMenu>
+        ))}
       </Menubar>
       <MDEditor
-        className="text-lg"
         height={mdEditorHeight}
         hideToolbar={toolbarVisible}
         toolbarBottom={true}
@@ -273,9 +321,14 @@ export const MarkdownEditor = ({
           customCodePreviewCommand,
           commands.divider,
           customFullscreenCommand,
+          help
         ]}
         commands={newCommands}
+        textareaProps={{
+          placeholder: 'Please enter Markdown text',
+        }}        
       />
+      {showBottomPreview ? (<MDEditor.Markdown source={value} style={{ whiteSpace: 'pre-wrap' }} />):(<></>)}
     </>
   )
 }
