@@ -8,6 +8,7 @@ const envSchema = z.object({
   VERCEL_ENV: z.string().optional(), 
   VERCEL_URL: z.string().optional(),
   NEXT_PUBLIC_VERCEL_URL: z.string().optional(),
+  POSTGRES_URL: z.string().optional(),
 });
 
 const env = envSchema.parse({
@@ -18,6 +19,7 @@ const env = envSchema.parse({
   VERCEL_ENV: process.env?.VERCEL_ENV, 
   VERCEL_URL: process.env?.VERCEL_URL, 
   NEXT_PUBLIC_VERCEL_URL: process.env?.VERCEL_URL,   
+  POSTGRES_URL: process.env?.POSTGRES_URL,   
 });
 
 module.exports = { env };

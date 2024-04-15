@@ -12,6 +12,7 @@ import { Button } from '@/components/ui/button'
 interface PublisherToolbarProps {
   editorValue: any
   isPage?: boolean
+  closeEditor?: any 
 }
 
 export const PublisherToolbar = ({
@@ -55,8 +56,9 @@ export const PublisherToolbar = ({
   }
 
   const CloseEditor = () => {
-    // TODO: Go back to all pages
-
+    if (props && props?.closeEditor) {
+      props.closeEditor()
+    }
   }
 
   return (

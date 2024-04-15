@@ -25,7 +25,7 @@ import { MarkdownEditor } from '@/components/editor'
 
 type Inputs = z.infer<typeof blogSchema>
 
-export function AddBlogPostForm() {
+export function AddBlogPostForm(params: any) {
   const router = useRouter()
   const [isPending, startTransition] = React.useTransition()
   const [editorValue, setEditorValue] = React.useState<any>('Just start typing!')
@@ -51,9 +51,18 @@ export function AddBlogPostForm() {
     })
   }
 
+  function closeEditor() {
+    const subref = params?.subRef ? params.subRef : undefined
+    if (subref) {
+      const url = `${window.location.origin}/publish/${subref}/blogs`
+      router.push(url)
+    }
+  }
+
   return (
     <>
-      <PublisherToolbar editorValue={editorValue} isPage={false} />
+      <p>On Client, from Server: {params.subRef}</p>
+      <PublisherToolbar editorValue={editorValue} isPage={false} closeEditor={closeEditor} />
       <Form {...form}>
         <form
           className="grid gap-4"
