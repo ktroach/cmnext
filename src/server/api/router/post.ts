@@ -1,5 +1,4 @@
 import { z } from 'zod'
-
 import { createTRPCRouter, protectedProcedure, publicProcedure } from '../trpc'
 import { ContentStatus } from '@/db'
 
@@ -7,14 +6,41 @@ export const postRouter = createTRPCRouter({
   create: protectedProcedure
     .input(
       z.object({
+        subRef: z.string().min(1),
         title: z.string().min(1),
+        description: z.string().min(1),
+        image: z.string().min(1),
         content: z.string().min(1),
         slug: z.string().min(1),
-        authorId: z.number().min(1),
-        subsiteId: z.number().min(1),
       })
     )
     .mutation(async ({ input, ctx }) => {
+      console.log("CAN WE CALL FETCH OR AXIOS RIGHT HERE?")
+
+      const alreadyExists = await ctx.db.post.findFirst({ where: {title: input.title} })
+      if (alreadyExists) {
+        console.log("Post already exists...")
+        return null
+      }
+
+      // TODO: get authorId and subsiteId from backend!
+      
+      const response = await fetch("/api/content/save", {
+        method: "POST",
+        body: JSON.stringify({
+          subRef: input.subRef,
+          title: input.title, 
+          description: input.description,
+          image: input.image,
+          body: input.content
+        }),
+      });
+
+      if (!response) {
+        console.log("Error saving content!")
+        return null        
+      }
+
       return await ctx.db.post.create({
         data: {
           title: input.title,
@@ -22,8 +48,8 @@ export const postRouter = createTRPCRouter({
           slug: input.slug,
           published: false,
           deleted: false,
-          authorId: input.authorId,
-          subsiteId: input.subsiteId
+          authorId: 7,
+          subsiteId: 7
         },
       })
     }),
@@ -77,14 +103,14 @@ export const postRouter = createTRPCRouter({
       })
     }),
 
-    setStatusDraft: protectedProcedure
+  setStatusDraft: protectedProcedure
     .input(
       z.object({
         id: z.number().min(1),
       })
     )
     .mutation(async ({ input, ctx }) => {
-      return await ctx.db.page.update({
+      return await ctx.db.post.update({
         where: {
           id: input.id,
         },
@@ -101,7 +127,7 @@ export const postRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ input, ctx }) => {
-      return await ctx.db.page.update({
+      return await ctx.db.post.update({
         where: {
           id: input.id,
         },
@@ -120,7 +146,7 @@ export const postRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ input, ctx }) => {
-      return await ctx.db.page.update({
+      return await ctx.db.post.update({
         where: {
           id: input.id,
         },
@@ -137,7 +163,7 @@ export const postRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ input, ctx }) => {
-      return await ctx.db.page.update({
+      return await ctx.db.post.update({
         where: {
           id: input.id,
         },
@@ -147,24 +173,6 @@ export const postRouter = createTRPCRouter({
       })
     }),      
 
-  show: protectedProcedure
-    .input(
-      z.object({
-        id: z.number().min(1),
-        showOnNav: z.boolean().default(true)     
-      })
-    )
-    .mutation(async ({ input, ctx }) => {
-      return await ctx.db.page.update({
-        where: {
-          id: input.id,
-        },
-        data: {
-          showOnNav: input.showOnNav,
-        },
-      })
-    }),
-
   softDelete: protectedProcedure
     .input(
       z.object({
@@ -173,7 +181,7 @@ export const postRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ input, ctx }) => {
-      return await ctx.db.page.update({
+      return await ctx.db.post.update({
         where: {
           id: input.id,
         },

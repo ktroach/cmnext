@@ -11,6 +11,12 @@ module.exports = {
       },
     },
     extend: {
+      ul: {
+        listStyle: "revert"
+      },      
+      ol: {
+        listStyle: "revert"
+      },   
       screens: {
         xs: "380px",
       },

@@ -37,10 +37,10 @@ export function VerifyEmailForm() {
   const [isPending, startTransition] = React.useTransition()
 
   const createUserMutation = api.users.create.useMutation({
-    onSuccess: (newUser) => {
+    onSuccess: (newUser: any) => {
       console.log('onSuccess >>> newUser >>> ', newUser)
     },
-    onError: (error) =>
+    onError: (error: any) =>
       toast('Failed to Create User', {
         duration: 2000,
         description: error.message,

@@ -65,6 +65,10 @@
 
     --ring: 240 3.7% 15.9%;
   }
+
+  ul, ol {
+    list-style: revert;
+  }
 }
 
 

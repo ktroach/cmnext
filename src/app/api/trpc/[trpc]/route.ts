@@ -6,7 +6,7 @@ import { type NextRequest } from "next/server"
 
 // You need this to be "edge" runtime for production on vercel so that it can properly resolve the trpc endpoint:
 // If this is not set, you will get the following Error: Failed to collect page data for /api/trpc/[trpc]
-export const runtime = "edge";
+// export const runtime = "edge";
 
 const addCorsHeaders = (res: Response) => {
   res.headers.set("Access-Control-Allow-Origin", "*")

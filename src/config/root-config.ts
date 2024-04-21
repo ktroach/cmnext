@@ -15,6 +15,15 @@ export const RootConfig = {
     signoutOptions: {
       signOutOptionText: "Sign Out"
     },
+    statusConfigs: 
+      {
+        draft: {        
+          statusColor: "text-blue-500"
+        },
+        published: {
+          statusColor: "text-green-500"
+        }
+      },
     sections:  [
         {
           title: 'Blogs',
