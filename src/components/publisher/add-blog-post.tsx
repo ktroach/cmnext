@@ -85,8 +85,8 @@ export function AddBlogPostForm(params: any) {
     return await createPostMutation.mutateAsync({
       subRef: subref,
       title: title,
-      description: formControl.description ?? "blog post",
-      image: formControl.image ?? "default.png",
+      description: formControl.description,
+      image: formControl.image,
       content: editorContent,
       slug: slug,
     })
@@ -143,7 +143,6 @@ export function AddBlogPostForm(params: any) {
 
   return (
     <>
-      {/* <p>On Client: {params.subRef}</p> */}
       <PublisherToolbar
         isBlog
         status={params?.status}

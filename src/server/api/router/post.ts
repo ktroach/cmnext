@@ -1,6 +1,7 @@
 import { z } from 'zod'
 import { createTRPCRouter, protectedProcedure, publicProcedure } from '../trpc'
 import { ContentStatus } from '@/db'
+import { getFrontendBaseUrl } from '@/lib/url'
 
 export const postRouter = createTRPCRouter({
   create: protectedProcedure
@@ -15,19 +16,23 @@ export const postRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ input, ctx }) => {
-      console.log("CAN WE CALL FETCH OR AXIOS RIGHT HERE?")
-
+      // TODO: This is more of an Upsert route, so maybe we should rename it upsert
       const alreadyExists = await ctx.db.post.findFirst({ where: {title: input.title} })
       if (alreadyExists) {
         console.log("Post already exists...")
         return null
       }
 
+      // TODO: If the post already exists, update it 
+
       // TODO: get authorId and subsiteId from backend!
       
-      const response = await fetch("/api/content/save", {
+      const baseUrl: string = getFrontendBaseUrl()
+      const saveEndpoint: string = `${baseUrl}/api/content/save`
+      const response = await fetch(saveEndpoint, {
         method: "POST",
         body: JSON.stringify({
+          isUpdate: false,
           subRef: input.subRef,
           title: input.title, 
           description: input.description,
@@ -36,7 +41,7 @@ export const postRouter = createTRPCRouter({
         }),
       });
 
-      if (!response) {
+      if (response.status !== 204) {
         console.log("Error saving content!")
         return null        
       }

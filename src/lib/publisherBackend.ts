@@ -6,7 +6,7 @@ import {
   generateMDXFrontmatter,
 } from './mdxUtils'
 import { writeFileSync, existsSync } from 'fs'
-import { generateUniqueFilename } from './fileUtils'
+import { createDir, generateUniqueFilename, verifyPath } from './fileUtils'
 
 export const saveContent = (
   userName: string,
@@ -49,8 +49,14 @@ export const saveContent = (
     const generatedFilename = generateUniqueFilename()
     console.log('generatedFilename:', generatedFilename)
 
-    const postSlug: string = `/content/blog/${subRef}`
+    const postSlug: string = `/content/blogs/${subRef}`
     const mdxBlogPath: string = `./src${postSlug}`
+
+    if (!verifyPath(mdxBlogPath)) {
+        console.log("creating directory: ", mdxBlogPath, "...")
+        createDir(mdxBlogPath)
+    }
+
     const mdxFileName: string = `${mdxBlogPath}/${generatedFilename}.mdx`
     const slug: string = `${postSlug}/${generatedFilename}`
 
