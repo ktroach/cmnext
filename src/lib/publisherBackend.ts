@@ -7,6 +7,23 @@ import {
 } from './mdxUtils'
 import { writeFileSync, existsSync } from 'fs'
 import { createDir, generateUniqueFilename, verifyPath } from './fileUtils'
+import { getSubsiteBySignInIdentifierQuery } from './queries'
+
+export const GetSubsiteBySignInIdentifierBackend = async (userId: string, signInIdentifier: string) => {
+  if (!userId) {
+    console.log('>>> Unauthorized call to Backend Route: [GetSubsiteBySignInIdentifierBackend], Reason: [userId]')
+    return null
+  }
+
+  if (!signInIdentifier) {
+    console.log('>>> Unauthorized call to Backend Route: [GetSubsiteBySignInIdentifierBackend], Reason: [signInIdentifier]')
+    return null
+  }
+
+  const subSiteResult = await getSubsiteBySignInIdentifierQuery(userId, signInIdentifier)
+  console.log('>>> GetSubsiteBySignInIdentifierBackend >>> subSiteResult >>> ', subSiteResult)
+  return subSiteResult
+}
 
 export const saveContent = (
   userName: string,
@@ -53,8 +70,8 @@ export const saveContent = (
     const mdxBlogPath: string = `./src${postSlug}`
 
     if (!verifyPath(mdxBlogPath)) {
-        console.log("creating directory: ", mdxBlogPath, "...")
-        createDir(mdxBlogPath)
+      console.log('creating directory: ', mdxBlogPath, '...')
+      createDir(mdxBlogPath)
     }
 
     const mdxFileName: string = `${mdxBlogPath}/${generatedFilename}.mdx`
@@ -73,7 +90,7 @@ export const saveContent = (
 
     return response
   } catch (ex) {
-    console.log("Failed to Save Content >>> ", ex)
+    console.log('Failed to Save Content >>> ', ex)
     return null
   }
 }

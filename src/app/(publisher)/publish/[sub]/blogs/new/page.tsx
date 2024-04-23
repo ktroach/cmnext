@@ -5,7 +5,10 @@ import { Header } from '@/components/layouts/header'
 import { AddBlogPostForm } from '@/components/publisher/add-blog-post'
 import { Block } from '@/components/containers/block'
 import { getFrontendBaseUrl } from '@/lib/url'
-import { verifySubRefAccess } from '@/lib/queries'
+import { 
+  verifySubRefAccess, 
+  getUserSubsite
+} from '@/lib/queries'
 
 export const metadata: Metadata = {
   metadataBase: new URL(getFrontendBaseUrl()),
@@ -19,6 +22,7 @@ export default async function PublisherNewBlog({ params }: any) {
   const subRef = params?.sub ? params.sub : null
   const hasAccess = await verifySubRefAccess(curUser, subRef)
   if (!hasAccess) redirect('/')
+  const subsite: any = await getUserSubsite(curUser, subRef)
 
   return (
     <Block>
@@ -27,8 +31,7 @@ export default async function PublisherNewBlog({ params }: any) {
         description="Create/Add a new Blog Post to your site!"
         size="sm"
       />
-      From Server - subRef: {subRef} 
-      <AddBlogPostForm subRef={subRef} />
+      <AddBlogPostForm subsite={subsite} />
     </Block>
   )
 }

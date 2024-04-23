@@ -28,13 +28,6 @@ export default async function SignUpPage() {
 
   return (
     <Block className="max-w-lg">
-      {/* <Card>
-        <CardHeader>
-          <CardTitle>We are so glad to have you join!</CardTitle>
-          <CardDescription>
-          </CardDescription>
-        </CardHeader>
-      </Card> */}
       <Card>
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl">Sign up</CardTitle>

@@ -55,8 +55,8 @@ export function AddBlogPostForm(params: any) {
   }
 
   const closeEditor = () => {
-    const subref = params?.subRef ? params.subRef : undefined
-    console.log('close editor called: ', subref)
+    const subsite: any = params?.subsite ? params.subsite : undefined
+    const subref: string = subsite?.subRef ? subsite.subRef : undefined
     if (subref) {
       const url = `${window.location.origin}/publish/${subref}/blogs`
       router.push(url)
@@ -80,16 +80,25 @@ export function AddBlogPostForm(params: any) {
     console.log('Entered: CreatePost')
     const formControl = form.getValues()
     const title = formControl.title
-    const subref = params?.subRef ? params.subRef : undefined
+    const subsite: any = params?.subsite ? params.subsite : undefined
+    const subref: string = subsite?.subRef ? subsite.subRef : undefined
+    const userId: number | undefined = subsite?.userId ? parseInt(subsite.userId) : undefined
+    const subsiteId: number  | undefined = subsite?.subsiteId ? parseInt(subsite.subsiteId) : undefined
     const slug = `/${subref}/blogs/${title}`
-    return await createPostMutation.mutateAsync({
-      subRef: subref,
-      title: title,
-      description: formControl.description,
-      image: formControl.image,
-      content: editorContent,
-      slug: slug,
-    })
+
+    if (title && subref && userId && subsiteId) {
+      return await createPostMutation.mutateAsync({
+        subRef: subref,
+        title: title,
+        description: formControl.description,
+        image: formControl.image,
+        content: editorContent,
+        authorId: userId, 
+        subsiteId: subsiteId, 
+      })
+    }
+
+    return null
   }
 
   const saveDraft = async () => {

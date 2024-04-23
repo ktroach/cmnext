@@ -14,7 +14,6 @@ import {
 } from '@/components/ui/card'
 import { OAuthSignIn } from '@/components/auth/oauth-signin'
 import { SignInForm } from '@/components/auth/signin-form'
-import { SignoutOptions } from "@/components/auth/signout-options"
 import { Block } from '@/components/containers/block'
 import { getFrontendBaseUrl } from '@/lib/url'
 
@@ -26,13 +25,11 @@ export const metadata: Metadata = {
 
 export default async function SignInPage() {
   const user = await currentUser()
-  // TODO: Make this Optional 
-  // if (user) redirect("/")
 
   return (
     <Block className="max-w-lg">
       {user ? (
-        <SignoutOptions />
+        <></>
       ) : (
         <Card>
         <CardHeader className="space-y-1">

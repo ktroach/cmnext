@@ -57,3 +57,62 @@ export const verifySubRefAccess = async (
   console.log('Subsite Inaccessible - Not Authenticated')
   return false
 }
+
+export const getSubsiteBySignInIdentifierQuery = async (userId: string, signInIdentifier: string) => {
+  if (!userId) {
+    console.log('>>> Unauthorized call to Query Resource: [getSubsiteBySignInIdentifierQuery], Reason: [userId]')
+    return null
+  }
+
+  if (!signInIdentifier) {
+    console.log('>>> Unauthorized call to Query Resource: [getSubsiteBySignInIdentifierQuery], Reason: [signInIdentifier]')
+    return null
+  }
+
+  const identifierField: string = signInIdentifier.indexOf('@') != -1 ? 'email' : 'name'
+  console.log('>>> identifierField >>> ', identifierField)
+
+  const queryResult = await sql`
+  SELECT "User"."id" AS "userId", 
+         "Subsite"."id" AS "subsiteId", 
+         "Subsite"."subsiteRef" AS "subRef"  
+    FROM "User"
+    JOIN "Account" ON "User"."id" = "Account"."adminId"
+    JOIN "Subsite" ON "Account"."id" = "Subsite"."accountId"
+    WHERE "User"."email" = ${signInIdentifier};
+    `
+  console.log('>>> queries >>> getSubsiteBySignInIdentifierQuery >>> resultData >>> ', queryResult)
+  if (queryResult && queryResult.length > 0) {
+    return queryResult[0]
+  }
+  return null
+}
+
+export const getUserSubsite = async (
+  user: ClerkUserType,
+  subSiteRef: string | null
+): Promise<any | undefined> => {
+  if (!user) {
+    return null
+  }
+  if (!subSiteRef) {
+    return null
+  }
+  const username: string | null = getClerkUserName(user)
+  if (username) {
+    const resultData = await sql`
+    SELECT "User"."id" AS "userId", 
+           "Subsite"."id" AS "subsiteId", 
+           "Subsite"."subsiteRef" AS "subRef"  
+      FROM "User"
+      JOIN "Account" ON "User"."id" = "Account"."adminId"
+      JOIN "Subsite" ON "Account"."id" = "Subsite"."accountId"
+      WHERE "User"."name" = ${username};     
+      `
+    if (resultData && resultData.length > 0) {
+      return resultData[0]
+    }
+  }
+  console.log('Subsite Inaccessible - Not Authenticated')
+  return null
+}

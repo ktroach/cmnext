@@ -28,6 +28,7 @@ import {
 import { Skeleton } from '@/components/ui/skeleton'
 import { getFrontendBaseUrl } from '@/lib/url'
 import { sendEmail } from '@/lib/email'
+import { getSubRefByIdentifier } from '@/lib/subref'
 
 type Inputs = z.infer<typeof verfifyEmailSchema>
 
@@ -57,7 +58,6 @@ export function VerifyEmailForm() {
     })
   }
 
-
   const createAccountMutation = api.accounts.create.useMutation({
     onSuccess: (newAccount) => {
       console.log('onSuccess >>> newAccount >>> ', newAccount)
@@ -78,7 +78,6 @@ export function VerifyEmailForm() {
       adminId: adminId,
     })
   }
-
 
   const createSubSiteMutation = api.subsites.create.useMutation({
     onSuccess: (newSubSite) => {
@@ -165,33 +164,47 @@ export function VerifyEmailForm() {
     toast('Account created. Thank you for joining!')
 
     toast.message('Hang tight while we generate your site...', {
-      description: "This usually takes a few seconds.",
+      description: 'This usually takes a few seconds.',
     })
 
-    const baseUrl = getFrontendBaseUrl()
-    const subRef = userSubSite?.subsiteRef ? userSubSite.subsiteRef : undefined
-    const creatorUrl: string | undefined = baseUrl && subRef ? `${baseUrl}/publish/${subRef}` : undefined
-    // Most likely this would not occur, but we handle this rare scenario as gracefully as we can 
-    if (!creatorUrl) {
-      // toast.error('There was a problem generating your site. Please check your email for further instructions.')
-      toast.error('There was a problem generating your site.', {
-        description: "Please check your email for further instructions.",
-      })      
-      return 
-    }
+    let publisherUrl: string | undefined = ''
+    const baseUrl: string = getFrontendBaseUrl()
+    const identifier: string | null =
+      userEmail && typeof userEmail === 'string' ? userEmail : null
+    if (identifier) {
+      const subRef: string | undefined = await getSubRefByIdentifier(
+        baseUrl,
+        identifier
+      )
+      
+      if (!subRef) {
+        console.log(">>> verify-email >>> subRef not provided >>> return to origin.") 
+        router.push(`${window.location.origin}/`)
+        return
+      }
 
-   /***
-     * TODO: Send Email to the new user: 
-     * thank you for signing up, here is your 
-     * Site's URL to start creating, here is 
-     * how to get started create a blog, 
+      publisherUrl = baseUrl && subRef ? `${baseUrl}/publish/${subRef}` : undefined
+      // Most likely this would not occur, but we handle this rare scenario as gracefully as we can
+      if (!publisherUrl) {
+        // toast.error('There was a problem generating your site. Please check your email for further instructions.')
+        toast.error('There was a problem generating your site.', {
+          description: 'Please check your email for further instructions.',
+        })
+        return
+      }
+    }
+    /***
+     * TODO: Send Email to the new user:
+     * thank you for signing up, here is your
+     * Site's URL to start creating, here is
+     * how to get started create a blog,
      * create a web page, create etc..
      */
     if (userEmail) {
       // TODO: Need Email Templates
-      const emailBody = `<div><p>Thank you for joining! Here is </p><a href='${creatorUrl}'>Your Site URL</a></div>`
+      const emailBody = `<div><p>Thank you for joining! Here is </p><a href='${publisherUrl}'>Your Site URL</a></div>`
       console.log('emailBody: ', emailBody)
-      await sendEmail(user.email, "Start Creating", emailBody, true)    
+      await sendEmail(user.email, 'Start Creating', emailBody, true)
     }
 
     setTimeout(() => {

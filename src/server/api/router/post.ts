@@ -12,57 +12,121 @@ export const postRouter = createTRPCRouter({
         description: z.string().min(1),
         image: z.string().min(1),
         content: z.string().min(1),
-        slug: z.string().min(1),
+        authorId: z.number().min(1),
+        subsiteId: z.number().min(1),
       })
     )
     .mutation(async ({ input, ctx }) => {
-      // TODO: This is more of an Upsert route, so maybe we should rename it upsert
-      const alreadyExists = await ctx.db.post.findFirst({ where: {title: input.title} })
-      if (alreadyExists) {
-        console.log("Post already exists...")
+      const postExists = await ctx.db.post.findFirst({
+        where: {
+          title: input.title,
+          authorId: input.authorId,
+          subsiteId: input.subsiteId,
+        },
+      })
+      if (postExists) {
+        console.log('Post already exists...')
         return null
       }
 
-      // TODO: If the post already exists, update it 
-
-      // TODO: get authorId and subsiteId from backend!
-      
       const baseUrl: string = getFrontendBaseUrl()
       const saveEndpoint: string = `${baseUrl}/api/content/save`
       const response = await fetch(saveEndpoint, {
-        method: "POST",
+        method: 'POST',
         body: JSON.stringify({
           isUpdate: false,
           subRef: input.subRef,
-          title: input.title, 
+          title: input.title,
           description: input.description,
           image: input.image,
-          body: input.content
+          body: input.content,
         }),
-      });
+      })
 
       if (response.status !== 204) {
-        console.log("Error saving content!")
-        return null        
+        console.log('Error saving content!')
+        return null
       }
+
+      const responseData = await response.json()
+      console.log("post create >>> responseData >>> ", responseData)
+      const slug = responseData && responseData?.slug ? responseData.slug : undefined
+      console.log("post create >>> slug >>> ", slug)
 
       return await ctx.db.post.create({
         data: {
           title: input.title,
           content: input.content,
-          slug: input.slug,
+          slug: slug,
           published: false,
           deleted: false,
-          authorId: 7,
-          subsiteId: 7
+          authorId: input.authorId,
+          subsiteId: input.subsiteId,
         },
       })
     }),
-    
+
+  updateContent: protectedProcedure
+    .input(
+      z.object({
+        postId: z.number().min(1),
+        content: z.string().min(1),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      const postExists = await ctx.db.post.findFirst({
+        where: {
+          id: input.postId,
+        },
+      })
+      if (!postExists) {
+        console.log('Failed to update content. Post no longer exists: ', input.postId)
+        return null
+      }
+
+      return await ctx.db.post.update({
+        where: {
+          id: input.postId,
+        },
+        data: {
+          content: input.content,
+        },
+      })
+    }),
+
+  updateImage: protectedProcedure
+    .input(
+      z.object({
+        postId: z.number().min(1),
+        coverImage: z.string().min(1),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      const postExists = await ctx.db.post.findFirst({
+        where: {
+          id: input.postId,
+        },
+      })
+      if (!postExists) {
+        console.log('Failed to update image. Post no longer exists: ', input.postId)
+        return null
+      }
+
+      return await ctx.db.post.update({
+        where: {
+          id: input.postId,
+        },
+        data: {
+          coverImage: input.coverImage,
+        },
+      })
+    }),
+
+
   getFeatured: publicProcedure
     .input(
       z.object({
-        limit: z.number().min(3)
+        limit: z.number().min(3),
       })
     )
     .query(async ({ input, ctx }) => {
@@ -128,7 +192,7 @@ export const postRouter = createTRPCRouter({
   setStatusPublished: protectedProcedure
     .input(
       z.object({
-        id: z.number().min(1),  
+        id: z.number().min(1),
       })
     )
     .mutation(async ({ input, ctx }) => {
@@ -137,17 +201,17 @@ export const postRouter = createTRPCRouter({
           id: input.id,
         },
         data: {
-          published: true, 
-          publishedAt: new Date(), 
+          published: true,
+          publishedAt: new Date(),
           status: ContentStatus.PUBLISHED,
         },
       })
-    }),  
-    
+    }),
+
   setStatusPending: protectedProcedure
     .input(
       z.object({
-        id: z.number().min(1),  
+        id: z.number().min(1),
       })
     )
     .mutation(async ({ input, ctx }) => {
@@ -159,12 +223,12 @@ export const postRouter = createTRPCRouter({
           status: ContentStatus.PENDING,
         },
       })
-    }),  
-    
+    }),
+
   setStatusReview: protectedProcedure
     .input(
       z.object({
-        id: z.number().min(1),  
+        id: z.number().min(1),
       })
     )
     .mutation(async ({ input, ctx }) => {
@@ -176,13 +240,13 @@ export const postRouter = createTRPCRouter({
           status: ContentStatus.REVIEW,
         },
       })
-    }),      
+    }),
 
   softDelete: protectedProcedure
     .input(
       z.object({
         id: z.number().min(1),
-        softDeleted: z.boolean().default(true)     
+        softDeleted: z.boolean().default(true),
       })
     )
     .mutation(async ({ input, ctx }) => {
@@ -196,7 +260,7 @@ export const postRouter = createTRPCRouter({
       })
     }),
 
-  delete: protectedProcedure
+  hardDelete: protectedProcedure
     .input(
       z.object({
         id: z.number().min(1),
@@ -210,25 +274,4 @@ export const postRouter = createTRPCRouter({
       })
     }),
 
-  patch: protectedProcedure
-    .input(
-      z.object({
-        id: z.number().min(1),
-        title: z.string().min(1),
-        content: z.string().min(1),
-        slug: z.string().min(1),
-      })
-    )
-    .mutation(async ({ input, ctx }) => {
-      return await ctx.db.post.update({
-        where: {
-          id: input.id,
-        },
-        data: {
-          title: input.title,
-          content: input.content,
-          slug: input.slug,
-        },
-      })
-    }),
 })
