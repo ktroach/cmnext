@@ -60,7 +60,7 @@ const RenderCards = (data: any[] | undefined) => {
             ? item.coverImage
             : `https://source.unsplash.com/random/220x120`
           return (
-            <Link href={uri}>
+            <Link href={uri} key={uri}>
               <span className="sr-only">{item.title}</span>
               <Card className="relative flex size-full flex-col items-center justify-center overflow-hidden rounded-lg bg-transparent transition-colors hover:bg-muted/50">
                 <CardHeader>

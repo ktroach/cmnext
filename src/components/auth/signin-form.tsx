@@ -6,7 +6,6 @@ import { useSignIn } from "@clerk/nextjs"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import type { z } from "zod"
-import { api } from '@/trpc/client'
 import { catchClerkError } from "@/lib/clerk"
 import { authSchema } from "@/validations/auth"
 import { Button } from "@/components/ui/button"

@@ -3,23 +3,17 @@ import { appRouter } from "@/server/api/router/root"
 import { createTRPCContext } from "@/server"
 import { fetchRequestHandler } from "@trpc/server/adapters/fetch"
 import { type NextRequest } from "next/server"
+import { SetCorsHeaders } from '@/lib/cors'
 
 // You need this to be "edge" runtime for production on vercel so that it can properly resolve the trpc endpoint:
 // If this is not set, you will get the following Error: Failed to collect page data for /api/trpc/[trpc]
-export const runtime = "edge";
-
-const addCorsHeaders = (res: Response) => {
-  res.headers.set("Access-Control-Allow-Origin", "*")
-  res.headers.set("Access-Control-Request-Method", "*")
-  res.headers.set("Access-Control-Allow-Methods", "OPTIONS, GET, POST")
-  res.headers.set("Access-Control-Allow-Headers", "*")  
-}
+export const runtime = "edge"
 
 export const OPTIONS = () => {
   const response = new Response(null, {
     status: 204,
   });
-  addCorsHeaders(response)
+  SetCorsHeaders(response)
   return response
 }
 
@@ -46,7 +40,7 @@ const handler = async (req: NextRequest) => {
         : undefined,
   })
 
-  addCorsHeaders(response)
+  SetCorsHeaders(response)
   return response
 }
 

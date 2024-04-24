@@ -1,21 +1,21 @@
-import { auth, currentUser } from '@clerk/nextjs'
+import { auth } from '@clerk/nextjs'
 import { GetSubsiteBySignInIdentifierBackend } from '@/lib/publisherBackend'
+import { type NextRequest } from "next/server"
+import { SetCorsHeaders } from '@/lib/cors'
 
-export async function POST(req: Request) {
-  console.log('>>> POST /subsite >>> req >>> ', req)
+export const runtime = "edge"
 
-  const { userId } = auth()
-
-  if (!userId) {
-    return new Response('Unauthorized', { status: 401 })
-  }
-
-  const data = await req.json()
-  console.log('>>> data >>>> ', data)
-
+const handler = async (req: NextRequest) => {
   try {
+    const { userId } = auth()
+
+    if (!userId) {
+      return new Response('Unauthorized', { status: 401 })
+    }
+  
+    const body = await req.json()
     const signInIdentifier =
-      data && data?.signInIdentifier ? data.signInIdentifier : undefined
+      body && body?.signInIdentifier ? body.signInIdentifier : undefined
 
     if (!signInIdentifier) {
       return new Response('Unauthorized', { status: 401 })
@@ -25,8 +25,13 @@ export async function POST(req: Request) {
       await GetSubsiteBySignInIdentifierBackend(userId, signInIdentifier)
     console.log('>>> subsiteResult >>>> ', subsiteResult)
 
-    return Response.json(subsiteResult)
+    const response = Response.json(subsiteResult)
+    SetCorsHeaders(response)
+
+    return response
   } catch (error) {
     return Response.json(error)
   }
 }
+
+export { handler as POST }

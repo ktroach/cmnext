@@ -36,6 +36,7 @@ export function VerifyEmailForm() {
   const router = useRouter()
   const { isLoaded, signUp, setActive } = useSignUp()
   const [isPending, startTransition] = React.useTransition()
+  const [publishUrl, setPublishUrl] = React.useState<string | undefined>('')
 
   const createUserMutation = api.users.create.useMutation({
     onSuccess: (newUser: any) => {
@@ -108,13 +109,13 @@ export function VerifyEmailForm() {
       ? signupResource.username
       : ''
 
-    // we shouldn't run into this scenario
     if (!validateUser(userName, userEmail)) {
+      console.log(">>> verify-email >>> createUserAccount >>> invalid user >>> userName >>> ", userName, ' >>> userEmail >>> ', userEmail)
       return
     }
 
     const user = await CreateUser(userName, userEmail)
-    console.log('after CreateUser >>> user >>> ', user)
+    // console.log('after CreateUser >>> user >>> ', user)
 
     if (!user) {
       console.log(
@@ -148,8 +149,6 @@ export function VerifyEmailForm() {
       return
     }
 
-    // TODO: Now create the initial Subsite for this User Account
-    // This is where the Subsite Id is initially created for the user
     const userSubSite = await CreateSubSite(userAccount.name, userAccount.id)
     console.log('userSubSite: ', userSubSite)
     if (!userSubSite) {
@@ -167,7 +166,6 @@ export function VerifyEmailForm() {
       description: 'This usually takes a few seconds.',
     })
 
-    let publisherUrl: string | undefined = ''
     const baseUrl: string = getFrontendBaseUrl()
     const identifier: string | null =
       userEmail && typeof userEmail === 'string' ? userEmail : null
@@ -176,50 +174,50 @@ export function VerifyEmailForm() {
         baseUrl,
         identifier
       )
+      console.log(">> verify-email >> subRef from api >>> ", subRef)
       
       if (!subRef) {
         console.log(">>> verify-email >>> subRef not provided >>> return to origin.") 
-        router.push(`${window.location.origin}/`)
-        return
       }
 
-      publisherUrl = baseUrl && subRef ? `${baseUrl}/publish/${subRef}` : undefined
-      // Most likely this would not occur, but we handle this rare scenario as gracefully as we can
+      const publisherUrl: string | undefined = baseUrl && subRef ? `${baseUrl}/publish/${subRef}` : undefined
+      console.log(">> verify-email >> publisherUrl from subRef >>> ", publisherUrl)
       if (!publisherUrl) {
-        // toast.error('There was a problem generating your site. Please check your email for further instructions.')
         toast.error('There was a problem generating your site.', {
           description: 'Please check your email for further instructions.',
         })
-        return
+        // return
       }
+      setPublishUrl(publisherUrl)
+      sendSignupEmail(user, publisherUrl)
     }
-    /***
-     * TODO: Send Email to the new user:
-     * thank you for signing up, here is your
-     * Site's URL to start creating, here is
-     * how to get started create a blog,
-     * create a web page, create etc..
-     */
-    if (userEmail) {
-      // TODO: Need Email Templates
-      const emailBody = `<div><p>Thank you for joining! Here is </p><a href='${publisherUrl}'>Your Site URL</a></div>`
+  }
+
+  const sendSignupEmail = async (user: any, publisherUrl: string | undefined) => {
+    if (!user) {
+      console.log('>>> sendSignupEmail >>> user is required')
+      return
+    }
+    if (!publisherUrl) {
+      console.log('>>> sendSignupEmail >>> publisherUrl is required')
+      return      
+    }
+    if (user?.email) {
+      // TODO: see Task regarding sending Signup Email 
+      const emailBody = `<div><p>Thank you for joining! Click here to check out your <a href='${publisherUrl}'>Publisher Site</a> </p></div>`
       console.log('emailBody: ', emailBody)
       await sendEmail(user.email, 'Start Creating', emailBody, true)
-    }
-
-    setTimeout(() => {
-      // redirect(creatorUrl)
-    }, 3000)
+    }    
   }
 
   const validateUser = (username: unknown, email: unknown) => {
     if (!username) {
-      console.log('Invalid user_name in user signup for ', email)
+      console.log('Invalid user_name in user verify email for ', email)
       return false
     }
 
     if (!email) {
-      console.log('Invalid user_email in user signup for ', username)
+      console.log('Invalid user_email in user verify email for ', username)
       return false
     }
     return true
@@ -245,19 +243,15 @@ export function VerifyEmailForm() {
 
         if (completeSignUp.status !== 'complete') {
           console.log(JSON.stringify(completeSignUp, null, 2))
-          toast.error('Something went wrong, please try again.')
-          return
+          console.log('Something went wrong in completeSignUp >>> ', completeSignUp)
         }
 
         if (completeSignUp.status === 'complete') {
           await setActive({ session: completeSignUp.createdSessionId })
           const useAccountResult: any = await createUserAccount(completeSignUp)
           if (!useAccountResult) {
-            toast.error('Something went wrong, please try again.')
-            return
+            console.log('Something went wrong in signup createUserAccount >>> ', useAccountResult)
           }
-
-          router.push(`${window.location.origin}/profile`)
         }
       } catch (err) {
         catchClerkError(err)
@@ -268,6 +262,10 @@ export function VerifyEmailForm() {
   const handleGoBack = (ev: any) => {
     ev.stopPropagation()
     router.push(`${window.location.origin}/signup`)
+  }
+
+  if (publishUrl) {
+    router.push(publishUrl)
   }
 
   return (

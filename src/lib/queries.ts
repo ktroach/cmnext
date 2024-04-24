@@ -54,7 +54,7 @@ export const verifySubRefAccess = async (
       return false
     }
   }
-  console.log('Subsite Inaccessible - Not Authenticated')
+  console.log('Subsite Denied - Not Authenticated')
   return false
 }
 
@@ -113,6 +113,6 @@ export const getUserSubsite = async (
       return resultData[0]
     }
   }
-  console.log('Subsite Inaccessible - Not Authenticated')
+  console.log('Subsite Denied - Not Authenticated')
   return null
 }

@@ -1,4 +1,4 @@
-// "use client"
+"use client"
 
 export const getSubRefByIdentifier = async (baseUrl: string, identifier: string | null) => {
     const subsiteEndpoint: string = `${baseUrl}/api/subsite`
@@ -9,6 +9,7 @@ export const getSubRefByIdentifier = async (baseUrl: string, identifier: string 
     }
     const response: any = await fetch(subsiteEndpoint, {
       method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         signInIdentifier: signInIdentifier,
       }),

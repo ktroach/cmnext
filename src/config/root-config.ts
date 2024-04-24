@@ -12,6 +12,7 @@ export const RootConfig = {
     featureBlogsLimit: 4,  
     featureSitesLimit: 4,  
     logoImage: "",
+    emailProviderUrl: "https://react.email/api/send/test",
     signoutOptions: {
       signOutOptionText: "Sign Out"
     },
