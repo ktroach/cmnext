@@ -17,15 +17,16 @@ export const postRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ input, ctx }) => {
-      const postExists = await ctx.db.post.findFirst({
+      const exists = await ctx.db.post.findFirst({
         where: {
           title: input.title,
           authorId: input.authorId,
           subsiteId: input.subsiteId,
         },
       })
-      if (postExists) {
-        console.log('Post already exists...')
+      // Do not allow the same title to be duplicated
+      if (exists) {
+        console.log('Failed to CREATE Content. Post already exists: ', exists?.id)
         return null
       }
 
@@ -44,7 +45,7 @@ export const postRouter = createTRPCRouter({
       })
 
       if (response.status !== 204) {
-        console.log('Error saving content!')
+        console.log('Error saving Post >>> input >>> ', input)
         return null
       }
 
@@ -74,12 +75,12 @@ export const postRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ input, ctx }) => {
-      const postExists = await ctx.db.post.findFirst({
+      const exists = await ctx.db.post.findFirst({
         where: {
           id: input.postId,
         },
       })
-      if (!postExists) {
+      if (!exists) {
         console.log('Failed to update content. Post no longer exists: ', input.postId)
         return null
       }
@@ -171,6 +172,33 @@ export const postRouter = createTRPCRouter({
         },
       })
     }),
+
+  getPost: protectedProcedure
+    .input(
+      z.object({
+        title: z.string().min(1).optional(),
+        authorId: z.number().min(1).optional(),
+        subsiteId: z.number().min(1).optional(),
+      })
+    )
+    .query(async ({ input, ctx }) => {
+      if (!input?.title){
+        return null
+      }
+      if (!input?.authorId){
+        return null
+      }
+      if (!input?.subsiteId){
+        return null
+      }
+      return await ctx.db.post.findFirst({
+        where: {
+          title: input.title,
+          authorId: input.authorId,
+          subsiteId: input.subsiteId,
+        },
+      })
+    }),    
 
   setStatusDraft: protectedProcedure
     .input(
@@ -273,5 +301,4 @@ export const postRouter = createTRPCRouter({
         },
       })
     }),
-
 })

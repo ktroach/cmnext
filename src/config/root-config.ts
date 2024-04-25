@@ -20,11 +20,17 @@ export const RootConfig = {
     statusConfigs: 
       {
         draft: {        
-          statusColor: "text-blue-500"
+          statusColor: "text-blue-600"
         },
         published: {
-          statusColor: "text-green-500"
-        }
+          statusColor: "text-green-600"
+        },
+        review: {        
+          statusColor: "text-yellow-600"
+        },
+        pending: {        
+          statusColor: "text-gray-600"
+        },                
       },
     sections:  [
         {

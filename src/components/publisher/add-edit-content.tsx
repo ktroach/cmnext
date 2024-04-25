@@ -20,14 +20,9 @@ import { Input } from '@/components/ui/input'
 import { blogSchema } from '@/validations/blog'
 import { PublisherToolbar } from '@/components/publisher/publisher-toolbar'
 import { MarkdownEditor } from '@/components/editor'
-import { Icons } from '@/styles/icons'
 import { useMounted } from '@/hooks/use-mounted'
-import {
-  handlePostPublish,
-  createPostMutation,
-  isCreatingPost,
-} from '@/lib/contentMutations'
 import { RootConfig } from '@/config/root-config'
+import { api } from '@/trpc/client'
 
 type Inputs = z.infer<typeof blogSchema>
 
@@ -38,6 +33,137 @@ export function AddEditContent(params: any) {
   const [editorContent, setEditorContent] =
     React.useState<any>('Just start typing!')
   const [postId, setPostId] = React.useState<any>()
+  const [pageId, setPageId] = React.useState<any>()
+  const [contentLoaded, setContentLoaded] = React.useState<boolean>()
+  const [content, setContent] = React.useState<any>()
+  const [title, setTitle] = React.useState<any>()
+  const [titleSearch, setTitleSearch] = React.useState<string | undefined>()
+  const [contentStatus, setContentStatus] = React.useState<any>()
+
+  // Create Post Mutations
+  const createPostMutation = api.posts.create.useMutation({
+    onSuccess: (newPost) => {
+      console.log('onSuccess >>> newPost >>> ', newPost)
+    },
+    onError: (error) =>
+      toast('Failed to Create Post', {
+        duration: 2000,
+        description: error.message,
+      }),
+  })
+  const isCreatingPost = createPostMutation.isLoading
+
+  // Edit Post Mutations
+  const editPostMutation = api.posts.updateContent.useMutation({
+    onSuccess: (modifiedPost) => {
+      console.log('onSuccess >>> modifiedPost >>> ', modifiedPost)
+    },
+    onError: (error) =>
+      toast('Failed to Edit Post', {
+        duration: 2000,
+        description: error.message,
+      }),
+  })
+  const isEditingPost = editPostMutation.isLoading
+
+  // Publish Post Mutations
+  function handlePostPublish(postId: any) {
+    const setPostPublishedMutation = api.posts.setStatusPublished.useMutation({
+      onSuccess: (updatedPost) => {
+        console.log('onSuccess >>> updatedPost >>> ', updatedPost)
+      },
+      onError: (error) =>
+        toast('Failed to Publish Post', {
+          duration: 2000,
+          description: error.message,
+        }),
+    })
+    const isPublishingPost = setPostPublishedMutation.isLoading
+
+    const PublishPost = async () => {
+      console.log('Entered: PublishPost')
+      if (!postId) {
+        console.log('Failed to Publish - No Post ID !')
+        toast('Something went wrong when Publishing. Please try again.')
+        return
+      }
+      return await setPostPublishedMutation.mutateAsync({
+        id: postId,
+      })
+    }
+    return { PublishPost, isPublishingPost }
+  }
+
+  // Create Page Mutations
+  const createPageMutation = api.pages.create.useMutation({
+    onSuccess: (newPage) => {
+      console.log('onSuccess >>> newPage >>> ', newPage)
+    },
+    onError: (error) =>
+      toast('Failed to Create Page', {
+        duration: 2000,
+        description: error.message,
+      }),
+  })
+  const isCreatingPage = createPageMutation.isLoading
+
+  // Edit Page Mutations
+  const editPageMutation = api.pages.updateContent.useMutation({
+    onSuccess: (modifiedPage) => {
+      console.log('onSuccess >>> modifiedPage >>> ', modifiedPage)
+    },
+    onError: (error) =>
+      toast('Failed to Edit Post', {
+        duration: 2000,
+        description: error.message,
+      }),
+  })
+  const isEditingPage = editPageMutation.isLoading
+
+  // Publish Page Mutations
+  function handlePagePublish(pageId: any) {
+    const setPagePublishedMutation = api.pages.setStatusPublished.useMutation({
+      onSuccess: (updatedPage) => {
+        console.log('onSuccess >>> updatedPage >>> ', updatedPage)
+      },
+      onError: (error) =>
+        toast('Failed to Publish Page', {
+          duration: 2000,
+          description: error.message,
+        }),
+    })
+    const isPublishingPage = setPagePublishedMutation.isLoading
+
+    const PublishPage = async () => {
+      console.log('Entered: PublishPage')
+      if (!pageId) {
+        console.log('Failed to Publish - Missing pageId')
+        toast('Something went wrong when Publishing. Please try again.')
+        return
+      }
+      return await setPagePublishedMutation.mutateAsync({
+        id: pageId,
+      })
+    }
+    return { PublishPage, isPublishingPage }
+  }
+
+  const subsiteData: any = params?.subsite ? params.subsite : undefined
+  const authorIdData = subsiteData && subsiteData?.userId ? subsiteData.userId : undefined
+  const subSiteIdData = subsiteData && subsiteData?.subsiteId ? subsiteData.subsiteId : undefined
+  const { isLoading, data: postData } = api.posts.getPost.useQuery({
+    title: titleSearch,
+    authorId: authorIdData, 
+    subsiteId: subSiteIdData, 
+  })
+  if (!isLoading && postData) {
+    console.log('postData >>> ', postData)
+    if (!content) {
+      setContent(postData)
+      setContentStatus(postData?.status)
+      setContentLoaded(true)
+    }
+  }    
 
   const form = useForm<Inputs>({
     resolver: zodResolver(blogSchema),
@@ -71,18 +197,55 @@ export function AddEditContent(params: any) {
   }
 
   const CreateContent = async () => {
-    console.log('Entered: CreatePost')
-    const requiredInputs: any = getMutationVariables()
+    console.log('Entered: CreateContent')
+    const requiredInputs: any = getCreateMutationVariables()
     if (requiredInputs !== null) {
       if (params?.isPost) {
         return await createPostMutation.mutateAsync(requiredInputs)
+      } else {
+        return await createPageMutation.mutateAsync(requiredInputs)
       }
-      return await createPostMutation.mutateAsync(requiredInputs)
     }
     return null
   }
 
-  const getMutationVariables = () => {
+  const EditContent = async () => {
+    console.log('Entered: EditContent')
+    const requiredInputs: any = getEditMutationVariables()
+    if (requiredInputs !== null) {
+      if (params?.isPost) {
+        return await editPostMutation.mutateAsync(requiredInputs)
+      } else {
+        return await editPageMutation.mutateAsync(requiredInputs)
+      }
+    }
+    console.log('>>> EditContent >>> requiredInputs >>> ', requiredInputs)
+    return null
+  }
+
+  const getEditMutationVariables = () => {
+    let mutationVars: any = null
+    if (params?.isPost) {
+      if (!postId) {
+        return null
+      }
+      mutationVars = {
+        postId: postId,
+        content: editorContent,
+      }
+    } else {
+      if (!pageId) {
+        return null
+      }
+      mutationVars = {
+        pageId: pageId,
+        content: editorContent,
+      }
+    }
+    return mutationVars
+  }
+
+  const getCreateMutationVariables = () => {
     const formControl = form.getValues()
     const title = formControl.title
     const subsite: any = params?.subsite ? params.subsite : undefined
@@ -100,12 +263,12 @@ export function AddEditContent(params: any) {
       ? formControl.description
       : undefined
 
-    let valid: boolean = verifyInput(title)
-    if (valid) valid = verifyInput(subref)
-    if (valid) valid = verifyInput(userId)
-    if (valid) valid = verifyInput(subsiteId)
-    if (valid) valid = verifyInput(coverImage)
-    if (valid) {
+    let inputsValid: boolean = verifyInput(title)
+    if (inputsValid) inputsValid = verifyInput(subref)
+    if (inputsValid) inputsValid = verifyInput(userId)
+    if (inputsValid) inputsValid = verifyInput(subsiteId)
+    if (inputsValid) inputsValid = verifyInput(coverImage)
+    if (inputsValid) {
       const mutationVars: any = {
         subRef: subref,
         title: title,
@@ -114,64 +277,77 @@ export function AddEditContent(params: any) {
         content: editorContent,
         authorId: userId,
         subsiteId: subsiteId,
-      }      
+      }
       return mutationVars
     }
     return null
   }
 
   const verifyInput = (input: any): boolean => {
-    let isValid = input && typeof(input) !== 'undefined' ? true : false 
-    if (typeof(input) === 'number' && input === 0) isValid = false
-    if (typeof(input) === 'string' && input.length === 0) isValid = false
-    return isValid 
+    let isValid = input && typeof input !== 'undefined' ? true : false
+    if (typeof input === 'number' && input === 0) isValid = false
+    if (typeof input === 'string' && input.length === 0) isValid = false
+    return isValid
   }
 
   const saveDraft = async () => {
-    // isNew ?
-    const post: any = await CreateContent()
-    console.log('after CreatePost >>> post >>> ', post)
-    if (post?.id) {
-      setPostId(post.id)
+    let savedContent: any = null
+
+    if (params?.isNew) {
+      savedContent = await CreateContent()
+    } else {
+      savedContent = await EditContent()
     }
 
-    if (!post) {
-      console.log('There was a problem creating the post')
+    console.log('>>> saveDraft >>> savedContent >>> ', savedContent)
+
+    if (!savedContent) {
+      console.log('There was a problem saving draft: savedContent is null')
       toast('There was a problem saving draft. Please try again.')
       return
+    }
+
+    if (!savedContent?.id) {
+      console.log('savedContent.id is null')
+      return
+    }
+
+    if (params?.isPost) {
+      setPostId(savedContent.id)
+    } else {
+      setPageId(savedContent.id)
     }
   }
 
   const { PublishPost, isPublishingPost } = handlePostPublish(postId)
+  const { PublishPage, isPublishingPage } = handlePagePublish(pageId)
 
   const publishChanges = async () => {
     if (params?.isPost) {
-      await PublishPost()
+      return await PublishPost()
     } else {
-      await PublishPage()
+      return await PublishPage()
     }
   }
 
-  if (isPending) {
-    return <>Loading...</>
-  }
+  const contentIsUpdating: boolean =
+    isPending ||
+    isCreatingPage ||
+    isCreatingPost ||
+    isPublishingPost ||
+    isPublishingPage
 
   return (
     <>
       <PublisherToolbar
         isBlog
-        status={params?.status}
+        status={contentStatus}
         closeEditor={closeEditor}
         saveDraft={saveDraft}
         publishChanges={publishChanges}
         publishDisabled={params?.isNew}
+        isUpdating={contentIsUpdating}
       />
-      {(isCreatingPost || isPublishingPost) ?? (
-        <Icons.spinner
-          className="mr-2 h-4 w-4 animate-spin"
-          aria-hidden="true"
-        />
-      )}
       <Form {...form}>
         <form
           className="grid gap-4"
@@ -185,9 +361,17 @@ export function AddEditContent(params: any) {
                 <FormLabel className="text-lg">Blog Title</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="Title goes here..."
+                    disabled={contentLoaded}
+                    placeholder="Title of your post..."
                     {...field}
                     className="hover:border-blue-500 border-blue-400"
+                    value={title}
+                    onChange={(e) => {
+                      setTitle(e.target.value)
+                    }}
+                    onBlur={(e) => {
+                      setTitleSearch(e.target.value)
+                    }}
                   />
                 </FormControl>
                 <FormMessage />

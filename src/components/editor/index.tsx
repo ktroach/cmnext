@@ -13,6 +13,7 @@ import {
 } from '@/components/ui/menubar'
 import { Label } from '../ui/label'
 import { useTheme } from 'next-themes'
+import { Icons } from '@/styles/icons'
 
 interface MarkdownEditorProps {
   value: any
@@ -39,9 +40,10 @@ export const MarkdownEditor = ({
   const [toolbarVisible] = React.useState<boolean>(false)
   const [showBottomPreview, setShowBottomPreview] =
     React.useState<boolean>(true)
-  const rootMenubarClassName: string = 'xs:h-10 sm:h-12 md:h-12 lg:h-14 xl:h-14 justify-center '
+  const rootMenubarClassName: string =
+    'xs:h-10 sm:h-12 md:h-12 lg:h-14 xl:h-14 justify-center '
   const menubarTriggerClassName: string =
-    'text-white bg-blue-500 dark:hover:bg-blue-600 h-full xs:text-xs sm:text-xs md:text-sm lg:text-md xl:text-md'
+    'dark:text-white text-gray-700 h-full xs:text-xs sm:text-xs md:text-sm lg:text-md xl:text-md'
   const menubarItemClassName: string = 'dark:hover:bg-blue-600'
 
   let mdEditorHeight = 1500 // TODO: Dont harcode this value. Calculate this based on the height of the window
@@ -341,7 +343,7 @@ export const MarkdownEditor = ({
       ],
     },
     {
-      trigger: 'Links',
+      trigger: 'Add Link',
       items: [
         {
           title: 'Add Hyperlink (external)',
@@ -360,7 +362,7 @@ export const MarkdownEditor = ({
       ],
     },
     {
-      trigger: 'Images',
+      trigger: 'Add Image',
       items: [
         {
           title: 'Add Image (url)',
@@ -379,54 +381,19 @@ export const MarkdownEditor = ({
       ],
     },
     {
-      trigger: 'Tables',
+      trigger: 'Add Table',
       items: [
         {
-          title: 'Add Table (1x1)',
+          title: 'Add Table',
           onSelect: (event: any) => {
             executeCommand('table')
           },
           shortcut: '⌘^1',
         },
-        {
-          title: 'Add Table (2x2)',
-          onSelect: (event: any) => {
-            executeCommand('table')
-          },
-          shortcut: '⌘^2',
-        },
-        {
-          title: 'Add Table (3x3)',
-          onSelect: (event: any) => {
-            executeCommand('table')
-          },
-          shortcut: '⌘^3',
-        },
-        {
-          title: 'Add Table (4x4)',
-          onSelect: (event: any) => {
-            executeCommand('table')
-          },
-          shortcut: '⌘^4',
-        },
-        {
-          title: 'Add Table (5x5)',
-          onSelect: (event: any) => {
-            executeCommand('table')
-          },
-          shortcut: '⌘^5',
-        },
-        {
-          title: 'Add Table (6x6)',
-          onSelect: (event: any) => {
-            executeCommand('table')
-          },
-          shortcut: '⌘^6',
-        },
       ],
     },
     {
-      trigger: 'Preview',
+      trigger: 'Preview Options',
       items: [
         {
           title: 'None',
@@ -459,10 +426,10 @@ export const MarkdownEditor = ({
       ],
     },
     {
-      trigger: 'Help',
+      trigger: 'Markdown Help',
       items: [
         {
-          title: 'Get Help',
+          title: 'Basic Syntax',
           onSelect: (event: any) => {
             executeCommand('help')
           },
@@ -483,6 +450,10 @@ export const MarkdownEditor = ({
         {menuData.map((menu, index) => (
           <MenubarMenu key={index}>
             <MenubarTrigger className={menubarTriggerClassName}>
+              <Icons.addCircle
+                className="mr-2 h-4 w-4 animate-pulse"
+                aria-hidden={true}
+              />
               {menu.trigger}
             </MenubarTrigger>
             <MenubarContent>
@@ -494,9 +465,7 @@ export const MarkdownEditor = ({
                 >
                   {item.title}{' '}
                   <MenubarShortcut>{item.shortcut}</MenubarShortcut>
-                  
                 </MenubarItem>
-               
               ))}
             </MenubarContent>
             <MenubarSeparator />
@@ -505,6 +474,7 @@ export const MarkdownEditor = ({
       </Menubar>
       {/*@ts-ignore eslint-disable-next-line*/}
       <MDEditor
+        className="my-[-32px]"
         data-color-mode={editorColorMode}
         height={mdEditorHeight}
         hideToolbar={toolbarVisible}
@@ -527,15 +497,18 @@ export const MarkdownEditor = ({
       />
 
       {showBottomPreview ? (
-        <>
-          <Label className="text-lg font-medium">Live Preview</Label>
-          <div className=" border-solid border-2 border-spacing-x-4 border-gray/[0.5] dark:border-white/[0.2] border-spacing-2 shadow-md">
-            <MDEditor.Markdown
-              source={value}
-              wrapperElement={wrapperElement}
-            />
+        <div className="my-[32px]">
+          <div className="space-y-5">
+            <Label className="text-lg font-medium">Live Preview</Label>
+            <div className=" border-solid border-2 border-spacing-x-4 border-gray/[0.5] dark:border-white/[0.2] border-spacing-2 shadow-md">
+              <MDEditor.Markdown
+                className='px-4'
+                source={value}
+                wrapperElement={wrapperElement}
+              />
+            </div>
           </div>
-        </>
+        </div>
       ) : (
         <></>
       )}
