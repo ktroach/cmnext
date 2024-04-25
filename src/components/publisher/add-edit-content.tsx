@@ -40,6 +40,203 @@ export function AddEditContent(params: any) {
   const [titleSearch, setTitleSearch] = React.useState<string | undefined>()
   const [contentStatus, setContentStatus] = React.useState<any>()
 
+  const slugParam: any = params?.slug ? params.slug : undefined
+  const slugItem: any = slugParam ? slugParam[0] : undefined
+  const slugId: number = slugItem ? parseInt(slugItem) : 0
+  const subsiteData: any = params?.subsite ? params.subsite : undefined
+  const authorIdInt = subsiteData && subsiteData?.userId ? parseInt(subsiteData.userId ): undefined
+  const subSiteIdInt = subsiteData && subsiteData?.subsiteId ? parseInt(subsiteData.subsiteId) : undefined
+
+  const { isLoading, data: postData } = api.posts.getOne.useQuery({
+    id: slugId,
+    authorId: authorIdInt, 
+    subsiteId: subSiteIdInt, 
+  })
+  if (!isLoading && postData) {
+    console.log('postData >>> ', postData)
+    if (!content) {
+      setContent(postData)
+      setContentStatus(postData?.status)
+      setEditorContent(postData?.content)
+      setContentLoaded(true)
+    }
+  }    
+
+  const form = useForm<Inputs>({
+    resolver: zodResolver(blogSchema),
+    defaultValues: {
+      title: '',
+      description: '',
+      image: '',
+      body: '',
+    },
+  })
+
+  function onSubmit(data: Inputs) {
+    startTransition(async () => {
+      try {
+        saveDraft()
+      } catch (err) {
+        console.error(err)
+      }
+    })
+  }
+
+  const closeEditor = () => {
+    const subsite: any = params?.subsite ? params.subsite : undefined
+    const subref: string = subsite?.subRef ? subsite.subRef : undefined
+    if (subref) {
+      const url: string = params?.isPost
+        ? `${window.location.origin}/publish/${subref}/blogs`
+        : `${window.location.origin}/publish/${subref}/pages`
+      router.push(url)
+    }
+  }
+
+  const CreateContent = async () => {
+    console.log('Entered: CreateContent')
+    const requiredInputs: any = getCreateMutationVariables()
+    if (requiredInputs !== null) {
+      if (params?.isPost) {
+        return await createPostMutation.mutateAsync(requiredInputs)
+      } else {
+        return await createPageMutation.mutateAsync(requiredInputs)
+      }
+    }
+    return null
+  }
+
+  const EditContent = async () => {
+    console.log('Entered: EditContent')
+    const requiredInputs: any = getEditMutationVariables()
+    if (requiredInputs !== null) {
+      if (params?.isPost) {
+        return await editPostMutation.mutateAsync(requiredInputs)
+      } else {
+        return await editPageMutation.mutateAsync(requiredInputs)
+      }
+    }
+    console.log('>>> EditContent >>> requiredInputs >>> ', requiredInputs)
+    return null
+  }
+
+  const getEditMutationVariables = () => {
+    let mutationVars: any = null
+    if (params?.isPost) {
+      if (!slugId) {
+        return null
+      }
+      // TODO: Revisit this change
+      mutationVars = {
+        postId: slugId,
+        content: editorContent,
+        authorId: authorIdInt, 
+        subsiteId: subSiteIdInt,         
+      }
+    } else {
+      if (!slugId) {
+        return null
+      }
+      mutationVars = {
+        pageId: slugId,
+        content: editorContent,
+        authorId: authorIdInt, 
+        subsiteId: subSiteIdInt,         
+      }
+    }
+    return mutationVars
+  }
+
+  const getCreateMutationVariables = () => {
+    const formControl = form.getValues()
+    const title = formControl.title
+    const subsite: any = params?.subsite ? params.subsite : undefined
+    const subref: string = subsite?.subRef ? subsite.subRef : undefined
+    const userId: number | undefined = subsite?.userId
+      ? parseInt(subsite.userId)
+      : undefined
+    const subsiteId: number | undefined = subsite?.subsiteId
+      ? parseInt(subsite.subsiteId)
+      : undefined
+    const coverImage: string | undefined = formControl?.image
+      ? formControl.image
+      : RootConfig?.defaultCoverImage ?? undefined
+    const contentDescription: string | undefined = formControl?.description
+      ? formControl.description
+      : undefined
+
+    let inputsValid: boolean = verifyInput(title)
+    if (inputsValid) inputsValid = verifyInput(subref)
+    if (inputsValid) inputsValid = verifyInput(userId)
+    if (inputsValid) inputsValid = verifyInput(subsiteId)
+    if (inputsValid) inputsValid = verifyInput(coverImage)
+    if (inputsValid) {
+      const mutationVars: any = {
+        subRef: subref,
+        title: title,
+        description: contentDescription,
+        image: coverImage,
+        content: editorContent,
+        authorId: userId,
+        subsiteId: subsiteId,
+      }
+      return mutationVars
+    }
+    return null
+  }
+
+  const verifyInput = (input: any): boolean => {
+    let isValid = input && typeof input !== 'undefined' ? true : false
+    if (typeof input === 'number' && input === 0) isValid = false
+    if (typeof input === 'string' && input.length === 0) isValid = false
+    return isValid
+  }
+
+  const saveDraft = async () => {
+    let savedContent: any = null
+
+    // TODO: Check for the slugId 
+    if (params?.isNew) {
+      savedContent = await CreateContent()
+      // TODO: Redirect to the /edit/[id] route after saving the content for the first time
+    } else {
+      toast('Saving Changes...')
+      savedContent = await EditContent()
+    }
+
+    console.log('>>> saveDraft >>> savedContent >>> ', savedContent)
+
+    if (!savedContent) {
+      console.log('There was a problem saving draft: savedContent is null')
+      toast('There was a problem saving draft. Please try again.')
+      return
+    }
+
+    if (!savedContent?.id) {
+      console.log('savedContent.id is null')
+      return
+    }
+
+    if (params?.isPost) {
+      setPostId(savedContent.id)
+    } else {
+      setPageId(savedContent.id)
+    }
+
+    toast.success("Content saved successfully.")
+  }
+
+  const { PublishPost, isPublishingPost } = handlePostPublish(postId)
+  const { PublishPage, isPublishingPage } = handlePagePublish(pageId)
+
+  const publishChanges = async () => {
+    if (params?.isPost) {
+      return await PublishPost()
+    } else {
+      return await PublishPage()
+    }
+  }
+
   // Create Post Mutations
   const createPostMutation = api.posts.create.useMutation({
     onSuccess: (newPost) => {
@@ -148,187 +345,6 @@ export function AddEditContent(params: any) {
     return { PublishPage, isPublishingPage }
   }
 
-  const subsiteData: any = params?.subsite ? params.subsite : undefined
-  const authorIdData = subsiteData && subsiteData?.userId ? subsiteData.userId : undefined
-  const subSiteIdData = subsiteData && subsiteData?.subsiteId ? subsiteData.subsiteId : undefined
-  const { isLoading, data: postData } = api.posts.getPost.useQuery({
-    title: titleSearch,
-    authorId: authorIdData, 
-    subsiteId: subSiteIdData, 
-  })
-  if (!isLoading && postData) {
-    console.log('postData >>> ', postData)
-    if (!content) {
-      setContent(postData)
-      setContentStatus(postData?.status)
-      setContentLoaded(true)
-    }
-  }    
-
-  const form = useForm<Inputs>({
-    resolver: zodResolver(blogSchema),
-    defaultValues: {
-      title: '',
-      description: '',
-      image: '',
-      body: '',
-    },
-  })
-
-  function onSubmit(data: Inputs) {
-    startTransition(async () => {
-      try {
-        saveDraft()
-      } catch (err) {
-        console.error(err)
-      }
-    })
-  }
-
-  const closeEditor = () => {
-    const subsite: any = params?.subsite ? params.subsite : undefined
-    const subref: string = subsite?.subRef ? subsite.subRef : undefined
-    if (subref) {
-      const url: string = params?.isPost
-        ? `${window.location.origin}/publish/${subref}/blogs`
-        : `${window.location.origin}/publish/${subref}/pages`
-      router.push(url)
-    }
-  }
-
-  const CreateContent = async () => {
-    console.log('Entered: CreateContent')
-    const requiredInputs: any = getCreateMutationVariables()
-    if (requiredInputs !== null) {
-      if (params?.isPost) {
-        return await createPostMutation.mutateAsync(requiredInputs)
-      } else {
-        return await createPageMutation.mutateAsync(requiredInputs)
-      }
-    }
-    return null
-  }
-
-  const EditContent = async () => {
-    console.log('Entered: EditContent')
-    const requiredInputs: any = getEditMutationVariables()
-    if (requiredInputs !== null) {
-      if (params?.isPost) {
-        return await editPostMutation.mutateAsync(requiredInputs)
-      } else {
-        return await editPageMutation.mutateAsync(requiredInputs)
-      }
-    }
-    console.log('>>> EditContent >>> requiredInputs >>> ', requiredInputs)
-    return null
-  }
-
-  const getEditMutationVariables = () => {
-    let mutationVars: any = null
-    if (params?.isPost) {
-      if (!postId) {
-        return null
-      }
-      mutationVars = {
-        postId: postId,
-        content: editorContent,
-      }
-    } else {
-      if (!pageId) {
-        return null
-      }
-      mutationVars = {
-        pageId: pageId,
-        content: editorContent,
-      }
-    }
-    return mutationVars
-  }
-
-  const getCreateMutationVariables = () => {
-    const formControl = form.getValues()
-    const title = formControl.title
-    const subsite: any = params?.subsite ? params.subsite : undefined
-    const subref: string = subsite?.subRef ? subsite.subRef : undefined
-    const userId: number | undefined = subsite?.userId
-      ? parseInt(subsite.userId)
-      : undefined
-    const subsiteId: number | undefined = subsite?.subsiteId
-      ? parseInt(subsite.subsiteId)
-      : undefined
-    const coverImage: string | undefined = formControl?.image
-      ? formControl.image
-      : RootConfig?.defaultCoverImage ?? undefined
-    const contentDescription: string | undefined = formControl?.description
-      ? formControl.description
-      : undefined
-
-    let inputsValid: boolean = verifyInput(title)
-    if (inputsValid) inputsValid = verifyInput(subref)
-    if (inputsValid) inputsValid = verifyInput(userId)
-    if (inputsValid) inputsValid = verifyInput(subsiteId)
-    if (inputsValid) inputsValid = verifyInput(coverImage)
-    if (inputsValid) {
-      const mutationVars: any = {
-        subRef: subref,
-        title: title,
-        description: contentDescription,
-        image: coverImage,
-        content: editorContent,
-        authorId: userId,
-        subsiteId: subsiteId,
-      }
-      return mutationVars
-    }
-    return null
-  }
-
-  const verifyInput = (input: any): boolean => {
-    let isValid = input && typeof input !== 'undefined' ? true : false
-    if (typeof input === 'number' && input === 0) isValid = false
-    if (typeof input === 'string' && input.length === 0) isValid = false
-    return isValid
-  }
-
-  const saveDraft = async () => {
-    let savedContent: any = null
-
-    if (params?.isNew) {
-      savedContent = await CreateContent()
-    } else {
-      savedContent = await EditContent()
-    }
-
-    console.log('>>> saveDraft >>> savedContent >>> ', savedContent)
-
-    if (!savedContent) {
-      console.log('There was a problem saving draft: savedContent is null')
-      toast('There was a problem saving draft. Please try again.')
-      return
-    }
-
-    if (!savedContent?.id) {
-      console.log('savedContent.id is null')
-      return
-    }
-
-    if (params?.isPost) {
-      setPostId(savedContent.id)
-    } else {
-      setPageId(savedContent.id)
-    }
-  }
-
-  const { PublishPost, isPublishingPost } = handlePostPublish(postId)
-  const { PublishPage, isPublishingPage } = handlePagePublish(pageId)
-
-  const publishChanges = async () => {
-    if (params?.isPost) {
-      return await PublishPost()
-    } else {
-      return await PublishPage()
-    }
-  }
 
   const contentIsUpdating: boolean =
     isPending ||
@@ -387,6 +403,7 @@ export function AddEditContent(params: any) {
                 <FormControl>
                   <Input
                     className="hover:border-blue-500 border-blue-400"
+                    disabled={contentLoaded}
                     placeholder="Give your blog a description..."
                     {...field}
                   />
@@ -409,7 +426,8 @@ export function AddEditContent(params: any) {
                 <FormControl>
                   <Input
                     className="hover:border-blue-500 border-blue-400"
-                    title="If blank, AI will generate cover image based on title"
+                    disabled={contentLoaded}
+                    title="If blank, the app will use a default image"
                     placeholder="Type in the Image URL or Keywords..."
                     {...field}
                   />

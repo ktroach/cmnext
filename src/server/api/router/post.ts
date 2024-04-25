@@ -72,12 +72,16 @@ export const postRouter = createTRPCRouter({
       z.object({
         postId: z.number().min(1),
         content: z.string().min(1),
+        authorId: z.number().min(1),
+        subsiteId: z.number().min(1),        
       })
     )
     .mutation(async ({ input, ctx }) => {
       const exists = await ctx.db.post.findFirst({
         where: {
           id: input.postId,
+          authorId: input.authorId,
+          subsiteId: input.subsiteId,           
         },
       })
       if (!exists) {
@@ -88,6 +92,8 @@ export const postRouter = createTRPCRouter({
       return await ctx.db.post.update({
         where: {
           id: input.postId,
+          authorId: input.authorId,
+          subsiteId: input.subsiteId,          
         },
         data: {
           content: input.content,
@@ -99,6 +105,8 @@ export const postRouter = createTRPCRouter({
     .input(
       z.object({
         postId: z.number().min(1),
+        authorId: z.number().min(1),
+        subsiteId: z.number().min(1),         
         coverImage: z.string().min(1),
       })
     )
@@ -116,6 +124,8 @@ export const postRouter = createTRPCRouter({
       return await ctx.db.post.update({
         where: {
           id: input.postId,
+          authorId: input.authorId,
+          subsiteId: input.subsiteId,          
         },
         data: {
           coverImage: input.coverImage,
@@ -163,12 +173,16 @@ export const postRouter = createTRPCRouter({
     .input(
       z.object({
         id: z.number().min(1),
+        authorId: z.number().min(1).optional(),
+        subsiteId: z.number().min(1).optional(),        
       })
     )
     .query(async ({ input, ctx }) => {
       return await ctx.db.post.findFirst({
         where: {
           id: input.id,
+          authorId: input.authorId,
+          subsiteId: input.subsiteId,          
         },
       })
     }),

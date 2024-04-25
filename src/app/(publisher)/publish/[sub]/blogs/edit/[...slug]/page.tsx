@@ -23,6 +23,7 @@ export default async function PublisherEditBlog({ params }: any) {
   const hasAccess = await verifySubRefAccess(curUser, subRef)
   if (!hasAccess) redirect('/')
   const subsite: any = await getUserSubsite(curUser, subRef)
+  const slug = params && params?.slug && params?.slug?.length > 0 ? params.slug : null
 
   return (
     <Block>
@@ -31,7 +32,7 @@ export default async function PublisherEditBlog({ params }: any) {
         description="Edit your Blog Post"
         size="sm"
       />
-      <AddEditContent subsite={subsite} isNew={false} isPost={true} />
+      <AddEditContent subsite={subsite} isNew={false} isPost={true} slug={slug} />
     </Block>
   )
 }

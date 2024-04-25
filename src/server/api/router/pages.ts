@@ -69,11 +69,13 @@ export const pagesRouter = createTRPCRouter({
       })
     }),    
 
-    updateContent: protectedProcedure
+  updateContent: protectedProcedure
     .input(
       z.object({
         pageId: z.number().min(1),
         content: z.string().min(1),
+        authorId: z.number().min(1),
+        subsiteId: z.number().min(1),         
       })
     )
     .mutation(async ({ input, ctx }) => {
@@ -91,6 +93,8 @@ export const pagesRouter = createTRPCRouter({
       return await ctx.db.page.update({
         where: {
           id: input.pageId,
+          authorId: input.authorId,
+          subsiteId: input.subsiteId,           
         },
         data: {
           content: input.content,
