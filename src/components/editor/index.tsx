@@ -39,7 +39,7 @@ export const MarkdownEditor = ({
   const [toolbarVisible] = React.useState<boolean>(false)
   const [showBottomPreview, setShowBottomPreview] =
     React.useState<boolean>(true)
-  const rootMenubarClassName: string = 'xs:h-10 sm:h-12 md:h-12 lg:h-14 xl:h-14'
+  const rootMenubarClassName: string = 'xs:h-10 sm:h-12 md:h-12 lg:h-14 xl:h-14 justify-center '
   const menubarTriggerClassName: string =
     'text-white bg-blue-500 dark:hover:bg-blue-600 h-full xs:text-xs sm:text-xs md:text-sm lg:text-md xl:text-md'
   const menubarItemClassName: string = 'dark:hover:bg-blue-600'

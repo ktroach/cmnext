@@ -22,11 +22,16 @@ import { PublisherToolbar } from '@/components/publisher/publisher-toolbar'
 import { MarkdownEditor } from '@/components/editor'
 import { Icons } from '@/styles/icons'
 import { useMounted } from '@/hooks/use-mounted'
-import { api } from '@/trpc/client'
+import {
+  handlePostPublish,
+  createPostMutation,
+  isCreatingPost,
+} from '@/lib/contentMutations'
+import { RootConfig } from '@/config/root-config'
 
 type Inputs = z.infer<typeof blogSchema>
 
-export function AddBlogPostForm(params: any) {
+export function AddEditContent(params: any) {
   const mounted = useMounted()
   const router = useRouter()
   const [isPending, startTransition] = React.useTransition()
@@ -58,92 +63,93 @@ export function AddBlogPostForm(params: any) {
     const subsite: any = params?.subsite ? params.subsite : undefined
     const subref: string = subsite?.subRef ? subsite.subRef : undefined
     if (subref) {
-      const url = `${window.location.origin}/publish/${subref}/blogs`
+      const url: string = params?.isPost
+        ? `${window.location.origin}/publish/${subref}/blogs`
+        : `${window.location.origin}/publish/${subref}/pages`
       router.push(url)
     }
   }
 
-  const createPostMutation = api.posts.create.useMutation({
-    onSuccess: (newPost) => {
-      console.log('onSuccess >>> newPost >>> ', newPost)
-    },
-    onError: (error) =>
-      toast('Failed to Create User', {
-        duration: 2000,
-        description: error.message,
-      }),
-  })
-
-  const isCreatingPost = createPostMutation.isLoading
-
-  const CreatePost = async () => {
+  const CreateContent = async () => {
     console.log('Entered: CreatePost')
+    const requiredInputs: any = getMutationVariables()
+    if (requiredInputs !== null) {
+      if (params?.isPost) {
+        return await createPostMutation.mutateAsync(requiredInputs)
+      }
+      return await createPostMutation.mutateAsync(requiredInputs)
+    }
+    return null
+  }
+
+  const getMutationVariables = () => {
     const formControl = form.getValues()
     const title = formControl.title
     const subsite: any = params?.subsite ? params.subsite : undefined
     const subref: string = subsite?.subRef ? subsite.subRef : undefined
-    const userId: number | undefined = subsite?.userId ? parseInt(subsite.userId) : undefined
-    const subsiteId: number  | undefined = subsite?.subsiteId ? parseInt(subsite.subsiteId) : undefined
-    const slug = `/${subref}/blogs/${title}`
+    const userId: number | undefined = subsite?.userId
+      ? parseInt(subsite.userId)
+      : undefined
+    const subsiteId: number | undefined = subsite?.subsiteId
+      ? parseInt(subsite.subsiteId)
+      : undefined
+    const coverImage: string | undefined = formControl?.image
+      ? formControl.image
+      : RootConfig?.defaultCoverImage ?? undefined
+    const contentDescription: string | undefined = formControl?.description
+      ? formControl.description
+      : undefined
 
-    if (title && subref && userId && subsiteId) {
-      return await createPostMutation.mutateAsync({
+    let valid: boolean = verifyInput(title)
+    if (valid) valid = verifyInput(subref)
+    if (valid) valid = verifyInput(userId)
+    if (valid) valid = verifyInput(subsiteId)
+    if (valid) valid = verifyInput(coverImage)
+    if (valid) {
+      const mutationVars: any = {
         subRef: subref,
         title: title,
-        description: formControl.description,
-        image: formControl.image,
+        description: contentDescription,
+        image: coverImage,
         content: editorContent,
-        authorId: userId, 
-        subsiteId: subsiteId, 
-      })
+        authorId: userId,
+        subsiteId: subsiteId,
+      }      
+      return mutationVars
     }
-
     return null
   }
 
+  const verifyInput = (input: any): boolean => {
+    let isValid = input && typeof(input) !== 'undefined' ? true : false 
+    if (typeof(input) === 'number' && input === 0) isValid = false
+    if (typeof(input) === 'string' && input.length === 0) isValid = false
+    return isValid 
+  }
+
   const saveDraft = async () => {
-    const post: any = await CreatePost()
+    // isNew ?
+    const post: any = await CreateContent()
     console.log('after CreatePost >>> post >>> ', post)
     if (post?.id) {
       setPostId(post.id)
     }
 
     if (!post) {
-      console.log(
-        'There was a problem creating the post'
-      )
+      console.log('There was a problem creating the post')
       toast('There was a problem saving draft. Please try again.')
       return
     }
   }
 
-  const setPublishedMutation = api.posts.setStatusPublished.useMutation({
-    onSuccess: (updatedPost) => {
-      console.log('onSuccess >>> updatedPost >>> ', updatedPost)
-    },
-    onError: (error) =>
-      toast('Failed to Publish', {
-        duration: 2000,
-        description: error.message,
-      }),    
-  })
-
-  const isPublishingPost = setPublishedMutation.isLoading
-
-  const PublishPost = async () => {
-    console.log('Entered: PublishPost')
-    if (!postId) {
-      console.log("Failed to Publish - No Post ID !")
-      toast("Cannot Publish!")
-      return
-    }
-    return await setPublishedMutation.mutateAsync({
-      id: postId
-    })
-  }
+  const { PublishPost, isPublishingPost } = handlePostPublish(postId)
 
   const publishChanges = async () => {
-    await PublishPost()
+    if (params?.isPost) {
+      await PublishPost()
+    } else {
+      await PublishPage()
+    }
   }
 
   if (isPending) {
@@ -158,13 +164,14 @@ export function AddBlogPostForm(params: any) {
         closeEditor={closeEditor}
         saveDraft={saveDraft}
         publishChanges={publishChanges}
+        publishDisabled={params?.isNew}
       />
-      {(isCreatingPost || isPublishingPost) ??
+      {(isCreatingPost || isPublishingPost) ?? (
         <Icons.spinner
           className="mr-2 h-4 w-4 animate-spin"
           aria-hidden="true"
-        />      
-      }
+        />
+      )}
       <Form {...form}>
         <form
           className="grid gap-4"

@@ -10,6 +10,7 @@ interface PublisherToolbarProps {
   closeEditor?: any
   saveDraft?: any
   publishChanges?: any
+  publishDisabled?: boolean
 }
 
 export const PublisherToolbar = ({
@@ -77,6 +78,7 @@ export const PublisherToolbar = ({
           <Button
             className="bg-green-800 hover:bg-green-600 text-white text-sm"
             onClick={PublishChanges}
+            disabled={props.publishDisabled}
           >
             Publish 
           </Button>

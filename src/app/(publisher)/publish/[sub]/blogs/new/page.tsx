@@ -2,7 +2,7 @@ import { type Metadata } from 'next'
 import { redirect } from 'next/navigation'
 import { currentUser } from '@clerk/nextjs/server'
 import { Header } from '@/components/layouts/header'
-import { AddBlogPostForm } from '@/components/publisher/add-blog-post'
+import { AddEditContent } from '@/components/publisher/add-edit-content'
 import { Block } from '@/components/containers/block'
 import { getFrontendBaseUrl } from '@/lib/url'
 import { 
@@ -31,7 +31,7 @@ export default async function PublisherNewBlog({ params }: any) {
         description="Create/Add a new Blog Post to your site!"
         size="sm"
       />
-      <AddBlogPostForm subsite={subsite} />
+      <AddEditContent subsite={subsite} isNew={true} isPost={true} />
     </Block>
   )
 }

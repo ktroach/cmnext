@@ -13,6 +13,7 @@ export const RootConfig = {
     featureSitesLimit: 4,  
     logoImage: "",
     emailProviderUrl: "https://react.email/api/send/test",
+    defaultCoverImage: '/public/images/blog/blog-one.png',
     signoutOptions: {
       signOutOptionText: "Sign Out"
     },

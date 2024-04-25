@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { Header } from '@/components/layouts/header'
 import { Block } from '@/components/containers/block'
-import { AddBlogPostForm } from '@/components/publisher/add-blog-post'
+import { AddEditContent } from '@/components/publisher/add-edit-content'
 import { getFrontendBaseUrl } from '@/lib/url'
 
 export const metadata: Metadata = {
@@ -16,7 +16,7 @@ export default async function PublisherManageBlogs({ params }: any) {
         description="Create/Add a new Blog Post to your site!"
         size="sm"
       />
-      <AddBlogPostForm />
+      <AddEditContent />
     </Block>
   )
 }
