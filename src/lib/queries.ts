@@ -128,8 +128,10 @@ export const getAllPagesByPublisher = async (
     return null
   }
   const resultData = await sql`
-     SELECT *
+     SELECT "Page".*, "Subsite"."subsiteRef"
        FROM "Page"
+       JOIN "Account" ON "Page"."authorId" = "Account"."adminId"
+       JOIN "Subsite" ON "Account"."id" = "Subsite"."accountId"       
       WHERE "Page"."authorId" = ${authorId}     
         AND "Page"."subsiteId" = ${subsiteId}  
       ORDER BY "Page"."createdAt" DESC

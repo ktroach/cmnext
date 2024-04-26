@@ -3,7 +3,7 @@
 "use client"
 
 import * as React from "react"
-import type { Blog } from "@/types"
+import Link from 'next/link'
 import type {
   ColumnDef,
   ColumnFiltersState,
@@ -18,7 +18,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table"
-import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react"
+import { ChevronDown, MoreHorizontal } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -41,14 +41,20 @@ import {
 import { humanizeDate } from "@/lib/dates"
 import { Icons } from "@/styles/icons"
 
-export const pubDate = Date.now
+export const pubDate: any = new Date().toUTCString()
 export const columns: ColumnDef<any>[] = [
   {
     accessorKey: "title",
     header: "Title",
-    cell: ({ row }) => (
-      <div className="line-clamp-3 text-muted-foreground">{row.getValue("title")}</div>
-    ),
+    cell: ({ row }) => {
+      return (
+        <Link
+          href={row.getValue("slug")}
+        >
+          <span className="hover:underline">{row.getValue("title")}</span>
+        </Link>
+      )      
+    },
   },
   {
     accessorKey: "slug",
@@ -58,6 +64,13 @@ export const columns: ColumnDef<any>[] = [
     ),
   },
   {
+    accessorKey: "subsiteRef",
+    header: "subsiteRef",
+    cell: ({ row }) => (
+      <div className="line-clamp-3 text-muted-foreground">{row.getValue("subsiteRef")}</div>
+    ),
+  },  
+  {
     accessorKey: "status",
     header: "Status",
     cell: ({ row }) => (
@@ -65,10 +78,10 @@ export const columns: ColumnDef<any>[] = [
     ),
   },   
   {
-    accessorKey: "publishedAt",
+    accessorKey: "publishedAt",   
     header: "Published",
-    cell: ({ row }) => (
-      <div className="line-clamp-3 text-muted-foreground">{humanizeDate(pubDate)}</div>
+    cell: ({ cell: { value } }) => (
+      <div className="line-clamp-3 text-muted-foreground">{humanizeDate(value)}</div>
     ),
   },   
   {
@@ -82,6 +95,9 @@ export const columns: ColumnDef<any>[] = [
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
+      const val = row.getValue("slug")
+      const subRef = row.getValue("subsiteRef")
+      const editLink: string = `/publish/${subRef}/pages/edit${val}`
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -92,11 +108,8 @@ export const columns: ColumnDef<any>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem><Icons.edit className="pr-2 text-slate-700" aria-hidden="true" />Edit Post</DropdownMenuItem>
-            <DropdownMenuItem><Icons.hide className="pr-2 text-slate-700" aria-hidden="true" />Unpublish</DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem><Icons.send className="pr-2 text-slate-700" aria-hidden="true" />Share</DropdownMenuItem>
-          </DropdownMenuContent>
+            <DropdownMenuItem><Link className='text-xs flex flex-row' href={editLink}><Icons.edit className=" text-xs pr-1 text-slate-700" aria-hidden="true" />Edit Post</Link></DropdownMenuItem>
+         </DropdownMenuContent>
         </DropdownMenu>
       )
     },
@@ -119,7 +132,7 @@ export function PublisherListPages({ allPosts }: PublisherListPagesProps) {
   const data: any = allPosts
   console.log('allPosts: ', allPosts?.length)
 
-  const table = useReactTable<Blog>({
+  const table = useReactTable<any>({
     data,
     columns,
     onSortingChange: setSorting,
@@ -143,7 +156,7 @@ export function PublisherListPages({ allPosts }: PublisherListPagesProps) {
       <div className="flex items-center py-4">
         {/* Filter Input Field */}
         <Input
-          placeholder="Filter (by Title)"
+          placeholder="Filter Results (by Title)"
           value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
             table.getColumn("title")?.setFilterValue(event.target.value)
