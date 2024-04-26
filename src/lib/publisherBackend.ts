@@ -26,23 +26,28 @@ export const GetSubsiteBySignInIdentifierBackend = async (userId: string, signIn
 }
 
 export const saveContent = (
+  contentType: string, 
   userName: string,
-  userAvatar: string,
   subRef: string,
   data: any
 ) => {
   console.log('saveContent...')
   try {
+
     const authorMeta = {
       title: userName,
-      avatar: userAvatar,
-      twitter: '',
+      description: `${userName}`, 
+      avatar: '/images/avatar/1940742.png',
+      url: 'https://cmnext-8xo7wy5ik-titan-f4a1be16.vercel.app',
     }
+
     const mdxAuthorContent = generateAuthorFrontmatter(authorMeta)
     console.log('>>> mdxAuthorContent: ', mdxAuthorContent)
     const mdxAuthorsPath: string = `./src/content/authors`
     console.log('>>> mdxAuthorsPath: ', mdxAuthorsPath)
+
     const mdxAuthorFileName: string = `${mdxAuthorsPath}/${userName}.mdx`
+
     if (!existsSync(mdxAuthorFileName)) {
       console.log('>>> Writing Author File: ', mdxAuthorFileName)
       writeFileSync(mdxAuthorFileName, mdxAuthorContent)
@@ -66,8 +71,8 @@ export const saveContent = (
     const generatedFilename = generateUniqueFilename()
     console.log('generatedFilename:', generatedFilename)
 
-    const postSlug: string = `/content/blogs/${subRef}`
-    const mdxBlogPath: string = `./src${postSlug}`
+    const contentSlug: string = `/content/${contentType}/${subRef}`
+    const mdxBlogPath: string = `./src${contentSlug}`
 
     if (!verifyPath(mdxBlogPath)) {
       console.log('creating directory: ', mdxBlogPath, '...')
@@ -75,7 +80,7 @@ export const saveContent = (
     }
 
     const mdxFileName: string = `${mdxBlogPath}/${generatedFilename}.mdx`
-    const slug: string = `${postSlug}/${generatedFilename}`
+    const slug: string = `${contentSlug}/${generatedFilename}`
 
     console.log('>>> Writing Post File: ', mdxFileName)
     writeFileSync(mdxFileName, mdxFileContent)

@@ -41,45 +41,43 @@ import {
 import { humanizeDate } from "@/lib/dates"
 import { Icons } from "@/styles/icons"
 
-// TODO: Change to Page 
-export const columns: ColumnDef<Blog>[] = [
+export const pubDate = Date.now
+export const columns: ColumnDef<any>[] = [
+  {
+    accessorKey: "title",
+    header: "Title",
+    cell: ({ row }) => (
+      <div className="line-clamp-3 text-muted-foreground">{row.getValue("title")}</div>
+    ),
+  },
   {
     accessorKey: "slug",
-    header: "Title",
-    enableHiding: false,
-    cell: (row) => {
-      return (
-        <a href={row.row.original.slug}>
-          <div className="line-clamp-3 text-muted-foreground">
-            {row.row.original.title}
-          </div>
-        </a>
-      );
-    },
-  },
-  {
-    accessorKey: "description",
-    header: "Description",
+    header: "Slug",
     cell: ({ row }) => (
-      <div className="line-clamp-3 text-muted-foreground">{row.getValue("description")}</div>
+      <div className="line-clamp-3 text-muted-foreground">{row.getValue("slug")}</div>
     ),
   },
   {
-    accessorKey: "date",
-    header: "Date",
+    accessorKey: "status",
+    header: "Status",
     cell: ({ row }) => (
-      <time dateTime={row.getValue("date")} className="block text-muted-foreground">
-        {humanizeDate(row.getValue("date"))}
-      </time>      
+      <div className="line-clamp-3 text-muted-foreground">{row.getValue("status")}</div>
     ),
-  },    
+  },   
   {
-    accessorKey: "readingTime",
-    header: "Reading Time",
+    accessorKey: "publishedAt",
+    header: "Published",
     cell: ({ row }) => (
-      <div className="line-clamp-3 text-muted-foreground">{row.getValue("readingTime")} mins</div>
+      <div className="line-clamp-3 text-muted-foreground">{humanizeDate(pubDate)}</div>
     ),
-  },  
+  },   
+  {
+    accessorKey: "coverImage",
+    header: "Cover Image",
+    cell: ({ row }) => (
+      <div className="line-clamp-3 text-muted-foreground">{row.getValue("coverImage")}</div>
+    ),
+  },         
   {
     id: "actions",
     enableHiding: false,
@@ -118,7 +116,8 @@ export function PublisherListPages({ allPosts }: PublisherListPagesProps) {
     React.useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = React.useState({})
 
-  const data: Blog[] = allPosts && allPosts?.allPosts ? allPosts.allPosts : [];
+  const data: any = allPosts
+  console.log('allPosts: ', allPosts?.length)
 
   const table = useReactTable<Blog>({
     data,
@@ -139,16 +138,12 @@ export function PublisherListPages({ allPosts }: PublisherListPagesProps) {
     },
   });
 
- React.useEffect(() => {
-    table.getColumn("description")?.toggleVisibility(false);
- }, []);
-
   return (
     <div className="w-full">
       <div className="flex items-center py-4">
         {/* Filter Input Field */}
         <Input
-          placeholder="Filter Posts..."
+          placeholder="Filter (by Title)"
           value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
             table.getColumn("title")?.setFilterValue(event.target.value)
@@ -234,6 +229,7 @@ export function PublisherListPages({ allPosts }: PublisherListPagesProps) {
           </TableBody>
         </Table>
       </div>
+
       {/* Paging Controls */}
       <div className="flex items-center justify-end space-x-2 py-4">
         <div className="flex-1 text-sm text-muted-foreground">

@@ -116,3 +116,49 @@ export const getUserSubsite = async (
   console.log('Subsite Denied - Not Authenticated')
   return null
 }
+
+export const getAllPagesByPublisher = async (
+  authorId: number | null,
+  subsiteId: number | null
+): Promise<any | undefined> => {
+  if (!authorId) {
+    return null
+  }
+  if (!subsiteId) {
+    return null
+  }
+  const resultData = await sql`
+     SELECT *
+       FROM "Page"
+      WHERE "Page"."authorId" = ${authorId}     
+        AND "Page"."subsiteId" = ${subsiteId}  
+      ORDER BY "Page"."createdAt" DESC
+    `
+  if (resultData && resultData.length > 0) {
+    return resultData
+  }
+  return null
+}
+
+export const getAllPostsByPublisher = async (
+  authorId: number | null,
+  subsiteId: number | null
+): Promise<any | undefined> => {
+  if (!authorId) {
+    return null
+  }
+  if (!subsiteId) {
+    return null
+  }
+  const resultData = await sql`
+     SELECT *
+       FROM "Post"
+      WHERE "Post"."authorId" = ${authorId}     
+        AND "Post"."subsiteId" = ${subsiteId}  
+      ORDER BY "Post"."createdAt" DESC
+    `
+  if (resultData && resultData.length > 0) {
+    return resultData
+  }
+  return null
+}

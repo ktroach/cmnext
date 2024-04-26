@@ -30,17 +30,30 @@ export const postRouter = createTRPCRouter({
         return null
       }
 
+      // you have to get the username 
+      const user = await ctx.db.user.findFirst({
+        where: {
+          id: input.authorId,
+        },
+      })
+      if (!user) {
+        console.log('Failed to CREATE Content. User does not exist.')
+        return null
+      }      
+
       const baseUrl: string = getFrontendBaseUrl()
       const saveEndpoint: string = `${baseUrl}/api/content/save`
       const response = await fetch(saveEndpoint, {
         method: 'POST',
         body: JSON.stringify({
           isUpdate: false,
+          contentType: 'post',
           subRef: input.subRef,
           title: input.title,
           description: input.description,
           image: input.image,
           body: input.content,
+          userName: user.name, 
         }),
       })
 
