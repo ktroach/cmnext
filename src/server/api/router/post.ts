@@ -39,7 +39,9 @@ export const postRouter = createTRPCRouter({
       if (!user) {
         console.log('Failed to CREATE Content. User does not exist.')
         return null
-      }      
+      }    
+      
+      console.log('>>> post >>> user >>> ', user)
 
       const baseUrl: string = getFrontendBaseUrl()
       const saveEndpoint: string = `${baseUrl}/api/content/save`

@@ -31,6 +31,19 @@ export const pagesRouter = createTRPCRouter({
         return null
       }
 
+      // you have to get the username 
+      const user = await ctx.db.user.findFirst({
+        where: {
+          id: input.authorId,
+        },
+      })
+      if (!user) {
+        console.log('Failed to CREATE Content. User does not exist.')
+        return null
+      }    
+      
+      console.log('>>> pages >>> user >>> ', user)
+
       const baseUrl: string = getFrontendBaseUrl()
       const saveEndpoint: string = `${baseUrl}/api/content/save`
       // TODO: isPost? or Page?
@@ -38,11 +51,13 @@ export const pagesRouter = createTRPCRouter({
         method: 'POST',
         body: JSON.stringify({
           isUpdate: false,
+          contentType: 'pages',
           subRef: input.subRef,
           title: input.title,
           description: input.description,
           image: input.image,
           body: input.content,
+          userName: user.name,           
         }),
       })
 

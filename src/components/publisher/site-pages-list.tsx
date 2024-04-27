@@ -64,13 +64,6 @@ export const columns: ColumnDef<any>[] = [
     ),
   },
   {
-    accessorKey: "subsiteRef",
-    header: "subsiteRef",
-    cell: ({ row }) => (
-      <div className="line-clamp-3 text-muted-foreground">{row.getValue("subsiteRef")}</div>
-    ),
-  },  
-  {
     accessorKey: "status",
     header: "Status",
     cell: ({ row }) => (
@@ -80,10 +73,19 @@ export const columns: ColumnDef<any>[] = [
   {
     accessorKey: "publishedAt",   
     header: "Published",
-    cell: ({ cell: { value } }) => (
-      <div className="line-clamp-3 text-muted-foreground">{humanizeDate(value)}</div>
-    ),
-  },   
+    cell: ({ row }) => {
+      const publishedAt: any = row.getValue("publishedAt")
+      if (publishedAt) {
+        return (
+          <div className="line-clamp-3 text-muted-foreground">{publishedAt.toUTCString()}</div>
+        )
+      } else {
+        return (
+          <div className="line-clamp-3 text-muted-foreground"></div>
+        )
+      }
+    },
+  },     
   {
     accessorKey: "coverImage",
     header: "Cover Image",

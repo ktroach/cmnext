@@ -149,7 +149,7 @@ export function AddEditContent(params: any) {
 
   const getCreateMutationVariables = () => {
     const formControl = form.getValues()
-    const title = formControl.title
+    const titleInput: string | undefined = title ? title : undefined
     const subsite: any = params?.subsite ? params.subsite : undefined
     const subref: string = subsite?.subRef ? subsite.subRef : undefined
     const userId: number | undefined = subsite?.userId
@@ -165,7 +165,7 @@ export function AddEditContent(params: any) {
       ? formControl.description
       : undefined
 
-    let inputsValid: boolean = verifyInput(title)
+    let inputsValid: boolean = verifyInput(titleInput)
     if (inputsValid) inputsValid = verifyInput(subref)
     if (inputsValid) inputsValid = verifyInput(userId)
     if (inputsValid) inputsValid = verifyInput(subsiteId)
@@ -173,7 +173,7 @@ export function AddEditContent(params: any) {
     if (inputsValid) {
       const mutationVars: any = {
         subRef: subref,
-        title: title,
+        title: titleInput,
         description: contentDescription,
         image: coverImage,
         content: editorContent,
@@ -374,7 +374,7 @@ export function AddEditContent(params: any) {
             name="title"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-lg">Blog Title</FormLabel>
+                <FormLabel className="text-lg">Title</FormLabel>
                 <FormControl>
                   <Input
                     disabled={contentLoaded}
@@ -399,7 +399,7 @@ export function AddEditContent(params: any) {
             name="description"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-lg">Blog Description</FormLabel>
+                <FormLabel className="text-lg">Description</FormLabel>
                 <FormControl>
                   <Input
                     className="hover:border-blue-500 border-blue-400"
@@ -421,7 +421,7 @@ export function AddEditContent(params: any) {
                   className="text-lg"
                   title="If blank, AI will generate cover image based on title"
                 >
-                  Cover Image URL (Optional)
+                  Cover Image (Optional)
                 </FormLabel>
                 <FormControl>
                   <Input
@@ -437,7 +437,7 @@ export function AddEditContent(params: any) {
             )}
           />
           <Separator />
-          <Label className="text-lg">Blog Content</Label>
+          <Label className="text-lg">Content</Label>
         </form>
       </Form>
       <MarkdownEditor
