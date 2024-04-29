@@ -22,6 +22,16 @@ export default async function SubsiteLayout({
   const pagesData = await getAllPagesBySubRef(subRef)
   const blogsData = await getAllBlogsBySubRef(subRef)
 
+  menuData.push({
+    label: 'HOME',
+    href: '/',
+    slug: '/',
+    sub: params.sub,
+    type: 'super-group',
+    items: [], 
+    isPage: true, 
+  })      
+
   if (pagesData && params?.sub) {
     for (let i = 0; i < pagesData.length; i++) {
       const pageData = pagesData[i]
@@ -46,7 +56,7 @@ export default async function SubsiteLayout({
     blogsData.map((post: any) =>
       blogsMenu.push({
         label: post.title,
-        href: `${baseUrl}/p/${params.sub}/${post.slug}`, 
+        href: `${baseUrl}/p/${params.sub}/blogs/${post.slug}`, 
         type: 'navlink',
         slug: post.slug,
         sub: params.sub,
