@@ -2,10 +2,9 @@
 'use server'
 
 import React from 'react'
-
-import { allPages, allPosts } from 'contentlayer/generated'
 import SubsiteMenu from '@/components/containers/subsite-menu'
 import { getFrontendBaseUrl } from '@/lib/url'
+import { getAllPagesBySubRef, getAllBlogsBySubRef } from '@/lib/queries'
 
 interface SubsiteLayoutProps {
   params: any
@@ -16,28 +15,45 @@ export default async function SubsiteLayout({
   params,
   children,
 }: SubsiteLayoutProps) {
+
   let menuData: any = []
   const baseUrl = getFrontendBaseUrl()
-  if (allPages && params?.sub) {
-    allPages.map((page) =>
+  const subRef = params?.sub ? params.sub : null
+
+  const pagesData = await getAllPagesBySubRef(subRef)
+  // console.log('>>> pagesData >>> ', pagesData)
+
+  const blogsData = await getAllBlogsBySubRef(subRef)
+  // console.log('>>> blogsData >>> ', blogsData)  
+
+  if (pagesData && params?.sub) {
+    for (let i = 0; i < pagesData.length; i++) {
+      const pageData = pagesData[i]
+      console.log(pageData)
+      const pageTitle = pageData?.title ? pageData.title : undefined
+      const pageSlug  = pageData?.slug ? pageData.slug : undefined
+      const pageUrl = `${baseUrl}/p/${params.sub}${pageSlug}`
+      console.log(pageUrl)
       menuData.push({
-        label: page.title,
-        href: page.slug,
-        slug: page.slugAsParams.split('/'),
+        label: pageTitle,
+        href: pageUrl,
+        slug: pageSlug,
         sub: params.sub,
-      })
-    )
+        type: 'super-group',
+        items: []
+      })      
+    }
   }
 
-  if (allPosts && params?.sub) {
+  if (blogsData && params?.sub) {
     let blogsMenu: any = []
     // add the posts to the Blogs group
-    allPosts.map((post) =>
+    blogsData.map((post: any) =>
       blogsMenu.push({
         label: post.title,
-        href: `${baseUrl}/p/${params.sub}${post.slug}`, 
+        href: `${baseUrl}/p/${params.sub}/${post.slug}`, 
         type: 'navlink',
-        slug: post.slugAsParams.split('/'),
+        slug: post.slug,
         sub: params.sub,
       })
     )
@@ -55,7 +71,6 @@ export default async function SubsiteLayout({
   return (
     <div className="relative flex min-h-screen flex-col">
       <SubsiteMenu sub={params.sub} menuData={menuData} />
-      {/* subs route layout - sub: {params.sub} */}
       <main className="flex-1 my-20">{children}</main>{' '}
     </div>
   )

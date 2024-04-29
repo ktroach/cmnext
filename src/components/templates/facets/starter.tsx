@@ -87,8 +87,8 @@ export default function StarterTemplate({
       if (subRef) {
         leftActionHref = `${baseUrl}/p/${subRef}`
         rightActionHref = `${baseUrl}/publish/${subRef}`
-        leftActionTitle = 'Take me to my Public Site'
-        rightActionTitle = 'Take me to my Publisher Site'  
+        leftActionTitle = 'Take me to my Site'
+        rightActionTitle = 'Take me to my Dashboard'  
       }
     }  
   }
