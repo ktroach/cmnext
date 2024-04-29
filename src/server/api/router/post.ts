@@ -49,7 +49,7 @@ export const postRouter = createTRPCRouter({
         method: 'POST',
         body: JSON.stringify({
           isUpdate: false,
-          contentType: 'post',
+          contentType: 'blogs',
           subRef: input.subRef,
           title: input.title,
           description: input.description,
@@ -59,8 +59,11 @@ export const postRouter = createTRPCRouter({
         }),
       })
 
-      if (response.status !== 204) {
-        console.log('Error saving Post >>> input >>> ', input)
+      console.log('>>> post >>> response >>> ', response)
+      console.log('>>> post >>> response.status >>> ', response.status)
+
+      if (response.status !== 200) {
+        console.log('Error saving Blog in TRPC Route >>> input >>> ', input)
         return null
       }
 

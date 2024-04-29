@@ -38,91 +38,115 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { humanizeDate } from "@/lib/dates"
+import { 
+  formatDateTime, 
+  humanizeDate,
+} from "@/lib/dates"
 import { Icons } from "@/styles/icons"
 
-export const pubDate: any = new Date().toUTCString()
-export const columns: ColumnDef<any>[] = [
-  {
-    accessorKey: "title",
-    header: "Title",
-    cell: ({ row }) => {
-      return (
-        <Link
-          href={row.getValue("slug")}
-        >
-          <span className="hover:underline">{row.getValue("title")}</span>
-        </Link>
-      )      
-    },
-  },
-  {
-    accessorKey: "slug",
-    header: "Slug",
-    cell: ({ row }) => (
-      <div className="line-clamp-3 text-muted-foreground">{row.getValue("slug")}</div>
-    ),
-  },
-  {
-    accessorKey: "status",
-    header: "Status",
-    cell: ({ row }) => (
-      <div className="line-clamp-3 text-muted-foreground">{row.getValue("status")}</div>
-    ),
-  },   
-  {
-    accessorKey: "publishedAt",   
-    header: "Published",
-    cell: ({ row }) => {
-      const publishedAt: any = row.getValue("publishedAt")
-      if (publishedAt) {
+export const CreateColumns = (contentType: string | undefined | null, subRef: string | undefined | null): ColumnDef<any>[] => {
+  if (!contentType) {
+    console.log("Failed to create columns, contentType is null or undefined")
+    return []
+  }
+  const hasContentType: boolean = contentType ? true : false
+  const contentTypePage: boolean = hasContentType && contentType === 'pages' ? true : false
+  const contentTypeBlog: boolean = hasContentType && contentType === 'blogs' ? true : false  
+  let cols: ColumnDef<any>[] = [
+    {
+      accessorKey: "title",
+      header: "Title",
+      cell: ({ row }) => {
+        const slugValue = row.getValue("slug")
+        const editLink: string  = subRef && hasContentType && slugValue ? `/publish/${subRef}/${contentType}/edit/${slugValue}` : ''         
         return (
-          <div className="line-clamp-3 text-muted-foreground">{publishedAt.toUTCString()}</div>
-        )
-      } else {
-        return (
-          <div className="line-clamp-3 text-muted-foreground"></div>
-        )
-      }
+          <Link
+            href={editLink}
+          >
+            <span className="hover:underline">{row.getValue("title")}</span>
+          </Link>
+        )      
+      },
     },
-  },     
-  {
-    accessorKey: "coverImage",
-    header: "Cover Image",
-    cell: ({ row }) => (
-      <div className="line-clamp-3 text-muted-foreground">{row.getValue("coverImage")}</div>
-    ),
-  },         
-  {
-    id: "actions",
-    enableHiding: false,
-    cell: ({ row }) => {
-      const val = row.getValue("slug")
-      const subRef = row.getValue("subsiteRef")
-      const editLink: string = `/publish/${subRef}/pages/edit${val}`
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem><Link className='text-xs flex flex-row' href={editLink}><Icons.edit className=" text-xs pr-1 text-slate-700" aria-hidden="true" />Edit Post</Link></DropdownMenuItem>
-         </DropdownMenuContent>
-        </DropdownMenu>
-      )
+    {
+      accessorKey: "slug",
+      header: "Slug",
+      cell: ({ row }) => {
+        const slugValue = row.getValue("slug")
+        const editLink: string  = subRef && hasContentType && slugValue ? `/publish/${subRef}/${contentType}/edit/${slugValue}` : ''        
+        return(<div className="line-clamp-3 text-muted-foreground">{editLink}</div>)
+      },
     },
-  },
-]
+    {
+      accessorKey: "status",
+      header: "Status",
+      cell: ({ row }) => (
+        <div className="line-clamp-3 text-muted-foreground">{row.getValue("status")}</div>
+      ),
+    },   
+    {
+      accessorKey: "publishedAt",   
+      header: "Published",
+      cell: ({ row }) => {
+        const publishedAt: any = row.getValue("publishedAt")
+        const formattedDate = publishedAt ? formatDateTime(publishedAt, 'ddd, MMM D, YYYY h:mm A (ZZ)') : ''
+        const humanizedDate: string =  publishedAt ? humanizeDate(publishedAt) : ''
+        if (publishedAt) {
+          return (
+            <div className="line-clamp-3 text-muted-foreground" title={formattedDate}>{humanizedDate}</div>
+          )
+        } else {
+          return (
+            <div className="line-clamp-3 text-muted-foreground"></div>
+          )
+        }
+      },
+    },     
+    {
+      accessorKey: "coverImage",
+      header: "Cover Image",
+      cell: ({ row }) => (
+        <div className="line-clamp-3 text-muted-foreground">{row.getValue("coverImage")}</div>
+      ),
+    },         
+    {
+      id: "actions",
+      enableHiding: false,
+      cell: ({ row }) => {
+        const slugValue = row.getValue("slug")
+        const linkText: string | undefined = contentTypePage ? 'Edit Page' : contentTypeBlog ? 'Edit Blog' : undefined
+        const editLink: string  = subRef && hasContentType && slugValue ? `/publish/${subRef}/${contentType}/edit/${slugValue}` : ''
+        if (linkText && editLink) {
+          return (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="h-8 w-8 p-0">
+                  <span className="sr-only">Open menu</span>
+                  <MoreHorizontal className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                <DropdownMenuItem><Link className='text-xs flex flex-row' href={editLink}><Icons.edit className=" text-xs pr-1 text-slate-700" aria-hidden="true" />{linkText}</Link></DropdownMenuItem>
+             </DropdownMenuContent>
+            </DropdownMenu>
+          )
+        }
+        return (<></>)
+      },
+    },
+  ]
 
-interface PublisherListPagesProps {
-    allPosts: any
+  return cols 
 }
 
-export function PublisherListPages({ allPosts }: PublisherListPagesProps) {
+interface SiteContentListProps {
+    publisherContentData: any,
+    contentDataType: string | undefined | null, 
+    subsiteRef: string | undefined | null, 
+}
+
+export function SiteContentList({ publisherContentData: contentData, contentDataType, subsiteRef }: SiteContentListProps) {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -131,8 +155,11 @@ export function PublisherListPages({ allPosts }: PublisherListPagesProps) {
     React.useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = React.useState({})
 
-  const data: any = allPosts
-  console.log('allPosts: ', allPosts?.length)
+  const data: any = contentData
+  console.log('contentData: ', contentData?.length)
+
+  const contentType: string = contentDataType ? contentDataType : 'pages'
+  const columns: ColumnDef<any>[] = CreateColumns(contentType, subsiteRef)
 
   const table = useReactTable<any>({
     data,

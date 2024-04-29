@@ -27,12 +27,6 @@ export const CreatorConfig: CreatorConfigType = {
           items: [],
         },
         {
-          title: "Images",
-          href: "/media",
-          icon: "upload",
-          items: [],
-        }, 
-        {
           title: "Settings",
           href: "/settings",
           icon: "settings",

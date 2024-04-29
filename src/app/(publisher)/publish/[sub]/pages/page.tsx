@@ -9,7 +9,7 @@ import { Block } from '@/components/containers/block'
 import { AspectRatio } from '@/components/ui/aspect-ratio'
 import { Icons } from '@/styles/icons'
 import { CreateNewPageAction } from '@/components/publisher/create-page-action'
-import { PublisherListPages } from '@/components/publisher/site-pages-list'
+import { SiteContentList } from '@/components/publisher/site-content-list'
 import { getFrontendBaseUrl } from '@/lib/url'
 import { 
   verifySubRefAccess, 
@@ -93,7 +93,7 @@ export default async function PublisherManagePages({ params }: any) {
           ))}
         </div>
         <h2 className="py-4 font-bold">All Site Pages</h2>
-        {allPagesByPublisher ? <PublisherListPages allPosts={allPagesByPublisher} /> : <></>}
+        {allPagesByPublisher ? <SiteContentList publisherContentData={allPagesByPublisher} contentDataType='pages' subsiteRef={subRef} /> : <></>}
       </div>
     </Block>
   )

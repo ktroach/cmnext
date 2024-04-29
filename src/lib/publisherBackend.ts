@@ -25,7 +25,7 @@ export const GetSubsiteBySignInIdentifierBackend = async (userId: string, signIn
   return subSiteResult
 }
 
-export const saveContent = (
+export const saveContent = async (
   contentType: string, 
   userName: string,
   subRef: string,
@@ -80,12 +80,12 @@ export const saveContent = (
     }
 
     const mdxFileName: string = `${mdxBlogPath}/${generatedFilename}.mdx`
-    const slug: string = `${contentSlug}/${generatedFilename}`
+    const slug: string = `${generatedFilename}`
 
     console.log('>>> Writing Post File: ', mdxFileName)
     writeFileSync(mdxFileName, mdxFileContent)
 
-    const response = {
+    const saveContentResponse = {
       generatedFilename: generatedFilename,
       mdxFileName: mdxFileName,
       slug: slug,
@@ -93,7 +93,10 @@ export const saveContent = (
       mdxDate: mdxDate,
     }
 
-    return response
+    console.log('>>> saveContentResponse >>> ', saveContentResponse)
+
+    return saveContentResponse
+
   } catch (ex) {
     console.log('Failed to Save Content >>> ', ex)
     return null

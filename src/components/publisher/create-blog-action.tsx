@@ -5,9 +5,9 @@ import { Button } from '../ui/button'
 import { catchError } from '@/lib/errors'
 import { getFrontendBaseUrl } from '@/lib/url'
 
-export function CreateBlogAction() {
+export function CreateNewBlogAction(props: any) {
   const baseUrl = getFrontendBaseUrl()
-  const publisherCreateBlogUrl = `${baseUrl}/publish/cltyljhuw0003sd3lubvh6ap5/blogs/new`
+  const publisherCreateBlogUrl = props?.subRef ? `${baseUrl}/publish/${props?.subRef}/blogs/new` : ''
   const [isPending, startTransition] = React.useTransition()
   const handleSubmit = () => {
     startTransition(() => {

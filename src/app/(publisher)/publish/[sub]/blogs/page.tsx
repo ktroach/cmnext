@@ -1,46 +1,69 @@
 import type { Metadata } from 'next'
-import { Icons } from '@/styles/icons'
+import Image from 'next/image'
+import Link from 'next/link'
+import { redirect } from 'next/navigation'
+import { currentUser } from '@clerk/nextjs/server'
+import { humanizeDate } from '@/lib/dates'
 import { Header } from '@/components/layouts/header'
 import { Block } from '@/components/containers/block'
-import { Separator } from "@/components/ui/separator"
-import Image from "next/image"
-import { AspectRatio } from "@/components/ui/aspect-ratio"
-import Link from "next/link"
+import { AspectRatio } from '@/components/ui/aspect-ratio'
+import { Icons } from '@/styles/icons'
+import { CreateNewBlogAction } from '@/components/publisher/create-blog-action'
+import { SiteContentList } from '@/components/publisher/site-content-list'
 import { getFrontendBaseUrl } from '@/lib/url'
-import { allPosts } from "contentlayer/generated"
-import dayjs from "dayjs"
+import { 
+  verifySubRefAccess, 
+  getUserSubsite, 
+  getAllBlogsByPublisher, 
+} from '@/lib/queries'
 
 export const metadata: Metadata = {
   metadataBase: new URL(getFrontendBaseUrl()),
+  title: 'Site Blogs',
+  description: 'Manage your Site Blogs',
 }
 
 export default async function PublisherManageBlogs({ params }: any) {
-  // console.log('params: ', params)
-  const posts = allPosts
-    .filter((post) => post.published)
-    .sort((a, b) => dayjs(b.date).unix() - dayjs(a.date).unix())
+  const curUser = await currentUser()
+  if (!curUser) redirect('/')
+  const subRef = params?.sub ? params.sub : null
+  const hasAccess = await verifySubRefAccess(curUser, subRef)
+  if (!hasAccess) redirect('/')
+  const subsite: any = await getUserSubsite(curUser, subRef)
+  console.log('allBlogsByPublisher >>> subsite >> ', subsite)
+  const authorId: number | null = subsite && subsite?.userId? subsite.userId : null
+  const subsiteId: number | null = subsite && subsite?.subsiteId? subsite.subsiteId : null
+  console.log('allBlogsByPublisher >>> authorId >> ', authorId)
+  console.log('allBlogsByPublisher >>> subsiteId >> ', subsiteId)
+  const allBlogsByPublisher = await getAllBlogsByPublisher(authorId, subsiteId)
+  console.log('allBlogsByPublisher >>> ', allBlogsByPublisher)
+
+  let mostRecentPosts: any = []
+  mostRecentPosts = allBlogsByPublisher ? allBlogsByPublisher.slice(0, 4) : []
 
   return (
-    <Block>
+    <Block variant="sidebar">
       <Header
-        title="Manage Blog Posts"
-        description="Manage the Blog Post for your Site"
+        title="Site Blogs"
+        description="Manage your Site's Blogs"
         size="sm"
       />
-      <Separator className="mb-2.5" />
-      <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-        {posts.map((post, i) => (
-          <Link key={post.slug} href={post.slug}>
-            <article className="flex flex-col space-y-2.5">
-              <AspectRatio ratio={4 / 4}>
-                  {post.image ? (
+      <div className="w-full overflow-hidden">
+        <CreateNewBlogAction subRef={subRef} />
+        <h2 className="py-4 font-bold">Recent Blogs</h2>
+        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+          {mostRecentPosts.map((blog: any, index: any) => (
+            <Link key={blog.slug} href={blog.slug}>
+              <article className="flex flex-col space-y-2.5">
+                <AspectRatio ratio={2}>
+                  {blog?.coverImage ? (
                     <Image
-                      src={post.image}
-                      alt={post.title}
+                      src={blog.coverImage}
+                      alt={blog?.title}
                       fill
                       sizes="(min-width: 1024px) 384px, (min-width: 768px) 288px, (min-width: 640px) 224px, 100vw"
                       className="rounded-lg object-cover"
-                      priority={i <= 1}
+                      priority={index <= 1}
                     />
                   ) : (
                     <div
@@ -56,20 +79,21 @@ export default async function PublisherManageBlogs({ params }: any) {
                     </div>
                   )}
                 </AspectRatio>
-              <h2 className="line-clamp-1 text-xl font-semibold">
-                {post.title}
-              </h2>
-              <p className="line-clamp-2 text-muted-foreground">
-                {post.description}
-              </p>
-              {post.date ? (
-                <p className="text-sm text-muted-foreground">
-                 post.date
+                <h5 className="line-clamp-1 font-semibold">{blog.title}</h5>
+                <p className="line-clamp-2 text-sm text-muted-foreground">
+                  {blog.description}
                 </p>
-              ) : null}
-            </article>
-          </Link>
-        ))}
+                {blog?.createdAt ? (
+                  <p className="text-sm text-muted-foreground">
+                    {humanizeDate(blog.createdAt)}
+                  </p>
+                ) : null}
+              </article>
+            </Link>
+          ))}
+        </div>
+        <h2 className="py-4 font-bold">All Site Blogs</h2>
+        {allBlogsByPublisher ? <SiteContentList publisherContentData={allBlogsByPublisher} contentDataType='blogs' subsiteRef={subRef} /> : <></>}
       </div>
     </Block>
   )

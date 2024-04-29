@@ -16,7 +16,7 @@ export async function POST(req: Request) {
         return new Response(null, { status: 404 })
     }    
 
-    const contentType: string = data?.contentType ? data.contentType : 'post'
+    const contentType: string = data?.contentType ? data.contentType : 'blogs'
     const userName: string | undefined = data?.userName ? data.userName : undefined
 
     if (!userName) {
@@ -24,10 +24,9 @@ export async function POST(req: Request) {
       return new Response(null, { status: 404 })      
     }
 
-    // TODO: Add more parameters: userAvatar, userUrl, userDescription
-    const responseData = saveContent(contentType, userName, subRef, data)
+    const responseData = await saveContent(contentType, userName, subRef, data)
 
-    return Response.json({ responseData })
+    return Response.json( responseData )
   } catch (error) {
     return Response.json(error)
   }

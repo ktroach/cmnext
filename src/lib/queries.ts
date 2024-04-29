@@ -134,6 +134,7 @@ export const getAllPagesByPublisher = async (
        JOIN "Subsite" ON "Account"."id" = "Subsite"."accountId"       
       WHERE "Page"."authorId" = ${authorId}     
         AND "Page"."subsiteId" = ${subsiteId}  
+        AND "Page"."deleted" = false        
       ORDER BY "Page"."createdAt" DESC
     `
   if (resultData && resultData.length > 0) {
@@ -142,7 +143,7 @@ export const getAllPagesByPublisher = async (
   return null
 }
 
-export const getAllPostsByPublisher = async (
+export const getAllBlogsByPublisher = async (
   authorId: number | null,
   subsiteId: number | null
 ): Promise<any | undefined> => {
@@ -157,6 +158,7 @@ export const getAllPostsByPublisher = async (
        FROM "Post"
       WHERE "Post"."authorId" = ${authorId}     
         AND "Post"."subsiteId" = ${subsiteId}  
+        AND "Post"."deleted" = false  
       ORDER BY "Post"."createdAt" DESC
     `
   if (resultData && resultData.length > 0) {
