@@ -19,28 +19,23 @@ export default async function SubsiteLayout({
   let menuData: any = []
   const baseUrl = getFrontendBaseUrl()
   const subRef = params?.sub ? params.sub : null
-
   const pagesData = await getAllPagesBySubRef(subRef)
-  // console.log('>>> pagesData >>> ', pagesData)
-
   const blogsData = await getAllBlogsBySubRef(subRef)
-  // console.log('>>> blogsData >>> ', blogsData)  
 
   if (pagesData && params?.sub) {
     for (let i = 0; i < pagesData.length; i++) {
       const pageData = pagesData[i]
-      console.log(pageData)
       const pageTitle = pageData?.title ? pageData.title : undefined
       const pageSlug  = pageData?.slug ? pageData.slug : undefined
-      const pageUrl = `${baseUrl}/p/${params.sub}${pageSlug}`
-      console.log(pageUrl)
+      const pageUrl = `${baseUrl}/p/${params.sub}/pages/${pageSlug}`
       menuData.push({
         label: pageTitle,
         href: pageUrl,
         slug: pageSlug,
         sub: params.sub,
         type: 'super-group',
-        items: []
+        items: [], 
+        isPage: true, 
       })      
     }
   }

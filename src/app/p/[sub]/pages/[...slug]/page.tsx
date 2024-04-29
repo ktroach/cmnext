@@ -2,19 +2,20 @@ import { notFound } from 'next/navigation'
 import { Metadata } from 'next'
 import { Block } from '@/components/containers/block'
 import { allPages } from 'contentlayer/generated'
-import { Header } from '@/components/layouts/header'
 import { Mdx } from '@/components/mdx'
 
 interface PageProps {
   params: {
+    sub: string, 
     slug: string[] 
   }
 }
 
 async function getPageFromSlug(params: PageProps['params']) {
   const slug = params?.slug?.join('/')
-  // console.log("slug >>> ", slug)  
-  const page = allPages.find((page) => page.slugAsParams === slug)
+  const subRef = params?.sub ? params.sub : ''
+  const slugKey = `${subRef}/${slug}`
+  const page = allPages.find((page) => page.slugAsParams === slugKey)
 
   if (!page) {
     console.log("page not found")
@@ -56,10 +57,6 @@ export default async function PagePage({ params }: PageProps) {
 
   return (
     <Block>
-      <Header
-        title="Test"
-        description="Some description"
-      />
       <div className="w-full overflow-hidden flex flex-col items-center justify-center">
         <article className="py-6 prose dark:prose-invert">
           <h1>{page.title}</h1>
