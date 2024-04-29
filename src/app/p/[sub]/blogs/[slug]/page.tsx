@@ -22,8 +22,12 @@ interface PostPageProps {
 
 async function getPostFromParams(params: PostPageProps['params']) {
   const slug = params?.slug
-  // console.log("slug >>> ", slug)  
-  const postPage = allPosts.find((post) => post.slugAsParams === slug)
+  console.log(">>> slug >>> ", slug)  
+  const subRef = params?.sub ? params.sub : ''
+  const slugKey = `${subRef}/${slug}`
+  console.log(">>> slugKey >>> ", slugKey)  
+
+  const postPage = allPosts.find((post) => post.slugAsParams === slugKey)
 
   if (!postPage) {
     console.log("page not found: ", slug)
@@ -73,10 +77,11 @@ export async function generateMetadata({
 }
 
 export default async function PostPage({ params }: PostPageProps) {
-  const post = await getPostFromParams(params)
-  const baseUrl = getFrontendBaseUrl()
+  const subRef = params && params?.sub ? params.sub : ''
 
+  const post = await getPostFromParams(params)
   if (!post) {
+    console.log('>>> post not found >>> ', params)
     notFound()
   }
 
@@ -84,7 +89,7 @@ export default async function PostPage({ params }: PostPageProps) {
     allAuthors.find((a) => a.title === author?.replace(/\r$/, ''))
   )
 
-  const subRef = params && params?.sub ? params.sub : ''
+  const baseUrl = getFrontendBaseUrl()
   const allPostsUrl = `${baseUrl}/p/${subRef}/blogs`
 
   return (

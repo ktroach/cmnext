@@ -11,6 +11,7 @@ import { Header } from "@/components/layouts/header"
 import { Icons } from "@/styles/icons"
 import { Block } from "@/components/containers/block"
 import { getFrontendBaseUrl } from "@/lib/url"
+import { getAllBlogsBySubRef } from '@/lib/queries'
 
 export const metadata: Metadata = {
   metadataBase: new URL(getFrontendBaseUrl()),
@@ -18,16 +19,14 @@ export const metadata: Metadata = {
   description: "Explore the latest updates",
 }
 
-export default function BlogPage({ params }: any) {
-  const posts = allPosts
-    .filter((post) => post.published)
-    .sort((a, b) => dayjs(b.date).unix() - dayjs(a.date).unix())
+export default async function BlogPage({ params }: any) {
+  const subRef = params?.sub ? params.sub : null
+  const blogsData = await getAllBlogsBySubRef(subRef)
 
-    const getPostUrl = (postSlug: string) => {
-      const baseUrl = getFrontendBaseUrl()
-      const subRef = params?.sub ? params.sub : '' 
-      return `${baseUrl}/p/${subRef}${postSlug}`
-    }
+  const getPostUrl = (postSlug: string) => {
+    const baseUrl = getFrontendBaseUrl()
+    return `${baseUrl}/p/${subRef}/blogs/${postSlug}`
+  }
 
   return (
     <Block className="md:pb-10 my-20">
@@ -37,13 +36,13 @@ export default function BlogPage({ params }: any) {
       />
       <Separator className="mb-2.5" />
       <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-        {posts.map((post, i) => (
+        {blogsData.map((post: any, i: number) => (
           <Link key={post.slug} href={getPostUrl(post.slug)}>
             <article className="flex flex-col space-y-2.5">
               <AspectRatio ratio={4 / 4}>
-                {post.image ? (
+                {post?.coverImage ? (
                   <Image
-                    src={post.image}
+                    src={post.coverImage}
                     alt={post.title}
                     fill
                     sizes="(min-width: 1024px) 384px, (min-width: 768px) 288px, (min-width: 640px) 224px, 100vw"
@@ -70,9 +69,9 @@ export default function BlogPage({ params }: any) {
               <p className="line-clamp-2 text-muted-foreground">
                 {post.description}
               </p>
-              {post.date ? (
+              {post.publishedAt ? (
                 <p className="text-sm text-muted-foreground">
-                  {formatDate(post.date)}
+                  {formatDate(post.publishedAt)}
                 </p>
               ) : null}
             </article>
