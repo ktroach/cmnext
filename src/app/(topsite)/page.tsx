@@ -9,7 +9,7 @@ import StarterTemplate from '@/components/templates/facets/starter'
 
 export default async function IndexPage() {
   const user = await currentUser()
-
+ 
   const buildFeaturedSections = (sectionContent: any) => {
     let sections: any = []
     const sectionsConfig = RootConfig.sections ? RootConfig.sections : undefined
@@ -32,6 +32,7 @@ export default async function IndexPage() {
   return (
     <>
       <StarterTemplate
+        userName={user?.username}
         line={RootConfig.description}
         words={RootConfig.pitch}
         waves={RootConfig.waveAnimationColors}
