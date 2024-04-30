@@ -167,6 +167,9 @@
     "typescript": "^5.3.2"
   },
     "browser": {
+      "fs": false,
+      "os": false,
+      "path": false,      
       "crypto": false,
       "stream": false
   }  
