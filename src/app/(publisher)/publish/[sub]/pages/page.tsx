@@ -1,93 +1,69 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
-import { env } from '@/env.mjs'
-import { type Post, allPosts } from 'contentlayer/generated'
-import dayjs from 'dayjs'
-
+import { redirect } from 'next/navigation'
+import { currentUser } from '@clerk/nextjs/server'
 import { humanizeDate } from '@/lib/dates'
 import { Header } from '@/components/layouts/header'
 import { Block } from '@/components/containers/block'
 import { AspectRatio } from '@/components/ui/aspect-ratio'
 import { Icons } from '@/styles/icons'
-
-import type { Blog } from '@/types'
 import { CreateNewPageAction } from '@/components/publisher/create-page-action'
-import { PublisherListPages } from '@/components/publisher/site-pages-list'
+import { SiteContentList } from '@/components/publisher/site-content-list'
+import { getFrontendBaseUrl } from '@/lib/url'
+import { 
+  verifySubRefAccess, 
+  getUserSubsite, 
+  getAllPagesByPublisher, 
+} from '@/lib/queries'
 
 export const metadata: Metadata = {
-  metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
+  metadataBase: new URL(getFrontendBaseUrl()),
   title: 'Site Pages',
   description: 'Manage your Site Pages',
 }
 
-export default function PublisherManagePages({ params }: any) {
-  // TODO: Change to Pages not Posts
-  const blogPosts: Blog[] = []
-  let mostRecentPosts: Post[] = []
+export default async function PublisherManagePages({ params }: any) {
+  const curUser = await currentUser()
+  if (!curUser) redirect('/')
+  const subRef = params?.sub ? params.sub : null
+  const hasAccess = await verifySubRefAccess(curUser, subRef)
+  if (!hasAccess) redirect('/')
+  const subsite: any = await getUserSubsite(curUser, subRef)
+  console.log('allPagesByPublisher >>> subsite >> ', subsite)
+  const authorId: number | null = subsite && subsite?.userId? subsite.userId : null
+  const subsiteId: number | null = subsite && subsite?.subsiteId? subsite.subsiteId : null
+  console.log('allPagesByPublisher >>> authorId >> ', authorId)
+  console.log('allPagesByPublisher >>> subsiteId >> ', subsiteId)
+  const allPagesByPublisher = await getAllPagesByPublisher(authorId, subsiteId)
+  console.log('allPagesByPublisher >>> ', allPagesByPublisher)
 
-  // TODO: query for the pages that belong to this subsite
-
-  // conver to tRPC call
-  const mapPosts = (posts: string | any[]) => {
-    if (posts && posts.length > 0) {
-      for (let i = 0; i < posts.length; i++) {
-        const p = posts[i]
-        if (p) {
-          blogPosts.push({
-            _id: p._id,
-            authors: p.authors,
-            title: p.title,
-            description: p?.description,
-            date: p.date,
-            published: p.published,
-            readingTime: p.readingTime,
-            slug: p.slug,
-            slugAsParams: p.slugAsParams,
-          })
-        }
-      }
-    }
-  }
-
-  // filters the posts that have been published
-  // const posts = allPosts.filter((post) => post.published);
-  const posts = allPosts && allPosts.length > 0 ? allPosts : []
-  // you need to check for null or empty array
-  if (posts && posts.length > 0) {
-    // sorts by date posted
-    posts.sort((a, b) => (dayjs(a.date).isAfter(dayjs(b.date)) ? 1 : -1))
-    // sort descending
-    posts.reverse()
-    // slice the first 4 posts
-    mostRecentPosts = posts ? posts.slice(0, 4) : []
-    mapPosts(posts)
-  }
+  let mostRecentPosts: any = []
+  mostRecentPosts = allPagesByPublisher ? allPagesByPublisher.slice(0, 4) : []
 
   return (
     <Block variant="sidebar">
-      <p>Sub: {params.sub} - Publisher - Manage Site Pages</p>
       <Header
         title="Site Pages"
         description="Manage your Site's Pages"
         size="sm"
       />
       <div className="w-full overflow-hidden">
-        <CreateNewPageAction />
+        <CreateNewPageAction subRef={subRef} />
         <h2 className="py-4 font-bold">Recent Pages</h2>
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-          {mostRecentPosts.map((post, i) => (
-            <Link key={post.slug} href={post.slug}>
+          {mostRecentPosts.map((page: any, index: any) => (
+            <Link key={page.slug} href={page.slug}>
               <article className="flex flex-col space-y-2.5">
                 <AspectRatio ratio={2}>
-                  {post.image ? (
+                  {page?.coverImage ? (
                     <Image
-                      src={post.image}
-                      alt={post.title}
+                      src={page.coverImage}
+                      alt={page?.title}
                       fill
                       sizes="(min-width: 1024px) 384px, (min-width: 768px) 288px, (min-width: 640px) 224px, 100vw"
                       className="rounded-lg object-cover"
-                      priority={i <= 1}
+                      priority={index <= 1}
                     />
                   ) : (
                     <div
@@ -103,13 +79,13 @@ export default function PublisherManagePages({ params }: any) {
                     </div>
                   )}
                 </AspectRatio>
-                <h5 className="line-clamp-1 font-semibold">{post.title}</h5>
+                <h5 className="line-clamp-1 font-semibold">{page.title}</h5>
                 <p className="line-clamp-2 text-sm text-muted-foreground">
-                  {post.description}
+                  {page.description}
                 </p>
-                {post.date ? (
+                {page?.createdAt ? (
                   <p className="text-sm text-muted-foreground">
-                    {humanizeDate(post.date)}
+                    {humanizeDate(page.createdAt)}
                   </p>
                 ) : null}
               </article>
@@ -117,7 +93,7 @@ export default function PublisherManagePages({ params }: any) {
           ))}
         </div>
         <h2 className="py-4 font-bold">All Site Pages</h2>
-        {blogPosts ? <PublisherListPages allPosts={blogPosts} /> : <></>}
+        {allPagesByPublisher ? <SiteContentList publisherContentData={allPagesByPublisher} contentDataType='pages' subsiteRef={subRef} /> : <></>}
       </div>
     </Block>
   )

@@ -14,7 +14,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <>
       <ClerkProvider>
-        <html lang="en">
+        <html lang="en" suppressHydrationWarning>
           <head />
           <body
             className={cn(

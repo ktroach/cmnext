@@ -6,7 +6,6 @@ import { useSignIn } from "@clerk/nextjs"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import type { z } from "zod"
-
 import { catchClerkError } from "@/lib/clerk"
 import { authSchema } from "@/validations/auth"
 import { Button } from "@/components/ui/button"
@@ -21,6 +20,8 @@ import {
 import { Input } from "@/components/ui/input"
 import { Icons } from "@/styles/icons"
 import { PasswordInput } from "@/components/secure/password-input"
+import { getFrontendBaseUrl } from '@/lib/url'
+import { getSubRefByIdentifier } from '@/lib/subref'
 
 type Inputs = z.infer<typeof authSchema>
 
@@ -42,17 +43,27 @@ export function SignInForm() {
 
     startTransition(async () => {
       try {
-        const result = await signIn.create({
+        const signInResult = await signIn.create({
           identifier: data.email,
           password: data.password,
         })
 
-        if (result.status === "complete") {
-          await setActive({ session: result.createdSessionId })
+        if (signInResult.status === "complete") {
+          await setActive({ session: signInResult.createdSessionId })
+          const baseUrl: string = getFrontendBaseUrl()
+          const subRef: string | undefined = await getSubRefByIdentifier(baseUrl, signInResult.identifier)
 
-          router.push(`${window.location.origin}/`)
+          if (!subRef) {
+            console.log(">>> signin >>> subRef not provided >>> return to origin.") 
+            router.push(`${window.location.origin}/`)
+            return
+          }
+
+          const publisherUrl: string | undefined = baseUrl && subRef ? `${baseUrl}/publish/${subRef}` : undefined     
+          console.log('>>> redirecting user ', signInResult.identifier, ' to publisher dashboard: ', publisherUrl)     
+          router.push(`${publisherUrl}/`)
         } else {
-          console.log(result)
+          console.log(signInResult)
         }
       } catch (err) {
         catchClerkError(err)

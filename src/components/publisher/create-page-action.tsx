@@ -5,9 +5,9 @@ import { Button } from '../ui/button'
 import { catchError } from '@/lib/errors'
 import { getFrontendBaseUrl } from '@/lib/url'
 
-export function CreateNewPageAction() {
+export function CreateNewPageAction(props: any) {
   const baseUrl = getFrontendBaseUrl()
-  const publisherCreatePageUrl = `${baseUrl}/publish/cltyljhuw0003sd3lubvh6ap5/pages/new`
+  const publisherCreatePageUrl = props?.subRef ? `${baseUrl}/publish/${props?.subRef}/pages/new` : ''
   const [isPending, startTransition] = React.useTransition()
   const handleSubmit = () => {
     startTransition(() => {

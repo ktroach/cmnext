@@ -3,7 +3,7 @@
 "use client"
 
 import * as React from "react"
-import type { Blog } from "@/types"
+import Link from 'next/link'
 import type {
   ColumnDef,
   ColumnFiltersState,
@@ -18,7 +18,7 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table"
-import { ArrowUpDown, ChevronDown, MoreHorizontal } from "lucide-react"
+import { ChevronDown, MoreHorizontal } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -38,78 +38,115 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { humanizeDate } from "@/lib/dates"
+import { 
+  formatDateTime, 
+  humanizeDate,
+} from "@/lib/dates"
 import { Icons } from "@/styles/icons"
 
-// TODO: Change to Page 
-export const columns: ColumnDef<Blog>[] = [
-  {
-    accessorKey: "slug",
-    header: "Title",
-    enableHiding: false,
-    cell: (row) => {
-      return (
-        <a href={row.row.original.slug}>
-          <div className="line-clamp-3 text-muted-foreground">
-            {row.row.original.title}
-          </div>
-        </a>
-      );
+export const CreateColumns = (contentType: string | undefined | null, subRef: string | undefined | null): ColumnDef<any>[] => {
+  if (!contentType) {
+    console.log("Failed to create columns, contentType is null or undefined")
+    return []
+  }
+  const hasContentType: boolean = contentType ? true : false
+  const contentTypePage: boolean = hasContentType && contentType === 'pages' ? true : false
+  const contentTypeBlog: boolean = hasContentType && contentType === 'blogs' ? true : false  
+  let cols: ColumnDef<any>[] = [
+    {
+      accessorKey: "title",
+      header: "Title",
+      cell: ({ row }) => {
+        const slugValue = row.getValue("slug")
+        const editLink: string  = subRef && hasContentType && slugValue ? `/publish/${subRef}/${contentType}/edit/${slugValue}` : ''         
+        return (
+          <Link
+            href={editLink}
+          >
+            <span className="hover:underline">{row.getValue("title")}</span>
+          </Link>
+        )      
+      },
     },
-  },
-  {
-    accessorKey: "description",
-    header: "Description",
-    cell: ({ row }) => (
-      <div className="line-clamp-3 text-muted-foreground">{row.getValue("description")}</div>
-    ),
-  },
-  {
-    accessorKey: "date",
-    header: "Date",
-    cell: ({ row }) => (
-      <time dateTime={row.getValue("date")} className="block text-muted-foreground">
-        {humanizeDate(row.getValue("date"))}
-      </time>      
-    ),
-  },    
-  {
-    accessorKey: "readingTime",
-    header: "Reading Time",
-    cell: ({ row }) => (
-      <div className="line-clamp-3 text-muted-foreground">{row.getValue("readingTime")} mins</div>
-    ),
-  },  
-  {
-    id: "actions",
-    enableHiding: false,
-    cell: ({ row }) => {
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem><Icons.edit className="pr-2 text-slate-700" aria-hidden="true" />Edit Post</DropdownMenuItem>
-            <DropdownMenuItem><Icons.hide className="pr-2 text-slate-700" aria-hidden="true" />Unpublish</DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem><Icons.send className="pr-2 text-slate-700" aria-hidden="true" />Share</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      )
+    {
+      accessorKey: "slug",
+      header: "Slug",
+      cell: ({ row }) => {
+        const slugValue = row.getValue("slug")
+        const editLink: string  = subRef && hasContentType && slugValue ? `/publish/${subRef}/${contentType}/edit/${slugValue}` : ''        
+        return(<div className="line-clamp-3 text-muted-foreground">{editLink}</div>)
+      },
     },
-  },
-]
+    {
+      accessorKey: "status",
+      header: "Status",
+      cell: ({ row }) => (
+        <div className="line-clamp-3 text-muted-foreground">{row.getValue("status")}</div>
+      ),
+    },   
+    {
+      accessorKey: "publishedAt",   
+      header: "Published",
+      cell: ({ row }) => {
+        const publishedAt: any = row.getValue("publishedAt")
+        const formattedDate = publishedAt ? formatDateTime(publishedAt, 'ddd, MMM D, YYYY h:mm A (ZZ)') : ''
+        const humanizedDate: string =  publishedAt ? humanizeDate(publishedAt) : ''
+        if (publishedAt) {
+          return (
+            <div className="line-clamp-3 text-muted-foreground" title={formattedDate}>{humanizedDate}</div>
+          )
+        } else {
+          return (
+            <div className="line-clamp-3 text-muted-foreground"></div>
+          )
+        }
+      },
+    },     
+    {
+      accessorKey: "coverImage",
+      header: "Cover Image",
+      cell: ({ row }) => (
+        <div className="line-clamp-3 text-muted-foreground">{row.getValue("coverImage")}</div>
+      ),
+    },         
+    {
+      id: "actions",
+      enableHiding: false,
+      cell: ({ row }) => {
+        const slugValue = row.getValue("slug")
+        const linkText: string | undefined = contentTypePage ? 'Edit Page' : contentTypeBlog ? 'Edit Blog' : undefined
+        const editLink: string  = subRef && hasContentType && slugValue ? `/publish/${subRef}/${contentType}/edit/${slugValue}` : ''
+        if (linkText && editLink) {
+          return (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="h-8 w-8 p-0">
+                  <span className="sr-only">Open menu</span>
+                  <MoreHorizontal className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                <DropdownMenuItem><Link className='text-xs flex flex-row' href={editLink}><Icons.edit className=" text-xs pr-1 text-slate-700" aria-hidden="true" />{linkText}</Link></DropdownMenuItem>
+             </DropdownMenuContent>
+            </DropdownMenu>
+          )
+        }
+        return (<></>)
+      },
+    },
+  ]
 
-interface PublisherListPagesProps {
-    allPosts: any
+  return cols 
 }
 
-export function PublisherListPages({ allPosts }: PublisherListPagesProps) {
+interface SiteContentListProps {
+    publisherContentData: any,
+    contentDataType: string | undefined | null, 
+    subsiteRef: string | undefined | null, 
+}
+
+export function SiteContentList({ publisherContentData: contentData, contentDataType, subsiteRef }: SiteContentListProps) {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -118,9 +155,13 @@ export function PublisherListPages({ allPosts }: PublisherListPagesProps) {
     React.useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = React.useState({})
 
-  const data: Blog[] = allPosts && allPosts?.allPosts ? allPosts.allPosts : [];
+  const data: any = contentData
+  console.log('contentData: ', contentData?.length)
 
-  const table = useReactTable<Blog>({
+  const contentType: string = contentDataType ? contentDataType : 'pages'
+  const columns: ColumnDef<any>[] = CreateColumns(contentType, subsiteRef)
+
+  const table = useReactTable<any>({
     data,
     columns,
     onSortingChange: setSorting,
@@ -139,16 +180,12 @@ export function PublisherListPages({ allPosts }: PublisherListPagesProps) {
     },
   });
 
- React.useEffect(() => {
-    table.getColumn("description")?.toggleVisibility(false);
- }, []);
-
   return (
     <div className="w-full">
       <div className="flex items-center py-4">
         {/* Filter Input Field */}
         <Input
-          placeholder="Filter Posts..."
+          placeholder="Filter Results (by Title)"
           value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
             table.getColumn("title")?.setFilterValue(event.target.value)
@@ -234,6 +271,7 @@ export function PublisherListPages({ allPosts }: PublisherListPagesProps) {
           </TableBody>
         </Table>
       </div>
+
       {/* Paging Controls */}
       <div className="flex items-center justify-end space-x-2 py-4">
         <div className="flex-1 text-sm text-muted-foreground">

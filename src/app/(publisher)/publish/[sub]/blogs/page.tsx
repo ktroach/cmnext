@@ -1,91 +1,69 @@
-import type { Metadata } from "next"
-import Image from "next/image"
-import Link from "next/link"
-import { env } from "@/env.mjs"
-import { type Post, allPosts } from "contentlayer/generated"
-import dayjs from "dayjs"
-
-import { humanizeDate } from "@/lib/dates"
-import { Header } from "@/components/layouts/header"
-import { Block } from "@/components/containers/block"
-import { AspectRatio } from "@/components/ui/aspect-ratio"
-import { Icons } from "@/styles/icons"
-
-import { PublisherListBlogs } from "@/components/publisher/blog-list"
-import { CreateBlogAction } from "@/components/publisher/create-blog-action"
-
-import type { Blog } from "@/types"
+import type { Metadata } from 'next'
+import Image from 'next/image'
+import Link from 'next/link'
+import { redirect } from 'next/navigation'
+import { currentUser } from '@clerk/nextjs/server'
+import { humanizeDate } from '@/lib/dates'
+import { Header } from '@/components/layouts/header'
+import { Block } from '@/components/containers/block'
+import { AspectRatio } from '@/components/ui/aspect-ratio'
+import { Icons } from '@/styles/icons'
+import { CreateNewBlogAction } from '@/components/publisher/create-blog-action'
+import { SiteContentList } from '@/components/publisher/site-content-list'
+import { getFrontendBaseUrl } from '@/lib/url'
+import { 
+  verifySubRefAccess, 
+  getUserSubsite, 
+  getAllBlogsByPublisher, 
+} from '@/lib/queries'
 
 export const metadata: Metadata = {
-  metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
-  title: "Blog Posts", 
-  description: "Manage your Blog Posts",
+  metadataBase: new URL(getFrontendBaseUrl()),
+  title: 'Site Blogs',
+  description: 'Manage your Site Blogs',
 }
 
-export default function PublisherManageBlogs({ params }: any) {
-  const blogPosts: Blog[] = [];
-  let mostRecentPosts: Post[] = [];
+export default async function PublisherManageBlogs({ params }: any) {
+  const curUser = await currentUser()
+  if (!curUser) redirect('/')
+  const subRef = params?.sub ? params.sub : null
+  const hasAccess = await verifySubRefAccess(curUser, subRef)
+  if (!hasAccess) redirect('/')
+  const subsite: any = await getUserSubsite(curUser, subRef)
+  console.log('allBlogsByPublisher >>> subsite >> ', subsite)
+  const authorId: number | null = subsite && subsite?.userId? subsite.userId : null
+  const subsiteId: number | null = subsite && subsite?.subsiteId? subsite.subsiteId : null
+  console.log('allBlogsByPublisher >>> authorId >> ', authorId)
+  console.log('allBlogsByPublisher >>> subsiteId >> ', subsiteId)
+  const allBlogsByPublisher = await getAllBlogsByPublisher(authorId, subsiteId)
+  console.log('allBlogsByPublisher >>> ', allBlogsByPublisher)
 
-  // conver to tRPC call 
-  const mapPosts = (posts: string | any[]) => {
-    if (posts && posts.length > 0) {
-      for (let i = 0; i < posts.length; i++) {
-        const p = posts[i];
-        if (p) {
-          blogPosts.push({
-            _id: p._id, 
-            authors: p.authors, 
-            title: p.title,
-            description: p?.description,
-            date: p.date, 
-            published: p.published, 
-            readingTime: p.readingTime, 
-            slug: p.slug, 
-            slugAsParams: p.slugAsParams
-          });
-        }
-      }    
-    }
-  };
-
-  // filters the posts that have been published
-  // const posts = allPosts.filter((post) => post.published);
-  const posts = allPosts && allPosts.length > 0 ? allPosts : [];
-  // you need to check for null or empty array 
-  if (posts && posts.length > 0) {
-    // sorts by date posted 
-    posts.sort((a, b) => (dayjs(a.date).isAfter(dayjs(b.date)) ? 1 : -1));
-    // sort descending
-    posts.reverse();
-    // slice the first 4 posts 
-    mostRecentPosts = posts ? posts.slice(0, 4) : [];
-    mapPosts(posts);
-  }
+  let mostRecentPosts: any = []
+  mostRecentPosts = allBlogsByPublisher ? allBlogsByPublisher.slice(0, 4) : []
 
   return (
     <Block variant="sidebar">
-        <p>Sub: {params.sub} - Publisher - Manage Blogs</p>
       <Header
-        title="Blog Posts"
-        description="Manage your Blog Posts"
+        title="Site Blogs"
+        description="Manage your Site's Blogs"
         size="sm"
       />
       <div className="w-full overflow-hidden">
-        <CreateBlogAction />
-        <h2 className="py-4 font-bold">Recent Posts</h2>
+        <CreateNewBlogAction subRef={subRef} />
+        <h2 className="py-4 font-bold">Recent Blogs</h2>
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-          {mostRecentPosts.map((post, i) => (
-            <Link key={post.slug} href={post.slug}>
+          {mostRecentPosts.map((blog: any, index: any) => (
+            <Link key={blog.slug} href={blog.slug}>
               <article className="flex flex-col space-y-2.5">
                 <AspectRatio ratio={2}>
-                  {post.image ? (
+                  {blog?.coverImage ? (
                     <Image
-                      src={post.image}
-                      alt={post.title}
+                      src={blog.coverImage}
+                      alt={blog?.title}
                       fill
                       sizes="(min-width: 1024px) 384px, (min-width: 768px) 288px, (min-width: 640px) 224px, 100vw"
                       className="rounded-lg object-cover"
-                      priority={i <= 1}
+                      priority={index <= 1}
                     />
                   ) : (
                     <div
@@ -101,23 +79,21 @@ export default function PublisherManageBlogs({ params }: any) {
                     </div>
                   )}
                 </AspectRatio>
-                <h5 className="line-clamp-1 font-semibold">
-                  {post.title}
-                </h5>
+                <h5 className="line-clamp-1 font-semibold">{blog.title}</h5>
                 <p className="line-clamp-2 text-sm text-muted-foreground">
-                  {post.description}
+                  {blog.description}
                 </p>
-                {post.date ? (
+                {blog?.createdAt ? (
                   <p className="text-sm text-muted-foreground">
-                    {humanizeDate(post.date)}
+                    {humanizeDate(blog.createdAt)}
                   </p>
                 ) : null}
               </article>
             </Link>
           ))}
         </div>
-        <h2 className="py-4 font-bold">All Posts</h2>        
-        {blogPosts ? <PublisherListBlogs allPosts={blogPosts} /> : <></>}
+        <h2 className="py-4 font-bold">All Site Blogs</h2>
+        {allBlogsByPublisher ? <SiteContentList publisherContentData={allBlogsByPublisher} contentDataType='blogs' subsiteRef={subRef} /> : <></>}
       </div>
     </Block>
   )

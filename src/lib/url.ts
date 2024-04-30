@@ -1,33 +1,36 @@
 export const getFrontendBaseUrl = () => {
-    // If App url is defined (Production), return it
-    let appUrl = process.env.NEXT_PUBLIC_APP_URL;
-    if (appUrl) {
-      return appUrl;
-    }
-  
-    // If this is the vercel deployment, return the preview url
-    const vercelUrl = process.env.VERCEL_URL;
-    if (vercelUrl) {
-      return `https://${vercelUrl}`;
-    }
-  
-    return `http://localhost:3000`;
-  }
-  
-  export const getBackendBaseUrl = () => {
-    // If this is browser environment, return empty string
-    // because we want to use relative path for browser
-    if (typeof window !== "undefined") return "";
-  
-    // else return frontend url as we are using nextjs api routes
-    return getFrontendBaseUrl();
-  };
-  
-  export const getTRPCUrl = () => {
-    return getBackendBaseUrl() + "/api/trpc";
+  // This setting takes precedence 
+  // NEXT_PUBLIC_APP_URL is used for PRODUCTION environment and for local Development, NOT PREVIEW
+  let appUrl = process.env.NEXT_PUBLIC_APP_URL
+  if (appUrl) {
+    return appUrl
   }
 
-  export function absoluteUrl(path: string) {
-    return `${getFrontendBaseUrl()}${path}`
+  // This is used by the PREVIEW environment
+  // Vercel will automatically create VERCEL_URL and NEXT_PUBLIC_VERCEL_URL, but you have to expose this in the Vercel settings
+  // Both of these should be available, but this could change. 
+  const vercelUrl = process.env?.VERCEL_URL ?? process.env?.NEXT_PUBLIC_VERCEL_URL
+  if (vercelUrl) {
+    return `https://${vercelUrl}`
   }
-  
+
+  // If absolutely nothing else is defined, return the localhost:3000 address
+  return `http://localhost:3000`
+}
+
+export const getBackendBaseUrl = () => {
+  // If this is browser environment, return empty string
+  // because we want to use relative path for browser
+  if (typeof window !== 'undefined') return ''
+
+  // else return frontend url as we are using nextjs api routes
+  return getFrontendBaseUrl()
+}
+
+export const getTRPCUrl = () => {
+  return getBackendBaseUrl() + '/api/trpc'
+}
+
+export function absoluteUrl(path: string) {
+  return `${getFrontendBaseUrl()}${path}`
+}

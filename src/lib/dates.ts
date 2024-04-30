@@ -11,13 +11,16 @@ export function formatDate(date: Date | string) {
   return dayjs(date).format('MMMM D, YYYY')
 }
 
-export function formatDateTime(date: Date | string, dateTimeFormat: string) {
+export function formatDateTime(date: Date | string, dateTimeFormat?: string) {
   return dayjs(date).format(dateTimeFormat)
 }
 
-export function humanizeDate(date: Date | string) {
+export function humanizeDate(date: Date | string | undefined | null): string {
+  if (!date) {
+    return ''
+  }
   const pastDate = dayjs(date)
-  const timeAgo = pastDate.fromNow()
-  console.log('Time ago:', timeAgo)
-  return timeAgo
+  let elapsedTime: any  = ''
+  elapsedTime =  pastDate.fromNow()
+  return elapsedTime
 }

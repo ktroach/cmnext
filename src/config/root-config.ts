@@ -8,13 +8,30 @@ export const RootConfig = {
     pitch: "Create Blogs, Create Sites, Create your Dreams",
     waveAnimationColors: ['#38bfff', '#818cf8', '#c084fc', '#e879f9', '#22d3ee'],
     leftAction: { title: 'Learn More...', href: '' }, 
-    rightAction: { title: 'Start Creating', href: '' },
+    rightAction: { title: 'Start Creating', href: '/signup' },
     featureBlogsLimit: 4,  
     featureSitesLimit: 4,  
     logoImage: "",
+    emailProviderUrl: "https://react.email/api/send/test",
+    defaultCoverImage: '/public/images/blog/blog-one.png',
     signoutOptions: {
       signOutOptionText: "Sign Out"
     },
+    statusConfigs: 
+      {
+        draft: {        
+          statusColor: "text-blue-600"
+        },
+        published: {
+          statusColor: "text-green-600"
+        },
+        review: {        
+          statusColor: "text-yellow-600"
+        },
+        pending: {        
+          statusColor: "text-gray-600"
+        },                
+      },
     sections:  [
         {
           title: 'Blogs',

@@ -4,7 +4,7 @@ import SSOCallback from "@/components/auth/sso-callback"
 import { Block } from "@/components/containers/block"
 
 // Running out of edge function execution units on vercel free plan
-// export const runtime = "edge"
+export const runtime = "edge"
 
 export interface SSOCallbackPageProps {
   searchParams: HandleOAuthCallbackParams

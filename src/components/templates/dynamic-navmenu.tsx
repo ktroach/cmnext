@@ -20,6 +20,7 @@ export interface MenuItemType {
   href: string | undefined
   type: string | undefined
   items?: MenuItemType[]
+  isPage?: boolean
 }
 
 export interface NavMenuProps {

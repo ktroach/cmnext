@@ -4,10 +4,8 @@ import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 import type { z } from 'zod'
-// import { toast } from "sonner"
-import { Button } from '@/components/ui/button'
-import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
 import {
   Form,
@@ -19,7 +17,6 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { Icons } from '@/styles/icons'
 import {
   Select,
   SelectContent,
@@ -30,22 +27,18 @@ import {
 import { pageSchema } from '@/validations/page'
 import { PublisherToolbar } from '@/components/publisher/publisher-toolbar'
 import { MarkdownEditor } from '@/components/editor'
-import Link from 'next/link'
+import { useMounted } from '@/hooks/use-mounted'
 
 type Inputs = z.infer<typeof pageSchema>
 
-export function AddNewSitePageForm() {
+export function AddNewSitePageForm(params: any) {
   const router = useRouter()
   const [isPending, startTransition] = React.useTransition()
-  const [body, setBody] = useState('')
-  const [editorValue, setEditorValue] =
-    React.useState<any>('Just start typing!')
+  const [editorContent, setEditorContent] = React.useState<any>('')
+  const [contentStatus, setContentStatus] = React.useState<string>('DRAFT')
 
-  let allPages: any = []
-
-  allPages.push({ value: 'home', title: 'Home' })
-  allPages.push({ value: 'me', title: 'Me ' })
-  allPages.push({ value: 'you', title: 'You ' })
+  const mounted = useMounted()
+  console.log("mounted: ", mounted)
 
   const form = useForm<Inputs>({
     resolver: zodResolver(pageSchema),
@@ -58,32 +51,110 @@ export function AddNewSitePageForm() {
     },
   })
 
+  const getCurrentStatus = async () => {
+    setContentStatus('REVIEW')
+    return
+    const subref = params?.subRef ? params.subRef : undefined
+    const token = params?.token ? params.token : undefined    
+    const statusEndpoint = '/pages/[id]/status'
+    const response = await fetch(statusEndpoint, {
+      method: 'GET',
+      headers: { 
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+    })
+    console.log("response: ", response)
+  }
+
   function onSubmit(data: Inputs) {
     startTransition(async () => {
       try {
-        // console.log(">>> onSubmit >>> input data >>> ", data);
-        // const response = await fetch("/api/blog/create", {
-        //   method: "POST",
-        //   body: JSON.stringify({
-        //     title: data.title,
-        //     description: data.description,
-        //     image: "/_next/image?url=%2Fimages%2Fblog%2Fblog-two.jpg&w=750&q=75",
-        //     body: body
-        //   }),
-        // });
-        // console.log(">>> response >>> ", response);
-        // toast.success("Blog added successfully.")
-        // form.reset()
-        // router.push("/admin/blog")
+        saveDraft()
       } catch (err) {
         console.error(err)
       }
     })
   }
 
+  const closeEditor = () => {
+    const subref = params?.subRef ? params.subRef : undefined
+    if (subref) {
+      const url = `${window.location.origin}/publish/${subref}/pages`
+      router.push(url)
+    }
+  }
+
+  const saveDraft = async () => {
+    const subref = params?.subRef ? params.subRef : undefined
+    const token = params?.token ? params.token : undefined
+    console.log('Saving draft...', subref)
+    console.log(">>> form.getValues() >>> ", form.getValues())
+    const formControl = form.getValues()
+    const saveEndpoint = '/pages/save'
+    const response = await fetch(saveEndpoint, {
+      method: 'PATCH',
+      headers: { 
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        contentType: 'page',
+        title: formControl.title,
+        description: formControl.description,
+        image: formControl.image,
+        content: editorContent,
+      }),
+    })
+    console.log("response: ", response)
+    // TODO: returns the full data with the new id of the Page
+    if (response.status !== 204) {
+      toast.error('Failed to Save Draft')
+    }
+  }
+
+  const publishChanges = async () => {
+    const subref = params?.subRef ? params.subRef : undefined
+    const token = params?.token ? params.token : undefined
+    console.log('Publishing changes >>> subref >>> ', subref, " >>> token >>> ", token)
+    const formControl = form.getValues()
+    const publishEndpoint = '/pages/publish'
+    const response = await fetch(publishEndpoint, {
+      method: 'PUT',
+      headers: { 
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        contentType: 'page',
+        title: formControl.title,
+        description: formControl.description,
+        image: formControl.image,
+        content: editorContent,
+      }),
+    })
+    console.log("response: ", response)
+    // TODO: returns the data of the Page
+    if (response.status !== 204) {
+      toast.error('Failed to Publish Page')
+    }    
+  }
+
+  if (isPending) {
+    return (
+      <>Loading...</>
+    )
+  }  
+
   return (
     <>
-      <PublisherToolbar editorValue={editorValue} isPage={true} />
+      <PublisherToolbar
+        status={contentStatus}        
+        isBlog={false}
+        closeEditor={closeEditor}
+        saveDraft={saveDraft}
+        publishChanges={publishChanges}        
+      />
       <Form {...form}>
         <form
           className="grid gap-4"
@@ -169,10 +240,9 @@ export function AddNewSitePageForm() {
           />
           <Separator />
           <MarkdownEditor
-            value={editorValue}
-            onChange={setEditorValue}
-            editorHeight={750}
-            hideToolbar={false}
+            value={editorContent}
+            onChange={setEditorContent}
+            editorHeight="calc(100vh / 3)"
           />
         </form>
       </Form>

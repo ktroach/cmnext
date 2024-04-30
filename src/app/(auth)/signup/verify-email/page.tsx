@@ -10,9 +10,10 @@ import {
 } from "@/components/ui/card"
 import { VerifyEmailForm } from "@/components/auth/verify-email"
 import { Block } from "@/components/containers/block"
+import { getFrontendBaseUrl } from "@/lib/url"
 
 export const metadata: Metadata = {
-  metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
+  metadataBase: new URL(getFrontendBaseUrl()),
   title: "Verify Email",
   description: "Verify your email address to continue with your sign up",
 }

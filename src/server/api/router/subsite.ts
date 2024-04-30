@@ -1,7 +1,6 @@
 import { z } from 'zod'
 
 import { createTRPCRouter, protectedProcedure } from '../trpc'
-import { v4 as uuidv4 } from 'uuid'
 
 export const subsiteRouter = createTRPCRouter({
   create: protectedProcedure
@@ -12,15 +11,13 @@ export const subsiteRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ input, ctx }) => {
-      const subsiteRef = uuidv4()
-      console.log('subsiteRef: ', subsiteRef)
       const newSubSite = await ctx.db.subsite.create({
         data: {
           name: input.name,
           accountId: input.accountId,
-        //   subsiteRef: subsiteRef is automatically created by prisma 
         },
       })
+      console.log('>>> subsite create >>> newSubSite >>> ', newSubSite)
       return newSubSite
     }),
 

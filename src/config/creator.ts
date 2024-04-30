@@ -21,23 +21,11 @@ export const CreatorConfig: CreatorConfigType = {
           items: [],
         },    
         {
-          title: "Blog Posts",
+          title: "Blogs",
           href: "/blogs",
           icon: "edit",
           items: [],
         },
-        {
-          title: "Images & Files",
-          href: "/media",
-          icon: "upload",
-          items: [],
-        }, 
-        {
-          title: "Subscriptions",
-          href: "/subscriptions",
-          icon: "dollarSign",
-          items: [],
-        },                   
         {
           title: "Settings",
           href: "/settings",

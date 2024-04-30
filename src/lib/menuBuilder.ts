@@ -7,7 +7,7 @@ export const buildDyanmicMenus = (menuData: any) => {
       let groupName = '';
       for (let i = 0; i < menuData.length; i++) {
         const menuProps = menuData[i];
-        const slugItems = menuProps?.slug ? menuProps.slug : undefined;
+        const slugItems = menuProps?.slugItems ? menuProps.slugItems : undefined;
         const superGroup = menuProps && menuProps?.type === 'super-group' ? menuProps : undefined
         if (superGroup) {
           const subMenus = [];
@@ -53,6 +53,7 @@ export const buildDyanmicMenus = (menuData: any) => {
             }
           } else {
             // this will appear at the top of the menu as a single menu item
+            console.log('>>> menu for page >>> ')
             menuItems.push({
               label: menuProps?.label ? menuProps.label.toUpperCase() : '',
               href: useHref(menuProps),

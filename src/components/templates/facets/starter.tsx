@@ -8,20 +8,23 @@ import { ContentSection } from '@/components/containers/content-section'
 import { Wavy } from '@/components/animations/wavy'
 import { TextGenerator } from '@/components/animations/text-generator'
 import { DynamicNavMenu, MenuItemType } from '@/components/templates/dynamic-navmenu'
+import { getFrontendBaseUrl } from '@/lib/url'
+import { api } from '@/trpc/client'
 
-// TODO: pass in this data props from the server component. this data will be stored in the db at the subsite account level
 export interface StarterTemplateProps {
+  userName: any, 
   line: string
   words: string
   waves: any
-  leftAction: any // TODO: use explicit type
-  rightAction: any // TODO: use explicit type
-  sections: any // TODO: use explicit type and sections will be stored in the database
+  leftAction: any 
+  rightAction: any 
+  sections: any 
   menuConfig: MenuItemType[]
 }
 
 // TODO: This Starter Template facet will be used later. This is just a spike.
 export default function StarterTemplate({
+  userName, 
   line,
   words,
   waves,
@@ -67,6 +70,29 @@ export default function StarterTemplate({
     )
   }
 
+  let leftActionHref: string = leftAction?.href
+  let rightActionHref: string = rightAction?.href
+  let leftActionTitle: string = leftAction?.title
+  let rightActionTitle: string = rightAction?.title
+  if (userName) {
+    console.log('>>> userName >>> ', userName)
+    const { isLoading, data: resultData } = api.users.getUserSubSite.useQuery({
+      username: userName,
+  
+    })
+    if (!isLoading && resultData) {
+      console.log('resultData >>> ', resultData)
+      const baseUrl = getFrontendBaseUrl()
+      const subRef:string| undefined = resultData?.subsiteRef ? resultData.subsiteRef : undefined
+      if (subRef) {
+        leftActionHref = `${baseUrl}/p/${subRef}`
+        rightActionHref = `${baseUrl}/publish/${subRef}`
+        leftActionTitle = 'Take me to my Site'
+        rightActionTitle = 'Take me to my Dashboard'  
+      }
+    }  
+  }
+
   return (
     <>
       <div className="h-[60rem] relative w-full bg-transparent flex flex-col items-center justify-center overflow-hidden rounded-md">
@@ -92,15 +118,15 @@ export default function StarterTemplate({
               waveWidth={2}
             >
               <Button asChild>
-                <Link href={leftAction.href} className="mx-[5px]">
-                  {leftAction.title}
-                  <span className="sr-only">{leftAction.title}</span>
+                <Link href={leftActionHref} className="mx-[5px]">
+                  {leftActionTitle}
+                  <span className="sr-only">{leftActionTitle}</span>
                 </Link>
               </Button>
               <Button variant="outline" asChild>
-                <Link href={rightAction.href}>
-                  {rightAction.title}
-                  <span className="sr-only">{rightAction.title}</span>
+                <Link href={rightActionHref}>
+                  {rightActionTitle}
+                  <span className="sr-only">{rightActionTitle}</span>
                 </Link>
               </Button>
             </Wavy>

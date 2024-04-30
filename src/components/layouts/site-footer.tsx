@@ -20,14 +20,14 @@ export function SiteFooter() {
               {RootConfig.footerNav.map((item) => (
                 <div key={item.title} className="space-y-3">
                   <h4 className="text-base font-medium">{item.title}</h4>
-                  <ul className="space-y-3">
+                  <ul className="space-y-3 list-none">
                     {item.items.map((link) => (
                       <li key={link.title}>
                         <Link
                           href={link.href}
                           target={link?.external ? '_blank' : undefined}
                           rel={link?.external ? 'noreferrer' : undefined}
-                          className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+                          className="text-md text-muted-foreground transition-colors hover:text-foreground"
                         >
                           {link.title}
                           <span className="sr-only">{link.title}</span>
