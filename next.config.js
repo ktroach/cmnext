@@ -46,6 +46,7 @@ const nextConfig = {
         resourceRegExp: /^pg-native$|^cloudflare:sockets$/,
     })),
     config.plugins.push(
+      // @ts-ignore
       new webpack.NormalModuleReplacementPlugin(/^node:/, (resource) => {
         resource.request = resource.request.replace(/^node:/, "");
     })) 

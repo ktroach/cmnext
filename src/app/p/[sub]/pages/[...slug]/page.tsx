@@ -42,6 +42,7 @@ export async function generateMetadata({
 }
 
 export async function generateStaticParams(): Promise<PageProps['params'][]> {
+  // @ts-ignore 
   return allPages.map((page) => ({
     slug: page.slugAsParams.split('/'),
   }))
