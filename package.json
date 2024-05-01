@@ -4,7 +4,7 @@
   "description": "",
   "scripts": {
     "dev": "next",
-    "build": "next build",
+    "build": "npx prisma generate --data-proxy && next build",
     "start": "next start",
     "test": "jest --silent",
     "contentlayer:dev": "contentlayer dev",
@@ -25,6 +25,9 @@
   "dependencies": {
     "@clerk/nextjs": "^4.29.9",
     "@clerk/themes": "^1.7.9",
+    "@emotion/core": "^11.0.0",
+    "@emotion/react": "^11.8.2",
+    "@emotion/styled": "^11.8.1",    
     "@faker-js/faker": "^8.4.1",
     "@hookform/resolvers": "^3.3.4",
     "@ngneat/falso": "^7.2.0",
