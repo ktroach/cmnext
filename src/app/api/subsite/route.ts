@@ -3,7 +3,7 @@ import { GetSubsiteBySignInIdentifierBackend } from '@/lib/publisherBackend'
 import { type NextRequest } from "next/server"
 import { SetCorsHeaders } from '@/lib/cors'
 
-export const runtime = "edge"
+export const runtime = "nodejs"
 
 const handler = async (req: NextRequest) => {
   try {

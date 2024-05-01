@@ -7,7 +7,7 @@ import { SetCorsHeaders } from '@/lib/cors'
 
 // You need this to be "edge" runtime for production on vercel so that it can properly resolve the trpc endpoint:
 // If this is not set, you will get the following Error: Failed to collect page data for /api/trpc/[trpc]
-export const runtime = "edge"
+export const runtime = "nodejs"
 
 export const OPTIONS = () => {
   const response = new Response(null, {
