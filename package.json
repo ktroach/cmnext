@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next",
     "build": "next build",
+    "postinstall": "prisma generate --data-proxy",
     "prebuild": "echo Press CTRL-C to cancel",
     "postbuild": "npx prisma generate --data-proxy",
     "start": "next start",
