@@ -41,6 +41,13 @@ const nextConfig = {
   eslint: { ignoreDuringBuilds: true },
   typescript: { ignoreBuildErrors: true },
   staticPageGenerationTimeout: 1000,
+  webpack: (config, { webpack }) => {
+    config.plugins.push(new webpack.IgnorePlugin({
+        resourceRegExp: /^pg-native$|^cloudflare:sockets$/,
+    }))
+
+    return config
+},  
 }
 
 module.exports = withContentlayer(nextConfig)
