@@ -5,8 +5,6 @@
   "scripts": {
     "dev": "next",
     "build": "next build",
-    "prebuild": "echo Press CTRL-C to cancel",
-    "postbuild": "npx prisma generate --data-proxy",
     "start": "next start",
     "test": "jest --silent",
     "contentlayer:dev": "contentlayer dev",
