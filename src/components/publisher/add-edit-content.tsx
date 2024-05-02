@@ -44,13 +44,12 @@ export function AddEditContent(params: any) {
   const [coverImage, setCoverImage] = React.useState<any>()
 
   const editParams: any = params?.editParams ? params.editParams : null
-  console.log('>>> editParams >>> ', editParams)
-
   const editData: any =
     editParams && editParams?.editData && editParams?.editData
       ? editParams.editData
       : null
   const editContentId: number | null = editData && editData?.id ? editData.id : null
+  const editSlug: string | null = editData && editData?.slug ? editData.slug : null
   const editAuthorId: number | null = editData && editData?.authorId ? editData.authorId : null
   const editSubsiteId: number | null = editData && editData?.subsiteId ? editData.subsiteId : null
   const editStatus: string = editData && editData?.status ? editData.status : ''
@@ -142,6 +141,7 @@ export function AddEditContent(params: any) {
         content: editorContent,
         authorId: authorId,
         subsiteId: subsiteId,
+        metaData: `${editSlug}.mdx`,        
       }
       return mutationVars
     }
@@ -151,6 +151,7 @@ export function AddEditContent(params: any) {
         content: editorContent,
         authorId: authorId,
         subsiteId: subsiteId,
+        metaData: `${editSlug}.mdx`,        
       }
       return mutationVars
     }

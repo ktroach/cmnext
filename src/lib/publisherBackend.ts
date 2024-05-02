@@ -5,7 +5,7 @@ import {
   generateMDXDate,
   generateMDXFrontmatter,
 } from './mdxUtils'
-import { writeFileSync, existsSync, readFileSync } from 'fs'
+import { writeFileSync, existsSync, readFileSync,   } from 'fs'
 import { createDir, fileExists, generateUniqueFilename, verifyPath } from './fileUtils'
 import { getSubsiteBySignInIdentifierQuery } from './queries'
 
@@ -129,12 +129,18 @@ export const updateContent = async (
       return null
     }
 
-    const mdxMetaData: string | undefined  = data && data?.metaData  ? data.metaData : undefined
+    let mdxMetaData: string | undefined  = data && data?.metaData  ? data.metaData : undefined
     if (!mdxMetaData) {
       console.log('Failed to UPDATE content >>> MDX MetaData is missing or incomplete')
       return null
     }    
-    const mdxFileName: string = `${mdxContentPath}/${mdxMetaData}`
+    const mdxFileName: string = `${mdxContentPath}${mdxMetaData}`
+
+    if (!fileExists(mdxFileName)) {
+      console.log('Failed to UPDATE content >>> MDX File does not exist: ', mdxFileName)
+      return null
+    }    
+
     const existingFileContents = readFileSync(mdxFileName, 'utf8')
     const existingFileLines = existingFileContents.split('\n')
     const mdxFrontMatter = existingFileLines.slice(0, 8).join('\n')
@@ -147,6 +153,8 @@ export const updateContent = async (
 
     console.log('>>> Updating MDX File: ', mdxFileName)
     writeFileSync(mdxFileName, mdxFileContent, 'utf8')
+
+    console.log("Here's what it would have written to the file if i had let it: ", mdxFileContent)
 
     const saveContentResponse = {
       mdxFileName: mdxFileName,

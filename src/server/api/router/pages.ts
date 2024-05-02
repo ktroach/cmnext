@@ -79,6 +79,7 @@ export const pagesRouter = createTRPCRouter({
           deleted: false,
           authorId: input.authorId,
           subsiteId: input.subsiteId,
+          metaData: `${slug}.mdx`
         },
       })
     }),    
@@ -89,17 +90,18 @@ export const pagesRouter = createTRPCRouter({
         pageId: z.number().min(1),
         content: z.string().min(1),
         authorId: z.number().min(1),
-        subsiteId: z.number().min(1),    
+        subsiteId: z.number().min(1),   
+        metaData: z.string().min(1), 
       })
     )
     .mutation(async ({ input, ctx }) => {
-      const exists = await ctx.db.page.findFirst({
+      const existingPage = await ctx.db.page.findFirst({
         where: {
           id: input.pageId,
         },
       })
 
-      if (!exists) {
+      if (!existingPage) {
         console.log('Failed to UPDATE Content. Page does not exist: ', input.pageId)
         return null
       }
@@ -138,11 +140,13 @@ export const pagesRouter = createTRPCRouter({
       const response = await fetch(updateContentEndpoint, {
         method: 'POST',
         body: JSON.stringify({
-          isUpdate: false,
+          isUpdate: true,
           contentType: 'pages',
           subRef: subRef,
           body: input.content,
-          userName: user.name,           
+          userName: user.name,  
+          existingData: existingPage,          
+          metaData: input.metaData,        
         }),
       })      
 
@@ -157,6 +161,7 @@ export const pagesRouter = createTRPCRouter({
         },
         data: {
           content: input.content,
+          updatedAt: new Date()
         },
       })
     }),    

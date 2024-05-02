@@ -92,17 +92,18 @@ export const postRouter = createTRPCRouter({
         content: z.string().min(1),
         authorId: z.number().min(1),
         subsiteId: z.number().min(1),        
+        metaData: z.string().min(1),
       })
     )
     .mutation(async ({ input, ctx }) => {
-      const exists = await ctx.db.post.findFirst({
+      const existingPost = await ctx.db.post.findFirst({
         where: {
           id: input.postId,
           authorId: input.authorId,
           subsiteId: input.subsiteId,           
         },
       })
-      if (!exists) {
+      if (!existingPost) {
         console.log('Failed to update content. Post no longer exists: ', input.postId)
         return null
       }
@@ -141,11 +142,13 @@ export const postRouter = createTRPCRouter({
       const response = await fetch(updateContentEndpoint, {
         method: 'POST',
         body: JSON.stringify({
-          isUpdate: false,
+          isUpdate: true,
           contentType: 'blogs',
           subRef: subRef,
           body: input.content,
-          userName: user.name,           
+          userName: user.name,  
+          existingData: existingPost,    
+          metaData: input.metaData,        
         }),
       })      
 
@@ -160,6 +163,7 @@ export const postRouter = createTRPCRouter({
         },
         data: {
           content: input.content,
+          updatedAt: new Date()
         },
       })
     }),
