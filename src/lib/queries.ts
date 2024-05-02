@@ -206,3 +206,57 @@ export const getAllBlogsBySubRef = async (
   }
   return null
 }
+
+export const getPageBySlug = async (
+  slug: string | null,  
+  authorId: number | null,
+  subsiteId: number | null
+): Promise<any | undefined> => {
+  if (!slug) {
+    return null
+  }  
+  if (!authorId) {
+    return null
+  }
+  if (!subsiteId) {
+    return null
+  }
+  const resultData = await sql`
+    SELECT "Page".*
+      FROM "Page"
+     WHERE "Page"."slug" = ${slug}     
+       AND "Page"."authorId" = ${authorId}     
+       AND "Page"."subsiteId" = ${subsiteId}  
+    `
+  if (resultData && resultData.length > 0) {
+    return resultData
+  }
+  return null
+}
+
+export const getPostBySlug = async (
+  slug: string | null,  
+  authorId: number | null,
+  subsiteId: number | null
+): Promise<any | undefined> => {
+  if (!slug) {
+    return null
+  }  
+  if (!authorId) {
+    return null
+  }
+  if (!subsiteId) {
+    return null
+  }
+  const resultData = await sql`
+    SELECT "Post".*
+      FROM "Post"
+     WHERE "Post"."slug" = ${slug}     
+       AND "Post"."authorId" = ${authorId}     
+       AND "Post"."subsiteId" = ${subsiteId}  
+    `
+  if (resultData && resultData.length > 0) {
+    return resultData
+  }
+  return null
+}

@@ -2,7 +2,6 @@ import * as React from "react"
 import Link from "next/link"
 import { ArrowRightIcon } from "@radix-ui/react-icons"
 import { Slot } from "@radix-ui/react-slot"
-
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 
@@ -13,6 +12,8 @@ interface ContentSectionProps extends React.HTMLAttributes<HTMLDivElement> {
   linkText?: string
   children: React.ReactNode
   asChild?: boolean
+  showButton?: boolean
+  mdxCode?: any 
 }
 
 export function ContentSection({
@@ -23,6 +24,8 @@ export function ContentSection({
   children,
   className,
   asChild = false,
+  showButton,
+  mdxCode, 
   ...props
 }: ContentSectionProps) {
   const ChildrenShell = asChild ? Slot : "div"
@@ -40,6 +43,7 @@ export function ContentSection({
             </p>
           ) : null}
         </div>
+        {showButton ? (
         <Button variant="outline" className="hidden sm:flex" asChild>
           <Link href={href}>
             {linkText}
@@ -47,6 +51,7 @@ export function ContentSection({
             <span className="sr-only"> {linkText}</span>
           </Link>
         </Button>
+        ) : null}
       </div>
       <div className="space-y-8">
         <ChildrenShell

@@ -3,7 +3,7 @@ import { Header } from "@/components/layouts/header"
 import { Block } from "@/components/containers/block"
 
 // Running out of edge function execution units on vercel free plan
-export const runtime = "nodejs"
+// export const runtime = "edge"
 
 export default function SignOutPage() {
   return (

@@ -62,7 +62,7 @@ export const Starfield = (props: ParticlesProps) => {
           options={{
             background: {
               color: {
-                value: background || "#0d47a1",
+                value: background || "#000000",
               },
             },
             fullScreen: {

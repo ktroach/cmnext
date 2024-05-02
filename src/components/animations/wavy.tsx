@@ -130,7 +130,7 @@ export const Wavy = ({
       {timedOut ? (<></>) : 
       (
         <canvas
-        className="absolute inset-0 z-0"
+        className="absolute inset-0 z-0 mt-[-333px]"
         ref={canvasRef}
         id="canvas"
       ></canvas>

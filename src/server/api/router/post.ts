@@ -44,8 +44,8 @@ export const postRouter = createTRPCRouter({
       console.log('>>> post >>> user >>> ', user)
 
       const baseUrl: string = getFrontendBaseUrl()
-      const saveEndpoint: string = `${baseUrl}/api/content/save`
-      const response = await fetch(saveEndpoint, {
+      const createContentEndpoint: string = `${baseUrl}/api/content/create`
+      const response = await fetch(createContentEndpoint, {
         method: 'POST',
         body: JSON.stringify({
           isUpdate: false,
@@ -106,6 +106,51 @@ export const postRouter = createTRPCRouter({
         console.log('Failed to update content. Post no longer exists: ', input.postId)
         return null
       }
+
+      // you have to get the username 
+      const user = await ctx.db.user.findFirst({
+        where: {
+          id: input.authorId,
+        },
+      })
+      if (!user) {
+        console.log('Failed to UPDATE Content. User does not exist.')
+        return null
+      }    
+      
+      console.log('>>> pages >>> user >>> ', user)      
+
+      // you have to get the subRef 
+      const subsite = await ctx.db.subsite.findFirst({
+        where: {
+          id: input.subsiteId,
+        },
+      })      
+      if (!subsite) {
+        console.log('Failed to UPDATE Content. subsite does not exist.')
+        return null
+      }    
+      const subRef = subsite?.subsiteRef ? subsite.subsiteRef : null
+      if (!subRef) {
+        console.log('Failed to UPDATE Content. subsiteRef does not exist.')
+        return null
+      }    
+      
+      const baseUrl: string = getFrontendBaseUrl()
+      const updateContentEndpoint: string = `${baseUrl}/api/content/save`
+      const response = await fetch(updateContentEndpoint, {
+        method: 'POST',
+        body: JSON.stringify({
+          isUpdate: false,
+          contentType: 'blogs',
+          subRef: subRef,
+          body: input.content,
+          userName: user.name,           
+        }),
+      })      
+
+      const responseData = await response.json()
+      console.log(">>> post UPDATE >>> responseData >>> ", responseData)      
 
       return await ctx.db.post.update({
         where: {

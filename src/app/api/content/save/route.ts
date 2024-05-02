@@ -1,4 +1,4 @@
-import { saveContent } from '@/lib/publisherBackend'
+import { updateContent } from '@/lib/publisherBackend'
 import { auth, currentUser } from '@clerk/nextjs'
 
 export async function POST(req: Request) {
@@ -24,7 +24,7 @@ export async function POST(req: Request) {
       return new Response(null, { status: 404 })      
     }
 
-    const responseData = await saveContent(contentType, userName, subRef, data)
+    const responseData = await updateContent(contentType, userName, subRef, data)
 
     return Response.json( responseData )
   } catch (error) {
