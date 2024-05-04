@@ -1,15 +1,14 @@
-import type { Metadata } from 'next';
-import { env } from '@/env.mjs';
-import { metaConfig } from "@/config/static";
+import type { Metadata } from 'next'
+import { RootConfig as rootConfig } from '@/config/root-config'
 import { getFrontendBaseUrl } from '@/lib/url'
 
 export const metadata: Metadata = {
     metadataBase: new URL(getFrontendBaseUrl()),
     title: {
-        default: metaConfig.name,
-        template: `%s - ${metaConfig.name}`,
+        default: rootConfig?.name,
+        template: `%s - ${rootConfig?.name}`,
     },
-    description: metaConfig.description,
+    description: rootConfig?.description,
     keywords: [
         'Next.js',
         'React',

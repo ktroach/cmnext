@@ -5,8 +5,8 @@ import {
   generateMDXDate,
   generateMDXFrontmatter,
 } from './mdxUtils'
-import { writeFileSync, existsSync } from 'fs'
-import { createDir, generateUniqueFilename, verifyPath } from './fileUtils'
+import { writeFileSync, existsSync, readFileSync,   } from 'fs'
+import { createDir, fileExists, generateUniqueFilename, verifyPath } from './fileUtils'
 import { getSubsiteBySignInIdentifierQuery } from './queries'
 
 export const GetSubsiteBySignInIdentifierBackend = async (userId: string, signInIdentifier: string) => {
@@ -25,15 +25,16 @@ export const GetSubsiteBySignInIdentifierBackend = async (userId: string, signIn
   return subSiteResult
 }
 
+// TODO: Consider rewriting all of this backend I/O in Rust 
 export const saveContent = async (
   contentType: string, 
   userName: string,
   subRef: string,
   data: any
 ) => {
-  console.log('saveContent...')
   try {
 
+    // TODO: Fix Author avatar and url
     const authorMeta = {
       title: userName,
       description: `${userName}`, 
@@ -42,14 +43,10 @@ export const saveContent = async (
     }
 
     const mdxAuthorContent = generateAuthorFrontmatter(authorMeta)
-    console.log('>>> mdxAuthorContent: ', mdxAuthorContent)
     const mdxAuthorsPath: string = `./src/content/authors`
-    console.log('>>> mdxAuthorsPath: ', mdxAuthorsPath)
-
     const mdxAuthorFileName: string = `${mdxAuthorsPath}/${userName}.mdx`
 
     if (!existsSync(mdxAuthorFileName)) {
-      console.log('>>> Writing Author File: ', mdxAuthorFileName)
       writeFileSync(mdxAuthorFileName, mdxAuthorContent)
     } else {
       console.log(
@@ -72,18 +69,17 @@ export const saveContent = async (
     console.log('generatedFilename:', generatedFilename)
 
     const contentSlug: string = `/content/${contentType}/${subRef}`
-    const mdxBlogPath: string = `./src${contentSlug}`
+    const mdxContentPath: string = `./src${contentSlug}`
 
-    if (!verifyPath(mdxBlogPath)) {
-      console.log('creating directory: ', mdxBlogPath, '...')
-      createDir(mdxBlogPath)
+    if (!verifyPath(mdxContentPath)) {
+      console.log('creating directory: ', mdxContentPath, '...')
+      createDir(mdxContentPath)
     }
 
-    const mdxFileName: string = `${mdxBlogPath}/${generatedFilename}.mdx`
+    const mdxFileName: string = `${mdxContentPath}/${generatedFilename}.mdx`
     const slug: string = `${generatedFilename}`
 
-    console.log('>>> Writing Post File: ', mdxFileName)
-    writeFileSync(mdxFileName, mdxFileContent)
+    writeFileSync(mdxFileName, mdxFileContent, 'utf8')
 
     const saveContentResponse = {
       generatedFilename: generatedFilename,
@@ -92,8 +88,6 @@ export const saveContent = async (
       mdxMeta: MdxMeta,
       mdxDate: mdxDate,
     }
-
-    console.log('>>> saveContentResponse >>> ', saveContentResponse)
 
     return saveContentResponse
 
@@ -109,4 +103,58 @@ export const getContent = () => {
 
 export const publishContent = () => {
   console.log('publishContent...')
+}
+
+// TODO: Consider rewriting all of this backend I/O in Rust 
+export const updateContent = async (
+  contentType: string, 
+  userName: string,
+  subRef: string,
+  data: any
+) => {
+  try {
+
+    const contentSlug: string = `/content/${contentType}/${subRef}`
+    const mdxContentPath: string = `./src${contentSlug}`
+
+    if (!verifyPath(mdxContentPath)) {
+      console.log('Failed to UPDATE content >>> directory does not exist >>> ', mdxContentPath)
+      return null
+    }
+
+    let mdxMetaData: string | undefined  = data && data?.metaData  ? data.metaData : undefined
+    if (!mdxMetaData) {
+      console.log('Failed to UPDATE content >>> MDX MetaData is missing or incomplete')
+      return null
+    }    
+    const mdxFileName: string = `${mdxContentPath}${mdxMetaData}`
+
+    if (!fileExists(mdxFileName)) {
+      console.log('Failed to UPDATE content >>> MDX File does not exist: ', mdxFileName)
+      return null
+    }    
+
+    const existingFileContents = readFileSync(mdxFileName, 'utf8')
+    const existingFileLines = existingFileContents.split('\n')
+    const mdxFrontMatter = existingFileLines.slice(0, 8).join('\n')
+    if (!mdxFrontMatter) {
+      console.log('Failed to UPDATE content >>> MDX FrontMatter error')
+      return null
+    }
+    
+    const mdxFileContent = `${mdxFrontMatter}\n${data.body}`
+
+    writeFileSync(mdxFileName, mdxFileContent, 'utf8')
+
+    const saveContentResponse = {
+      mdxFileName: mdxFileName,
+      userName: userName, 
+      subRef: subRef
+    }
+
+    return saveContentResponse
+  } catch (ex) {
+    console.log('Failed to Save Content >>> ', ex)
+    return null
+  }
 }

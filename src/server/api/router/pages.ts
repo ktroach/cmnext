@@ -42,12 +42,10 @@ export const pagesRouter = createTRPCRouter({
         return null
       }    
       
-      console.log('>>> pages >>> user >>> ', user)
-
       const baseUrl: string = getFrontendBaseUrl()
-      const saveEndpoint: string = `${baseUrl}/api/content/save`
-      // TODO: isPost? or Page?
-      const response = await fetch(saveEndpoint, {
+      const createContentEndpoint: string = `${baseUrl}/api/content/create`
+      // TODO: This Fetch may cause us a problem with CORS, re-evaluate the create content endpoint architeture completely 
+      const response = await fetch(createContentEndpoint, {
         method: 'POST',
         body: JSON.stringify({
           isUpdate: false,
@@ -61,15 +59,15 @@ export const pagesRouter = createTRPCRouter({
         }),
       })
 
-      if (response.status !== 204) {
+      if (response.status !== 200) {
         console.log('Error saving Page >>> input >>> ', input)
         return null
       }
 
       const responseData = await response.json()
-      console.log("post create >>> responseData >>> ", responseData)
+      console.log(">>> page >>> create >>> responseData >>> ", responseData)
       const slug = responseData && responseData?.slug ? responseData.slug : undefined
-      console.log("post create >>> slug >>> ", slug)
+      console.log(">>> page >>> create >>> slug >>> ", slug)
 
       return await ctx.db.page.create({
         data: {
@@ -80,6 +78,7 @@ export const pagesRouter = createTRPCRouter({
           deleted: false,
           authorId: input.authorId,
           subsiteId: input.subsiteId,
+          metaData: `${slug}.mdx`
         },
       })
     }),    
@@ -90,20 +89,65 @@ export const pagesRouter = createTRPCRouter({
         pageId: z.number().min(1),
         content: z.string().min(1),
         authorId: z.number().min(1),
-        subsiteId: z.number().min(1),         
+        subsiteId: z.number().min(1),   
+        metaData: z.string().min(1), 
       })
     )
     .mutation(async ({ input, ctx }) => {
-      const exists = await ctx.db.page.findFirst({
+      const existingPage = await ctx.db.page.findFirst({
         where: {
           id: input.pageId,
         },
       })
 
-      if (!exists) {
+      if (!existingPage) {
         console.log('Failed to UPDATE Content. Page does not exist: ', input.pageId)
         return null
       }
+
+      // you have to get the username 
+      const user = await ctx.db.user.findFirst({
+        where: {
+          id: input.authorId,
+        },
+      })
+      if (!user) {
+        console.log('Failed to UPDATE Content. User does not exist.')
+        return null
+      }    
+      
+      const subsite = await ctx.db.subsite.findFirst({
+        where: {
+          id: input.subsiteId,
+        },
+      })      
+      if (!subsite) {
+        console.log('Failed to UPDATE Content. subsite does not exist.')
+        return null
+      }    
+      const subRef = subsite?.subsiteRef ? subsite.subsiteRef : null
+      if (!subRef) {
+        console.log('Failed to UPDATE Content. subsiteRef does not exist.')
+        return null
+      }          
+
+      const baseUrl: string = getFrontendBaseUrl()
+      const updateContentEndpoint: string = `${baseUrl}/api/content/save`
+      const response = await fetch(updateContentEndpoint, {
+        method: 'POST',
+        body: JSON.stringify({
+          isUpdate: true,
+          contentType: 'pages',
+          subRef: subRef,
+          body: input.content,
+          userName: user.name,  
+          existingData: existingPage,          
+          metaData: input.metaData,        
+        }),
+      })      
+
+      const responseData = await response.json()
+      console.log(">>> page UPDATE >>> responseData >>> ", responseData)
 
       return await ctx.db.page.update({
         where: {
@@ -113,6 +157,7 @@ export const pagesRouter = createTRPCRouter({
         },
         data: {
           content: input.content,
+          updatedAt: new Date()
         },
       })
     }),    

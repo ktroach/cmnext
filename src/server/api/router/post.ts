@@ -41,11 +41,10 @@ export const postRouter = createTRPCRouter({
         return null
       }    
       
-      console.log('>>> post >>> user >>> ', user)
-
       const baseUrl: string = getFrontendBaseUrl()
-      const saveEndpoint: string = `${baseUrl}/api/content/save`
-      const response = await fetch(saveEndpoint, {
+      const createContentEndpoint: string = `${baseUrl}/api/content/create`
+      // TODO: Re-evaluate the api endpoint and fetch here. It may be problematic in edge scenarios. Consider an alternative solution.
+      const response = await fetch(createContentEndpoint, {
         method: 'POST',
         body: JSON.stringify({
           isUpdate: false,
@@ -58,9 +57,6 @@ export const postRouter = createTRPCRouter({
           userName: user.name, 
         }),
       })
-
-      console.log('>>> post >>> response >>> ', response)
-      console.log('>>> post >>> response.status >>> ', response.status)
 
       if (response.status !== 200) {
         console.log('Error saving Blog in TRPC Route >>> input >>> ', input)
@@ -92,20 +88,65 @@ export const postRouter = createTRPCRouter({
         content: z.string().min(1),
         authorId: z.number().min(1),
         subsiteId: z.number().min(1),        
+        metaData: z.string().min(1),
       })
     )
     .mutation(async ({ input, ctx }) => {
-      const exists = await ctx.db.post.findFirst({
+      const existingPost = await ctx.db.post.findFirst({
         where: {
           id: input.postId,
           authorId: input.authorId,
           subsiteId: input.subsiteId,           
         },
       })
-      if (!exists) {
+      if (!existingPost) {
         console.log('Failed to update content. Post no longer exists: ', input.postId)
         return null
       }
+
+      // you have to get the username 
+      const user = await ctx.db.user.findFirst({
+        where: {
+          id: input.authorId,
+        },
+      })
+      if (!user) {
+        console.log('Failed to UPDATE Content. User does not exist.')
+        return null
+      }    
+      
+      const subsite = await ctx.db.subsite.findFirst({
+        where: {
+          id: input.subsiteId,
+        },
+      })      
+      if (!subsite) {
+        console.log('Failed to UPDATE Content. subsite does not exist.')
+        return null
+      }    
+      const subRef = subsite?.subsiteRef ? subsite.subsiteRef : null
+      if (!subRef) {
+        console.log('Failed to UPDATE Content. subsiteRef does not exist.')
+        return null
+      }    
+      
+      const baseUrl: string = getFrontendBaseUrl()
+      const updateContentEndpoint: string = `${baseUrl}/api/content/save`
+      const response = await fetch(updateContentEndpoint, {
+        method: 'POST',
+        body: JSON.stringify({
+          isUpdate: true,
+          contentType: 'blogs',
+          subRef: subRef,
+          body: input.content,
+          userName: user.name,  
+          existingData: existingPost,    
+          metaData: input.metaData,        
+        }),
+      })      
+
+      const responseData = await response.json()
+      console.log(">>> post UPDATE >>> responseData >>> ", responseData)      
 
       return await ctx.db.post.update({
         where: {
@@ -115,6 +156,7 @@ export const postRouter = createTRPCRouter({
         },
         data: {
           content: input.content,
+          updatedAt: new Date()
         },
       })
     }),

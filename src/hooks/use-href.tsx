@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react'
 import { getFrontendBaseUrl } from '@/lib/url'
 
 const useHref = (menuProps: any) => {
-  console.log('>>> menuProps.isPage >>> ', menuProps?.isPage)    
   const BaseUrl = getFrontendBaseUrl()
   const [hrefResult, setHrefResult] = useState(BaseUrl)
 

@@ -16,14 +16,19 @@ import { Icons } from '@/styles/icons'
 import { ThemeToggle } from './theme-toggle'
 import { RootConfig } from '@/config/root-config'
 import { MainNav } from './main-nav'
+import { getFrontendBaseUrl } from '@/lib/url'
 
 interface SiteHeaderProps {
   user: User | null
+  subRef: string | undefined
 }
 
-export function SiteHeader({ user }: SiteHeaderProps) {
+export function SiteHeader({ user, subRef }: SiteHeaderProps) {
   let accountInitials: string | undefined = ''
   let accountEmail: string | undefined = ''
+  const publisherUrl: string | undefined = subRef ? `/publish/${subRef}` : undefined
+  const baseUrl: string = getFrontendBaseUrl()
+  const accountUrl: string = publisherUrl ? `${baseUrl}${publisherUrl}/settings` : ''
 
   if (user) {
     accountInitials = `${user?.firstName?.charAt(0) ?? ''} ${
@@ -76,12 +81,12 @@ export function SiteHeader({ user }: SiteHeaderProps) {
                   <DropdownMenuSeparator />
                   <DropdownMenuGroup>
                     <DropdownMenuItem asChild>
-                      <Link href="/dashboard/account">
+                      <Link href={accountUrl}>
                         <Icons.user
                           className="mr-2 h-4 w-4"
                           aria-hidden="true"
                         />
-                        Account
+                        Account Settings
                         <DropdownMenuShortcut>⇧⌘A</DropdownMenuShortcut>
                       </Link>
                     </DropdownMenuItem>
@@ -93,7 +98,7 @@ export function SiteHeader({ user }: SiteHeaderProps) {
                         className="mr-2 h-4 w-4"
                         aria-hidden="true"
                       />
-                      Log out
+                      Sign Out
                       <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
                     </Link>
                   </DropdownMenuItem>

@@ -58,30 +58,51 @@ export const verifySubRefAccess = async (
   return false
 }
 
-export const getSubsiteBySignInIdentifierQuery = async (userId: string, signInIdentifier: string) => {
+export const getSubsiteBySignInIdentifierQuery = async (
+  userId: string | undefined,
+  signInIdentifier: string | undefined
+) => {
   if (!userId) {
-    console.log('>>> Unauthorized call to Query Resource: [getSubsiteBySignInIdentifierQuery], Reason: [userId]')
+    console.log(
+      '>>> Unauthorized call to Query Resource: [getSubsiteBySignInIdentifierQuery], Reason: [userId]'
+    )
     return null
   }
 
   if (!signInIdentifier) {
-    console.log('>>> Unauthorized call to Query Resource: [getSubsiteBySignInIdentifierQuery], Reason: [signInIdentifier]')
+    console.log(
+      '>>> Unauthorized call to Query Resource: [getSubsiteBySignInIdentifierQuery], Reason: [signInIdentifier]'
+    )
     return null
   }
 
-  const identifierField: string = signInIdentifier.indexOf('@') != -1 ? 'email' : 'name'
-  console.log('>>> identifierField >>> ', identifierField)
+  const identifierField: string =
+    signInIdentifier.indexOf('@') != -1 ? 'email' : 'name'
+  let queryResult: any = null
+  if (identifierField === 'email') {
+    queryResult = await sql`
+      SELECT "User"."id" AS "userId", 
+            "Subsite"."id" AS "subsiteId", 
+            "Subsite"."subsiteRef" AS "subRef"  
+        FROM "User"
+        JOIN "Account" ON "User"."id" = "Account"."adminId"
+        JOIN "Subsite" ON "Account"."id" = "Subsite"."accountId"
+        WHERE "User"."email" = ${signInIdentifier};
+        `
+  }
 
-  const queryResult = await sql`
-  SELECT "User"."id" AS "userId", 
-         "Subsite"."id" AS "subsiteId", 
-         "Subsite"."subsiteRef" AS "subRef"  
-    FROM "User"
-    JOIN "Account" ON "User"."id" = "Account"."adminId"
-    JOIN "Subsite" ON "Account"."id" = "Subsite"."accountId"
-    WHERE "User"."email" = ${signInIdentifier};
-    `
-  console.log('>>> queries >>> getSubsiteBySignInIdentifierQuery >>> resultData >>> ', queryResult)
+  if (identifierField === 'name') {
+    queryResult = await sql`
+      SELECT "User"."id" AS "userId", 
+            "Subsite"."id" AS "subsiteId", 
+            "Subsite"."subsiteRef" AS "subRef"  
+        FROM "User"
+        JOIN "Account" ON "User"."id" = "Account"."adminId"
+        JOIN "Subsite" ON "Account"."id" = "Subsite"."accountId"
+        WHERE "User"."name" = ${signInIdentifier};
+        `
+  }
+
   if (queryResult && queryResult.length > 0) {
     return queryResult[0]
   }
@@ -168,7 +189,7 @@ export const getAllBlogsByPublisher = async (
 }
 
 export const getAllPagesBySubRef = async (
-  subRef: string | null,
+  subRef: string | null
 ): Promise<any | undefined> => {
   if (!subRef) {
     return null
@@ -188,7 +209,7 @@ export const getAllPagesBySubRef = async (
 }
 
 export const getAllBlogsBySubRef = async (
-  subRef: string | null,
+  subRef: string | null
 ): Promise<any | undefined> => {
   if (!subRef) {
     return null
@@ -200,6 +221,60 @@ export const getAllBlogsBySubRef = async (
       WHERE "Subsite"."subsiteRef" = ${subRef}     
         AND "Post"."deleted" = false        
    ORDER BY "Post"."createdAt" DESC
+    `
+  if (resultData && resultData.length > 0) {
+    return resultData
+  }
+  return null
+}
+
+export const getPageBySlug = async (
+  slug: string | null,
+  authorId: number | null,
+  subsiteId: number | null
+): Promise<any | undefined> => {
+  if (!slug) {
+    return null
+  }
+  if (!authorId) {
+    return null
+  }
+  if (!subsiteId) {
+    return null
+  }
+  const resultData = await sql`
+    SELECT "Page".*
+      FROM "Page"
+     WHERE "Page"."slug" = ${slug}     
+       AND "Page"."authorId" = ${authorId}     
+       AND "Page"."subsiteId" = ${subsiteId}  
+    `
+  if (resultData && resultData.length > 0) {
+    return resultData
+  }
+  return null
+}
+
+export const getPostBySlug = async (
+  slug: string | null,
+  authorId: number | null,
+  subsiteId: number | null
+): Promise<any | undefined> => {
+  if (!slug) {
+    return null
+  }
+  if (!authorId) {
+    return null
+  }
+  if (!subsiteId) {
+    return null
+  }
+  const resultData = await sql`
+    SELECT "Post".*
+      FROM "Post"
+     WHERE "Post"."slug" = ${slug}     
+       AND "Post"."authorId" = ${authorId}     
+       AND "Post"."subsiteId" = ${subsiteId}  
     `
   if (resultData && resultData.length > 0) {
     return resultData

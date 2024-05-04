@@ -42,6 +42,7 @@ export async function generateMetadata({
 }
 
 export async function generateStaticParams(): Promise<PageProps['params'][]> {
+  // @ts-ignore 
   return allPages.map((page) => ({
     slug: page.slugAsParams.split('/'),
   }))
@@ -49,7 +50,6 @@ export async function generateStaticParams(): Promise<PageProps['params'][]> {
 
 export default async function PagePage({ params }: PageProps) {
   const page = await getPageFromSlug(params)
-
   if (!page) {
     console.log("page not found: ", params)
     notFound()

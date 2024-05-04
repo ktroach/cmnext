@@ -7,6 +7,7 @@ import {
   MenuItem,
 } from '@/components/animations/floating-navbar'
 import { cn } from '@/lib/utils'
+import { ThemeToggle } from '@/components/layouts/theme-toggle'
 
 export interface MenuItemProps {
   item: MenuItemType
@@ -79,6 +80,7 @@ export const DynamicNavMenu = ({className, menuItems, active, setActive }: Dynam
     >
       <Menu setActive={setActive}>
         <NavMenu menuItems={menuItems} setActive={setActive} active={active} />
+        <ThemeToggle className="pt-1 mt-[-12px]" />
       </Menu>
     </div>
   )

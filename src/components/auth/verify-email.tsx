@@ -167,15 +167,9 @@ export function VerifyEmailForm() {
     })
 
     const baseUrl: string = getFrontendBaseUrl()
-    const identifier: string | null =
-      userEmail && typeof userEmail === 'string' ? userEmail : null
+    const identifier: string | null = userEmail && typeof userEmail === 'string' ? userEmail : null
     if (identifier) {
-      const subRef: string | undefined = await getSubRefByIdentifier(
-        baseUrl,
-        identifier
-      )
-      console.log(">> verify-email >> subRef from api >>> ", subRef)
-      
+      const subRef: any = await getSubRefByIdentifier(identifier)
       if (!subRef) {
         console.log(">>> verify-email >>> subRef not provided >>> return to origin.") 
       }
@@ -186,7 +180,7 @@ export function VerifyEmailForm() {
         toast.error('There was a problem generating your site.', {
           description: 'Please check your email for further instructions.',
         })
-        // return
+        // TODO: return?
       }
       setPublishUrl(publisherUrl)
       sendSignupEmail(user, publisherUrl)

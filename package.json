@@ -4,9 +4,7 @@
   "description": "",
   "scripts": {
     "dev": "next",
-    "build": "next build",
-    "prebuild": "echo Press CTRL-C to cancel",
-    "postbuild": "npx prisma generate",
+    "build": "npx prisma generate && next build",
     "start": "next start",
     "test": "jest --silent",
     "contentlayer:dev": "contentlayer dev",
@@ -27,6 +25,9 @@
   "dependencies": {
     "@clerk/nextjs": "^4.29.9",
     "@clerk/themes": "^1.7.9",
+    "@emotion/core": "^11.0.0",
+    "@emotion/react": "^11.8.2",
+    "@emotion/styled": "^11.8.1",
     "@faker-js/faker": "^8.4.1",
     "@hookform/resolvers": "^3.3.4",
     "@ngneat/falso": "^7.2.0",
@@ -91,12 +92,14 @@
     "deep-email-validator": "^0.1.21",
     "embla-carousel-react": "8.0.0-rc11",
     "framer-motion": "^11.0.6",
+    "html-react-parser": "^5.1.10",
     "jspdf": "^2.5.1",
     "jspdf-autotable": "^3.5.31",
     "license-generator": "^0.0.13",
     "lodash": "4.17.21",
     "lodash-es": "^4.17.21",
     "lucide-react": "^0.263.0",
+    "markdown-it": "^14.1.0",
     "md-editor-rt": "^4.6.1",
     "msr": "^1.3.4",
     "next": "^14.1.1",
@@ -166,8 +169,11 @@
     "ts-jest": "^29.1.1",
     "typescript": "^5.3.2"
   },
-    "browser": {
-      "crypto": false,
-      "stream": false
-  }  
+  "browser": {
+    "fs": false,
+    "os": false,
+    "path": false,
+    "crypto": false,
+    "stream": false
+  }
 }

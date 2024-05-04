@@ -1,4 +1,4 @@
-import { updateContent } from '@/lib/publisherBackend'
+import { saveContent } from '@/lib/publisherBackend'
 import { auth, currentUser } from '@clerk/nextjs'
 
 export async function POST(req: Request) {
@@ -9,7 +9,7 @@ export async function POST(req: Request) {
   try {
     const subRef = data?.subRef ? data.subRef : undefined
     if (!subRef) {
-        console.log('>>> save content route >>> subRef not found >>> ')
+        console.log('>>> create content route >>> subRef not found >>> ')
         return new Response(null, { status: 404 })
     }    
 
@@ -17,11 +17,11 @@ export async function POST(req: Request) {
     const userName: string | undefined = data?.userName ? data.userName : undefined
 
     if (!userName) {
-      console.log('>>> save content route >>> userName not found >>> ')
+      console.log('>>> create content route >>> userName not found >>> ')
       return new Response(null, { status: 404 })      
     }
 
-    const responseData = await updateContent(contentType, userName, subRef, data)
+    const responseData = await saveContent(contentType, userName, subRef, data)
 
     return Response.json( responseData )
   } catch (error) {

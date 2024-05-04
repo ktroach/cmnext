@@ -17,7 +17,6 @@ export const subsiteRouter = createTRPCRouter({
           accountId: input.accountId,
         },
       })
-      console.log('>>> subsite create >>> newSubSite >>> ', newSubSite)
       return newSubSite
     }),
 

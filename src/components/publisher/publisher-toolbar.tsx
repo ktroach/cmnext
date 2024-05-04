@@ -13,6 +13,7 @@ interface PublisherToolbarProps {
   publishChanges?: any
   publishDisabled?: boolean
   isUpdating?: boolean
+  isSaveDisabled?: boolean
 }
 
 export const PublisherToolbar = ({
@@ -60,35 +61,42 @@ export const PublisherToolbar = ({
     return renderIcon(statusColor)
   }
 
+  const isInUpdatingState = props?.isUpdating && props?.isUpdating === true ? true : false 
+  const isPublishDisabled = props?.publishDisabled &&props?.publishDisabled === true ? true : false 
+  const isSaveDraftDisabled = props?.isSaveDisabled &&props?.isSaveDisabled === true ? true : false 
+
   return (
     <header className="sticky top-0 z-[1000] w-full border-b bg-white dark:bg-transparent">
       <div className="container flex flex-row h-16 items-center">
         <div className="mx-[-32px]">
           <div className="flex flex-row">
+            <div>
+              {props?.isUpdating ?? (
+                <Icons.spinner
+                  className="mr-2 h-4 w-4 animate-spin"
+                  aria-hidden="true"
+                />
+              )}             
+            </div>
             <div>{getStatusIcon(props?.status)}</div>
             <div className="mx-2">{getFormattedStatus(props?.status)}</div>
           </div>
         </div>
-        {props?.isUpdating ?? (
-          <Icons.spinner
-            className="mr-2 h-4 w-4 animate-spin"
-            aria-hidden="true"
-          />
-        )}
         <div className="flex flex-1 justify-end space-x-4">
-          <Button className=" bg-primary text-sm" onClick={CloseEditor}>
+          <Button className=" bg-primary text-sm" onClick={CloseEditor} disabled={isInUpdatingState}>
             Close Editor
           </Button>
           <Button
             className="bg-blue-800 hover:bg-blue-600 text-white text-sm"
             onClick={SaveDraft}
+            disabled={isInUpdatingState || isSaveDraftDisabled}
           >
             Save Draft
           </Button>
           <Button
             className="bg-green-800 hover:bg-green-600 text-white text-sm"
             onClick={PublishChanges}
-            disabled={props.publishDisabled}
+            disabled={isPublishDisabled || isInUpdatingState}
           >
             Publish
           </Button>

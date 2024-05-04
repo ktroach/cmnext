@@ -7,7 +7,8 @@ import { AddEditContent } from '@/components/publisher/add-edit-content'
 import { getFrontendBaseUrl } from '@/lib/url'
 import { 
   verifySubRefAccess, 
-  getUserSubsite
+  getUserSubsite, 
+  getPostBySlug, 
 } from '@/lib/queries'
 
 export const metadata: Metadata = {
@@ -24,6 +25,17 @@ export default async function PublisherEditBlog({ params }: any) {
   if (!hasAccess) redirect('/')
   const subsite: any = await getUserSubsite(curUser, subRef)
   const slug = params && params?.slug && params?.slug?.length > 0 ? params.slug : null
+  const authorId: number | null = subsite && subsite?.userId ? subsite.userId : null
+  const subsiteId: number | null = subsite && subsite?.subsiteId ? subsite.subsiteId : null
+  const pageResult: any = await getPostBySlug(slug, authorId, subsiteId)
+  const pageData: any = pageResult && pageResult.length > 0 ? pageResult[0] : null
+  let editParams: any = null
+
+  if (pageData) {
+    editParams = {
+      editData: pageData, 
+    }
+  }  
 
   return (
     <Block>
@@ -32,7 +44,7 @@ export default async function PublisherEditBlog({ params }: any) {
         description="Edit your Blog Post"
         size="sm"
       />
-      <AddEditContent subsite={subsite} isNew={false} isPost={true} slug={slug} />
+      <AddEditContent subsite={subsite} isNew={false} isPost={true} slug={slug} editParams={editParams} />
     </Block>
   )
 }

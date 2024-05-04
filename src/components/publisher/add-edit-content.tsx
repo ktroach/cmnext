@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { useRouter } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
@@ -30,37 +30,50 @@ export function AddEditContent(params: any) {
   const mounted = useMounted()
   const router = useRouter()
   const [isPending, startTransition] = React.useTransition()
-  const [editorContent, setEditorContent] =
-    React.useState<any>('Just start typing!')
+  const [editorContent, setEditorContent] = React.useState<any>('Just start typing!')
   const [postId, setPostId] = React.useState<any>()
   const [pageId, setPageId] = React.useState<any>()
+  const [authorId, setAuthorId] = React.useState<any>()
+  const [subsiteId, setSubsiteId] = React.useState<any>()
   const [contentLoaded, setContentLoaded] = React.useState<boolean>()
   const [content, setContent] = React.useState<any>()
   const [title, setTitle] = React.useState<any>()
   const [titleSearch, setTitleSearch] = React.useState<string | undefined>()
   const [contentStatus, setContentStatus] = React.useState<any>()
+  const [coverImage, setCoverImage] = React.useState<any>()
+  const [isSaving, setIsSaving] = React.useState<boolean>(false)
 
-  const slugParam: any = params?.slug ? params.slug : undefined
-  const slugItem: any = slugParam ? slugParam[0] : undefined
-  const slugId: number = slugItem ? parseInt(slugItem) : 0
-  const subsiteData: any = params?.subsite ? params.subsite : undefined
-  const authorIdInt = subsiteData && subsiteData?.userId ? parseInt(subsiteData.userId ): undefined
-  const subSiteIdInt = subsiteData && subsiteData?.subsiteId ? parseInt(subsiteData.subsiteId) : undefined
+  const editParams: any = params?.editParams ? params.editParams : null
+  const editData: any =
+    editParams && editParams?.editData && editParams?.editData
+      ? editParams.editData
+      : null
+  const editContentId: number | null = editData && editData?.id ? editData.id : null
+  const editSlug: string | null = editData && editData?.slug ? editData.slug : null
+  const editAuthorId: number | null = editData && editData?.authorId ? editData.authorId : null
+  const editSubsiteId: number | null = editData && editData?.subsiteId ? editData.subsiteId : null
+  const editStatus: string = editData && editData?.status ? editData.status : ''
+  const editContent: string =
+    editData && editData?.content ? editData.content : ''
+  const editTitle: string = editData && editData?.title ? editData.title : ''
+  const editCoverImage: string =
+    editData && editData?.coverImage ? editData.coverImage : ''
 
-  const { isLoading, data: postData } = api.posts.getOne.useQuery({
-    id: slugId,
-    authorId: authorIdInt, 
-    subsiteId: subSiteIdInt, 
-  })
-  if (!isLoading && postData) {
-    console.log('postData >>> ', postData)
-    if (!content) {
-      setContent(postData)
-      setContentStatus(postData?.status)
-      setEditorContent(postData?.content)
-      setContentLoaded(true)
-    }
-  }    
+  if (!contentLoaded && editData) {
+    setTitle(editTitle)
+    setCoverImage(editCoverImage)
+    setContent(editContent)
+    setContentStatus(editStatus)
+    setEditorContent(editContent)
+    setAuthorId(editAuthorId)
+    setSubsiteId(editSubsiteId)
+    if (params?.isPost) {
+      setPostId(editContentId)
+    } else {
+      setPageId(editContentId)
+    }    
+    setContentLoaded(true)
+  }
 
   const form = useForm<Inputs>({
     resolver: zodResolver(blogSchema),
@@ -116,35 +129,32 @@ export function AddEditContent(params: any) {
         return await editPageMutation.mutateAsync(requiredInputs)
       }
     }
-    console.log('>>> EditContent >>> requiredInputs >>> ', requiredInputs)
     return null
   }
 
   const getEditMutationVariables = () => {
     let mutationVars: any = null
-    if (params?.isPost) {
-      if (!slugId) {
-        return null
-      }
-      // TODO: Revisit this change
+    if (postId) {
       mutationVars = {
-        postId: slugId,
+        postId: postId,
         content: editorContent,
-        authorId: authorIdInt, 
-        subsiteId: subSiteIdInt,         
+        authorId: authorId,
+        subsiteId: subsiteId,
+        metaData: `${editSlug}.mdx`,        
       }
-    } else {
-      if (!slugId) {
-        return null
-      }
-      mutationVars = {
-        pageId: slugId,
-        content: editorContent,
-        authorId: authorIdInt, 
-        subsiteId: subSiteIdInt,         
-      }
+      return mutationVars
     }
-    return mutationVars
+    if (pageId) {
+      mutationVars = {
+        pageId: pageId,
+        content: editorContent,
+        authorId: authorId,
+        subsiteId: subsiteId,
+        metaData: `${editSlug}.mdx`,        
+      }
+      return mutationVars
+    }
+    return null
   }
 
   const getCreateMutationVariables = () => {
@@ -195,16 +205,14 @@ export function AddEditContent(params: any) {
   const saveDraft = async () => {
     let savedContent: any = null
 
-    // TODO: Check for the slugId 
+    setIsSaving(true)
+   
     if (params?.isNew) {
       savedContent = await CreateContent()
-      // TODO: Redirect to the /edit/[id] route after saving the content for the first time
     } else {
       toast('Saving Changes...')
       savedContent = await EditContent()
     }
-
-    console.log('>>> saveDraft >>> savedContent >>> ', savedContent)
 
     if (!savedContent) {
       console.log('There was a problem saving draft: savedContent is null')
@@ -223,7 +231,12 @@ export function AddEditContent(params: any) {
       setPageId(savedContent.id)
     }
 
-    toast.success("Content saved successfully.")
+    setContentLoaded(false)
+    setIsSaving(false)
+
+    toast.success('Content saved successfully.')
+
+    window.location.reload()
   }
 
   const { PublishPost, isPublishingPost } = handlePostPublish(postId)
@@ -318,7 +331,7 @@ export function AddEditContent(params: any) {
   const isEditingPage = editPageMutation.isLoading
 
   // Publish Page Mutations
-  function handlePagePublish(pageId: any) {
+  function handlePagePublish(publishPageId: any) {
     const setPagePublishedMutation = api.pages.setStatusPublished.useMutation({
       onSuccess: (updatedPage) => {
         console.log('onSuccess >>> updatedPage >>> ', updatedPage)
@@ -333,25 +346,17 @@ export function AddEditContent(params: any) {
 
     const PublishPage = async () => {
       console.log('Entered: PublishPage')
-      if (!pageId) {
+      if (!publishPageId) {
         console.log('Failed to Publish - Missing pageId')
         toast('Something went wrong when Publishing. Please try again.')
         return
       }
       return await setPagePublishedMutation.mutateAsync({
-        id: pageId,
+        id: publishPageId,
       })
     }
     return { PublishPage, isPublishingPage }
   }
-
-
-  const contentIsUpdating: boolean =
-    isPending ||
-    isCreatingPage ||
-    isCreatingPost ||
-    isPublishingPost ||
-    isPublishingPage
 
   return (
     <>
@@ -362,7 +367,8 @@ export function AddEditContent(params: any) {
         saveDraft={saveDraft}
         publishChanges={publishChanges}
         publishDisabled={params?.isNew}
-        isUpdating={contentIsUpdating}
+        isUpdating={isSaving}
+        isSaveDisabled={isSaving}
       />
       <Form {...form}>
         <form
@@ -378,7 +384,7 @@ export function AddEditContent(params: any) {
                 <FormControl>
                   <Input
                     disabled={contentLoaded}
-                    placeholder="Title of your post..."
+                    placeholder="Title of your content..."
                     {...field}
                     className="hover:border-blue-500 border-blue-400"
                     value={title}
@@ -399,12 +405,12 @@ export function AddEditContent(params: any) {
             name="description"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="text-lg">Description</FormLabel>
+                <FormLabel className="text-lg">Summary</FormLabel>
                 <FormControl>
                   <Input
                     className="hover:border-blue-500 border-blue-400"
                     disabled={contentLoaded}
-                    placeholder="Give your blog a description..."
+                    placeholder="Tell a summary about your content..."
                     {...field}
                   />
                 </FormControl>
@@ -419,7 +425,7 @@ export function AddEditContent(params: any) {
               <FormItem>
                 <FormLabel
                   className="text-lg"
-                  title="If blank, AI will generate cover image based on title"
+                  title="If blank, a random image will be assigned based on the title"
                 >
                   Cover Image (Optional)
                 </FormLabel>
@@ -428,8 +434,12 @@ export function AddEditContent(params: any) {
                     className="hover:border-blue-500 border-blue-400"
                     disabled={contentLoaded}
                     title="If blank, the app will use a default image"
-                    placeholder="Type in the Image URL or Keywords..."
+                    placeholder="https://source.unsplash.com/random/220x120"
                     {...field}
+                    value={coverImage}
+                    onChange={(e) => {
+                      setCoverImage(e.target.value)
+                    }}
                   />
                 </FormControl>
                 <FormMessage />
@@ -437,7 +447,7 @@ export function AddEditContent(params: any) {
             )}
           />
           <Separator />
-          <Label className="text-lg">Content</Label>
+          <Label className="text-lg">Content Block</Label>
         </form>
       </Form>
       <MarkdownEditor
@@ -446,6 +456,9 @@ export function AddEditContent(params: any) {
         onChange={setEditorContent}
         editorHeight="calc(100vh / 3)"
       />
+
+      {pageId ? (<p>TODO: Add/Remove Content Blocks...</p>) : (<></>)}
+      
     </>
   )
 }
