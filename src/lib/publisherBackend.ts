@@ -25,15 +25,16 @@ export const GetSubsiteBySignInIdentifierBackend = async (userId: string, signIn
   return subSiteResult
 }
 
+// TODO: Consider rewriting all of this backend I/O in Rust 
 export const saveContent = async (
   contentType: string, 
   userName: string,
   subRef: string,
   data: any
 ) => {
-  console.log('>>> saveContent...')
   try {
 
+    // TODO: Fix Author avatar and url
     const authorMeta = {
       title: userName,
       description: `${userName}`, 
@@ -42,14 +43,10 @@ export const saveContent = async (
     }
 
     const mdxAuthorContent = generateAuthorFrontmatter(authorMeta)
-    console.log('>>> mdxAuthorContent: ', mdxAuthorContent)
     const mdxAuthorsPath: string = `./src/content/authors`
-    console.log('>>> mdxAuthorsPath: ', mdxAuthorsPath)
-
     const mdxAuthorFileName: string = `${mdxAuthorsPath}/${userName}.mdx`
 
     if (!existsSync(mdxAuthorFileName)) {
-      console.log('>>> Writing Author File: ', mdxAuthorFileName)
       writeFileSync(mdxAuthorFileName, mdxAuthorContent)
     } else {
       console.log(
@@ -82,7 +79,6 @@ export const saveContent = async (
     const mdxFileName: string = `${mdxContentPath}/${generatedFilename}.mdx`
     const slug: string = `${generatedFilename}`
 
-    console.log('>>> Writing MDX File: ', mdxFileName)
     writeFileSync(mdxFileName, mdxFileContent, 'utf8')
 
     const saveContentResponse = {
@@ -92,8 +88,6 @@ export const saveContent = async (
       mdxMeta: MdxMeta,
       mdxDate: mdxDate,
     }
-
-    console.log('>>> saveContentResponse >>> ', saveContentResponse)
 
     return saveContentResponse
 
@@ -111,14 +105,13 @@ export const publishContent = () => {
   console.log('publishContent...')
 }
 
-
+// TODO: Consider rewriting all of this backend I/O in Rust 
 export const updateContent = async (
   contentType: string, 
   userName: string,
   subRef: string,
   data: any
 ) => {
-  console.log('>>> updateContent...')
   try {
 
     const contentSlug: string = `/content/${contentType}/${subRef}`
@@ -151,10 +144,7 @@ export const updateContent = async (
     
     const mdxFileContent = `${mdxFrontMatter}\n${data.body}`
 
-    console.log('>>> Updating MDX File: ', mdxFileName)
     writeFileSync(mdxFileName, mdxFileContent, 'utf8')
-
-    console.log("Here's what it would have written to the file if i had let it: ", mdxFileContent)
 
     const saveContentResponse = {
       mdxFileName: mdxFileName,
@@ -162,10 +152,7 @@ export const updateContent = async (
       subRef: subRef
     }
 
-    console.log('>>> saveContentResponse >>> ', saveContentResponse)
-
     return saveContentResponse
-
   } catch (ex) {
     console.log('Failed to Save Content >>> ', ex)
     return null

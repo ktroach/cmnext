@@ -23,9 +23,51 @@ export function Sidebar(props: any) {
 
   if (!props?.items?.length) return null
 
+  const TreeNode = ({ node, rootName }: any) => {
+    const linkUrl =
+      node?.href && publisherBaseUrl ? `${publisherBaseUrl}${node.href}` : ''
+    return (
+      <div key={`div-${node.title}`}>
+        {node.title !== rootName && node?.title}
+        {node?.items && (
+          <ul key={node.title}>
+            {node.items.map((child: any, index: number) => {
+              const IconKey: string = child?.icon ?? 'chevronLeft'
+              /* @ts-ignore-next-line */
+              const Icon = Icons[IconKey]
+              return (
+                <>
+                  <Link
+                    key={`link-${index}`}
+                    href={`${linkUrl}${child.href}`}
+                    target={child?.external ? '_blank' : ''}
+                    rel={child?.external ? 'noreferrer' : ''}
+                  >
+                    <li
+                      className="flex w-full items-center rounded-md p-2 text-muted-foreground hover:underline mx-6"
+                      key={`li-${index}`}
+                    >
+                      <Icon className="mr-2 h-4 w-4" aria-hidden="true" key={`icon-${index}`} />
+                      <TreeNode node={child} rootName="" key={`node-${index}`} />
+                    </li>
+                  </Link>
+                </>
+              )
+            })}
+          </ul>
+        )}
+      </div>
+    )
+  }
+
+  const Tree = ({ data, rootName }: any) => (
+    <div>
+      <TreeNode node={data} rootName={rootName} />
+    </div>
+  )
+
   return (
     <>
-      {/* Hamburger button */}
       <div className="flex w-full flex-col">
         <button
           className="block px-2 py-1 text-white-600 hover:text-white-800 focus:outline-none focus:text-white-800  lg:hidden "
@@ -55,7 +97,7 @@ export function Sidebar(props: any) {
 
       {isOpen && (
         <div
-          className=" fixed top-0 left-0 w-full h-full bg-black opacity-50 z-10"
+          className="fixed top-0 left-0 w-full h-full bg-black opacity-50 z-10"
           onClick={toggleSidebar}
         />
       )}
@@ -70,30 +112,37 @@ export function Sidebar(props: any) {
               ? `${publisherBaseUrl}${item.href}`
               : ''
           return linkUrl ? (
-            <Link
-              key={index}
-              href={linkUrl}
-              target={item.external ? '_blank' : ''}
-              rel={item.external ? 'noreferrer' : ''}
-            >
-              <>
-                <span
-                  className={cn(
-                    'group flex w-full items-center rounded-md border border-transparent px-2 py-1 hover:bg-muted hover:text-foreground',
-                    (pathname === linkUrl)
-                      ? 'bg-muted font-medium text-foreground'
-                      : 'text-muted-foreground',
-                    item.disabled && 'pointer-events-none opacity-60'
-                  )}
-                >
-                  <Icon className="mr-2 h-4 w-4" aria-hidden="true" />
-                  <span>{item.title}</span>
-                </span>
-              </>
-            </Link>
+            <>
+              <Link
+                key={'link-${index}'}
+                href={linkUrl}
+                target={item.external ? '_blank' : ''}
+                rel={item.external ? 'noreferrer' : ''}
+              >
+                <>
+                  <span
+                    className={cn(
+                      'group flex w-full items-center rounded-md border border-transparent px-2 py-1 hover:bg-muted hover:text-foreground',
+                      pathname === linkUrl
+                        ? 'bg-muted font-medium text-foreground'
+                        : 'text-muted-foreground',
+                      item.disabled && 'pointer-events-none opacity-60'
+                    )}
+                  >
+                    <Icon className="mr-2 h-4 w-4" aria-hidden="true"  />
+                    <span>{item.title}</span>
+                  </span>
+                </>
+              </Link>
+              {item?.items && item?.items?.length > 0 ? (
+                <Tree data={item} rootName={item?.title} key={item?.title} />
+              ) : (
+                <></>
+              )}
+            </>
           ) : (
             <span
-              key={index}
+              key={`title-${index}`}
               className="flex w-full cursor-not-allowed items-center rounded-md p-2 text-muted-foreground hover:underline"
             >
               {item.title}

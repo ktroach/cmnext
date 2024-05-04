@@ -1,9 +1,7 @@
 import { type Metadata } from 'next'
 import Link from 'next/link'
-import { redirect } from 'next/navigation'
-import { env } from '@/env.mjs'
 import { currentUser } from '@clerk/nextjs/server'
-
+import { redirect } from 'next/navigation'
 import {
   Card,
   CardContent,
@@ -16,6 +14,7 @@ import { OAuthSignIn } from '@/components/auth/oauth-signin'
 import { SignInForm } from '@/components/auth/signin-form'
 import { Block } from '@/components/containers/block'
 import { getFrontendBaseUrl } from '@/lib/url'
+import { getSubsiteBySignInIdentifierQuery } from '@/lib/queries'
 
 export const metadata: Metadata = {
   metadataBase: new URL(getFrontendBaseUrl()),
@@ -24,12 +23,17 @@ export const metadata: Metadata = {
 }
 
 export default async function SignInPage() {
-  const user = await currentUser()
+  const curUser = await currentUser()
+  const signInId = curUser && curUser?.username ? curUser.username : undefined
+  const userSubSite: any = await getSubsiteBySignInIdentifierQuery(signInId, signInId)
+  const subRef: any = userSubSite?.subRef ? userSubSite.subRef : undefined
+  const publisherUrl: string | undefined = subRef ? `/publish/${subRef}` : undefined
+  if (publisherUrl) redirect(publisherUrl)
 
-  return (
+    return (
     <Block className="max-w-lg">
-      {user ? (
-        <></>
+      {curUser ? (
+        <><p className='text-center'>You are Signed In</p></>
       ) : (
         <Card>
         <CardHeader className="space-y-1">

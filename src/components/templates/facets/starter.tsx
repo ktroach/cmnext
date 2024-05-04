@@ -75,7 +75,6 @@ export default function StarterTemplate({
   let leftActionTitle: string = leftAction?.title
   let rightActionTitle: string = rightAction?.title
   if (userName) {
-    console.log('>>> userName >>> ', userName)
     const { isLoading, data: resultData } = api.users.getUserSubSite.useQuery({
       username: userName,
   

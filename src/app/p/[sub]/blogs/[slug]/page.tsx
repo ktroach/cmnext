@@ -81,7 +81,7 @@ export default async function PostPage({ params }: PostPageProps) {
 
   const post = await getPostFromParams(params)
   if (!post) {
-    console.log('>>> post not found >>> ', params)
+    console.log('>>> PostPage >>> (post) artifact non-existant >>> params >>> ', params)
     notFound()
   }
 

@@ -42,10 +42,9 @@ export const pagesRouter = createTRPCRouter({
         return null
       }    
       
-      console.log('>>> pages >>> user >>> ', user)
-
       const baseUrl: string = getFrontendBaseUrl()
       const createContentEndpoint: string = `${baseUrl}/api/content/create`
+      // TODO: This Fetch may cause us a problem with CORS, re-evaluate the create content endpoint architeture completely 
       const response = await fetch(createContentEndpoint, {
         method: 'POST',
         body: JSON.stringify({
@@ -60,7 +59,7 @@ export const pagesRouter = createTRPCRouter({
         }),
       })
 
-      if (response.status !== 204) {
+      if (response.status !== 200) {
         console.log('Error saving Page >>> input >>> ', input)
         return null
       }
@@ -117,9 +116,6 @@ export const pagesRouter = createTRPCRouter({
         return null
       }    
       
-      console.log('>>> pages >>> user >>> ', user)      
-
-      // you have to get the subRef 
       const subsite = await ctx.db.subsite.findFirst({
         where: {
           id: input.subsiteId,

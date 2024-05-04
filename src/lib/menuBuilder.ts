@@ -53,7 +53,6 @@ export const buildDyanmicMenus = (menuData: any) => {
             }
           } else {
             // this will appear at the top of the menu as a single menu item
-            console.log('>>> menu for page >>> ')
             menuItems.push({
               label: menuProps?.label ? menuProps.label.toUpperCase() : '',
               href: useHref(menuProps),

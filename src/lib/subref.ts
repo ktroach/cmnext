@@ -1,21 +1,18 @@
 "use client"
 
-export const getSubRefByIdentifier = async (baseUrl: string, identifier: string | null) => {
-    const subsiteEndpoint: string = `${baseUrl}/api/subsite`
+import { api } from '@/trpc/client'
+
+export const getSubRefByIdentifier = async (identifier: string | null) => {
     const signInIdentifier: string | undefined = identifier ? identifier : undefined
     if (!signInIdentifier) {
       console.log('Sign In identifier not provided')
-      return 
+      return null
     }
-    const response: any = await fetch(subsiteEndpoint, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        signInIdentifier: signInIdentifier,
-      }),
+    const { isLoading, data: resultData } = api.users.getUserSubSite.useQuery({
+      username: signInIdentifier,
     })
-    const subsiteResult = await response.json()
-    const subsite = subsiteResult ? subsiteResult : undefined
-    const subRef = subsite && subsite?.subRef ? subsite.subRef : undefined
-    return subRef    
+    if (!isLoading && resultData) {
+      return resultData
+    }
+    return null 
 }

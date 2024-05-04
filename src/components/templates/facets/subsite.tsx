@@ -71,7 +71,6 @@ export default function SubsiteHomeTemplate({
   let leftActionTitle: string = leftAction?.title
   let rightActionTitle: string = rightAction?.title
   if (subRef) {
-    console.log('>>> subRef >>> ', subRef)
     const { isLoading, data: resultData } = api.subsites.getByRef.useQuery({
       subsiteRef: subRef,
     })
@@ -95,8 +94,6 @@ export default function SubsiteHomeTemplate({
       }
     },
   }
-
-  console.log('>>> mardownToRender >>> ', markdownToRender)
 
   return (
     <>

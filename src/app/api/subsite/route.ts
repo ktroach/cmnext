@@ -21,9 +21,7 @@ const handler = async (req: NextRequest) => {
       return new Response('Unauthorized', { status: 401 })
     }
 
-    const subsiteResult =
-      await GetSubsiteBySignInIdentifierBackend(userId, signInIdentifier)
-    console.log('>>> subsiteResult >>>> ', subsiteResult)
+    const subsiteResult = await GetSubsiteBySignInIdentifierBackend(userId, signInIdentifier)
 
     const response = Response.json(subsiteResult)
     SetCorsHeaders(response)

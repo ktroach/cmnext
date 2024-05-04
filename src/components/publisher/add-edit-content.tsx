@@ -30,8 +30,7 @@ export function AddEditContent(params: any) {
   const mounted = useMounted()
   const router = useRouter()
   const [isPending, startTransition] = React.useTransition()
-  const [editorContent, setEditorContent] =
-    React.useState<any>('Just start typing!')
+  const [editorContent, setEditorContent] = React.useState<any>('Just start typing!')
   const [postId, setPostId] = React.useState<any>()
   const [pageId, setPageId] = React.useState<any>()
   const [authorId, setAuthorId] = React.useState<any>()
@@ -42,6 +41,7 @@ export function AddEditContent(params: any) {
   const [titleSearch, setTitleSearch] = React.useState<string | undefined>()
   const [contentStatus, setContentStatus] = React.useState<any>()
   const [coverImage, setCoverImage] = React.useState<any>()
+  const [isSaving, setIsSaving] = React.useState<boolean>(false)
 
   const editParams: any = params?.editParams ? params.editParams : null
   const editData: any =
@@ -129,7 +129,6 @@ export function AddEditContent(params: any) {
         return await editPageMutation.mutateAsync(requiredInputs)
       }
     }
-    console.log('>>> EditContent >>> requiredInputs >>> ', requiredInputs)
     return null
   }
 
@@ -206,16 +205,14 @@ export function AddEditContent(params: any) {
   const saveDraft = async () => {
     let savedContent: any = null
 
-    // TODO: Check for the slugId
+    setIsSaving(true)
+   
     if (params?.isNew) {
       savedContent = await CreateContent()
-      // TODO: Redirect to the /edit/[id] route after saving the content for the first time
     } else {
       toast('Saving Changes...')
       savedContent = await EditContent()
     }
-
-    console.log('>>> saveDraft >>> savedContent >>> ', savedContent)
 
     if (!savedContent) {
       console.log('There was a problem saving draft: savedContent is null')
@@ -235,6 +232,7 @@ export function AddEditContent(params: any) {
     }
 
     setContentLoaded(false)
+    setIsSaving(false)
 
     toast.success('Content saved successfully.')
 
@@ -360,13 +358,6 @@ export function AddEditContent(params: any) {
     return { PublishPage, isPublishingPage }
   }
 
-  const contentIsUpdating: boolean =
-    isPending ||
-    isCreatingPage ||
-    isCreatingPost ||
-    isPublishingPost ||
-    isPublishingPage
-
   return (
     <>
       <PublisherToolbar
@@ -376,7 +367,8 @@ export function AddEditContent(params: any) {
         saveDraft={saveDraft}
         publishChanges={publishChanges}
         publishDisabled={params?.isNew}
-        isUpdating={contentIsUpdating}
+        isUpdating={isSaving}
+        isSaveDisabled={isSaving}
       />
       <Form {...form}>
         <form

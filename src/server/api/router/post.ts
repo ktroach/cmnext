@@ -41,10 +41,9 @@ export const postRouter = createTRPCRouter({
         return null
       }    
       
-      console.log('>>> post >>> user >>> ', user)
-
       const baseUrl: string = getFrontendBaseUrl()
       const createContentEndpoint: string = `${baseUrl}/api/content/create`
+      // TODO: Re-evaluate the api endpoint and fetch here. It may be problematic in edge scenarios. Consider an alternative solution.
       const response = await fetch(createContentEndpoint, {
         method: 'POST',
         body: JSON.stringify({
@@ -58,9 +57,6 @@ export const postRouter = createTRPCRouter({
           userName: user.name, 
         }),
       })
-
-      console.log('>>> post >>> response >>> ', response)
-      console.log('>>> post >>> response.status >>> ', response.status)
 
       if (response.status !== 200) {
         console.log('Error saving Blog in TRPC Route >>> input >>> ', input)
@@ -119,9 +115,6 @@ export const postRouter = createTRPCRouter({
         return null
       }    
       
-      console.log('>>> pages >>> user >>> ', user)      
-
-      // you have to get the subRef 
       const subsite = await ctx.db.subsite.findFirst({
         where: {
           id: input.subsiteId,
