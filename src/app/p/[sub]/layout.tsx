@@ -1,4 +1,3 @@
-// Subsite Layout
 'use server'
 
 import React from 'react'
@@ -22,6 +21,10 @@ export default async function SubsiteLayout({
   const pagesData = await getAllPagesBySubRef(subRef)
   const blogsData = await getAllBlogsBySubRef(subRef)
 
+  // TODO: This needs some serious work 
+  // Needs to support parent page option
+  // Needs to go off of some ordering concept 
+
   menuData.push({
     label: 'HOME',
     href: '/',
@@ -33,21 +36,30 @@ export default async function SubsiteLayout({
   })      
 
   if (pagesData && params?.sub) {
+    let pagesMenu: any = []
     for (let i = 0; i < pagesData.length; i++) {
       const pageData = pagesData[i]
       const pageTitle = pageData?.title ? pageData.title : undefined
       const pageSlug  = pageData?.slug ? pageData.slug : undefined
       const pageUrl = `${baseUrl}/p/${params.sub}/pages/${pageSlug}`
-      menuData.push({
+      pagesMenu.push({
         label: pageTitle,
         href: pageUrl,
         slug: pageSlug,
         sub: params.sub,
-        type: 'super-group',
-        items: [], 
+        type: 'navlink',
         isPage: true, 
       })      
     }
+    menuData.push({
+      label: 'Pages',
+      href: '#',
+      slug: '/pages',
+      sub: params.sub,
+      type: 'super-group',
+      isPage: true, 
+      items: pagesMenu
+    })          
   }
 
   if (blogsData && params?.sub) {

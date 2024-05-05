@@ -23,6 +23,7 @@ export default function SubsiteMenu({ sub, menuData }: SubsiteMenuProps) {
             menuItems={menuItems}
             active={active}
             setActive={setActive}
+            showBorders={false}
           />
         </>
       )}

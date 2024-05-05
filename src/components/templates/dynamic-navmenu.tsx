@@ -35,6 +35,7 @@ export interface DynamicNavMenuProps {
     menuItems: MenuItemType[] | null
     active: string | null
     setActive: any | undefined    
+    showBorders?: boolean
 }
 
 export const NavMenuItem = ({ item, setActive, active }: MenuItemProps) => {
@@ -48,8 +49,8 @@ export const NavMenuItem = ({ item, setActive, active }: MenuItemProps) => {
 
   const url = item?.href ? item.href : ""
   let label = item?.label
-  if (label.length > 5) {
-    label = label.substring(0, 5) + '...'
+  if (label.length > 12) {
+    label = label.substring(0, 12) + '...'
   }
   return (
     <MenuItem
@@ -76,12 +77,12 @@ export const NavMenu = ({ menuItems, setActive, active }: NavMenuProps) => {
   )
 }
 
-export const DynamicNavMenu = ({className, menuItems, active, setActive }: DynamicNavMenuProps) => {
+export const DynamicNavMenu = ({className, menuItems, active, setActive, showBorders }: DynamicNavMenuProps) => {
   return (
     <div
       className={cn('fixed top-10 inset-x-0 max-w-2xl mx-auto z-50', className)}
     >
-      <Menu setActive={setActive}>
+      <Menu setActive={setActive} showBorders={showBorders}>
         <NavMenu menuItems={menuItems} setActive={setActive} active={active} />
         <ThemeToggle className="pt-1 mt-[-12px]" />
       </Menu>

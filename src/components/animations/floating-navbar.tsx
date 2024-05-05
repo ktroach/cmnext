@@ -37,11 +37,11 @@ export const MenuItem = ({
     <div onMouseEnter={() => setActive(item)} className="relative">
       <motion.p
         transition={{ duration: 0.3 }}
-        className="cursor-pointer text-black hover:opacity-[0.9] dark:text-white"
+        className="cursor-pointer text-black hover:opacity-[0.9] dark:text-white whitespace-nowrap"
       >
         {linkUrl && linkUrl?.href && (
           <Link href={linkUrl.href} legacyBehavior>
-            {item}
+            {item} 
           </Link>
         )}
       </motion.p>
@@ -72,18 +72,23 @@ export const MenuItem = ({
   )
 }
 
-// TODO: calcualate space-x-8 in nav className to be distributed and spaced evenly covering the full width
 export const Menu = ({
   setActive,
+  showBorders, 
   children,
 }: {
   setActive: (item: string | null) => void
+  showBorders?: boolean
   children: React.ReactNode
 }) => {
+  let className: string = "relative dark:bg-[#09090b] bg-white shadow-input flex justify-center space-x-8 px-8 py-6 "
+  if (showBorders) {
+    className = " relative border border-black/[0.4] dark:border-white/[0.4] rounded-full dark:bg-[#09090b] bg-white shadow-input flex justify-center space-x-8 px-8 py-6 "
+  }
   return (
     <nav
       onMouseLeave={() => setActive(null)}
-      className="relative border border-black/[0.4] dark:border-white/[0.4] rounded-full dark:bg-[#09090b] dark:border-white/[0.2] bg-white shadow-input flex justify-center space-x-8 px-8 py-6 "
+      className={className}
     >
       {children}
     </nav>

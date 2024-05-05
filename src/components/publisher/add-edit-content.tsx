@@ -544,7 +544,7 @@ export function AddEditContent(params: any) {
                     className="hover:border-blue-500 border-blue-400"
                     disabled={contentLoaded}
                     title="If blank, the app will use a default image"
-                    placeholder="https://source.unsplash.com/random/220x120"
+                    placeholder={RootConfig?.defaultCoverImage}
                     {...field}
                     value={coverImage}
                     onChange={(e) => {
