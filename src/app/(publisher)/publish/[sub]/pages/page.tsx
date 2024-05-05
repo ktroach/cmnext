@@ -30,13 +30,13 @@ export default async function PublisherManagePages({ params }: any) {
   const hasAccess = await verifySubRefAccess(curUser, subRef)
   if (!hasAccess) redirect('/')
   const subsite: any = await getUserSubsite(curUser, subRef)
-  console.log('allPagesByPublisher >>> subsite >> ', subsite)
+  // console.log('allPagesByPublisher >>> subsite >> ', subsite)
   const authorId: number | null = subsite && subsite?.userId? subsite.userId : null
   const subsiteId: number | null = subsite && subsite?.subsiteId? subsite.subsiteId : null
-  console.log('allPagesByPublisher >>> authorId >> ', authorId)
-  console.log('allPagesByPublisher >>> subsiteId >> ', subsiteId)
+  // console.log('allPagesByPublisher >>> authorId >> ', authorId)
+  // console.log('allPagesByPublisher >>> subsiteId >> ', subsiteId)
   const allPagesByPublisher = await getAllPagesByPublisher(authorId, subsiteId)
-  console.log('allPagesByPublisher >>> ', allPagesByPublisher)
+  // console.log('allPagesByPublisher >>> ', allPagesByPublisher)
 
   let mostRecentPosts: any = []
   mostRecentPosts = allPagesByPublisher ? allPagesByPublisher.slice(0, 4) : []

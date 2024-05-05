@@ -3,6 +3,7 @@ import { z } from 'zod'
 import { createTRPCRouter, protectedProcedure, publicProcedure } from '../trpc'
 import { ContentStatus } from '@/db'
 import { getFrontendBaseUrl } from '@/lib/url'
+import { createContent } from '@/lib/publisherBackend'
 
 export const pagesRouter = createTRPCRouter({
     create: protectedProcedure
@@ -40,35 +41,27 @@ export const pagesRouter = createTRPCRouter({
       if (!user) {
         console.log('Failed to CREATE Content. User does not exist.')
         return null
-      }    
+      }   
       
-      const baseUrl: string = getFrontendBaseUrl()
-      const createContentEndpoint: string = `${baseUrl}/api/content/create`
-      // TODO: Re-evaluate the api endpoint and fetch here.
-      const response = await fetch(createContentEndpoint, {
-        method: 'POST',
-        body: JSON.stringify({
-          isUpdate: false,
-          contentType: 'pages',
-          subRef: input.subRef,
-          title: input.title,
-          description: input.description,
-          image: input.image,
-          body: input.content,
-          userName: user.name,           
-        }),
-      })
-
-      if (response.status !== 200) {
-        console.log('Error saving Page >>> input >>> ', input)
-        return null
+      const createContentData: any = {
+        isUpdate: false,
+        contentType: 'pages',
+        subRef: input.subRef,
+        title: input.title,
+        description: input.description,
+        image: input.image,
+        body: input.content,
+        userName: user.name,           
       }
 
-      const responseData = await response.json()
+      const responseData = await createContent('pages', user.name, input.subRef, createContentData)
       console.log(">>> page >>> create >>> responseData >>> ", responseData)
-      // TODO: Ensure that the slug is pre-fixed with a slash before saving to the database. This is to fix a bug.
-      const slug = responseData && responseData?.slug ? responseData.slug : undefined
-      console.log(">>> page >>> create >>> slug >>> ", slug)
+      
+      let slug: string | undefined = responseData && responseData?.slug ? responseData.slug : undefined
+      // TODO: Ensure that the slug is pre-fixed with a slash before saving to the database
+      if (slug && slug?.indexOf('/') === 0) {
+        slug = `/${slug}`
+      }
 
       return await ctx.db.page.create({
         data: {

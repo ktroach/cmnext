@@ -28,11 +28,15 @@ export const GetSubsiteBySignInIdentifierBackend = async (userId: string, signIn
 // TODO: Consider rewriting all of this backend I/O in Rust 
 export const createContent = async (
   contentType: string, 
-  userName: string,
+  userName: string | undefined | null,
   subRef: string,
   data: any
 ) => {
   try {
+    if(!userName) {
+      console.log('>>> Failed to Create content >>> userName is required')
+      return null
+    }
 
     // TODO: Fix Author avatar and url
     const authorMeta = {

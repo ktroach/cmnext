@@ -17,18 +17,29 @@ export const metadata: Metadata = {
   description: 'Edit site page',
 }
 
-export default async function PublisherEditBlog({ params }: any) {
+export default async function PublisherEditPage({ params }: any) {
   const curUser = await currentUser()
   if (!curUser) redirect('/')
   const subRef = params?.sub ? params.sub : null
   const hasAccess = await verifySubRefAccess(curUser, subRef)
   if (!hasAccess) redirect('/')
+
   const subsite: any = await getUserSubsite(curUser, subRef)
-  const slug: any = params?.slug ? `/${params.slug.join('/')}` : null
+
+
+  const slug: any = params?.slug ? `${params.slug.join('/')}` : null
+  console.log('>>> PublisherEditPage >>> slug >>> ', slug)
+
+
   const authorId: number | null = subsite && subsite?.userId ? subsite.userId : null
   const subsiteId: number | null = subsite && subsite?.subsiteId ? subsite.subsiteId : null
   const pageResult: any = await getPageBySlug(slug, authorId, subsiteId)
+  console.log('>>> PublisherEditPage >>> pageResult >>> ', pageResult)
+
   const pageData: any = pageResult && pageResult.length > 0 ? pageResult[0] : null
+
+console.log('>>> PublisherEditPage >>> pageData >>> ', pageData)
+
   let editParams: any = null
 
   if (pageData) {
@@ -36,6 +47,8 @@ export default async function PublisherEditBlog({ params }: any) {
       editData: pageData, 
     }
   }
+
+  console.log('>>> PublisherEditPage >>> editParams >>> ', editParams)
 
   return (
     <Block>

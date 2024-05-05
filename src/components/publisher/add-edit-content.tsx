@@ -24,6 +24,7 @@ import { useMounted } from '@/hooks/use-mounted'
 import { RootConfig } from '@/config/root-config'
 import { api } from '@/trpc/client'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '../ui/select'
+import { getFrontendBaseUrl } from '@/lib/url'
 
 type Inputs = z.infer<typeof blogSchema>
 
@@ -62,10 +63,15 @@ export function AddEditContent(params: any) {
   ]  
 
   const editParams: any = params?.editParams ? params.editParams : null
+  console.log('>>> AddEditContent >>> editParams >>> ', editParams)
+
   const editData: any =
     editParams && editParams?.editData && editParams?.editData
       ? editParams.editData
       : null
+
+  console.log('>>> AddEditContent >>> editData >>> ', editData)      
+
   const editContentId: number | null = editData && editData?.id ? editData.id : null
   const editSlug: string | null = editData && editData?.slug ? editData.slug : null
   const editAuthorId: number | null = editData && editData?.authorId ? editData.authorId : null
@@ -74,6 +80,9 @@ export function AddEditContent(params: any) {
   const editContent: string =
     editData && editData?.content ? editData.content : ''
   const editTitle: string = editData && editData?.title ? editData.title : ''
+  console.log('>>> AddEditContent >>> editTitle >>> ', editTitle)  
+
+
   const editCoverImage: string =
     editData && editData?.coverImage ? editData.coverImage : ''
 
@@ -256,17 +265,34 @@ export function AddEditContent(params: any) {
 
     toast.success('Content saved successfully.')
 
-    window.location.reload()
+    if (params?.isNew) {
+      const newPageSlug: string | undefined = savedContent && savedContent?.slug ? savedContent?.slug : undefined
+      const subsite: any = params?.subsite ? params.subsite : undefined
+      const subref: string = subsite?.subRef ? subsite.subRef : undefined      
+      const baseUrl: string = getFrontendBaseUrl()
+      const editPageUrl: string | undefined = newPageSlug && subref ? `${baseUrl}/publish/${subref}/pages/edit/${newPageSlug}` : undefined
+      if (editPageUrl) {
+          window.location.href = editPageUrl
+      }
+    } else {
+      // reload the edit page
+      window.location.reload()
+    }
   }
 
   const { PublishPost, isPublishingPost } = handlePostPublish(postId)
   const { PublishPage, isPublishingPage } = handlePagePublish(pageId)
 
   const publishChanges = async () => {
+    let publishResult: any = null
     if (params?.isPost) {
-      return await PublishPost()
+      publishResult = await PublishPost()
     } else {
-      return await PublishPage()
+      publishResult = await PublishPage()
+    }
+    console.log('>>> AddEditContent >>> publishResult >>> ', publishResult)
+    if (publishResult) {
+      window.location.reload()
     }
   }
 

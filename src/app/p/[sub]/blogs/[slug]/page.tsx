@@ -22,11 +22,8 @@ interface PostPageProps {
 
 async function getPostFromParams(params: PostPageProps['params']) {
   const slug = params?.slug
-  console.log(">>> slug >>> ", slug)  
   const subRef = params?.sub ? params.sub : ''
   const slugKey = `${subRef}/${slug}`
-  console.log(">>> slugKey >>> ", slugKey)  
-
   const postPage = allPosts.find((post) => post.slugAsParams === slugKey)
 
   if (!postPage) {
