@@ -3,7 +3,6 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
-import Image from 'next/image'
 import useLinkUrl from '@/hooks/use-link-url'
 
 const transition = {
@@ -54,11 +53,11 @@ export const MenuItem = ({
             transition={transition}
           >
             {active === item && (
-              <div className="absolute top-[calc(100%_+_1.7rem)] left-1/2 transform -translate-x-1/2 -translate-y-[15%]">
+              <div className="absolute top-[calc(100%_+_1.7rem)] left-1/2 transform -translate-x-1/2 -translate-y-[15%]  ">
                 <motion.div
                   transition={transition}
                   layoutId="active"
-                  className="dark:bg-[#09090b] bg-white backdrop-blur-sm rounded-2xl overflow-hidden border border-black/[0.2] dark:border-white/[0.2] shadow-xl"
+                  className="dark:bg-[#09090b] bg-white backdrop-blur-sm rounded-2xl overflow-hidden border border-black/[0.4] dark:border-white/[0.4] shadow-xl"
                 >
                   <motion.div layout className="w-max h-full p-4">
                     {children}
@@ -84,7 +83,7 @@ export const Menu = ({
   return (
     <nav
       onMouseLeave={() => setActive(null)}
-      className="relative border border-transparent rounded-full dark:bg-[#09090b] dark:border-white/[0.2] bg-white shadow-input flex justify-center space-x-8 px-8 py-6 "
+      className="relative border border-black/[0.4] dark:border-white/[0.4] rounded-full dark:bg-[#09090b] dark:border-white/[0.2] bg-white shadow-input flex justify-center space-x-8 px-8 py-6 "
     >
       {children}
     </nav>
