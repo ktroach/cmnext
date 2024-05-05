@@ -3,7 +3,7 @@ import { z } from 'zod'
 import { createTRPCRouter, protectedProcedure, publicProcedure } from '../trpc'
 import { ContentStatus } from '@/db'
 import { getFrontendBaseUrl } from '@/lib/url'
-import { createContent } from '@/lib/publisherBackend'
+import { createContent, updateContent } from '@/lib/publisherBackend'
 
 export const pagesRouter = createTRPCRouter({
     create: protectedProcedure
@@ -58,7 +58,6 @@ export const pagesRouter = createTRPCRouter({
       console.log(">>> page >>> create >>> responseData >>> ", responseData)
       
       let slug: string | undefined = responseData && responseData?.slug ? responseData.slug : undefined
-      // TODO: Ensure that the slug is pre-fixed with a slash before saving to the database
       if (slug && slug?.indexOf('/') === 0) {
         slug = `/${slug}`
       }
@@ -105,10 +104,17 @@ export const pagesRouter = createTRPCRouter({
           id: input.authorId,
         },
       })
+
       if (!user) {
         console.log('Failed to UPDATE Content. User does not exist.')
         return null
       }    
+
+      const userName: string | undefined =  user?.name ?  user.name : undefined
+      if (!userName) {
+        console.log('Failed to UPDATE Content >>> user.name is invalid.')
+        return null
+      }         
       
       const subsite = await ctx.db.subsite.findFirst({
         where: {
@@ -123,14 +129,9 @@ export const pagesRouter = createTRPCRouter({
       if (!subRef) {
         console.log('Failed to UPDATE Content. subsiteRef does not exist.')
         return null
-      }          
-
-      // TODO: Re-evaluate the api endpoint and fetch here.
-      const baseUrl: string = getFrontendBaseUrl()
-      const updateContentEndpoint: string = `${baseUrl}/api/content/save`
-      const response = await fetch(updateContentEndpoint, {
-        method: 'POST',
-        body: JSON.stringify({
+      }       
+      
+      const updateContentData: any = {
           isUpdate: true,
           contentType: 'pages',
           subRef: subRef,
@@ -138,11 +139,11 @@ export const pagesRouter = createTRPCRouter({
           userName: user.name,  
           existingData: existingPage,          
           metaData: input.metaData,        
-        }),
-      })      
+      }
 
-      const responseData = await response.json()
-      console.log(">>> page UPDATE >>> responseData >>> ", responseData)
+      console.log('>>> pages >>> update >>> updateContentData >>> ', updateContentData)
+      const responseData = await updateContent('pages', userName, subRef, updateContentData)
+      console.log(">>> page >>> update >>> responseData >>> ", responseData)      
 
       return await ctx.db.page.update({
         where: {
@@ -164,7 +165,6 @@ export const pagesRouter = createTRPCRouter({
       })
     )
     .query(async ({ input, ctx }) => {
-      console.log({ 'input.limit': input.limit })
       return await ctx.db.page.findMany({
         take: input.limit,
         orderBy: {
