@@ -22,7 +22,7 @@ git add .
 git commit -am "commit at $current_datetime"
 
 echo "pushing to branch $branch_name"
-git push origin $current_branch
+git push --set-upstream origin $branch_name
 
 echo "pushed to $branch_name at $timestamp"
 
