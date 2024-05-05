@@ -94,7 +94,7 @@ export const RootConfig = {
         ],
       },    
       {
-        label: "Plans & Pricing",
+        label: "Plans",
         href: "/pricing",
         type: "group",
         items: [

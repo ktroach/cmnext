@@ -47,15 +47,18 @@ export const NavMenuItem = ({ item, setActive, active }: MenuItemProps) => {
   ) : null
 
   const url = item?.href ? item.href : ""
-
+  let label = item?.label
+  if (label.length > 5) {
+    label = label.substring(0, 5) + '...'
+  }
   return (
     <MenuItem
       setActive={setActive}
       active={active}
-      item={item?.label}
+      item={label}
       href={url}
     >
-      {subMenu}
+      {subMenu} 
     </MenuItem>
   )
 }

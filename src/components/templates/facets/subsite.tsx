@@ -4,7 +4,6 @@ import React, { useState, StrictMode } from 'react'
 import parse, { Element } from 'html-react-parser'
 import type { DOMNode, HTMLReactParserOptions } from 'html-react-parser'
 import markdownit from 'markdown-it'
-
 import Link from 'next/link'
 import { Block } from '@/components/containers/block'
 import { Button } from '@/components/ui/button'
@@ -97,39 +96,38 @@ export default function SubsiteHomeTemplate({
 
   return (
     <>
-      <Wavy
-        animationTimeoutMs={20000}
-        backgroundFill="transparent"
-        blur={0.5}
-        className="max-w-4xl mt-[-400px]"
-        colors={waves}
-        waveOpacity={0.007}
-        waveWidth={2}
-      ></Wavy>
-
-      <div className="h-[30rem] mt-[50px] relative w-full bg-transparent flex flex-col items-center justify-center overflow-hidden rounded-md">
-        <h1 className="md:text-7xl text-3xl lg:text-6xl font-bold text-center text-white relative z-20">
+      <div className="h-[55rem] relative w-full bg-transparent flex flex-col items-center justify-center overflow-hidden rounded-md">
+        <h1 className="mt-[-130px] md:text-7xl text-3xl lg:text-6xl font-bold text-center  text-black/[0.85] dark:text-white/[0.95] relative z-20">
           {line}
         </h1>
         <section className="mx-auto flex w-full max-w-5xl flex-col items-center justify-center gap-4 text-center">
-          <TextGenerator className="mt-5 mb-5" words={words} />
-          <div className="flex flex-wrap items-center justify-center gap-4 z-40">
-            <Button asChild>
-              <Link href={leftActionHref} className="mx-[5px]">
-                {leftActionTitle}
-                <span className="sr-only">{leftActionTitle}</span>
-              </Link>
-            </Button>
-            <Button variant="outline" asChild>
-              <Link href={rightActionHref}>
-                {rightActionTitle}
-                <span className="sr-only">{rightActionTitle}</span>
-              </Link>
-            </Button>
+          <TextGenerator className="mt-5  text-black/[0.85] dark:text-white/[0.95]" words={words} />
+          <div className="flex flex-wrap items-center justify-center gap-4 mt-10 z-40">
+            <Wavy
+              animationTimeoutMs={4000}
+              backgroundFill="transparent"
+              blur={0.0}
+              className="max-w-4xl mt-[-15px] "
+              colors={waves}
+              waveOpacity={0.015}
+              waveWidth={2}
+            >
+              <Button asChild>
+                <Link href={leftActionHref} className="mx-[5px]">
+                  {leftActionTitle}
+                  <span className="sr-only">{leftActionTitle}</span>
+                </Link>
+              </Button>
+              <Button variant="outline" asChild>
+                <Link href={rightActionHref}>
+                  {rightActionTitle}
+                  <span className="sr-only">{rightActionTitle}</span>
+                </Link>
+              </Button>
+            </Wavy>
           </div>
         </section>
       </div>
-      {/* <Block>{sections ? <BuildSections /> : <></>}</Block> */}
 
       <Block>
         <StrictMode>{parse(markupTest, options)}</StrictMode>
