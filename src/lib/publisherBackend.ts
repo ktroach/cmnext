@@ -26,7 +26,7 @@ export const GetSubsiteBySignInIdentifierBackend = async (userId: string, signIn
 }
 
 // TODO: Consider rewriting all of this backend I/O in Rust 
-export const saveContent = async (
+export const createContent = async (
   contentType: string, 
   userName: string,
   subRef: string,

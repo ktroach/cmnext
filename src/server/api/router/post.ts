@@ -43,7 +43,7 @@ export const postRouter = createTRPCRouter({
       
       const baseUrl: string = getFrontendBaseUrl()
       const createContentEndpoint: string = `${baseUrl}/api/content/create`
-      // TODO: Re-evaluate the api endpoint and fetch here. It may be problematic in edge scenarios. Consider an alternative solution.
+      // TODO: Re-evaluate the api endpoint and fetch here.
       const response = await fetch(createContentEndpoint, {
         method: 'POST',
         body: JSON.stringify({
@@ -65,6 +65,7 @@ export const postRouter = createTRPCRouter({
 
       const responseData = await response.json()
       console.log("post create >>> responseData >>> ", responseData)
+      // TODO: Ensure that the slug is pre-fixed with a slash before saving to the database. This is to fix a bug.
       const slug = responseData && responseData?.slug ? responseData.slug : undefined
       console.log("post create >>> slug >>> ", slug)
 
@@ -130,6 +131,7 @@ export const postRouter = createTRPCRouter({
         return null
       }    
       
+      // TODO: Re-evaluate the api endpoint and fetch here.
       const baseUrl: string = getFrontendBaseUrl()
       const updateContentEndpoint: string = `${baseUrl}/api/content/save`
       const response = await fetch(updateContentEndpoint, {

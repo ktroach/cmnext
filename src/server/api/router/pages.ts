@@ -44,7 +44,7 @@ export const pagesRouter = createTRPCRouter({
       
       const baseUrl: string = getFrontendBaseUrl()
       const createContentEndpoint: string = `${baseUrl}/api/content/create`
-      // TODO: This Fetch may cause us a problem with CORS, re-evaluate the create content endpoint architeture completely 
+      // TODO: Re-evaluate the api endpoint and fetch here.
       const response = await fetch(createContentEndpoint, {
         method: 'POST',
         body: JSON.stringify({
@@ -66,6 +66,7 @@ export const pagesRouter = createTRPCRouter({
 
       const responseData = await response.json()
       console.log(">>> page >>> create >>> responseData >>> ", responseData)
+      // TODO: Ensure that the slug is pre-fixed with a slash before saving to the database. This is to fix a bug.
       const slug = responseData && responseData?.slug ? responseData.slug : undefined
       console.log(">>> page >>> create >>> slug >>> ", slug)
 
@@ -131,6 +132,7 @@ export const pagesRouter = createTRPCRouter({
         return null
       }          
 
+      // TODO: Re-evaluate the api endpoint and fetch here.
       const baseUrl: string = getFrontendBaseUrl()
       const updateContentEndpoint: string = `${baseUrl}/api/content/save`
       const response = await fetch(updateContentEndpoint, {
