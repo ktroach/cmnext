@@ -270,7 +270,8 @@ export function AddEditContent(params: any) {
       const subsite: any = params?.subsite ? params.subsite : undefined
       const subref: string = subsite?.subRef ? subsite.subRef : undefined      
       const baseUrl: string = getFrontendBaseUrl()
-      const editPageUrl: string | undefined = newPageSlug && subref ? `${baseUrl}/publish/${subref}/pages/edit/${newPageSlug}` : undefined
+      const contentType: string = params?.isPost ? 'blogs' : 'pages'
+      const editPageUrl: string | undefined = newPageSlug && subref ? `${baseUrl}/publish/${subref}/${contentType}/edit/${newPageSlug}` : undefined
       if (editPageUrl) {
           window.location.href = editPageUrl
       }
@@ -403,8 +404,6 @@ export function AddEditContent(params: any) {
     }
     return { PublishPage, isPublishingPage }
   }
-
-  
 
   return (
     <>
