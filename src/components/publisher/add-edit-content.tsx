@@ -23,6 +23,7 @@ import { MarkdownEditor } from '@/components/editor'
 import { useMounted } from '@/hooks/use-mounted'
 import { RootConfig } from '@/config/root-config'
 import { api } from '@/trpc/client'
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '../ui/select'
 
 type Inputs = z.infer<typeof blogSchema>
 
@@ -42,6 +43,23 @@ export function AddEditContent(params: any) {
   const [contentStatus, setContentStatus] = React.useState<any>()
   const [coverImage, setCoverImage] = React.useState<any>()
   const [isSaving, setIsSaving] = React.useState<boolean>(false)
+
+  const isPage: boolean = params?.isPost ? false : true 
+
+  // TODO: Populate from database
+  const pageTemplates: any = [
+    {label: 'none', value: ''},
+    {label: 'full page template', value: 'full page template'},
+    {label: 'image gallery template', value: 'image table template'},
+    {label: 'bio page template', value: 'bio page template'},
+  ]
+  // TODO: Populate from database
+  const parentPage: any = [
+    {label: 'none', value: ''},
+    {label: 'about', value: '/about'},
+    {label: 'products', value: '/products'},
+    {label: 'services', value: '/services'},
+  ]  
 
   const editParams: any = params?.editParams ? params.editParams : null
   const editData: any =
@@ -82,6 +100,8 @@ export function AddEditContent(params: any) {
       description: '',
       image: '',
       body: '',
+      template: '', 
+      parent: '', 
     },
   })
 
@@ -358,6 +378,8 @@ export function AddEditContent(params: any) {
     return { PublishPage, isPublishingPage }
   }
 
+  
+
   return (
     <>
       <PublisherToolbar
@@ -375,6 +397,69 @@ export function AddEditContent(params: any) {
           className="grid gap-4"
           onSubmit={(...args) => void form.handleSubmit(onSubmit)(...args)}
         >
+          {isPage ? (
+            <>
+              <FormField
+                control={form.control}
+                name="template"
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <FormLabel>Template</FormLabel>
+                    <FormControl>
+                      <Select
+                        value={field.value?.toString()}
+                        onValueChange={field.onChange}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a Template" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectGroup>
+                            {pageTemplates.map((option: any, index: number) => (
+                              <SelectItem key={option.value} value={option.value}>
+                                {option.label}
+                              </SelectItem>
+                            ))}
+                          </SelectGroup>
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="parent"
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <FormLabel>Parent</FormLabel>
+                    <FormControl>
+                      <Select
+                        value={field.value?.toString()}
+                        onValueChange={field.onChange}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a Parent" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectGroup>
+                            {parentPage.map((option: any, index: number) => (
+                              <SelectItem key={option.value} value={option.value}>
+                                {option.label}
+                              </SelectItem>
+                            ))}
+                          </SelectGroup>
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </>
+          ) : (<></>)}
+
           <FormField
             control={form.control}
             name="title"
