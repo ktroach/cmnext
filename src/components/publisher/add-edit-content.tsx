@@ -323,7 +323,13 @@ export function AddEditContent(params: any) {
     }
     console.log('>>> AddEditContent >>> deleteContentResult >>> ', deleteContentResult)
     if (deleteContentResult) {
-      window.location.reload()
+      const subsite: any = params?.subsite ? params.subsite : undefined
+      const subref: string = subsite?.subRef ? subsite.subRef : undefined
+      const url: string = params?.isPost
+        ? `${window.location.origin}/publish/${subref}/blogs?reload=true`
+        : `${window.location.origin}/publish/${subref}/pages?reload=true`
+      router.push(url)      
+      router.refresh()
     }
   }  
 

@@ -4,6 +4,8 @@ import { Icons } from '@/styles/icons'
 import { Button } from '@/components/ui/button'
 import { Circle } from 'lucide-react'
 import { RootConfig } from '@/config/root-config'
+import { ArrowUpDown, ChevronLeft, MoreHorizontal } from "lucide-react"
+import { toast } from 'sonner'
 
 interface PublisherToolbarProps {
   isBlog?: boolean
@@ -57,7 +59,16 @@ export const PublisherToolbar = ({
 
   const HandleDeleteContent = () => {
     if (props && props?.deleteContent) {
-      props.deleteContent()
+      toast('Are you sure you want to delete this?', {
+        action: {
+          label: 'Yes',
+          onClick: () => {props.deleteContent()},
+        },
+        cancel: {
+          label: 'Cancel',
+          onClick: () => console.log('Delete Cancelled'),
+        },        
+      })
     }
   }  
 
@@ -103,24 +114,27 @@ export const PublisherToolbar = ({
           </div>
         </div>
         <div className="flex flex-1 justify-end space-x-4">
-          <Button className=" bg-primary text-sm" onClick={HandleUnPublishChanges} disabled={unPublishDisabled}>
-            UnPublish 
+          <Button className=" bg-gray-800 hover:bg-gray-600 text-white text-sm font-medium font-mono" onClick={HandleCloseEditor} disabled={isInUpdatingState}>
+            <ChevronLeft className="mr-2 h-4 w-4" /> Back
           </Button>
-          <Button className=" bg-primary text-sm" onClick={HandleDeleteContent} disabled={deleteDisabled}>
+          <Button className="  bg-cyan-800 hover:bg-cyan-600 text-white text-sm font-medium font-mono" onClick={HandleCloseEditor} disabled={isInUpdatingState}>
+            View Page
+          </Button>
+          <Button className="  bg-orange-800 hover:bg-orange-600 text-white text-sm font-medium font-mono" onClick={HandleUnPublishChanges} disabled={unPublishDisabled}>
+            Un-Publish 
+          </Button>
+          <Button className=" bg-red-800 hover:bg-red-600 text-white text-sm font-medium font-mono" onClick={HandleDeleteContent} disabled={deleteDisabled}>
             Delete 
           </Button>                    
-          <Button className=" bg-primary text-sm" onClick={HandleCloseEditor} disabled={isInUpdatingState}>
-            Close Editor
-          </Button>
           <Button
-            className="bg-blue-800 hover:bg-blue-600 text-white text-sm"
+            className="bg-blue-800 hover:bg-blue-600 text-white text-sm font-medium font-mono"
             onClick={HandleSaveDraft}
             disabled={isInUpdatingState || isSaveDraftDisabled}
           >
             Save Draft
           </Button>
           <Button
-            className="bg-green-800 hover:bg-green-600 text-white text-sm"
+            className="bg-green-800 hover:bg-green-600 text-white text-sm font-medium font-mono"
             onClick={HandlePublishChanges}
             disabled={isPublishDisabled || isInUpdatingState}
           >

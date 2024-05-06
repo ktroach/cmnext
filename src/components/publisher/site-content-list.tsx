@@ -83,6 +83,13 @@ export const CreateColumns = (contentType: string | undefined | null, subRef: st
       ),
     },   
     {
+      accessorKey: "slug",
+      header: "Slug",
+      cell: ({ row }) => (
+        <div className="line-clamp-3 text-muted-foreground">{row.getValue("slug")}</div>
+      ),
+    },       
+    {
       accessorKey: "parentPageId",
       header: "Parent ID",
       cell: ({ row }) => (
