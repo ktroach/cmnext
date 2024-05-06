@@ -219,6 +219,8 @@ export const pagesRouter = createTRPCRouter({
         },
         data: {
           status: ContentStatus.DRAFT,
+          published: false, 
+          updatedAt: new Date(), 
         },
       })
     }),
@@ -308,6 +310,9 @@ export const pagesRouter = createTRPCRouter({
         },
         data: {
           deleted: input.softDeleted,
+          published: false,
+          status: ContentStatus.DRAFT,
+          updatedAt: new Date()
         },
       })
     }),

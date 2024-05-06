@@ -283,6 +283,10 @@ export function AddEditContent(params: any) {
 
   const { PublishPost, isPublishingPost } = handlePostPublish(postId)
   const { PublishPage, isPublishingPage } = handlePagePublish(pageId)
+  const { UnPublishPage, isUnPublishingPage } = handlePageUnPublish(pageId)
+  const { DeletePage, isDeletingPage } = handlePageDelete(pageId)
+  const { UnPublishPost, isUnPublishingPost } = handlePostUnPublish(postId)
+  const { DeletePost, isDeletingPost } = handlePostDelete(postId)  
 
   const publishChanges = async () => {
     let publishResult: any = null
@@ -296,6 +300,33 @@ export function AddEditContent(params: any) {
       window.location.reload()
     }
   }
+
+  const unPublishChanges = async () => {
+    let unPublishResult: any = null
+    if (params?.isPost) {
+      unPublishResult = await UnPublishPost()
+    } else {
+      unPublishResult = await UnPublishPage()
+    }
+    console.log('>>> AddEditContent >>> unPublishResult >>> ', unPublishResult)
+    if (unPublishResult) {
+      window.location.reload()
+    }
+  }
+
+  const deleteContent = async () => {
+    let deleteContentResult: any = null
+    if (params?.isPost) {
+      deleteContentResult = await DeletePost()
+    } else {
+      deleteContentResult = await DeletePage()
+    }
+    console.log('>>> AddEditContent >>> deleteContentResult >>> ', deleteContentResult)
+    if (deleteContentResult) {
+      window.location.reload()
+    }
+  }  
+
 
   // Create Post Mutations
   const createPostMutation = api.posts.create.useMutation({
@@ -336,7 +367,6 @@ export function AddEditContent(params: any) {
         }),
     })
     const isPublishingPost = setPostPublishedMutation.isLoading
-
     const PublishPost = async () => {
       console.log('Entered: PublishPost')
       if (!postId) {
@@ -350,6 +380,112 @@ export function AddEditContent(params: any) {
     }
     return { PublishPost, isPublishingPost }
   }
+
+  // Un-Publish Mutations
+  function handlePageUnPublish(pageId: any) {
+    const setPageUnPublishedMutation = api.pages.setStatusDraft.useMutation({
+      onSuccess: (unpublishedPage) => {
+        console.log('onSuccess >>> unpublishedPage >>> ', unpublishedPage)
+      },
+      onError: (error) =>
+        toast('Failed to Un-Publish Page', {
+          duration: 2000,
+          description: error.message,
+        }),
+    })
+    const isUnPublishingPage = setPageUnPublishedMutation.isLoading
+    const UnPublishPage = async () => {
+      console.log('Entered: UnPublishPage')
+      if (!pageId) {
+        console.log('Failed to Un-Publish - No Page ID !')
+        toast('Something went wrong when Un-Publishing. Please try again.')
+        return
+      }
+      return await setPageUnPublishedMutation.mutateAsync({
+        id: pageId,
+      })
+    }
+    return { UnPublishPage, isUnPublishingPage }
+  } 
+
+  function handlePostUnPublish(postId: any) {
+    const setPostUnPublishedMutation = api.posts.setStatusDraft.useMutation({
+      onSuccess: (unpublishedPost) => {
+        console.log('onSuccess >>> unpublishedPost >>> ', unpublishedPost)
+      },
+      onError: (error) =>
+        toast('Failed to Un-Publish Post', {
+          duration: 2000,
+          description: error.message,
+        }),
+    })
+    const isUnPublishingPost = setPostUnPublishedMutation.isLoading
+    const UnPublishPost = async () => {
+      console.log('Entered: UnPublishPost')
+      if (!postId) {
+        console.log('Failed to Un-Publish - No Post ID !')
+        toast('Something went wrong when Un-Publishing. Please try again.')
+        return
+      }
+      return await setPostUnPublishedMutation.mutateAsync({
+        id: postId,
+      })
+    }
+    return { UnPublishPost, isUnPublishingPost }
+  } 
+  
+  // Delete Content Mutations
+  function handlePageDelete(pageId: any) {
+    const setPageDeletedMutation = api.pages.softDelete.useMutation({
+      onSuccess: (deletedPage) => {
+        console.log('onSuccess >>> deletedPage >>> ', deletedPage)
+      },
+      onError: (error) =>
+        toast('Failed to Delete Page', {
+          duration: 2000,
+          description: error.message,
+        }),
+    })
+    const isDeletingPage = setPageDeletedMutation.isLoading
+    const DeletePage = async () => {
+      console.log('Entered: DeletePage...')
+      if (!pageId) {
+        console.log('Failed to Delete Page - No Page ID !')
+        toast('Something went wrong when Deleting Page. Please try again.')
+        return
+      }
+      return await setPageDeletedMutation.mutateAsync({
+        id: pageId,
+      })
+    }
+    return { DeletePage, isDeletingPage }
+  } 
+  
+  function handlePostDelete(postId: any) {
+    const setPostDeletedMutation = api.posts.softDelete.useMutation({
+      onSuccess: (deletedPost) => {
+        console.log('onSuccess >>> deletedPost >>> ', deletedPost)
+      },
+      onError: (error) =>
+        toast('Failed to Delete Post', {
+          duration: 2000,
+          description: error.message,
+        }),
+    })
+    const isDeletingPost = setPostDeletedMutation.isLoading
+    const DeletePost = async () => {
+      console.log('Entered: DeletePost...')
+      if (!postId) {
+        console.log('Failed to Delete Post - No Post ID !')
+        toast('Something went wrong when Deleting Post. Please try again.')
+        return
+      }
+      return await setPostDeletedMutation.mutateAsync({
+        id: postId,
+      })
+    }
+    return { DeletePost, isDeletingPost }
+  } 
 
   // Create Page Mutations
   const createPageMutation = api.pages.create.useMutation({
@@ -416,6 +552,10 @@ export function AddEditContent(params: any) {
         publishDisabled={params?.isNew}
         isUpdating={isSaving}
         isSaveDisabled={isSaving}
+        unPublishChanges={unPublishChanges}
+        deleteContent={deleteContent}
+        unPublishDisabled={params?.isNew}
+        deleteDisabled={params?.isNew}
       />
       <Form {...form}>
         <form

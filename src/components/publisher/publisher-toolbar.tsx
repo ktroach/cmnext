@@ -14,6 +14,10 @@ interface PublisherToolbarProps {
   publishDisabled?: boolean
   isUpdating?: boolean
   isSaveDisabled?: boolean
+  unPublishChanges?: any
+  deleteContent?: any
+  unPublishDisabled?: boolean
+  deleteDisabled?: boolean
 }
 
 export const PublisherToolbar = ({
@@ -25,23 +29,37 @@ export const PublisherToolbar = ({
     return currentStatus.toUpperCase()
   }
 
-  const PublishChanges = () => {
+  const HandlePublishChanges = () => {
     if (props && props?.publishChanges) {
       props.publishChanges()
     }
   }
 
-  const SaveDraft = () => {
+  const HandleSaveDraft = () => {
     if (props && props?.saveDraft) {
       props.saveDraft()
     }
   }
 
-  const CloseEditor = () => {
+  const HandleCloseEditor = () => {
     if (props && props?.closeEditor) {
       props.closeEditor()
     }
   }
+
+
+  const HandleUnPublishChanges = () => {
+    if (props && props?.unPublishChanges) {
+      props.unPublishChanges()
+    }
+  }
+  
+
+  const HandleDeleteContent = () => {
+    if (props && props?.deleteContent) {
+      props.deleteContent()
+    }
+  }  
 
   const renderIcon = (iconColor: string) => {
     const iconClass: string = `h-5 w-5 ${iconColor} fill-current rounded-2xl border border-white/[0.5] dark:border-white/[0.5] shadow-xl`
@@ -62,8 +80,10 @@ export const PublisherToolbar = ({
   }
 
   const isInUpdatingState = props?.isUpdating && props?.isUpdating === true ? true : false 
-  const isPublishDisabled = props?.publishDisabled &&props?.publishDisabled === true ? true : false 
-  const isSaveDraftDisabled = props?.isSaveDisabled &&props?.isSaveDisabled === true ? true : false 
+  const isPublishDisabled = props?.publishDisabled && props?.publishDisabled === true ? true : false 
+  const isSaveDraftDisabled = props?.isSaveDisabled && props?.isSaveDisabled === true ? true : false 
+  const unPublishDisabled = props?.unPublishDisabled && props?.unPublishDisabled === true ? true : false 
+  const deleteDisabled = props?.deleteDisabled && props?.deleteDisabled === true ? true : false 
 
   return (
     <header className="sticky top-0 z-[1000] w-full border-b bg-white dark:bg-transparent">
@@ -83,19 +103,25 @@ export const PublisherToolbar = ({
           </div>
         </div>
         <div className="flex flex-1 justify-end space-x-4">
-          <Button className=" bg-primary text-sm" onClick={CloseEditor} disabled={isInUpdatingState}>
+          <Button className=" bg-primary text-sm" onClick={HandleUnPublishChanges} disabled={unPublishDisabled}>
+            UnPublish 
+          </Button>
+          <Button className=" bg-primary text-sm" onClick={HandleDeleteContent} disabled={deleteDisabled}>
+            Delete 
+          </Button>                    
+          <Button className=" bg-primary text-sm" onClick={HandleCloseEditor} disabled={isInUpdatingState}>
             Close Editor
           </Button>
           <Button
             className="bg-blue-800 hover:bg-blue-600 text-white text-sm"
-            onClick={SaveDraft}
+            onClick={HandleSaveDraft}
             disabled={isInUpdatingState || isSaveDraftDisabled}
           >
             Save Draft
           </Button>
           <Button
             className="bg-green-800 hover:bg-green-600 text-white text-sm"
-            onClick={PublishChanges}
+            onClick={HandlePublishChanges}
             disabled={isPublishDisabled || isInUpdatingState}
           >
             Publish
