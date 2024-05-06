@@ -122,6 +122,8 @@ model Page {
   subsiteId      Int
   createdAt      DateTime      @default(now())
   updatedAt      DateTime?     @updatedAt
+  pageOrder      Int           @default(-1)  
+  parentPageId   Int           @default(-1)
 }
 
 model UserProfile {

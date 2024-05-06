@@ -15,7 +15,6 @@ export interface MenuItemProps {
   setActive: any | undefined    
 }
 
-// TODO: add menuitem description for submenu Cards and maybe title attribute in the hoverlinks 
 export interface MenuItemType {
   label: string
   href: string | undefined

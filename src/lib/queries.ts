@@ -189,19 +189,33 @@ export const getAllBlogsByPublisher = async (
 }
 
 export const getAllPagesBySubRef = async (
-  subRef: string | null
+  subRef: string | null,
+  statusFilter?: string | undefined
 ): Promise<any | undefined> => {
   if (!subRef) {
     return null
   }
-  const resultData = await sql`
-     SELECT "Subsite"."subsiteRef", "Page".*
-       FROM "Subsite"
-       JOIN "Page" ON "Page"."subsiteId" = "Subsite"."id"       
-      WHERE "Subsite"."subsiteRef" = ${subRef}     
-        AND "Page"."deleted" = false        
-      ORDER BY "Page"."createdAt" DESC
-    `
+  let resultData: any = ``
+  if (statusFilter) {
+    resultData = await sql`
+    SELECT "Subsite"."subsiteRef", "Page".*
+      FROM "Subsite"
+      JOIN "Page" ON "Page"."subsiteId" = "Subsite"."id"       
+     WHERE "Subsite"."subsiteRef" = ${subRef}     
+       AND "Page"."deleted" = false        
+       AND "Page"."status" = ${statusFilter}        
+     ORDER BY "Page"."createdAt" DESC
+   `
+  } else {
+    resultData = await sql`
+    SELECT "Subsite"."subsiteRef", "Page".*
+      FROM "Subsite"
+      JOIN "Page" ON "Page"."subsiteId" = "Subsite"."id"       
+     WHERE "Subsite"."subsiteRef" = ${subRef}     
+       AND "Page"."deleted" = false        
+     ORDER BY "Page"."createdAt" DESC
+   `
+  }
   if (resultData && resultData.length > 0) {
     return resultData
   }
@@ -209,19 +223,34 @@ export const getAllPagesBySubRef = async (
 }
 
 export const getAllBlogsBySubRef = async (
-  subRef: string | null
+  subRef: string | null,
+  statusFilter?: string | undefined
 ): Promise<any | undefined> => {
   if (!subRef) {
     return null
   }
-  const resultData = await sql`
-     SELECT "Subsite"."subsiteRef", "Post".*
-       FROM "Subsite"
-       JOIN "Post" ON "Post"."subsiteId" = "Subsite"."id"       
-      WHERE "Subsite"."subsiteRef" = ${subRef}     
-        AND "Post"."deleted" = false        
-   ORDER BY "Post"."createdAt" DESC
-    `
+
+  let resultData: any = ``
+  if (statusFilter) {
+    resultData = await sql`
+      SELECT "Subsite"."subsiteRef", "Post".*
+      FROM "Subsite"
+      JOIN "Post" ON "Post"."subsiteId" = "Subsite"."id"       
+     WHERE "Subsite"."subsiteRef" = ${subRef}     
+       AND "Post"."deleted" = false        
+       AND "Post"."status" = ${statusFilter}           
+     ORDER BY "Post"."createdAt" DESC
+     `
+  } else {
+    resultData = await sql`
+      SELECT "Subsite"."subsiteRef", "Post".*
+      FROM "Subsite"
+      JOIN "Post" ON "Post"."subsiteId" = "Subsite"."id"       
+     WHERE "Subsite"."subsiteRef" = ${subRef}     
+       AND "Post"."deleted" = false        
+     ORDER BY "Post"."createdAt" DESC
+     `
+  }
   if (resultData && resultData.length > 0) {
     return resultData
   }
