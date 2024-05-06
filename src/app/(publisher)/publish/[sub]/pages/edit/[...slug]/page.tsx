@@ -23,32 +23,22 @@ export default async function PublisherEditPage({ params }: any) {
   const subRef = params?.sub ? params.sub : null
   const hasAccess = await verifySubRefAccess(curUser, subRef)
   if (!hasAccess) redirect('/')
-
   const subsite: any = await getUserSubsite(curUser, subRef)
-
-
   const slug: any = params?.slug ? `${params.slug.join('/')}` : null
-  console.log('>>> PublisherEditPage >>> slug >>> ', slug)
-
-
+  let pageSlug: string = slug ? slug : ''
+  if (pageSlug.indexOf('/') === -1) {
+    pageSlug = `/${pageSlug}`
+  }  
   const authorId: number | null = subsite && subsite?.userId ? subsite.userId : null
   const subsiteId: number | null = subsite && subsite?.subsiteId ? subsite.subsiteId : null
-  const pageResult: any = await getPageBySlug(slug, authorId, subsiteId)
-  console.log('>>> PublisherEditPage >>> pageResult >>> ', pageResult)
-
+  const pageResult: any = await getPageBySlug(pageSlug, authorId, subsiteId)
   const pageData: any = pageResult && pageResult.length > 0 ? pageResult[0] : null
-
-console.log('>>> PublisherEditPage >>> pageData >>> ', pageData)
-
   let editParams: any = null
-
   if (pageData) {
     editParams = {
       editData: pageData, 
     }
   }
-
-  console.log('>>> PublisherEditPage >>> editParams >>> ', editParams)
 
   return (
     <Block>

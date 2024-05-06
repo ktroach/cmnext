@@ -11,10 +11,10 @@ import { Icons } from '@/styles/icons'
 import { CreateNewPageAction } from '@/components/publisher/create-page-action'
 import { SiteContentList } from '@/components/publisher/site-content-list'
 import { getFrontendBaseUrl } from '@/lib/url'
-import { 
-  verifySubRefAccess, 
-  getUserSubsite, 
-  getAllPagesByPublisher, 
+import {
+  verifySubRefAccess,
+  getUserSubsite,
+  getAllPagesByPublisher,
 } from '@/lib/queries'
 
 export const metadata: Metadata = {
@@ -31,15 +31,17 @@ export default async function PublisherManagePages({ params }: any) {
   if (!hasAccess) redirect('/')
   const subsite: any = await getUserSubsite(curUser, subRef)
   // console.log('allPagesByPublisher >>> subsite >> ', subsite)
-  const authorId: number | null = subsite && subsite?.userId? subsite.userId : null
-  const subsiteId: number | null = subsite && subsite?.subsiteId? subsite.subsiteId : null
+  const authorId: number | null =
+    subsite && subsite?.userId ? subsite.userId : null
+  const subsiteId: number | null =
+    subsite && subsite?.subsiteId ? subsite.subsiteId : null
   // console.log('allPagesByPublisher >>> authorId >> ', authorId)
   // console.log('allPagesByPublisher >>> subsiteId >> ', subsiteId)
   const allPagesByPublisher = await getAllPagesByPublisher(authorId, subsiteId)
   // console.log('allPagesByPublisher >>> ', allPagesByPublisher)
-
   let mostRecentPosts: any = []
   mostRecentPosts = allPagesByPublisher ? allPagesByPublisher.slice(0, 4) : []
+  const baseUrl: string = getFrontendBaseUrl()
 
   return (
     <Block variant="sidebar">
@@ -50,50 +52,65 @@ export default async function PublisherManagePages({ params }: any) {
       />
       <div className="w-full overflow-hidden">
         <CreateNewPageAction subRef={subRef} />
-        <h2 className="py-4 font-bold">Recent Pages</h2>
-        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-          {mostRecentPosts.map((page: any, index: any) => (
-            <Link key={page.slug} href={page.slug}>
-              <article className="flex flex-col space-y-2.5">
-                <AspectRatio ratio={2}>
-                  {page?.coverImage ? (
-                    <Image
-                      src={page.coverImage}
-                      alt={page?.title}
-                      fill
-                      sizes="(min-width: 1024px) 384px, (min-width: 768px) 288px, (min-width: 640px) 224px, 100vw"
-                      className="rounded-lg object-cover"
-                      priority={index <= 1}
-                    />
-                  ) : (
-                    <div
-                      aria-label="Placeholder"
-                      role="img"
-                      aria-roledescription="placeholder"
-                      className="flex h-full w-full items-center justify-center rounded-lg bg-secondary"
-                    >
-                      <Icons.placeholder
-                        className="h-9 w-9 text-muted-foreground"
-                        aria-hidden="true"
+        <h2 className="mt-4 py-4 font-bold">Recent Pages</h2>
+        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 py-4">
+          {mostRecentPosts.map((page: any, index: any) => {
+            let pageSlug: string = page?.slug ? page.slug : ''
+            if (pageSlug.indexOf('/') !== -1) {
+              pageSlug = pageSlug.substring(1)
+            }
+            const linkUrl: string = `${baseUrl}/publish/${subRef}/pages/edit/${pageSlug}`
+            return (
+              <Link key={pageSlug ?? index} href={linkUrl}>
+                <article className="flex flex-col space-y-2.5">
+                  <AspectRatio ratio={2}>
+                    {page?.coverImage ? (
+                      <Image
+                        src={page.coverImage}
+                        alt={page?.title}
+                        fill
+                        sizes="(min-width: 1024px) 384px, (min-width: 768px) 288px, (min-width: 640px) 224px, 100vw"
+                        className="rounded-lg object-cover"
+                        priority={index <= 1}
                       />
-                    </div>
-                  )}
-                </AspectRatio>
-                <h5 className="line-clamp-1 font-semibold">{page.title}</h5>
-                <p className="line-clamp-2 text-sm text-muted-foreground">
-                  {page.description}
-                </p>
-                {page?.createdAt ? (
-                  <p className="text-sm text-muted-foreground">
-                    {humanizeDate(page.createdAt)}
-                  </p>
-                ) : null}
-              </article>
-            </Link>
-          ))}
+                    ) : (
+                      <div
+                        aria-label="Placeholder"
+                        role="img"
+                        aria-roledescription="placeholder"
+                        className="flex h-full w-full items-center justify-center rounded-lg bg-secondary"
+                      >
+                        <Icons.placeholder
+                          className="h-9 w-9 text-muted-foreground"
+                          aria-hidden="true"
+                        />
+                      </div>
+                    )}
+                  </AspectRatio>
+                  <h5 className="line-clamp-1 font-semibold">{page.title}</h5>
+                  {/* <p className="line-clamp-2 text-sm text-muted-foreground">
+                    {page.description}
+                  </p> */}
+                  {page?.createdAt ? (
+                    <p className="text-sm text-muted-foreground">
+                      {humanizeDate(page.createdAt)}
+                    </p>
+                  ) : null}
+                </article>
+              </Link>
+            )
+          })}
         </div>
         <h2 className="py-4 font-bold">All Site Pages</h2>
-        {allPagesByPublisher ? <SiteContentList publisherContentData={allPagesByPublisher} contentDataType='pages' subsiteRef={subRef} /> : <></>}
+        {allPagesByPublisher ? (
+          <SiteContentList
+            publisherContentData={allPagesByPublisher}
+            contentDataType="pages"
+            subsiteRef={subRef}
+          />
+        ) : (
+          <></>
+        )}
       </div>
     </Block>
   )

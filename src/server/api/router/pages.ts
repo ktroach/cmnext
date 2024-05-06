@@ -26,13 +26,11 @@ export const pagesRouter = createTRPCRouter({
           subsiteId: input.subsiteId,
         },
       })
-      // Do not allow the same title to be duplicated
       if (exists) {
         console.log('Failed to CREATE Content. Page already exists: ', exists?.id)
         return null
       }
 
-      // you have to get the username 
       const user = await ctx.db.user.findFirst({
         where: {
           id: input.authorId,
@@ -55,23 +53,23 @@ export const pagesRouter = createTRPCRouter({
       }
 
       const responseData = await createContent('pages', user.name, input.subRef, createContentData)
-      console.log(">>> page >>> create >>> responseData >>> ", responseData)
-      
       let slug: string | undefined = responseData && responseData?.slug ? responseData.slug : undefined
-      if (slug && slug?.indexOf('/') === 0) {
-        slug = `/${slug}`
+      let metaDataSlug: string  = slug ? slug : ''
+      let pageSlug: string = slug ? slug : ''
+      if (pageSlug && pageSlug?.indexOf('/') === 0) {
+        pageSlug = `/${pageSlug}`
       }
 
       return await ctx.db.page.create({
         data: {
           title: input.title,
           content: input.content,
-          slug: slug,
+          slug: pageSlug,
           published: false,
           deleted: false,
           authorId: input.authorId,
           subsiteId: input.subsiteId,
-          metaData: `${slug}.mdx`
+          metaData: `${metaDataSlug}.mdx`
         },
       })
     }),    
