@@ -830,8 +830,8 @@ export function AddEditContent(params: any) {
           </Button>
           <ul className=" list-none  space-y-10 ">
             {blocks.map((block: any) => (
-              <li key={block.id}>
-                <div className="flex flex-col border dark:border-gray-500 mt-5 ">
+              <li key={block.id} className='mb-10'>
+                <div className="flex flex-col border dark:border-gray-500 mt-5 h-[800px]">
                   <div className="flex flex-row justify-between mb-3">
                     <div className="flex flex-row mt-5 mr-5">
                       <Label className="text-lg mt-2 ml-5 mr-5">Title: </Label>
