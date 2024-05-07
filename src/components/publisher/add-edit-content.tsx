@@ -17,14 +17,23 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
 import { blogSchema } from '@/validations/blog'
 import { PublisherToolbar } from '@/components/publisher/publisher-toolbar'
 import { MarkdownEditor } from '@/components/editor'
 import { useMounted } from '@/hooks/use-mounted'
 import { RootConfig } from '@/config/root-config'
 import { api } from '@/trpc/client'
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '../ui/select'
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '../ui/select'
 import { getFrontendBaseUrl } from '@/lib/url'
+import { HelpCircle } from 'lucide-react'
 
 type Inputs = z.infer<typeof blogSchema>
 
@@ -32,7 +41,8 @@ export function AddEditContent(params: any) {
   const mounted = useMounted()
   const router = useRouter()
   const [isPending, startTransition] = React.useTransition()
-  const [editorContent, setEditorContent] = React.useState<any>('Just start typing!')
+  const [editorContent, setEditorContent] =
+    React.useState<any>('Just start typing!')
   const [postId, setPostId] = React.useState<any>()
   const [pageId, setPageId] = React.useState<any>()
   const [authorId, setAuthorId] = React.useState<any>()
@@ -45,22 +55,70 @@ export function AddEditContent(params: any) {
   const [coverImage, setCoverImage] = React.useState<any>()
   const [isSaving, setIsSaving] = React.useState<boolean>(false)
 
-  const isPage: boolean = params?.isPost ? false : true 
+  const [blocks, setBlocks] = React.useState<any>([])
+
+  const addBlock = () => {
+    setBlocks([
+      ...blocks,
+      { id: blocks.length, content: '', title: '' },
+    ])
+  }
+
+  const removeBlock = (id: any) => {
+    setBlocks(blocks.filter((block: any) => block.id !== id))
+  }
+
+ const updateBlockText = (id: any, newContent: any) => {
+    setBlocks(
+      blocks.map((block: { id: any }) => {
+        if (block.id === id) {
+          return { ...block, content: newContent }
+        }
+        return block
+      })
+    )
+  }
+
+  const updateBlockTitle = (id: any, e: React.ChangeEvent<HTMLInputElement>) => {
+    setBlocks(
+      blocks.map((block: { id: any }) => {
+        if (block.id === id) {
+          return { ...block, title: e.target.value }
+        }
+        return block
+      })
+    )
+  }  
+
+  const isPage: boolean = params?.isPost ? false : true
 
   // TODO: Populate from database
   const pageTemplates: any = [
-    {label: 'none', value: ''},
-    {label: 'full page template', value: 'full page template'},
-    {label: 'image gallery template', value: 'image table template'},
-    {label: 'bio page template', value: 'bio page template'},
+    { label: 'none', value: '0' },
+    { label: 'template 1', value: '1' },
+    { label: 'template 2', value: '2' },
+    { label: 'template 3', value: '3' },
   ]
   // TODO: Populate from database
   const parentPage: any = [
-    {label: 'none', value: ''},
-    {label: 'about', value: '/about'},
-    {label: 'products', value: '/products'},
-    {label: 'services', value: '/services'},
-  ]  
+    { label: 'Home', value: '1' },
+    { label: 'About', value: '2' },
+    { label: 'Archive', value: '3' },
+    { label: 'Contact', value: '4' },
+  ]
+
+  // TODO: Populate from database
+  const pageOrder: any = [
+    { label: 'Always at the top', value: '1' },
+    { label: 'Below page x', value: '2' },
+    { label: 'Below page y', value: '3' },
+    { label: 'Below page z', value: '4' },
+    { label: 'Always at the bottom', value: '5' },
+  ]
+
+  const handleTemplateHelp = () => {
+    toast('TODO')
+  }
 
   const editParams: any = params?.editParams ? params.editParams : null
   console.log('>>> AddEditContent >>> editParams >>> ', editParams)
@@ -70,18 +128,21 @@ export function AddEditContent(params: any) {
       ? editParams.editData
       : null
 
-  console.log('>>> AddEditContent >>> editData >>> ', editData)      
+  console.log('>>> AddEditContent >>> editData >>> ', editData)
 
-  const editContentId: number | null = editData && editData?.id ? editData.id : null
-  const editSlug: string | null = editData && editData?.slug ? editData.slug : null
-  const editAuthorId: number | null = editData && editData?.authorId ? editData.authorId : null
-  const editSubsiteId: number | null = editData && editData?.subsiteId ? editData.subsiteId : null
+  const editContentId: number | null =
+    editData && editData?.id ? editData.id : null
+  const editSlug: string | null =
+    editData && editData?.slug ? editData.slug : null
+  const editAuthorId: number | null =
+    editData && editData?.authorId ? editData.authorId : null
+  const editSubsiteId: number | null =
+    editData && editData?.subsiteId ? editData.subsiteId : null
   const editStatus: string = editData && editData?.status ? editData.status : ''
   const editContent: string =
     editData && editData?.content ? editData.content : ''
   const editTitle: string = editData && editData?.title ? editData.title : ''
-  console.log('>>> AddEditContent >>> editTitle >>> ', editTitle)  
-
+  console.log('>>> AddEditContent >>> editTitle >>> ', editTitle)
 
   const editCoverImage: string =
     editData && editData?.coverImage ? editData.coverImage : ''
@@ -98,7 +159,7 @@ export function AddEditContent(params: any) {
       setPostId(editContentId)
     } else {
       setPageId(editContentId)
-    }    
+    }
     setContentLoaded(true)
   }
 
@@ -109,8 +170,9 @@ export function AddEditContent(params: any) {
       description: '',
       image: '',
       body: '',
-      template: '', 
-      parent: '', 
+      template: '',
+      parent: '',
+      order: '',
     },
   })
 
@@ -169,7 +231,7 @@ export function AddEditContent(params: any) {
         content: editorContent,
         authorId: authorId,
         subsiteId: subsiteId,
-        metaData: `${editSlug}.mdx`,        
+        metaData: `${editSlug}.mdx`,
       }
       return mutationVars
     }
@@ -179,7 +241,7 @@ export function AddEditContent(params: any) {
         content: editorContent,
         authorId: authorId,
         subsiteId: subsiteId,
-        metaData: `${editSlug}.mdx`,        
+        metaData: `${editSlug}.mdx`,
       }
       return mutationVars
     }
@@ -235,7 +297,7 @@ export function AddEditContent(params: any) {
     let savedContent: any = null
 
     setIsSaving(true)
-   
+
     if (params?.isNew) {
       savedContent = await CreateContent()
     } else {
@@ -266,14 +328,18 @@ export function AddEditContent(params: any) {
     toast.success('Content saved successfully.')
 
     if (params?.isNew) {
-      const newPageSlug: string | undefined = savedContent && savedContent?.slug ? savedContent?.slug : undefined
+      const newPageSlug: string | undefined =
+        savedContent && savedContent?.slug ? savedContent?.slug : undefined
       const subsite: any = params?.subsite ? params.subsite : undefined
-      const subref: string = subsite?.subRef ? subsite.subRef : undefined      
+      const subref: string = subsite?.subRef ? subsite.subRef : undefined
       const baseUrl: string = getFrontendBaseUrl()
       const contentType: string = params?.isPost ? 'blogs' : 'pages'
-      const editPageUrl: string | undefined = newPageSlug && subref ? `${baseUrl}/publish/${subref}/${contentType}/edit/${newPageSlug}` : undefined
+      const editPageUrl: string | undefined =
+        newPageSlug && subref
+          ? `${baseUrl}/publish/${subref}/${contentType}/edit/${newPageSlug}`
+          : undefined
       if (editPageUrl) {
-          window.location.href = editPageUrl
+        window.location.href = editPageUrl
       }
     } else {
       // reload the edit page
@@ -286,7 +352,7 @@ export function AddEditContent(params: any) {
   const { UnPublishPage, isUnPublishingPage } = handlePageUnPublish(pageId)
   const { DeletePage, isDeletingPage } = handlePageDelete(pageId)
   const { UnPublishPost, isUnPublishingPost } = handlePostUnPublish(postId)
-  const { DeletePost, isDeletingPost } = handlePostDelete(postId)  
+  const { DeletePost, isDeletingPost } = handlePostDelete(postId)
 
   const publishChanges = async () => {
     let publishResult: any = null
@@ -321,18 +387,20 @@ export function AddEditContent(params: any) {
     } else {
       deleteContentResult = await DeletePage()
     }
-    console.log('>>> AddEditContent >>> deleteContentResult >>> ', deleteContentResult)
+    console.log(
+      '>>> AddEditContent >>> deleteContentResult >>> ',
+      deleteContentResult
+    )
     if (deleteContentResult) {
       const subsite: any = params?.subsite ? params.subsite : undefined
       const subref: string = subsite?.subRef ? subsite.subRef : undefined
       const url: string = params?.isPost
         ? `${window.location.origin}/publish/${subref}/blogs?reload=true`
         : `${window.location.origin}/publish/${subref}/pages?reload=true`
-      router.push(url)      
+      router.push(url)
       router.refresh()
     }
-  }  
-
+  }
 
   // Create Post Mutations
   const createPostMutation = api.posts.create.useMutation({
@@ -412,7 +480,7 @@ export function AddEditContent(params: any) {
       })
     }
     return { UnPublishPage, isUnPublishingPage }
-  } 
+  }
 
   function handlePostUnPublish(postId: any) {
     const setPostUnPublishedMutation = api.posts.setStatusDraft.useMutation({
@@ -438,8 +506,8 @@ export function AddEditContent(params: any) {
       })
     }
     return { UnPublishPost, isUnPublishingPost }
-  } 
-  
+  }
+
   // Delete Content Mutations
   function handlePageDelete(pageId: any) {
     const setPageDeletedMutation = api.pages.softDelete.useMutation({
@@ -465,8 +533,8 @@ export function AddEditContent(params: any) {
       })
     }
     return { DeletePage, isDeletingPage }
-  } 
-  
+  }
+
   function handlePostDelete(postId: any) {
     const setPostDeletedMutation = api.posts.softDelete.useMutation({
       onSuccess: (deletedPost) => {
@@ -491,7 +559,7 @@ export function AddEditContent(params: any) {
       })
     }
     return { DeletePost, isDeletingPost }
-  } 
+  }
 
   // Create Page Mutations
   const createPageMutation = api.pages.create.useMutation({
@@ -568,69 +636,6 @@ export function AddEditContent(params: any) {
           className="grid gap-4"
           onSubmit={(...args) => void form.handleSubmit(onSubmit)(...args)}
         >
-          {isPage ? (
-            <>
-              <FormField
-                control={form.control}
-                name="template"
-                render={({ field }) => (
-                  <FormItem className="w-full">
-                    <FormLabel>Template</FormLabel>
-                    <FormControl>
-                      <Select
-                        value={field.value?.toString()}
-                        onValueChange={field.onChange}
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a Template" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectGroup>
-                            {pageTemplates.map((option: any, index: number) => (
-                              <SelectItem key={option.value} value={option.value}>
-                                {option.label}
-                              </SelectItem>
-                            ))}
-                          </SelectGroup>
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="parent"
-                render={({ field }) => (
-                  <FormItem className="w-full">
-                    <FormLabel>Parent</FormLabel>
-                    <FormControl>
-                      <Select
-                        value={field.value?.toString()}
-                        onValueChange={field.onChange}
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a Parent" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectGroup>
-                            {parentPage.map((option: any, index: number) => (
-                              <SelectItem key={option.value} value={option.value}>
-                                {option.label}
-                              </SelectItem>
-                            ))}
-                          </SelectGroup>
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </>
-          ) : (<></>)}
-
           <FormField
             control={form.control}
             name="title"
@@ -656,34 +661,19 @@ export function AddEditContent(params: any) {
               </FormItem>
             )}
           />
-          <FormField
-            control={form.control}
-            name="description"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel className="text-lg">Summary</FormLabel>
-                <FormControl>
-                  <Input
-                    className="hover:border-blue-500 border-blue-400"
-                    disabled={contentLoaded}
-                    placeholder="Tell a summary about your content..."
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+
+          <Separator />
+
           <FormField
             control={form.control}
             name="image"
             render={({ field }) => (
               <FormItem>
                 <FormLabel
-                  className="text-lg"
+                  className=""
                   title="If blank, a random image will be assigned based on the title"
                 >
-                  Cover Image (Optional)
+                  Cover Image
                 </FormLabel>
                 <FormControl>
                   <Input
@@ -702,6 +692,122 @@ export function AddEditContent(params: any) {
               </FormItem>
             )}
           />
+
+          {/* Page Options */}
+          {isPage ? (
+            <>
+              <Separator />
+
+              <FormField
+                control={form.control}
+                name="template"
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <FormLabel>
+                      <div className="flex flex-row space-between">
+                        <div className="mr-2">Use a Template</div>{' '}
+                        <div className="mt-[-5px]">
+                          <HelpCircle onClick={handleTemplateHelp} />
+                        </div>{' '}
+                      </div>
+                    </FormLabel>
+                    <FormControl>
+                      <Select
+                        value={field.value?.toString()}
+                        onValueChange={field.onChange}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select if you want to use a template for this page" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectGroup>
+                            {pageTemplates.map((option: any, index: number) => (
+                              <SelectItem
+                                key={option.value}
+                                value={option.value}
+                                disabled={contentLoaded}
+                              >
+                                {option.label}
+                              </SelectItem>
+                            ))}
+                          </SelectGroup>
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="parent"
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <FormLabel>Parent Page</FormLabel>
+                    <FormControl>
+                      <Select
+                        value={field.value?.toString()}
+                        onValueChange={field.onChange}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a parent page" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectGroup>
+                            {parentPage.map((option: any, index: number) => (
+                              <SelectItem
+                                key={option.value}
+                                value={option.value}
+                              >
+                                {option.label}
+                              </SelectItem>
+                            ))}
+                          </SelectGroup>
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="order"
+                render={({ field }) => (
+                  <FormItem className="w-full">
+                    <FormLabel>Page Order</FormLabel>
+                    <FormControl>
+                      <Select
+                        value={field.value?.toString()}
+                        onValueChange={field.onChange}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select where you want the page on your site menu" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectGroup>
+                            {pageOrder.map((option: any, index: number) => (
+                              <SelectItem
+                                key={option.value}
+                                value={option.value}
+                              >
+                                {option.label}
+                              </SelectItem>
+                            ))}
+                          </SelectGroup>
+                        </SelectContent>
+                      </Select>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </>
+          ) : (
+            <></>
+          )}
+
           <Separator />
           <Label className="text-lg">Content Block</Label>
         </form>
@@ -713,8 +819,58 @@ export function AddEditContent(params: any) {
         editorHeight="calc(100vh / 3)"
       />
 
-      {pageId ? (<p>TODO: Add/Remove Content Blocks...</p>) : (<></>)}
-      
+      {pageId ? (
+        <>
+          <Separator />
+          <Button
+            className="bg-blue-800 hover:bg-blue-600  text-white text-lg"
+            onClick={addBlock}
+          >
+            Add Block
+          </Button>
+          <ul className=" list-none  space-y-10 ">
+            {blocks.map((block: any) => (
+              <li key={block.id}>
+                <div className="flex flex-col border dark:border-gray-500 mt-5 ">
+                  <div className="flex flex-row justify-between mb-3">
+                    <div className="flex flex-row mt-5 mr-5">
+                      <Label className="text-lg mt-2 ml-5 mr-5">Title: </Label>
+                      <Input
+                        className="mt-1"
+                        value={block?.title}
+                        onChange={(e) => {
+                          updateBlockTitle(block.id, e)
+                        }}
+                      ></Input>
+                    </div>
+                    <div className="mt-5 mr-5">
+                      <Button
+                        className=" bg-red-800 hover:bg-red-600 text-white text-md"
+                        onClick={() => removeBlock(block.id)}
+                      >
+                        Remove Block
+                      </Button>
+                    </div>
+                  </div>
+                  <div className="mt-4">
+                    <MarkdownEditor
+                      mounted={mounted}
+                      value={block?.content}
+                      onChange={(val: any) => {
+                        updateBlockText(block.id, val)
+                      }}
+                      editorHeight="calc(100vh / 3)"
+                    />
+                  </div>
+                </div>
+                <Separator />
+              </li>
+            ))}
+          </ul>
+        </>
+      ) : (
+        <></>
+      )}
     </>
   )
 }

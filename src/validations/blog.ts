@@ -9,5 +9,6 @@ export const blogSchema = z.object({
   body: z.string(),
   template: z.string().optional(),
   parent: z.string().optional(),
+  order: z.string().optional(),
 })
 
