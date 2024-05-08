@@ -26,13 +26,17 @@ export const GetSubsiteBySignInIdentifierBackend = async (userId: string, signIn
 }
 
 // TODO: Consider rewriting all of this backend I/O in Rust 
-export const saveContent = async (
+export const createContent = async (
   contentType: string, 
-  userName: string,
+  userName: string | undefined | null,
   subRef: string,
   data: any
 ) => {
   try {
+    if(!userName) {
+      console.log('>>> Failed to Create content >>> userName is required')
+      return null
+    }
 
     // TODO: Fix Author avatar and url
     const authorMeta = {
@@ -108,11 +112,15 @@ export const publishContent = () => {
 // TODO: Consider rewriting all of this backend I/O in Rust 
 export const updateContent = async (
   contentType: string, 
-  userName: string,
+  userName: string | undefined,
   subRef: string,
   data: any
 ) => {
   try {
+    if(!userName) {
+      console.log('>>> Failed to Update content >>> userName is required')
+      return null
+    }
 
     const contentSlug: string = `/content/${contentType}/${subRef}`
     const mdxContentPath: string = `./src${contentSlug}`

@@ -13,7 +13,7 @@ export const RootConfig = {
     featureSitesLimit: 4,  
     logoImage: "",
     emailProviderUrl: "https://react.email/api/send/test",
-    defaultCoverImage: 'https://source.unsplash.com/random/220x120',
+    defaultCoverImage: 'https://picsum.photos/seed/picsum/200/120',
     signoutOptions: {
       signOutOptionText: "Sign Out"
     },
@@ -94,7 +94,7 @@ export const RootConfig = {
         ],
       },    
       {
-        label: "Plans & Pricing",
+        label: "Plans",
         href: "/pricing",
         type: "group",
         items: [

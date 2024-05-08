@@ -3,6 +3,7 @@ import { z } from 'zod'
 import { createTRPCRouter, protectedProcedure, publicProcedure } from '../trpc'
 import { ContentStatus } from '@/db'
 import { getFrontendBaseUrl } from '@/lib/url'
+import { createContent, updateContent } from '@/lib/publisherBackend'
 
 export const pagesRouter = createTRPCRouter({
     create: protectedProcedure
@@ -25,13 +26,11 @@ export const pagesRouter = createTRPCRouter({
           subsiteId: input.subsiteId,
         },
       })
-      // Do not allow the same title to be duplicated
       if (exists) {
         console.log('Failed to CREATE Content. Page already exists: ', exists?.id)
         return null
       }
 
-      // you have to get the username 
       const user = await ctx.db.user.findFirst({
         where: {
           id: input.authorId,
@@ -40,45 +39,37 @@ export const pagesRouter = createTRPCRouter({
       if (!user) {
         console.log('Failed to CREATE Content. User does not exist.')
         return null
-      }    
+      }   
       
-      const baseUrl: string = getFrontendBaseUrl()
-      const createContentEndpoint: string = `${baseUrl}/api/content/create`
-      // TODO: This Fetch may cause us a problem with CORS, re-evaluate the create content endpoint architeture completely 
-      const response = await fetch(createContentEndpoint, {
-        method: 'POST',
-        body: JSON.stringify({
-          isUpdate: false,
-          contentType: 'pages',
-          subRef: input.subRef,
-          title: input.title,
-          description: input.description,
-          image: input.image,
-          body: input.content,
-          userName: user.name,           
-        }),
-      })
-
-      if (response.status !== 200) {
-        console.log('Error saving Page >>> input >>> ', input)
-        return null
+      const createContentData: any = {
+        isUpdate: false,
+        contentType: 'pages',
+        subRef: input.subRef,
+        title: input.title,
+        description: input.description,
+        image: input.image,
+        body: input.content,
+        userName: user.name,           
       }
 
-      const responseData = await response.json()
-      console.log(">>> page >>> create >>> responseData >>> ", responseData)
-      const slug = responseData && responseData?.slug ? responseData.slug : undefined
-      console.log(">>> page >>> create >>> slug >>> ", slug)
+      const responseData = await createContent('pages', user.name, input.subRef, createContentData)
+      let slug: string | undefined = responseData && responseData?.slug ? responseData.slug : undefined
+      let metaDataSlug: string  = slug ? slug : ''
+      let pageSlug: string = slug ? slug : ''
+      if (pageSlug && pageSlug?.indexOf('/') === 0) {
+        pageSlug = `/${pageSlug}`
+      }
 
       return await ctx.db.page.create({
         data: {
           title: input.title,
           content: input.content,
-          slug: slug,
+          slug: pageSlug,
           published: false,
           deleted: false,
           authorId: input.authorId,
           subsiteId: input.subsiteId,
-          metaData: `${slug}.mdx`
+          metaData: `${metaDataSlug}.mdx`
         },
       })
     }),    
@@ -111,10 +102,17 @@ export const pagesRouter = createTRPCRouter({
           id: input.authorId,
         },
       })
+
       if (!user) {
         console.log('Failed to UPDATE Content. User does not exist.')
         return null
       }    
+
+      const userName: string | undefined =  user?.name ?  user.name : undefined
+      if (!userName) {
+        console.log('Failed to UPDATE Content >>> user.name is invalid.')
+        return null
+      }         
       
       const subsite = await ctx.db.subsite.findFirst({
         where: {
@@ -129,13 +127,9 @@ export const pagesRouter = createTRPCRouter({
       if (!subRef) {
         console.log('Failed to UPDATE Content. subsiteRef does not exist.')
         return null
-      }          
-
-      const baseUrl: string = getFrontendBaseUrl()
-      const updateContentEndpoint: string = `${baseUrl}/api/content/save`
-      const response = await fetch(updateContentEndpoint, {
-        method: 'POST',
-        body: JSON.stringify({
+      }       
+      
+      const updateContentData: any = {
           isUpdate: true,
           contentType: 'pages',
           subRef: subRef,
@@ -143,11 +137,11 @@ export const pagesRouter = createTRPCRouter({
           userName: user.name,  
           existingData: existingPage,          
           metaData: input.metaData,        
-        }),
-      })      
+      }
 
-      const responseData = await response.json()
-      console.log(">>> page UPDATE >>> responseData >>> ", responseData)
+      console.log('>>> pages >>> update >>> updateContentData >>> ', updateContentData)
+      const responseData = await updateContent('pages', userName, subRef, updateContentData)
+      console.log(">>> page >>> update >>> responseData >>> ", responseData)      
 
       return await ctx.db.page.update({
         where: {
@@ -169,7 +163,6 @@ export const pagesRouter = createTRPCRouter({
       })
     )
     .query(async ({ input, ctx }) => {
-      console.log({ 'input.limit': input.limit })
       return await ctx.db.page.findMany({
         take: input.limit,
         orderBy: {
@@ -224,6 +217,8 @@ export const pagesRouter = createTRPCRouter({
         },
         data: {
           status: ContentStatus.DRAFT,
+          published: false, 
+          updatedAt: new Date(), 
         },
       })
     }),
@@ -313,6 +308,9 @@ export const pagesRouter = createTRPCRouter({
         },
         data: {
           deleted: input.softDeleted,
+          published: false,
+          status: ContentStatus.DRAFT,
+          updatedAt: new Date()
         },
       })
     }),

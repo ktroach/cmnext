@@ -43,7 +43,7 @@ export const MarkdownEditor = ({
   const rootMenubarClassName: string =
     'xs:h-10 sm:h-12 md:h-12 lg:h-14 xl:h-14 justify-center '
   const menubarTriggerClassName: string =
-    'dark:text-white text-gray-700 h-full xs:text-xs sm:text-xs md:text-sm lg:text-md xl:text-md'
+    'dark:text-white text-gray-700 h-full xs:text-xs sm:text-xs md:text-sm lg:text-md xl:text-md '
   const menubarItemClassName: string = 'dark:hover:bg-blue-600'
 
   let mdEditorHeight = 1500 // TODO: Dont harcode this value. Calculate this based on the height of the window
@@ -446,35 +446,37 @@ export const MarkdownEditor = ({
 
   return (
     <>
-      <Menubar className={rootMenubarClassName}>
-        {menuData.map((menu, index) => (
-          <MenubarMenu key={index}>
-            <MenubarTrigger className={menubarTriggerClassName}>
-              <Icons.addCircle
-                className="mr-2 h-4 w-4 animate-pulse"
-                aria-hidden={true}
-              />
-              {menu.trigger}
-            </MenubarTrigger>
-            <MenubarContent>
-              {menu.items.map((item, itemIndex) => (
-                <MenubarItem
-                  key={itemIndex}
-                  className={menubarItemClassName}
-                  onSelect={item.onSelect}
-                >
-                  {item.title}{' '}
-                  <MenubarShortcut>{item.shortcut}</MenubarShortcut>
-                </MenubarItem>
-              ))}
-            </MenubarContent>
-            <MenubarSeparator />
-          </MenubarMenu>
-        ))}
-      </Menubar>
+      <div className="h-[70px]">
+        <Menubar className={rootMenubarClassName}>
+          {menuData.map((menu, index) => (
+            <MenubarMenu key={index}>
+              <MenubarTrigger className={menubarTriggerClassName}>
+                <Icons.addCircle
+                  className="mr-2 h-4 w-4 animate-pulse"
+                  aria-hidden={true}
+                />
+                {menu.trigger}
+              </MenubarTrigger>
+              <MenubarContent>
+                {menu.items.map((item, itemIndex) => (
+                  <MenubarItem
+                    key={itemIndex}
+                    className={menubarItemClassName}
+                    onSelect={item.onSelect}
+                  >
+                    {item.title}{' '}
+                    <MenubarShortcut>{item.shortcut}</MenubarShortcut>
+                  </MenubarItem>
+                ))}
+              </MenubarContent>
+              <MenubarSeparator />
+            </MenubarMenu>
+          ))}
+        </Menubar>
+      </div>
       {/*@ts-ignore eslint-disable-next-line*/}
       <MDEditor
-        className="my-[-32px]"
+        className=""
         data-color-mode={editorColorMode}
         height={mdEditorHeight}
         hideToolbar={toolbarVisible}
@@ -502,7 +504,7 @@ export const MarkdownEditor = ({
             <Label className="text-lg font-medium">Live Preview</Label>
             <div className=" border-solid border-2 border-spacing-x-4 border-gray/[0.5] dark:border-white/[0.2] border-spacing-2 shadow-md">
               <MDEditor.Markdown
-                className='px-4'
+                className="px-4"
                 source={value}
                 wrapperElement={wrapperElement}
               />

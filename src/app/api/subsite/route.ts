@@ -3,8 +3,6 @@ import { GetSubsiteBySignInIdentifierBackend } from '@/lib/publisherBackend'
 import { type NextRequest } from "next/server"
 import { SetCorsHeaders } from '@/lib/cors'
 
-// export const runtime = "edge"
-
 const handler = async (req: NextRequest) => {
   try {
     const { userId } = auth()
@@ -22,11 +20,10 @@ const handler = async (req: NextRequest) => {
     }
 
     const subsiteResult = await GetSubsiteBySignInIdentifierBackend(userId, signInIdentifier)
-
     const response = Response.json(subsiteResult)
-    SetCorsHeaders(response)
-
+    SetCorsHeaders(response, "POST")
     return response
+
   } catch (error) {
     return Response.json(error)
   }

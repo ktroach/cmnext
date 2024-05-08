@@ -1,8 +1,13 @@
+import { SetCorsHeaders } from '@/lib/cors'
 import { updateContent } from '@/lib/publisherBackend'
 import { auth, currentUser } from '@clerk/nextjs'
 
 export async function POST(req: Request) {
   const { userId, getToken } = auth()
+
+  if (!userId) {
+    return new Response('Unauthorized', { status: 401 })
+  }  
 
   const data = await req.json()
 
@@ -22,8 +27,10 @@ export async function POST(req: Request) {
     }
 
     const responseData = await updateContent(contentType, userName, subRef, data)
-
-    return Response.json( responseData )
+    const response = Response.json(responseData)
+    SetCorsHeaders(response)    
+    return response
+    
   } catch (error) {
     return Response.json(error)
   }

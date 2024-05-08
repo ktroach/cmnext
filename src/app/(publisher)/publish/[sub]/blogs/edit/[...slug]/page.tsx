@@ -29,6 +29,7 @@ export default async function PublisherEditBlog({ params }: any) {
   const subsiteId: number | null = subsite && subsite?.subsiteId ? subsite.subsiteId : null
   const pageResult: any = await getPostBySlug(slug, authorId, subsiteId)
   const pageData: any = pageResult && pageResult.length > 0 ? pageResult[0] : null
+
   let editParams: any = null
 
   if (pageData) {

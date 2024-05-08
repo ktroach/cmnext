@@ -1,12 +1,16 @@
-import { saveContent } from '@/lib/publisherBackend'
+import { createContent } from '@/lib/publisherBackend'
 import { auth, currentUser } from '@clerk/nextjs'
+import { SetCorsHeaders } from '@/lib/cors'
 
 export async function POST(req: Request) {
   const { userId, getToken } = auth()
 
-  const data = await req.json()
+  if (!userId) {
+    return new Response('Unauthorized', { status: 401 })
+  }  
 
   try {
+    const data = await req.json()
     const subRef = data?.subRef ? data.subRef : undefined
     if (!subRef) {
         console.log('>>> create content route >>> subRef not found >>> ')
@@ -21,9 +25,11 @@ export async function POST(req: Request) {
       return new Response(null, { status: 404 })      
     }
 
-    const responseData = await saveContent(contentType, userName, subRef, data)
+    const responseData = await createContent(contentType, userName, subRef, data)
+    const response = Response.json(responseData)
+    SetCorsHeaders(response)    
+    return response
 
-    return Response.json( responseData )
   } catch (error) {
     return Response.json(error)
   }

@@ -2,6 +2,7 @@ import { z } from 'zod'
 import { createTRPCRouter, protectedProcedure, publicProcedure } from '../trpc'
 import { ContentStatus } from '@/db'
 import { getFrontendBaseUrl } from '@/lib/url'
+import { createContent, updateContent } from '@/lib/publisherBackend'
 
 export const postRouter = createTRPCRouter({
   create: protectedProcedure
@@ -36,37 +37,38 @@ export const postRouter = createTRPCRouter({
           id: input.authorId,
         },
       })
+
       if (!user) {
         console.log('Failed to CREATE Content. User does not exist.')
         return null
       }    
-      
-      const baseUrl: string = getFrontendBaseUrl()
-      const createContentEndpoint: string = `${baseUrl}/api/content/create`
-      // TODO: Re-evaluate the api endpoint and fetch here. It may be problematic in edge scenarios. Consider an alternative solution.
-      const response = await fetch(createContentEndpoint, {
-        method: 'POST',
-        body: JSON.stringify({
-          isUpdate: false,
-          contentType: 'blogs',
-          subRef: input.subRef,
-          title: input.title,
-          description: input.description,
-          image: input.image,
-          body: input.content,
-          userName: user.name, 
-        }),
-      })
 
-      if (response.status !== 200) {
-        console.log('Error saving Blog in TRPC Route >>> input >>> ', input)
+      const userName: string | undefined =  user?.name ?  user.name : undefined
+      if (!userName) {
+        console.log('Failed to CREATE Content >>> user.name is invalid.')
         return null
-      }
+      }    
 
-      const responseData = await response.json()
-      console.log("post create >>> responseData >>> ", responseData)
-      const slug = responseData && responseData?.slug ? responseData.slug : undefined
-      console.log("post create >>> slug >>> ", slug)
+      const createContentData: any = {
+        isUpdate: false,
+        contentType: 'blogs',
+        subRef: input.subRef,
+        title: input.title,
+        description: input.description,
+        image: input.image,
+        body: input.content,
+        userName: userName, 
+      }     
+      
+      const responseData = await createContent('blogs', userName, input.subRef, createContentData)
+      console.log(">>> post >>> create >>> responseData >>> ", responseData)
+      
+      let slug: string | undefined = responseData && responseData?.slug ? responseData.slug : undefined
+      if (slug && slug?.indexOf('/') === 0) {
+        slug = `/${slug}`
+      }
+      
+      console.log(">>> post >>> create >>> slug >>> ", slug)
 
       return await ctx.db.post.create({
         data: {
@@ -110,31 +112,36 @@ export const postRouter = createTRPCRouter({
           id: input.authorId,
         },
       })
+
       if (!user) {
         console.log('Failed to UPDATE Content. User does not exist.')
         return null
       }    
+
+      const userName: string | undefined =  user?.name ?  user.name : undefined
+      if (!userName) {
+        console.log('Failed to UPDATE Content >>> user.name is invalid.')
+        return null
+      }        
       
       const subsite = await ctx.db.subsite.findFirst({
         where: {
           id: input.subsiteId,
         },
       })      
+      
       if (!subsite) {
         console.log('Failed to UPDATE Content. subsite does not exist.')
         return null
-      }    
+      }   
+
       const subRef = subsite?.subsiteRef ? subsite.subsiteRef : null
       if (!subRef) {
         console.log('Failed to UPDATE Content. subsiteRef does not exist.')
         return null
       }    
-      
-      const baseUrl: string = getFrontendBaseUrl()
-      const updateContentEndpoint: string = `${baseUrl}/api/content/save`
-      const response = await fetch(updateContentEndpoint, {
-        method: 'POST',
-        body: JSON.stringify({
+
+      const updateContentData: any = {
           isUpdate: true,
           contentType: 'blogs',
           subRef: subRef,
@@ -142,11 +149,11 @@ export const postRouter = createTRPCRouter({
           userName: user.name,  
           existingData: existingPost,    
           metaData: input.metaData,        
-        }),
-      })      
+      }
 
-      const responseData = await response.json()
-      console.log(">>> post UPDATE >>> responseData >>> ", responseData)      
+      console.log('>>> post >>> update >>> updateContentData >>> ', updateContentData)
+      const responseData = await updateContent('blogs', userName, subRef, updateContentData)
+      console.log(">>> post >>> update >>> responseData >>> ", responseData)      
 
       return await ctx.db.post.update({
         where: {
@@ -201,7 +208,6 @@ export const postRouter = createTRPCRouter({
       })
     )
     .query(async ({ input, ctx }) => {
-      console.log({ 'input.limit': input.limit })
       return await ctx.db.post.findMany({
         take: input.limit,
         orderBy: {
@@ -287,6 +293,8 @@ export const postRouter = createTRPCRouter({
         },
         data: {
           status: ContentStatus.DRAFT,
+          published: false, 
+          updatedAt: new Date(),           
         },
       })
     }),
@@ -358,6 +366,9 @@ export const postRouter = createTRPCRouter({
         },
         data: {
           deleted: input.softDeleted,
+          published: false,
+          status: ContentStatus.DRAFT,
+          updatedAt: new Date()          
         },
       })
     }),

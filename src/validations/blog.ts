@@ -7,5 +7,8 @@ export const blogSchema = z.object({
   description: z.string(),
   image: z.string(),
   body: z.string(),
+  template: z.string().optional(),
+  parent: z.string().optional(),
+  order: z.string().optional(),
 })
 

@@ -195,7 +195,9 @@ exports.Prisma.PageScalarFieldEnum = {
   authorId: 'authorId',
   subsiteId: 'subsiteId',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  pageOrder: 'pageOrder',
+  parentPageId: 'parentPageId'
 };
 
 exports.Prisma.UserProfileScalarFieldEnum = {

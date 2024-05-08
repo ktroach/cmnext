@@ -54,6 +54,13 @@ export const CreateColumns = (contentType: string | undefined | null, subRef: st
   const contentTypeBlog: boolean = hasContentType && contentType === 'blogs' ? true : false  
   let cols: ColumnDef<any>[] = [
     {
+      accessorKey: "id",
+      header: "ID",
+      cell: ({ row }) => (
+        <div className="line-clamp-3 text-muted-foreground">{row.getValue("id")}</div>
+      ),
+    },     
+    {
       accessorKey: "title",
       header: "Title",
       cell: ({ row }) => {
@@ -69,21 +76,33 @@ export const CreateColumns = (contentType: string | undefined | null, subRef: st
       },
     },
     {
-      accessorKey: "slug",
-      header: "Slug",
-      cell: ({ row }) => {
-        const slugValue = row.getValue("slug")
-        const editLink: string  = subRef && hasContentType && slugValue ? `/publish/${subRef}/${contentType}/edit/${slugValue}` : ''        
-        return(<div className="line-clamp-3 text-muted-foreground">{editLink}</div>)
-      },
-    },
-    {
       accessorKey: "status",
       header: "Status",
       cell: ({ row }) => (
         <div className="line-clamp-3 text-muted-foreground">{row.getValue("status")}</div>
       ),
     },   
+    {
+      accessorKey: "slug",
+      header: "Slug",
+      cell: ({ row }) => (
+        <div className="line-clamp-3 text-muted-foreground">{row.getValue("slug")}</div>
+      ),
+    },       
+    {
+      accessorKey: "parentPageId",
+      header: "Parent ID",
+      cell: ({ row }) => (
+        <div className="line-clamp-3 text-muted-foreground">{row.getValue("parentPageId")}</div>
+      ),
+    },  
+    {
+      accessorKey: "pageOrder",
+      header: "Sort Order",
+      cell: ({ row }) => (
+        <div className="line-clamp-3 text-muted-foreground">{row.getValue("pageOrder")}</div>
+      ),
+    },           
     {
       accessorKey: "publishedAt",   
       header: "Published",
@@ -103,36 +122,73 @@ export const CreateColumns = (contentType: string | undefined | null, subRef: st
       },
     },     
     {
-      accessorKey: "coverImage",
-      header: "Cover Image",
-      cell: ({ row }) => (
-        <div className="line-clamp-3 text-muted-foreground">{row.getValue("coverImage")}</div>
-      ),
-    },         
+      accessorKey: "createdAt",   
+      header: "Created",
+      cell: ({ row }) => {
+        const createdAt: any = row.getValue("createdAt")
+        const formattedDate = createdAt ? formatDateTime(createdAt, 'ddd, MMM D, YYYY h:mm A (ZZ)') : ''
+        const humanizedDate: string =  createdAt ? humanizeDate(createdAt) : ''
+        if (createdAt) {
+          return (
+            <div className="line-clamp-3 text-muted-foreground" title={formattedDate}>{humanizedDate}</div>
+          )
+        } else {
+          return (
+            <div className="line-clamp-3 text-muted-foreground"></div>
+          )
+        }
+      },
+    }, 
+    {
+      accessorKey: "updatedAt",   
+      header: "Updated",
+      cell: ({ row }) => {
+        const updatedAt: any = row.getValue("updatedAt")
+        const formattedDate = updatedAt ? formatDateTime(updatedAt, 'ddd, MMM D, YYYY h:mm A (ZZ)') : ''
+        const humanizedDate: string =  updatedAt ? humanizeDate(updatedAt) : ''
+        if (updatedAt) {
+          return (
+            <div className="line-clamp-3 text-muted-foreground" title={formattedDate}>{humanizedDate}</div>
+          )
+        } else {
+          return (
+            <div className="line-clamp-3 text-muted-foreground"></div>
+          )
+        }
+      },
+    },           
     {
       id: "actions",
       enableHiding: false,
       cell: ({ row }) => {
         const slugValue = row.getValue("slug")
-        const linkText: string | undefined = contentTypePage ? 'Edit Page' : contentTypeBlog ? 'Edit Blog' : undefined
+        const statusValue = row.getValue("status")
+        const isPublished: boolean = statusValue && statusValue === 'PUBLISHED' ? true : false 
         const editLink: string  = subRef && hasContentType && slugValue ? `/publish/${subRef}/${contentType}/edit/${slugValue}` : ''
-        if (linkText && editLink) {
-          return (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="h-8 w-8 p-0">
-                  <span className="sr-only">Open menu</span>
-                  <MoreHorizontal className="h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                <DropdownMenuItem><Link className='text-xs flex flex-row' href={editLink}><Icons.edit className=" text-xs pr-1 text-slate-700" aria-hidden="true" />{linkText}</Link></DropdownMenuItem>
-             </DropdownMenuContent>
-            </DropdownMenu>
-          )
-        }
-        return (<></>)
+        const editLinkText: string | undefined = contentTypePage ? 'Edit Page' : contentTypeBlog ? 'Edit Blog' : undefined
+        const viewLink: string  = subRef && hasContentType && slugValue ? `/p/${subRef}/${contentType}/${slugValue}` : ''
+        const viewLinkText: string | undefined = isPublished && contentTypePage ? 'View Page' : isPublished && contentTypeBlog ? 'View Blog' : undefined   
+        const hasEditAccess: boolean = (editLink && editLinkText) ? true : false      
+        const hasViewAccess: boolean = (viewLink && viewLinkText) ? true : false      
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontal className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Actions</DropdownMenuLabel>
+              {hasEditAccess ? (
+                <DropdownMenuItem><Link className='text-xs flex flex-row' href={editLink}><Icons.edit className=" text-xs pr-1 text-slate-700" aria-hidden="true" />{editLinkText}</Link></DropdownMenuItem>
+              ) : (<></>)}
+              {hasViewAccess ? (
+                <DropdownMenuItem><Link className='text-xs flex flex-row' href={viewLink}><Icons.edit className=" text-xs pr-1 text-slate-700" aria-hidden="true" />{viewLinkText}</Link></DropdownMenuItem>
+              ) : (<></>)}              
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )
       },
     },
   ]
