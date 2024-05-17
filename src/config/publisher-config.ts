@@ -38,6 +38,12 @@ export const PublisherNavConfig: PublisherNavConfigType = {
               items: [],
             },
             {
+              title: "Site Settings", 
+              href: "/site",
+              icon: "store", 
+              items: [],
+            },            
+            {
               title: "Notifications", 
               href: "/notifications",
               icon: "message", 

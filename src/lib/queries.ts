@@ -138,6 +138,33 @@ export const getUserSubsite = async (
   return null
 }
 
+export const getSubsiteDetails = async (
+  user: ClerkUserType,
+  subSiteRef: string | null
+): Promise<any | undefined> => {
+  if (!user) {
+    return null
+  }
+  if (!subSiteRef) {
+    return null
+  }
+  const username: string | null = getClerkUserName(user)
+  if (username) {
+    const resultData = await sql`
+    SELECT * 
+      FROM "Subsite"
+      JOIN "Account" ON "Account"."id" = "Subsite"."accountId"
+      JOIN "User" ON "User"."id" = "Account"."adminId"
+     WHERE "User"."name" = ${username};       
+    `
+    if (resultData && resultData.length > 0) {
+      return resultData[0]
+    }
+  }
+  console.log('Subsite Denied - Not Authenticated')
+  return null
+}
+
 export const getAllPagesByPublisher = async (
   authorId: number | null,
   subsiteId: number | null

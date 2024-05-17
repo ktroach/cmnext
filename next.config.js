@@ -43,6 +43,14 @@ const nextConfig = {
       {
         protocol: 'https',
         hostname: 'picsum.photos',
+      },    
+      {
+        protocol: 'https',
+        hostname: 'imgix.cosmicjs.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'img.clerk.com',
       },                  
     ],
   },

@@ -14,14 +14,14 @@ export default async function SubsiteHomePage({ params }: any) {
     let sections: any = []
     const sectionsConfig = [
       {
-        title: 'Events',
-        description: 'Upcoming Events',
+        title: 'Featured',
+        description: 'Featured Content',
         href: `/p/${subRef}/pages`,
         linkText: 'View all Pages',
       },
       {
         title: 'Blogs',
-        description: 'Featured Blog Posts',
+        description: 'Recent Blog Posts',
         href: `/p/${subRef}/blogs`,
         linkText: 'View all Blogs',
       },      
@@ -39,7 +39,7 @@ export default async function SubsiteHomePage({ params }: any) {
   }
 
   const mainSections = buildFeaturedSections([
-    <FeaturedPages
+    <FeaturedPages 
       takeLimit={RootConfig.featureSitesLimit}
       subRef={subRef}
       contentType="pages"

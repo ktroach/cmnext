@@ -5,6 +5,8 @@ import { Header } from '@/components/layouts/header'
 import { Block } from '@/components/containers/block'
 import { getFrontendBaseUrl } from '@/lib/url'
 import { verifySubRefAccess } from '@/lib/queries'
+import { PublisherProfile } from '@/components/publisher/publisher-profile'
+import { humanAndFormattedDateHelper } from '@/lib/dates'
 
 export const metadata: Metadata = {
   metadataBase: new URL(getFrontendBaseUrl()),
@@ -19,6 +21,26 @@ export default async function ProfileSettings({ params }: any) {
   const hasAccess = await verifySubRefAccess(curUser, subRef)
   if (!hasAccess) redirect('/')
 
+  const userEmail =
+    curUser && curUser?.emailAddresses
+      ? curUser?.emailAddresses?.find(
+          (e) => e.id === curUser.primaryEmailAddressId
+        )?.emailAddress ?? ''
+      : ''
+
+  const createdAt = curUser?.createdAt ? new Date(curUser.createdAt) : null
+  const formattedCreatedAt = createdAt ? humanAndFormattedDateHelper(createdAt, 'MM-DD-YYYY') : ''
+  const lastSignInAt = curUser?.lastSignInAt ? new Date(curUser.lastSignInAt) : null
+  const formattedLastSignInAtAt = createdAt ? humanAndFormattedDateHelper(lastSignInAt, 'MM-DD-YYYY hh:mm:ss A') : ''
+
+  const profileData: any = {
+    userName: curUser?.username,
+    userEmail: userEmail,
+    userAvatar: curUser?.imageUrl,
+    createdAt: formattedCreatedAt,
+    lastSignInAt: formattedLastSignInAtAt,
+  }
+
   return (
     <Block variant="sidebar">
       <Header
@@ -27,7 +49,7 @@ export default async function ProfileSettings({ params }: any) {
         size="sm"
       />
       <div className="w-full overflow-hidden">
-        Nothing Yet
+        <PublisherProfile subRef={params?.sub} profileData={profileData} />
       </div>
     </Block>
   )

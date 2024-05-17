@@ -24,3 +24,12 @@ export function humanizeDate(date: Date | string | undefined | null): string {
   elapsedTime =  pastDate.fromNow()
   return elapsedTime
 }
+
+export function humanAndFormattedDateHelper(date: Date | string | undefined | null, dateFormat: string = 'MM-DD-YYYY'): string {
+  if (!date) {
+    return ''
+  }
+  const formattedDate = date ? formatDateTime(date, dateFormat) : ''
+  const humanizedDate = formattedDate ? humanizeDate(formattedDate) : ''
+  return `${humanizedDate} (${formattedDate})`
+}
