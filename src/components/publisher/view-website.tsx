@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import { catchError } from '@/lib/errors'
 import { getFrontendBaseUrl } from '@/lib/url'
 
-export function SiteDashboard(props: any) {
+export function ViewWebsite(props: any) {
   const baseUrl = getFrontendBaseUrl()
   const viewWebsiteUrl = props?.subRef ? `${baseUrl}/p/${props?.subRef}/pages` : ''
   const [isPending, startTransition] = React.useTransition()
