@@ -10,7 +10,7 @@ export const SidebarHeader = ({ collapsed }: { collapsed: boolean }) => {
     <>
       <div className={cn("flex items-center", collapsed && "justify-center")}>
         <Icons.nextjs className={cn("size-6 font-semibold")} />
-        <h1 className={cn("ml-2 opacity-100 visible block w-auto truncate transition-all", collapsed && " invisible hidden w-0")}>{RootConfig?.name}</h1>
+        <h1 className={cn("ml-4 opacity-100 visible block w-auto truncate transition-all", collapsed && " invisible hidden w-0")}>{RootConfig?.name}</h1>
       </div>
       <Separator className="mt-4" />
     </>

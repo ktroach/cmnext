@@ -54,50 +54,16 @@ export function AddEditContent(params: any) {
   const [contentStatus, setContentStatus] = React.useState<any>()
   const [coverImage, setCoverImage] = React.useState<any>()
   const [isSaving, setIsSaving] = React.useState<boolean>(false)
-
-  const [blocks, setBlocks] = React.useState<any>([])
-
-  const addBlock = () => {
-    setBlocks([
-      ...blocks,
-      { id: blocks.length, content: '', title: '' },
-    ])
-  }
-
-  const removeBlock = (id: any) => {
-    setBlocks(blocks.filter((block: any) => block.id !== id))
-  }
-
- const updateBlockText = (id: any, newContent: any) => {
-    setBlocks(
-      blocks.map((block: { id: any }) => {
-        if (block.id === id) {
-          return { ...block, content: newContent }
-        }
-        return block
-      })
-    )
-  }
-
-  const updateBlockTitle = (id: any, e: React.ChangeEvent<HTMLInputElement>) => {
-    setBlocks(
-      blocks.map((block: { id: any }) => {
-        if (block.id === id) {
-          return { ...block, title: e.target.value }
-        }
-        return block
-      })
-    )
-  }  
+  const [pageType, setPageType] = React.useState<any>()
 
   const isPage: boolean = params?.isPost ? false : true
 
   // TODO: Populate from database
-  const pageTemplates: any = [
-    { label: 'none', value: '0' },
-    { label: 'template 1', value: '1' },
-    { label: 'template 2', value: '2' },
-    { label: 'template 3', value: '3' },
+  const pageTypes: any = [
+    { label: 'markdown', value: 'markdown' },
+    { label: 'home', value: 'home' },
+    { label: 'form', value: 'form' },
+    { label: 'course', value: 'course' },
   ]
   // TODO: Populate from database
   const parentPage: any = [
@@ -662,7 +628,7 @@ export function AddEditContent(params: any) {
             )}
           />
 
-          <Separator />
+          <Separator className="mt-5" />
 
           <FormField
             control={form.control}
@@ -696,7 +662,7 @@ export function AddEditContent(params: any) {
           {/* Page Options */}
           {isPage ? (
             <>
-              <Separator />
+              <Separator className="mt-5" />
 
               <FormField
                 control={form.control}
@@ -705,7 +671,7 @@ export function AddEditContent(params: any) {
                   <FormItem className="w-full">
                     <FormLabel>
                       <div className="flex flex-row space-between">
-                        <div className="mr-2">Use a Template</div>{' '}
+                        <div className="mr-2">Page Type</div>{' '}
                         <div className="mt-[-5px]">
                           <HelpCircle onClick={handleTemplateHelp} />
                         </div>{' '}
@@ -713,15 +679,17 @@ export function AddEditContent(params: any) {
                     </FormLabel>
                     <FormControl>
                       <Select
-                        value={field.value?.toString()}
-                        onValueChange={field.onChange}
+                        value={pageType}
+                        onValueChange={(value) => {
+                          setPageType(value)
+                        }}
                       >
                         <SelectTrigger>
-                          <SelectValue placeholder="Select if you want to use a template for this page" />
+                          <SelectValue placeholder="Select what Page Type to use for this content" />
                         </SelectTrigger>
                         <SelectContent>
                           <SelectGroup>
-                            {pageTemplates.map((option: any, index: number) => (
+                            {pageTypes.map((option: any, index: number) => (
                               <SelectItem
                                 key={option.value}
                                 value={option.value}
@@ -807,66 +775,19 @@ export function AddEditContent(params: any) {
           ) : (
             <></>
           )}
-
-          <Separator />
-          <Label className="text-lg">Content Block</Label>
         </form>
       </Form>
-      <MarkdownEditor
-        mounted={mounted}
-        value={editorContent}
-        onChange={setEditorContent}
-        editorHeight="calc(100vh / 3)"
-      />
 
-      {pageId ? (
+      {pageType === 'markdown' ? (
         <>
-          <Separator />
-          <Button
-            className="bg-blue-800 hover:bg-blue-600  text-white text-lg"
-            onClick={addBlock}
-          >
-            Add Block
-          </Button>
-          <ul className=" list-none  space-y-10 ">
-            {blocks.map((block: any) => (
-              <li key={block.id} className='mb-10'>
-                <div className="flex flex-col border dark:border-gray-500 mt-5 h-[800px]">
-                  <div className="flex flex-row justify-between mb-3">
-                    <div className="flex flex-row mt-5 mr-5">
-                      <Label className="text-lg mt-2 ml-5 mr-5">Title: </Label>
-                      <Input
-                        className="mt-1"
-                        value={block?.title}
-                        onChange={(e) => {
-                          updateBlockTitle(block.id, e)
-                        }}
-                      ></Input>
-                    </div>
-                    <div className="mt-5 mr-5">
-                      <Button
-                        className=" bg-red-800 hover:bg-red-600 text-white text-md"
-                        onClick={() => removeBlock(block.id)}
-                      >
-                        Remove Block
-                      </Button>
-                    </div>
-                  </div>
-                  <div className="mt-4">
-                    <MarkdownEditor
-                      mounted={mounted}
-                      value={block?.content}
-                      onChange={(val: any) => {
-                        updateBlockText(block.id, val)
-                      }}
-                      editorHeight="calc(100vh / 3)"
-                    />
-                  </div>
-                </div>
-                <Separator />
-              </li>
-            ))}
-          </ul>
+          <Separator className="mt-5" />
+          <Label className="text-lg">Markdown Content</Label>
+          <MarkdownEditor
+            mounted={mounted}
+            value={editorContent}
+            onChange={setEditorContent}
+            editorHeight="calc(100vh / 3)"
+          />
         </>
       ) : (
         <></>
