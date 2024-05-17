@@ -55,8 +55,8 @@ export function AddEditContent(params: any) {
   const [coverImage, setCoverImage] = React.useState<any>()
   const [isSaving, setIsSaving] = React.useState<boolean>(false)
   const [pageType, setPageType] = React.useState<any>()
-
   const isPage: boolean = params?.isPost ? false : true
+  const isPageTypeDisabled: boolean = params?.isNew ? false : true
 
   // TODO: Populate from database
   const pageTypes: any = [
@@ -94,27 +94,19 @@ export function AddEditContent(params: any) {
       ? editParams.editData
       : null
 
-  console.log('>>> AddEditContent >>> editData >>> ', editData)
-
-  const editContentId: number | null =
-    editData && editData?.id ? editData.id : null
-  const editSlug: string | null =
-    editData && editData?.slug ? editData.slug : null
-  const editAuthorId: number | null =
-    editData && editData?.authorId ? editData.authorId : null
-  const editSubsiteId: number | null =
-    editData && editData?.subsiteId ? editData.subsiteId : null
+  const editContentId: number | null = editData && editData?.id ? editData.id : null
+  const editSlug: string | null = editData && editData?.slug ? editData.slug : null
+  const editAuthorId: number | null = editData && editData?.authorId ? editData.authorId : null
+  const editSubsiteId: number | null = editData && editData?.subsiteId ? editData.subsiteId : null
   const editStatus: string = editData && editData?.status ? editData.status : ''
-  const editContent: string =
-    editData && editData?.content ? editData.content : ''
+  const editContent: string =  editData && editData?.content ? editData.content : ''
   const editTitle: string = editData && editData?.title ? editData.title : ''
-  console.log('>>> AddEditContent >>> editTitle >>> ', editTitle)
-
-  const editCoverImage: string =
-    editData && editData?.coverImage ? editData.coverImage : ''
+  const editPageType: string = editData && editData?.pageType ? editData.pageType : ''
+  const editCoverImage: string =  editData && editData?.coverImage ? editData.coverImage : ''
 
   if (!contentLoaded && editData) {
     setTitle(editTitle)
+    setPageType(editPageType)
     setCoverImage(editCoverImage)
     setContent(editContent)
     setContentStatus(editStatus)
@@ -667,6 +659,7 @@ export function AddEditContent(params: any) {
               <FormField
                 control={form.control}
                 name="template"
+                disabled={isPageTypeDisabled}
                 render={({ field }) => (
                   <FormItem className="w-full">
                     <FormLabel>
@@ -792,6 +785,19 @@ export function AddEditContent(params: any) {
       ) : (
         <></>
       )}
+
+      {pageType === 'home' ? (
+        <>
+          <Separator className="mt-5" />
+          <Label className="text-lg">Home Page</Label>
+
+        </>
+      ) : (
+        <></>
+      )}      
+
+
+
     </>
   )
 }

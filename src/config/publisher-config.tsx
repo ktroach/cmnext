@@ -6,13 +6,13 @@ export const PublisherNavConfig: any = {
         {
           label: "Dashboard",
           path: "/",
-          icon: <Icons.home className="size-4" />,
+          icon: <Icons.chart className="size-4" />,
           children: [],
         },      
         {
           label: "Pages",
           path: "/pages",
-          icon: <Icons.palette className="size-4" />,
+          icon: <Icons.edit className="size-4" />,
           children: [],
         },    
         {
