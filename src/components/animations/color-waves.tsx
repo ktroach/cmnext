@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 import React, { useEffect, useRef } from "react";
 import { createNoise3D } from "simplex-noise";
 
-export const Wavy = ({
+export const ColorWaves = ({
   children,
   className,
   containerClassName,
@@ -130,7 +130,7 @@ export const Wavy = ({
       {timedOut ? (<></>) : 
       (
         <canvas
-        className="absolute inset-0 z-0 mt-[-333px]"
+        className="absolute inset-0 z-0 "
         ref={canvasRef}
         id="canvas"
       ></canvas>

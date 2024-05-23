@@ -10,7 +10,7 @@ import { Block } from '@/components/containers/block'
 import { Button } from '@/components/ui/button'
 import { ContentSection } from '@/components/containers/content-section'
 import { TextGenerator } from '@/components/animations/text-generator'
-import { Wavy } from '@/components/animations/wavy'
+import { ColorWaves } from '@/components/animations/color-waves'
 
 import Autoplay from 'embla-carousel-autoplay'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
@@ -116,7 +116,6 @@ export default function SubsiteHomeTemplate({
   }
 
   return (
-
     <div className='mt-5'>
       <div className="w-full h-[500px] flex flex-col items-center justify-center overflow-hidden text-center  ">
         <Carousel
@@ -169,7 +168,7 @@ export default function SubsiteHomeTemplate({
             words={words}
           />
           <div className="flex flex-wrap items-center justify-center gap-4 mt-10 z-40">
-            <Wavy
+            <ColorWaves
               animationTimeoutMs={4000}
               backgroundFill="transparent"
               blur={0.0}
@@ -190,7 +189,7 @@ export default function SubsiteHomeTemplate({
                   <span className="sr-only">{rightActionTitle}</span>
                 </Link>
               </Button> */}
-            </Wavy>
+            </ColorWaves>
           </div>
         </section>
       </div>

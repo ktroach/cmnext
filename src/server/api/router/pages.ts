@@ -204,6 +204,25 @@ export const pagesRouter = createTRPCRouter({
       })
     }),
 
+  setPageType: protectedProcedure
+    .input(
+      z.object({
+        id: z.number().min(1),
+        pageType: z.string().min(1),
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      return await ctx.db.page.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          pageType: input.pageType,
+          updatedAt: new Date(), 
+        },
+      })
+    }),
+
   setStatusDraft: protectedProcedure
     .input(
       z.object({

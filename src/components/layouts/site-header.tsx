@@ -29,8 +29,8 @@ export function SiteHeader({ user, subRef, subsite }: SiteHeaderProps) {
   const publisherUrl: string | undefined = subRef ? `/publish/${subRef}` : undefined
   const baseUrl: string = getFrontendBaseUrl()
   const accountUrl: string = publisherUrl ? `${baseUrl}${publisherUrl}/settings/profile` : ''
-  let siteName: string = subsite && subsite?.name ? subsite.name : ''
-  siteName = siteName ? siteName.toUpperCase() : ''
+  const siteName: string = subsite && subsite?.name ? subsite.name.toUpperCase() : ''
+  // siteName = siteName ? siteName.toUpperCase() : ''
 
   if (user) {
     accountInitials = `${user?.firstName?.charAt(0) ?? ''} ${

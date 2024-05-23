@@ -87,4 +87,8 @@ export type Blog = {
   slugAsParams: string
 }
 
+export type FooterMenuType = {
+  title: string
+  path: string
+}
 

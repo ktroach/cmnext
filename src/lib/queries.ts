@@ -151,7 +151,7 @@ export const getSubsiteDetails = async (
   const username: string | null = getClerkUserName(user)
   if (username) {
     const resultData = await sql`
-    SELECT * 
+    SELECT "Subsite".* 
       FROM "Subsite"
       JOIN "Account" ON "Account"."id" = "Subsite"."accountId"
       JOIN "User" ON "User"."id" = "Account"."adminId"
