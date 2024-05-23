@@ -1,9 +1,10 @@
+import { redirect } from 'next/navigation'
 import { currentUser } from '@clerk/nextjs/server'
 import { PublisherNavConfig } from '@/config/publisher-config'
-import { ScrollArea } from '@/components/ui/scroll-area'
-import { Sidebar } from '@/components/layouts/sidebar'
+import { type MenuItem, Sidebar } from '@/components/layouts/sidebar'
 import { SiteFooter } from '@/components/layouts/site-footer'
 import { SiteHeader } from '@/components/layouts/site-header'
+import { getSubsiteDetails, verifySubRefAccess } from '@/lib/queries'
 
 interface PublisherLayoutProps {
   params: any
@@ -14,21 +15,43 @@ export default async function AdminLayout({
   params,
   children,
 }: PublisherLayoutProps) {
-  const user = await currentUser()
-  const subRef = params?.sub
-  console.log('subRef: ', subRef)
+  const curUser = await currentUser()
+  if (!curUser) redirect('/')
+  const subRef = params?.sub ? params.sub : null
+  const hasAccess = await verifySubRefAccess(curUser, subRef)
+  if (!hasAccess) redirect('/')
+  const subsiteData: any = await getSubsiteDetails(curUser, subRef)
+  const publisherUrl = subRef ? `/publish/${subRef}` : ''
+
+  const buildSidebar = (menus: any[]): MenuItem[] => {
+    return menus.map(menu => {
+      return {
+        path: `${publisherUrl}${menu.path}`,
+        label: menu.label,
+        icon: menu.icon,
+        children: menu?.children ? buildSidebar(menu.children) : []
+      }
+    }
+    )
+  }
+  
+  const routes = buildSidebar(PublisherNavConfig.sidebarNav)
+
   return (
-    <div className="flex min-h-screen flex-col">
-      <SiteHeader user={user} subRef={subRef} />
-      <div className="container flex-1 items-start md:grid md:grid-cols-[220px_minmax(0,1fr)] md:gap-6 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-10">
-        <aside className="fixed top-14 z-30 -ml-2 hidden h-[calc(100vh-3.5rem)] w-full shrink-0 overflow-y-auto border-r md:sticky md:block">
-          <ScrollArea className="py-6 pr-6 lg:py-8">
-            <Sidebar subRef={subRef} items={PublisherNavConfig.sidebarNav}  /> 
-          </ScrollArea>
-        </aside>
-        <main className="flex w-full flex-col overflow-hidden">{children}</main>
+      <div className=" min-h-screen w-full flex">
+        <div className="sticky bg-background top-0 h-screen z-[49]">
+          <Sidebar routes={routes} />
+        </div>
+        <div className="flex flex-col flex-1 space-x-5 mr-10">
+          <div className="sticky bg-background top-0 z-[49]">
+            <SiteHeader user={curUser} subRef={subRef} subsite={subsiteData} />
+          </div>
+          <div className='h-full'>
+            {children}
+          </div>
+          <SiteFooter />
+        </div>
       </div>
-      <SiteFooter />
-    </div>
-  )
+  )  
+
 }

@@ -124,6 +124,7 @@ model Page {
   updatedAt      DateTime?     @updatedAt
   pageOrder      Int           @default(-1)  
   parentPageId   Int           @default(-1)
+  pageType       String        @default("")
 }
 
 model UserProfile {

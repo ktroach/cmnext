@@ -30,6 +30,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
                 position="bottom-right"
                 invert={true}
                 closeButton={true}
+                richColors
               />
               <ThemeProvider
                 attribute="class"

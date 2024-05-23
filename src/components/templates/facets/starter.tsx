@@ -2,11 +2,9 @@
 
 import React, { startTransition, useState } from 'react'
 import Link from 'next/link'
-import { Block } from '@/components/containers/block'
 import { Button } from '@/components/ui/button'
 import { Icons } from '@/styles/icons'
-import { ContentSection } from '@/components/containers/content-section'
-import { Wavy } from '@/components/animations/wavy'
+import { ColorWaves } from '@/components/animations/color-waves'
 import { TextGenerator } from '@/components/animations/text-generator'
 import {
   DynamicNavMenu,
@@ -15,66 +13,29 @@ import {
 import { getFrontendBaseUrl } from '@/lib/url'
 import { api } from '@/trpc/client'
 
-export interface StarterTemplateProps {
+export interface TopSiteTemplateProps {
   userName: any
   line: string
   words: string
   waves: any
   leftAction: any
   rightAction: any
-  sections: any
   menuConfig: MenuItemType[]
 }
 
-// TODO: This Starter Template facet will be used later. This is just a spike.
-export default function StarterTemplate({
+export default function TopSiteTemplate({
   userName,
   line,
   words,
   waves,
   leftAction,
   rightAction,
-  sections,
   menuConfig,
-}: StarterTemplateProps) {
+}: TopSiteTemplateProps) {
   const [isRedirecting, setIsRedirecting] = useState<boolean>(false)
   const [active, setActive] = useState<string | null>(null)
   const menuItems = menuConfig ? menuConfig : []
   const baseUrl = getFrontendBaseUrl()
-
-  const BuildSections = () => {
-    if (!sections) {
-      return
-    }
-    return sections.map(
-      (section: {
-        title: string
-        description: string | undefined
-        href: string
-        linkText: string | undefined
-        content:
-          | string
-          | number
-          | boolean
-          | React.ReactElement<any, string | React.JSXElementConstructor<any>>
-          | Iterable<React.ReactNode>
-          | React.ReactPortal
-          | React.PromiseLikeOfReactNode
-          | null
-          | undefined
-      }) => (
-        <ContentSection
-          title={section.title}
-          description={section.description}
-          href={section.href}
-          linkText={section.linkText}
-          className="pt-8 md:pt-10 lg:pt-12"
-        >
-          {section.content}
-        </ContentSection>
-      )
-    )
-  }
 
   let leftActionHref: string = leftAction?.href
   let rightActionHref: string = rightAction?.href
@@ -86,7 +47,7 @@ export default function StarterTemplate({
     })
     if (!isLoading && resultData) {
       console.log('resultData >>> ', resultData)
-      
+
       const subRef: string | undefined = resultData?.subsiteRef
         ? resultData.subsiteRef
         : undefined
@@ -101,20 +62,20 @@ export default function StarterTemplate({
 
   const handleLeftAction = () => {
     if (!leftActionHref) {
-      return 
+      return
     }
     if (leftActionHref === `${baseUrl}`) {
-      return 
+      return
     }
     setIsRedirecting(true)
   }
 
   const handleRightAction = () => {
     if (!rightActionHref) {
-      return 
+      return
     }
     if (rightActionHref === `${baseUrl}`) {
-      return 
+      return
     }
     setIsRedirecting(true)
   }
@@ -128,42 +89,31 @@ export default function StarterTemplate({
           active={active}
           setActive={setActive}
         />
-
         <h1 className="mt-[-130px]  font-bold text-5xl xl:text-6xl text-center  text-black/[0.85] dark:text-white/[0.95] relative z-20">
           {line}
         </h1>
         <section className="mx-auto flex w-full max-w-5xl flex-col items-center justify-center gap-4 text-center">
           <TextGenerator
-            className="mt-5  text-black/[0.85] dark:text-white/[0.95]"
+            className="mt-10 mb-10 text-black/[0.85] dark:text-white/[0.95]"
             words={words}
           />
-          <div className="flex flex-wrap items-center justify-center gap-4 mt-10 z-40">
-            <Wavy
-              animationTimeoutMs={4000}
-              backgroundFill="transparent"
-              blur={0.0}
-              className="max-w-4xl mt-[-15px] "
-              colors={waves}
-              waveOpacity={0.015}
-              waveWidth={2}
-            >
-              <Button asChild>
-                <Link
-                  href={leftActionHref}
-                  className="mx-[5px]"
-                  onClick={handleLeftAction}
-                >
-                  {leftActionTitle}
-                  <span className="sr-only">{leftActionTitle}</span>
-                </Link>
-              </Button>
-              <Button variant="outline" asChild>
-                <Link href={rightActionHref} onClick={handleRightAction}>
-                  {rightActionTitle}
-                  <span className="sr-only">{rightActionTitle}</span>
-                </Link>
-              </Button>
-            </Wavy>
+          <div className="flex flex-wrap items-center justify-center gap-4  z-40">
+            <Button asChild>
+              <Link
+                href={leftActionHref}
+                className="mx-[5px]"
+                onClick={handleLeftAction}
+              >
+                {leftActionTitle}
+                <span className="sr-only">{leftActionTitle}</span>
+              </Link>
+            </Button>
+            <Button variant="outline" asChild>
+              <Link href={rightActionHref} onClick={handleRightAction}>
+                {rightActionTitle}
+                <span className="sr-only">{rightActionTitle}</span>
+              </Link>
+            </Button>
           </div>
         </section>
         {isRedirecting ? (
@@ -177,7 +127,15 @@ export default function StarterTemplate({
           <></>
         )}
       </div>
-      {/* <Block>{sections ? <BuildSections /> : <></>}</Block> */}
+      <ColorWaves
+        animationTimeoutMs={4000}
+        backgroundFill="transparent"
+        blur={0.0}
+        className="max-w-4xl mt-[10] "
+        colors={waves}
+        waveOpacity={0.015}
+        waveWidth={2}
+      ></ColorWaves>
     </>
   )
 }

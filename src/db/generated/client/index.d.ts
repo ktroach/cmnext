@@ -6720,6 +6720,7 @@ export namespace Prisma {
     updatedAt: Date | null
     pageOrder: number | null
     parentPageId: number | null
+    pageType: string | null
   }
 
   export type PageMaxAggregateOutputType = {
@@ -6745,6 +6746,7 @@ export namespace Prisma {
     updatedAt: Date | null
     pageOrder: number | null
     parentPageId: number | null
+    pageType: string | null
   }
 
   export type PageCountAggregateOutputType = {
@@ -6770,6 +6772,7 @@ export namespace Prisma {
     updatedAt: number
     pageOrder: number
     parentPageId: number
+    pageType: number
     _all: number
   }
 
@@ -6813,6 +6816,7 @@ export namespace Prisma {
     updatedAt?: true
     pageOrder?: true
     parentPageId?: true
+    pageType?: true
   }
 
   export type PageMaxAggregateInputType = {
@@ -6838,6 +6842,7 @@ export namespace Prisma {
     updatedAt?: true
     pageOrder?: true
     parentPageId?: true
+    pageType?: true
   }
 
   export type PageCountAggregateInputType = {
@@ -6863,6 +6868,7 @@ export namespace Prisma {
     updatedAt?: true
     pageOrder?: true
     parentPageId?: true
+    pageType?: true
     _all?: true
   }
 
@@ -6975,6 +6981,7 @@ export namespace Prisma {
     updatedAt: Date | null
     pageOrder: number
     parentPageId: number
+    pageType: string
     _count: PageCountAggregateOutputType | null
     _avg: PageAvgAggregateOutputType | null
     _sum: PageSumAggregateOutputType | null
@@ -7019,6 +7026,7 @@ export namespace Prisma {
     updatedAt?: boolean
     pageOrder?: boolean
     parentPageId?: boolean
+    pageType?: boolean
     author?: boolean | UserDefaultArgs<ExtArgs>
     categories?: boolean | Page$categoriesArgs<ExtArgs>
     tags?: boolean | Page$tagsArgs<ExtArgs>
@@ -7049,6 +7057,7 @@ export namespace Prisma {
     updatedAt?: boolean
     pageOrder?: boolean
     parentPageId?: boolean
+    pageType?: boolean
   }
 
   export type PageInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -7091,6 +7100,7 @@ export namespace Prisma {
       updatedAt: Date | null
       pageOrder: number
       parentPageId: number
+      pageType: string
     }, ExtArgs["result"]["page"]>
     composites: {}
   }
@@ -7514,6 +7524,7 @@ export namespace Prisma {
     readonly updatedAt: FieldRef<"Page", 'DateTime'>
     readonly pageOrder: FieldRef<"Page", 'Int'>
     readonly parentPageId: FieldRef<"Page", 'Int'>
+    readonly pageType: FieldRef<"Page", 'String'>
   }
     
 
@@ -16074,7 +16085,8 @@ export namespace Prisma {
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
     pageOrder: 'pageOrder',
-    parentPageId: 'parentPageId'
+    parentPageId: 'parentPageId',
+    pageType: 'pageType'
   };
 
   export type PageScalarFieldEnum = (typeof PageScalarFieldEnum)[keyof typeof PageScalarFieldEnum]
@@ -16778,6 +16790,7 @@ export namespace Prisma {
     updatedAt?: DateTimeNullableFilter<"Page"> | Date | string | null
     pageOrder?: IntFilter<"Page"> | number
     parentPageId?: IntFilter<"Page"> | number
+    pageType?: StringFilter<"Page"> | string
     author?: XOR<UserRelationFilter, UserWhereInput>
     categories?: CategoryListRelationFilter
     tags?: TagListRelationFilter
@@ -16807,6 +16820,7 @@ export namespace Prisma {
     updatedAt?: SortOrderInput | SortOrder
     pageOrder?: SortOrder
     parentPageId?: SortOrder
+    pageType?: SortOrder
     author?: UserOrderByWithRelationInput
     categories?: CategoryOrderByRelationAggregateInput
     tags?: TagOrderByRelationAggregateInput
@@ -16839,6 +16853,7 @@ export namespace Prisma {
     updatedAt?: DateTimeNullableFilter<"Page"> | Date | string | null
     pageOrder?: IntFilter<"Page"> | number
     parentPageId?: IntFilter<"Page"> | number
+    pageType?: StringFilter<"Page"> | string
     author?: XOR<UserRelationFilter, UserWhereInput>
     categories?: CategoryListRelationFilter
     tags?: TagListRelationFilter
@@ -16868,6 +16883,7 @@ export namespace Prisma {
     updatedAt?: SortOrderInput | SortOrder
     pageOrder?: SortOrder
     parentPageId?: SortOrder
+    pageType?: SortOrder
     _count?: PageCountOrderByAggregateInput
     _avg?: PageAvgOrderByAggregateInput
     _max?: PageMaxOrderByAggregateInput
@@ -16901,6 +16917,7 @@ export namespace Prisma {
     updatedAt?: DateTimeNullableWithAggregatesFilter<"Page"> | Date | string | null
     pageOrder?: IntWithAggregatesFilter<"Page"> | number
     parentPageId?: IntWithAggregatesFilter<"Page"> | number
+    pageType?: StringWithAggregatesFilter<"Page"> | string
   }
 
   export type UserProfileWhereInput = {
@@ -18012,6 +18029,7 @@ export namespace Prisma {
     updatedAt?: Date | string | null
     pageOrder?: number
     parentPageId?: number
+    pageType?: string
     author: UserCreateNestedOneWithoutPagesInput
     categories?: CategoryCreateNestedManyWithoutPagesInput
     tags?: TagCreateNestedManyWithoutPagesInput
@@ -18041,6 +18059,7 @@ export namespace Prisma {
     updatedAt?: Date | string | null
     pageOrder?: number
     parentPageId?: number
+    pageType?: string
     categories?: CategoryUncheckedCreateNestedManyWithoutPagesInput
     tags?: TagUncheckedCreateNestedManyWithoutPagesInput
   }
@@ -18065,6 +18084,7 @@ export namespace Prisma {
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pageOrder?: IntFieldUpdateOperationsInput | number
     parentPageId?: IntFieldUpdateOperationsInput | number
+    pageType?: StringFieldUpdateOperationsInput | string
     author?: UserUpdateOneRequiredWithoutPagesNestedInput
     categories?: CategoryUpdateManyWithoutPagesNestedInput
     tags?: TagUpdateManyWithoutPagesNestedInput
@@ -18094,6 +18114,7 @@ export namespace Prisma {
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pageOrder?: IntFieldUpdateOperationsInput | number
     parentPageId?: IntFieldUpdateOperationsInput | number
+    pageType?: StringFieldUpdateOperationsInput | string
     categories?: CategoryUncheckedUpdateManyWithoutPagesNestedInput
     tags?: TagUncheckedUpdateManyWithoutPagesNestedInput
   }
@@ -18121,6 +18142,7 @@ export namespace Prisma {
     updatedAt?: Date | string | null
     pageOrder?: number
     parentPageId?: number
+    pageType?: string
   }
 
   export type PageUpdateManyMutationInput = {
@@ -18143,6 +18165,7 @@ export namespace Prisma {
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pageOrder?: IntFieldUpdateOperationsInput | number
     parentPageId?: IntFieldUpdateOperationsInput | number
+    pageType?: StringFieldUpdateOperationsInput | string
   }
 
   export type PageUncheckedUpdateManyInput = {
@@ -18168,6 +18191,7 @@ export namespace Prisma {
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pageOrder?: IntFieldUpdateOperationsInput | number
     parentPageId?: IntFieldUpdateOperationsInput | number
+    pageType?: StringFieldUpdateOperationsInput | string
   }
 
   export type UserProfileCreateInput = {
@@ -19328,6 +19352,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     pageOrder?: SortOrder
     parentPageId?: SortOrder
+    pageType?: SortOrder
   }
 
   export type PageAvgOrderByAggregateInput = {
@@ -19361,6 +19386,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     pageOrder?: SortOrder
     parentPageId?: SortOrder
+    pageType?: SortOrder
   }
 
   export type PageMinOrderByAggregateInput = {
@@ -19386,6 +19412,7 @@ export namespace Prisma {
     updatedAt?: SortOrder
     pageOrder?: SortOrder
     parentPageId?: SortOrder
+    pageType?: SortOrder
   }
 
   export type PageSumOrderByAggregateInput = {
@@ -21033,6 +21060,7 @@ export namespace Prisma {
     updatedAt?: Date | string | null
     pageOrder?: number
     parentPageId?: number
+    pageType?: string
     categories?: CategoryCreateNestedManyWithoutPagesInput
     tags?: TagCreateNestedManyWithoutPagesInput
     subsite: SubsiteCreateNestedOneWithoutPagesInput
@@ -21060,6 +21088,7 @@ export namespace Prisma {
     updatedAt?: Date | string | null
     pageOrder?: number
     parentPageId?: number
+    pageType?: string
     categories?: CategoryUncheckedCreateNestedManyWithoutPagesInput
     tags?: TagUncheckedCreateNestedManyWithoutPagesInput
   }
@@ -21241,6 +21270,7 @@ export namespace Prisma {
     updatedAt?: DateTimeNullableFilter<"Page"> | Date | string | null
     pageOrder?: IntFilter<"Page"> | number
     parentPageId?: IntFilter<"Page"> | number
+    pageType?: StringFilter<"Page"> | string
   }
 
   export type AccountUpsertWithWhereUniqueWithoutAdminInput = {
@@ -21544,6 +21574,7 @@ export namespace Prisma {
     updatedAt?: Date | string | null
     pageOrder?: number
     parentPageId?: number
+    pageType?: string
     author: UserCreateNestedOneWithoutPagesInput
     categories?: CategoryCreateNestedManyWithoutPagesInput
     tags?: TagCreateNestedManyWithoutPagesInput
@@ -21571,6 +21602,7 @@ export namespace Prisma {
     updatedAt?: Date | string | null
     pageOrder?: number
     parentPageId?: number
+    pageType?: string
     categories?: CategoryUncheckedCreateNestedManyWithoutPagesInput
     tags?: TagUncheckedCreateNestedManyWithoutPagesInput
   }
@@ -23033,6 +23065,7 @@ export namespace Prisma {
     updatedAt?: Date | string | null
     pageOrder?: number
     parentPageId?: number
+    pageType?: string
     author: UserCreateNestedOneWithoutPagesInput
     tags?: TagCreateNestedManyWithoutPagesInput
     subsite: SubsiteCreateNestedOneWithoutPagesInput
@@ -23061,6 +23094,7 @@ export namespace Prisma {
     updatedAt?: Date | string | null
     pageOrder?: number
     parentPageId?: number
+    pageType?: string
     tags?: TagUncheckedCreateNestedManyWithoutPagesInput
   }
 
@@ -23161,6 +23195,7 @@ export namespace Prisma {
     updatedAt?: Date | string | null
     pageOrder?: number
     parentPageId?: number
+    pageType?: string
     author: UserCreateNestedOneWithoutPagesInput
     categories?: CategoryCreateNestedManyWithoutPagesInput
     subsite: SubsiteCreateNestedOneWithoutPagesInput
@@ -23189,6 +23224,7 @@ export namespace Prisma {
     updatedAt?: Date | string | null
     pageOrder?: number
     parentPageId?: number
+    pageType?: string
     categories?: CategoryUncheckedCreateNestedManyWithoutPagesInput
   }
 
@@ -23267,6 +23303,7 @@ export namespace Prisma {
     updatedAt?: Date | string | null
     pageOrder?: number
     parentPageId?: number
+    pageType?: string
   }
 
   export type AccountCreateManyAdminInput = {
@@ -23348,6 +23385,7 @@ export namespace Prisma {
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pageOrder?: IntFieldUpdateOperationsInput | number
     parentPageId?: IntFieldUpdateOperationsInput | number
+    pageType?: StringFieldUpdateOperationsInput | string
     categories?: CategoryUpdateManyWithoutPagesNestedInput
     tags?: TagUpdateManyWithoutPagesNestedInput
     subsite?: SubsiteUpdateOneRequiredWithoutPagesNestedInput
@@ -23375,6 +23413,7 @@ export namespace Prisma {
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pageOrder?: IntFieldUpdateOperationsInput | number
     parentPageId?: IntFieldUpdateOperationsInput | number
+    pageType?: StringFieldUpdateOperationsInput | string
     categories?: CategoryUncheckedUpdateManyWithoutPagesNestedInput
     tags?: TagUncheckedUpdateManyWithoutPagesNestedInput
   }
@@ -23401,6 +23440,7 @@ export namespace Prisma {
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pageOrder?: IntFieldUpdateOperationsInput | number
     parentPageId?: IntFieldUpdateOperationsInput | number
+    pageType?: StringFieldUpdateOperationsInput | string
   }
 
   export type AccountUpdateWithoutAdminInput = {
@@ -23545,6 +23585,7 @@ export namespace Prisma {
     updatedAt?: Date | string | null
     pageOrder?: number
     parentPageId?: number
+    pageType?: string
   }
 
   export type PostUpdateWithoutSubsiteInput = {
@@ -23618,6 +23659,7 @@ export namespace Prisma {
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pageOrder?: IntFieldUpdateOperationsInput | number
     parentPageId?: IntFieldUpdateOperationsInput | number
+    pageType?: StringFieldUpdateOperationsInput | string
     author?: UserUpdateOneRequiredWithoutPagesNestedInput
     categories?: CategoryUpdateManyWithoutPagesNestedInput
     tags?: TagUpdateManyWithoutPagesNestedInput
@@ -23645,6 +23687,7 @@ export namespace Prisma {
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pageOrder?: IntFieldUpdateOperationsInput | number
     parentPageId?: IntFieldUpdateOperationsInput | number
+    pageType?: StringFieldUpdateOperationsInput | string
     categories?: CategoryUncheckedUpdateManyWithoutPagesNestedInput
     tags?: TagUncheckedUpdateManyWithoutPagesNestedInput
   }
@@ -23671,6 +23714,7 @@ export namespace Prisma {
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pageOrder?: IntFieldUpdateOperationsInput | number
     parentPageId?: IntFieldUpdateOperationsInput | number
+    pageType?: StringFieldUpdateOperationsInput | string
   }
 
   export type CategoryUpdateWithoutPostsInput = {
@@ -23845,6 +23889,7 @@ export namespace Prisma {
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pageOrder?: IntFieldUpdateOperationsInput | number
     parentPageId?: IntFieldUpdateOperationsInput | number
+    pageType?: StringFieldUpdateOperationsInput | string
     author?: UserUpdateOneRequiredWithoutPagesNestedInput
     tags?: TagUpdateManyWithoutPagesNestedInput
     subsite?: SubsiteUpdateOneRequiredWithoutPagesNestedInput
@@ -23873,6 +23918,7 @@ export namespace Prisma {
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pageOrder?: IntFieldUpdateOperationsInput | number
     parentPageId?: IntFieldUpdateOperationsInput | number
+    pageType?: StringFieldUpdateOperationsInput | string
     tags?: TagUncheckedUpdateManyWithoutPagesNestedInput
   }
 
@@ -23899,6 +23945,7 @@ export namespace Prisma {
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pageOrder?: IntFieldUpdateOperationsInput | number
     parentPageId?: IntFieldUpdateOperationsInput | number
+    pageType?: StringFieldUpdateOperationsInput | string
   }
 
   export type PostUpdateWithoutTagsInput = {
@@ -23973,6 +24020,7 @@ export namespace Prisma {
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pageOrder?: IntFieldUpdateOperationsInput | number
     parentPageId?: IntFieldUpdateOperationsInput | number
+    pageType?: StringFieldUpdateOperationsInput | string
     author?: UserUpdateOneRequiredWithoutPagesNestedInput
     categories?: CategoryUpdateManyWithoutPagesNestedInput
     subsite?: SubsiteUpdateOneRequiredWithoutPagesNestedInput
@@ -24001,6 +24049,7 @@ export namespace Prisma {
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pageOrder?: IntFieldUpdateOperationsInput | number
     parentPageId?: IntFieldUpdateOperationsInput | number
+    pageType?: StringFieldUpdateOperationsInput | string
     categories?: CategoryUncheckedUpdateManyWithoutPagesNestedInput
   }
 
@@ -24027,6 +24076,7 @@ export namespace Prisma {
     updatedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     pageOrder?: IntFieldUpdateOperationsInput | number
     parentPageId?: IntFieldUpdateOperationsInput | number
+    pageType?: StringFieldUpdateOperationsInput | string
   }
 
 

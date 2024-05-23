@@ -15,20 +15,22 @@ import {
 import { Icons } from '@/styles/icons'
 import { ThemeToggle } from './theme-toggle'
 import { RootConfig } from '@/config/root-config'
-import { MainNav } from './main-nav'
 import { getFrontendBaseUrl } from '@/lib/url'
 
 interface SiteHeaderProps {
   user: User | null
   subRef: string | undefined
+  subsite: any
 }
 
-export function SiteHeader({ user, subRef }: SiteHeaderProps) {
+export function SiteHeader({ user, subRef, subsite }: SiteHeaderProps) {
   let accountInitials: string | undefined = ''
   let accountEmail: string | undefined = ''
   const publisherUrl: string | undefined = subRef ? `/publish/${subRef}` : undefined
   const baseUrl: string = getFrontendBaseUrl()
-  const accountUrl: string = publisherUrl ? `${baseUrl}${publisherUrl}/settings` : ''
+  const accountUrl: string = publisherUrl ? `${baseUrl}${publisherUrl}/settings/profile` : ''
+  const siteName: string = subsite && subsite?.name ? subsite.name.toUpperCase() : ''
+  // siteName = siteName ? siteName.toUpperCase() : ''
 
   if (user) {
     accountInitials = `${user?.firstName?.charAt(0) ?? ''} ${
@@ -42,10 +44,10 @@ export function SiteHeader({ user, subRef }: SiteHeaderProps) {
 
   return (
     <header className="sticky top-0 z-[1000] w-full border-b bg-white dark:bg-black">
-      <div className="container flex h-16 items-center">
-        <MainNav items={RootConfig.mainNav} />
-        <div className="flex flex-1 items-center justify-end space-x-4">
-          <nav className="flex items-center space-x-2">
+      <div className="flex h-16 w-full space-x-4">
+        <div className='mt-5 ml-5'>{siteName}</div>
+        <div className="flex flex-1 items-center justify-end  mr-8 ">
+          <nav className="flex items-center space-x-4">
             <ThemeToggle />
             {user ? (
               <DropdownMenu>

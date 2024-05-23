@@ -21,8 +21,9 @@ interface MarkdownEditorProps {
   editorHeight?: any
   iconHeight?: string
   iconWidth?: string
-  className?: string
   mounted?: boolean
+  hideToolbar?: boolean
+  editorClassName?: string
 }
 
 export const MarkdownEditor = ({
@@ -31,19 +32,16 @@ export const MarkdownEditor = ({
   editorHeight,
   iconHeight,
   iconWidth,
-  className,
   mounted,
+  hideToolbar,
+  editorClassName = '',
   ...props
 }: MarkdownEditorProps) => {
   const { setTheme, theme } = useTheme()
   const editorColorMode: string | undefined = theme ? theme : 'dark'
-  const [toolbarVisible] = React.useState<boolean>(false)
-  const [showBottomPreview, setShowBottomPreview] =
-    React.useState<boolean>(true)
-  const rootMenubarClassName: string =
-    'xs:h-10 sm:h-12 md:h-12 lg:h-14 xl:h-14 justify-center '
-  const menubarTriggerClassName: string =
-    'dark:text-white text-gray-700 h-full xs:text-xs sm:text-xs md:text-sm lg:text-md xl:text-md '
+  const [showBottomPreview, setShowBottomPreview] = React.useState<boolean>(true)
+  const rootMenubarClassName: string = 'xs:h-10 sm:h-12 md:h-12 lg:h-14 xl:h-14 justify-center '
+  const menubarTriggerClassName: string = 'dark:text-white text-gray-700 h-full xs:text-xs sm:text-xs md:text-sm lg:text-md xl:text-md '
   const menubarItemClassName: string = 'dark:hover:bg-blue-600'
 
   let mdEditorHeight = 1500 // TODO: Dont harcode this value. Calculate this based on the height of the window
@@ -476,10 +474,10 @@ export const MarkdownEditor = ({
       </div>
       {/*@ts-ignore eslint-disable-next-line*/}
       <MDEditor
-        className=""
+        className={editorClassName}
         data-color-mode={editorColorMode}
         height={mdEditorHeight}
-        hideToolbar={toolbarVisible}
+        hideToolbar={hideToolbar}
         toolbarBottom={true}
         value={value}
         onChange={onChange}
