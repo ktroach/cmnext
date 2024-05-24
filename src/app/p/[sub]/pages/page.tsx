@@ -4,7 +4,7 @@ import {
   FeaturedPosts,
   FeaturedPages,
 } from '@/components/templates/featured-content'
-import SubsiteHomeTemplate from '@/components/templates/facets/subsite'
+import SubsiteHomeTemplate from '@/components/templates/base/subsite'
 
 export default async function SubsiteHomePage({ params }: any) {
   console.log('params: ', params)

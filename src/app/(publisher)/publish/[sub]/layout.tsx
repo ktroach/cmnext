@@ -2,7 +2,6 @@ import { redirect } from 'next/navigation'
 import { currentUser } from '@clerk/nextjs/server'
 import { PublisherNavConfig } from '@/config/publisher-config'
 import { type MenuItem, Sidebar } from '@/components/layouts/sidebar'
-import { SiteFooter } from '@/components/layouts/site-footer'
 import { SiteHeader } from '@/components/layouts/site-header'
 import { getSubsiteDetails, verifySubRefAccess } from '@/lib/queries'
 
@@ -49,9 +48,7 @@ export default async function AdminLayout({
           <div className='h-full'>
             {children}
           </div>
-          <SiteFooter />
         </div>
       </div>
   )  
-
 }

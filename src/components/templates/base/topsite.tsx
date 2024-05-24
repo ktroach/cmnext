@@ -1,6 +1,6 @@
 'use client'
 
-import React, { startTransition, useState } from 'react'
+import React, { startTransition, useState, useEffect } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Icons } from '@/styles/icons'
@@ -16,7 +16,7 @@ import { api } from '@/trpc/client'
 export interface TopSiteTemplateProps {
   userName: any
   line: string
-  words: string
+  pitches: any
   waves: any
   leftAction: any
   rightAction: any
@@ -26,7 +26,7 @@ export interface TopSiteTemplateProps {
 export default function TopSiteTemplate({
   userName,
   line,
-  words,
+  pitches,
   waves,
   leftAction,
   rightAction,
@@ -34,8 +34,19 @@ export default function TopSiteTemplate({
 }: TopSiteTemplateProps) {
   const [isRedirecting, setIsRedirecting] = useState<boolean>(false)
   const [active, setActive] = useState<string | null>(null)
+  const [pitchIndex, setPitchIndex] = useState(0)
   const menuItems = menuConfig ? menuConfig : []
   const baseUrl = getFrontendBaseUrl()
+
+  useEffect(() => {
+    let nextPitch  = 0
+    const interval = setInterval(() => {
+      setPitchIndex(nextPitch)
+      nextPitch = ( pitchIndex + 1 )
+      if (nextPitch > pitches.length) nextPitch = 0
+    }, 5000)
+    return () => clearInterval(interval)
+  }, [pitchIndex])
 
   let leftActionHref: string = leftAction?.href
   let rightActionHref: string = rightAction?.href
@@ -95,7 +106,7 @@ export default function TopSiteTemplate({
         <section className="mx-auto flex w-full max-w-5xl flex-col items-center justify-center gap-4 text-center">
           <TextGenerator
             className="mt-10 mb-10 text-black/[0.85] dark:text-white/[0.95]"
-            words={words}
+            text={pitches[pitchIndex]}
           />
           <div className="flex flex-wrap items-center justify-center gap-4  z-40">
             <Button asChild>

@@ -5,7 +5,11 @@ export const BaseUrl = getFrontendBaseUrl()
 export const RootConfig = {
   name: 'CMNexT',
   description: 'Taking your Content to the Next level',
-  pitch: 'Create Blogs, Create Sites, Create your Dreams',
+  pitches: [
+    'Create Sites, Blogs, Posts, Videos, and your own Design Templates',
+    'For Writers, Videographers, Bloggers, and Designers',
+    'Create your dreams within a matter of minutes',
+  ],
   waveAnimationColors: ['#38bfff', '#818cf8', '#c084fc', '#e879f9', '#22d3ee'],
   leftAction: { title: 'Learn More...', href: '' },
   rightAction: { title: 'Start Creating', href: '/signup' },
