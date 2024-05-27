@@ -4,7 +4,7 @@ import {
   FeaturedPosts,
   FeaturedPages,
 } from '@/components/templates/featured-content'
-import SubsiteHomeTemplate from '@/components/templates/base/subsite'
+// import SubsiteHomeTemplate from '@/components/templates/base/subsite'
 
 export default async function SubsiteHomePage({ params }: any) {
   console.log('params: ', params)
@@ -139,9 +139,8 @@ Numbered list:
   > Markdown uses email-style > characters for blockquoting.  
   `
 
-  return (
-    <>
-      <SubsiteHomeTemplate
+  /**
+   *       <SubsiteHomeTemplate
         subRef={subRef}
         line={line}
         words={pitch}
@@ -152,6 +151,11 @@ Numbered list:
         markupTest={markupTest1}
         markdownTest={markdownTest1}
       />
+   */
+
+  return (
+    <>
+      
     </>
   )
 }

@@ -56,10 +56,10 @@ export const pagesRouter = createTRPCRouter({
       const responseData = await createContent('pages', user.name, input.subRef, createContentData)
       let slug: string | undefined = responseData && responseData?.slug ? responseData.slug : undefined
       let metaDataSlug: string  = slug ? slug : ''
-      let pageSlug: string = slug ? slug : ''
-      if (pageSlug && pageSlug?.indexOf('/') === 0) {
-        pageSlug = `/${pageSlug}`
-      }
+      let pageSlug: string = slug ? `/${slug}` : ''
+      // if (pageSlug && pageSlug?.indexOf('/') === 0) {
+      //   pageSlug = `/${pageSlug}`
+      // }
 
       return await ctx.db.page.create({
         data: {

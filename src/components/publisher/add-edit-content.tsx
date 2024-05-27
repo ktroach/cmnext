@@ -230,7 +230,7 @@ export function AddEditContent(params: any) {
       : RootConfig?.defaultCoverImage ?? undefined
     const contentDescription: string | undefined = formControl?.description
       ? formControl.description
-      : undefined
+      : title
 
     let inputsValid: boolean = verifyInput(titleInput)
     if (inputsValid) inputsValid = verifyInput(subref)

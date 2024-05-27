@@ -54,7 +54,7 @@ export const verifySubRefAccess = async (
       return false
     }
   }
-  console.log('Subsite Denied - Not Authenticated')
+  // console.log('Subsite Denied - Not Authenticated')
   return false
 }
 
