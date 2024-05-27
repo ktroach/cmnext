@@ -4,6 +4,8 @@ import { Block } from '@/components/containers/block'
 import { allPages } from 'contentlayer/generated'
 import { Mdx } from '@/components/mdx'
 
+export const dynamic = 'force-dynamic'
+
 interface PageProps {
   params: {
     sub: string, 
