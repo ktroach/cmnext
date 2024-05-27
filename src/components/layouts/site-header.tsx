@@ -30,7 +30,6 @@ export function SiteHeader({ user, subRef, subsite }: SiteHeaderProps) {
   const baseUrl: string = getFrontendBaseUrl()
   const accountUrl: string = publisherUrl ? `${baseUrl}${publisherUrl}/settings/profile` : ''
   const siteName: string = subsite && subsite?.name ? subsite.name.toUpperCase() : ''
-  // siteName = siteName ? siteName.toUpperCase() : ''
 
   if (user) {
     accountInitials = `${user?.firstName?.charAt(0) ?? ''} ${
@@ -43,7 +42,7 @@ export function SiteHeader({ user, subRef, subsite }: SiteHeaderProps) {
   }
 
   return (
-    <header className="sticky top-0 z-[1000] w-full border-b bg-white dark:bg-black">
+    <header className="sticky top-0 z-[100] w-full border-b bg-white dark:bg-transparent">
       <div className="flex h-16 w-full space-x-4">
         <div className='mt-5 ml-5'>{siteName}</div>
         <div className="flex flex-1 items-center justify-end  mr-8 ">

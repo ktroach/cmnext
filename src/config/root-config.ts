@@ -23,16 +23,16 @@ export const RootConfig = {
   },
   statusConfigs: {
     draft: {
-      statusColor: 'text-blue-600',
+      statusColor: 'amber',
     },
     published: {
-      statusColor: 'text-green-600',
+      statusColor: 'grass',
     },
     review: {
-      statusColor: 'text-yellow-600',
+      statusColor: 'indigo',
     },
     pending: {
-      statusColor: 'text-gray-600',
+      statusColor: 'sky',
     },
   },
   sections: [

@@ -18,6 +18,7 @@ export const metadata: Metadata = {
 }
 
 export default async function PublisherEditPage({ params }: any) {
+  console.log('>>> entered EditPage >>> ')
   const curUser = await currentUser()
   if (!curUser) redirect('/')
   const subRef = params?.sub ? params.sub : null
@@ -30,6 +31,8 @@ export default async function PublisherEditPage({ params }: any) {
   if (pageSlug.indexOf('/') === -1) {
     pageSlug = `/${pageSlug}`
   }  
+
+  console.log('>>> pageSlug >>> ', pageSlug)
 
   const authorId: number | null = subsite && subsite?.userId ? subsite.userId : null
   const subsiteId: number | null = subsite && subsite?.subsiteId ? subsite.subsiteId : null

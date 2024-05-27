@@ -57,37 +57,34 @@ export function AddEditContent(params: any) {
   const [pageType, setPageType] = React.useState<any>()
   const isPage: boolean = params?.isPost ? false : true
   const isPageTypeDisabled: boolean = params?.isNew ? false : true
-
-  // TODO: Populate from database
   const pageTypes: any = [
     { label: 'markdown', value: 'markdown' },
-    { label: 'home', value: 'home' },
+    { label: 'full-width', value: 'full-width' },
     { label: 'form', value: 'form' },
-    { label: 'course', value: 'course' },
   ]
   // TODO: Populate from database
-  const parentPage: any = [
-    { label: 'Home', value: '1' },
-    { label: 'About', value: '2' },
-    { label: 'Archive', value: '3' },
-    { label: 'Contact', value: '4' },
-  ]
+  // const parentPage: any = [
+  //   { label: 'Home', value: '1' },
+  //   { label: 'About', value: '2' },
+  //   { label: 'Archive', value: '3' },
+  //   { label: 'Contact', value: '4' },
+  // ]
 
-  // TODO: Populate from database
-  const pageOrder: any = [
-    { label: 'Always at the top', value: '1' },
-    { label: 'Below page x', value: '2' },
-    { label: 'Below page y', value: '3' },
-    { label: 'Below page z', value: '4' },
-    { label: 'Always at the bottom', value: '5' },
-  ]
+  // // TODO: Populate from database
+  // const pageOrder: any = [
+  //   { label: 'Always at the top', value: '1' },
+  //   { label: 'Below page x', value: '2' },
+  //   { label: 'Below page y', value: '3' },
+  //   { label: 'Below page z', value: '4' },
+  //   { label: 'Always at the bottom', value: '5' },
+  // ]
 
   const handleTemplateHelp = () => {
     toast('TODO')
   }
 
   const editParams: any = params?.editParams ? params.editParams : null
-  console.log('>>> AddEditContent >>> editParams >>> ', editParams)
+  // console.log('>>> AddEditContent >>> editParams >>> ', editParams)
 
   const editData: any =
     editParams && editParams?.editData && editParams?.editData
@@ -155,9 +152,20 @@ export function AddEditContent(params: any) {
     }
   }
 
+  const viewPage = () => {
+    const subsite: any = params?.subsite ? params.subsite : undefined
+    const subref: string = subsite?.subRef ? subsite.subRef : undefined
+    if (subref) {
+      const url: string = params?.isPost
+        ? `${window.location.origin}/p/${subref}/blogs${editSlug}`
+        : `${window.location.origin}/p/${subref}/pages${editSlug} `
+      window.open(url, '_blank')
+    }
+  }  
+
   const CreateContent = async () => {
     console.log('Entered: CreateContent')
-    const requiredInputs: any = getCreateMutationVariables()
+    const requiredInputs: any = getCreateMutationVariables(params?.isPost)
     if (requiredInputs !== null) {
       if (params?.isPost) {
         return await createPostMutation.mutateAsync(requiredInputs)
@@ -206,7 +214,7 @@ export function AddEditContent(params: any) {
     return null
   }
 
-  const getCreateMutationVariables = () => {
+  const getCreateMutationVariables = (isPost: any) => {
     const formControl = form.getValues()
     const titleInput: string | undefined = title ? title : undefined
     const subsite: any = params?.subsite ? params.subsite : undefined
@@ -230,14 +238,28 @@ export function AddEditContent(params: any) {
     if (inputsValid) inputsValid = verifyInput(subsiteId)
     if (inputsValid) inputsValid = verifyInput(coverImage)
     if (inputsValid) {
-      const mutationVars: any = {
-        subRef: subref,
-        title: titleInput,
-        description: contentDescription,
-        image: coverImage,
-        content: editorContent,
-        authorId: userId,
-        subsiteId: subsiteId,
+      let mutationVars: any = {}
+      if (isPost) {
+        mutationVars = {
+          subRef: subref,
+          title: titleInput,
+          description: contentDescription,
+          image: coverImage,
+          content: editorContent,
+          authorId: userId,
+          subsiteId: subsiteId
+        }        
+      } else {
+        mutationVars = {
+          subRef: subref,
+          title: titleInput,
+          description: contentDescription,
+          image: coverImage,
+          content: editorContent,
+          authorId: userId,
+          subsiteId: subsiteId,
+          pageType: pageType
+        }        
       }
       return mutationVars
     }
@@ -579,6 +601,7 @@ export function AddEditContent(params: any) {
         isBlog
         status={contentStatus}
         closeEditor={closeEditor}
+        viewPage={viewPage}
         saveDraft={saveDraft}
         publishChanges={publishChanges}
         publishDisabled={params?.isNew}
@@ -588,6 +611,7 @@ export function AddEditContent(params: any) {
         deleteContent={deleteContent}
         unPublishDisabled={params?.isNew}
         deleteDisabled={params?.isNew}
+        allToolbarActionsDisabled={!params?.isNew && !editData}
       />
       <Form {...form}>
         <form
@@ -699,71 +723,6 @@ export function AddEditContent(params: any) {
                   </FormItem>
                 )}
               />
-
-              <FormField
-                control={form.control}
-                name="parent"
-                render={({ field }) => (
-                  <FormItem className="w-full">
-                    <FormLabel>Parent Page</FormLabel>
-                    <FormControl>
-                      <Select
-                        value={field.value?.toString()}
-                        onValueChange={field.onChange}
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a parent page" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectGroup>
-                            {parentPage.map((option: any, index: number) => (
-                              <SelectItem
-                                key={option.value}
-                                value={option.value}
-                              >
-                                {option.label}
-                              </SelectItem>
-                            ))}
-                          </SelectGroup>
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="order"
-                render={({ field }) => (
-                  <FormItem className="w-full">
-                    <FormLabel>Page Order</FormLabel>
-                    <FormControl>
-                      <Select
-                        value={field.value?.toString()}
-                        onValueChange={field.onChange}
-                      >
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select where you want the page on your site menu" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectGroup>
-                            {pageOrder.map((option: any, index: number) => (
-                              <SelectItem
-                                key={option.value}
-                                value={option.value}
-                              >
-                                {option.label}
-                              </SelectItem>
-                            ))}
-                          </SelectGroup>
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
             </>
           ) : (
             <></>
@@ -774,7 +733,7 @@ export function AddEditContent(params: any) {
       {pageType === 'markdown' ? (
         <>
           <Separator className="mt-5" />
-          <Label className="text-lg">Markdown Content</Label>
+          <Label className="text-lg">Markdown Editor</Label>
           <MarkdownEditor
             mounted={mounted}
             value={editorContent}

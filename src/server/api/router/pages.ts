@@ -16,6 +16,7 @@ export const pagesRouter = createTRPCRouter({
         content: z.string().min(1),
         authorId: z.number().min(1),
         subsiteId: z.number().min(1),
+        pageType: z.string().min(1),
       })
     )
     .mutation(async ({ input, ctx }) => {
@@ -69,7 +70,8 @@ export const pagesRouter = createTRPCRouter({
           deleted: false,
           authorId: input.authorId,
           subsiteId: input.subsiteId,
-          metaData: `${metaDataSlug}.mdx`
+          metaData: `${metaDataSlug}.mdx`,
+          pageType: input.pageType,
         },
       })
     }),    
