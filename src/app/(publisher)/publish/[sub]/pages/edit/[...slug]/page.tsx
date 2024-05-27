@@ -37,6 +37,9 @@ export default async function PublisherEditPage({ params }: any) {
   const authorId: number | null = subsite && subsite?.userId ? subsite.userId : null
   const subsiteId: number | null = subsite && subsite?.subsiteId ? subsite.subsiteId : null
   const pageResult: any = await getPageBySlug(pageSlug, authorId, subsiteId)
+
+  console.log('>>> pageResult >>> ', pageResult)
+
   const pageData: any = pageResult && pageResult.length > 0 ? pageResult[0] : null
 
   let editParams: any = null

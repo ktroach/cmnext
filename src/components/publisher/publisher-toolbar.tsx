@@ -121,7 +121,7 @@ export const PublisherToolbar = ({
   const statusText: any = getFormattedStatus(props?.status)
 
   return (
-    <header className="sticky top-0 z-[1000] w-full border-b bg-white dark:bg-transparent">
+    <header className="sticky top-0 z-[1000] w-full border-b bg-white dark:bg-black">
       <div className="container flex flex-row h-16 items-center">
         <div className="mx-[-32px]">
           <div className="flex flex-row">
