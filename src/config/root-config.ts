@@ -127,4 +127,10 @@ export const RootConfig = {
       path: 'https://discord.com/',
     },
   ],
+  templateConfigs: {
+    carousel: {
+      defaultClassName: 'p-5 inset-0 rounded-xl object-cover',
+      defaultSrc: 'https://picsum.photos/id/230/800/800',
+    }
+  }
 }

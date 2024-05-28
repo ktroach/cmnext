@@ -1,12 +1,8 @@
 'use client'
 
-import React, { useState } from 'react'
-import Link from 'next/link'
+import React from 'react'
 import Image from 'next/image'
-import { AspectRatio } from '@/components/ui/aspect-ratio'
-import { Block } from '@/components/containers/block'
 import Autoplay from 'embla-carousel-autoplay'
-import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import {
   Carousel,
   CarouselContent,
@@ -14,48 +10,69 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@/components/ui/carousel'
-import { Skeleton } from '@/components/ui/skeleton'
 import { Button } from '@/components/ui/button'
+import { RootConfig } from '@/config/root-config'
 
 export interface CarouselTemplateProps {
-  subRef: any
-  config: any
+  subtree: any
 }
 
-export default function CarouselTemplate({
-  subRef,
-  config,
-}: CarouselTemplateProps) {
+export default function CarouselTemplate({ subtree }: CarouselTemplateProps) {
+  const carousel = JSON.parse(subtree)
+  const delay: number = carousel?.delay ?? 3000
+  const stopOnInteraction: boolean = carousel?.stopOnInteraction ?? true
+  const rootClassName: string = carousel?.className ? carousel.className : ''
+  const parentClassName: string = carousel?.parentClassName
+    ? carousel.parentClassName
+    : ''
+  const carouselImages: any = carousel?.children ? carousel?.children : []
+  const defaultClassName: string =
+    RootConfig.templateConfigs.carousel.defaultClassName
+  const defaultSrc: string = RootConfig.templateConfigs.carousel.defaultSrc
 
   const plugin = React.useRef(
-    Autoplay({ delay: 2000, stopOnInteraction: false })
+    Autoplay({ delay: delay, stopOnInteraction: stopOnInteraction })
   )
 
   return (
     <div className="mt-5">
-      <div className="w-full flex flex-col items-center justify-center overflow-hidden text-center border ">
+      <div className={rootClassName}>
         <Carousel
           plugins={[plugin.current]}
           onMouseEnter={plugin.current.stop}
           onMouseLeave={plugin.current.reset}
         >
           <CarouselContent>
-            {Array.from({ length: 5 }).map((_, index) => (
-              <CarouselItem key={index}>
-                <div className="p-1">
-                <Image
-                    className="inset-0 rounded-xl object-cover"
-                    src={`https://picsum.photos/id/${233 + index}/800/800`}
-                    alt="image"
-                    quality={100}
-                    width={0}
-                    height={0}
-                    sizes="100vw"
-                    style={{ width: '100%', height: '800px' }}
-                  ></Image>
-                </div>
-              </CarouselItem>
-            ))}
+            {carouselImages.map((img: any, index: number) => {
+              const inheritClass =
+                img?.properties?.className &&
+                img?.properties?.className === 'inherit'
+                  ? true
+                  : false
+              const imgClass = inheritClass
+                ? parentClassName
+                : img?.properties?.className ?? defaultClassName
+              const imgSrc = img?.properties?.src ?? defaultSrc
+              const imgAlt = img?.properties?.alt ?? 'image'
+              return (
+                <CarouselItem key={index}>
+                  <div className="relative w-screen h-screen overflow-hidden -z-10">
+                    <Image
+                      className={imgClass}
+                      src={imgSrc}
+                      alt={imgAlt}
+                      sizes="100vw"
+                      width={0}
+                      height={0}
+                      fill 
+                      style={{
+                        objectFit: 'cover',
+                      }}
+                    />
+                  </div>
+                </CarouselItem>
+              )
+            })} 
           </CarouselContent>
           <CarouselPrevious />
           <CarouselNext />
