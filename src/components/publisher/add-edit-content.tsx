@@ -62,22 +62,6 @@ export function AddEditContent(params: any) {
     { label: 'full-width', value: 'full-width' },
     { label: 'form', value: 'form' },
   ]
-  // TODO: Populate from database
-  // const parentPage: any = [
-  //   { label: 'Home', value: '1' },
-  //   { label: 'About', value: '2' },
-  //   { label: 'Archive', value: '3' },
-  //   { label: 'Contact', value: '4' },
-  // ]
-
-  // // TODO: Populate from database
-  // const pageOrder: any = [
-  //   { label: 'Always at the top', value: '1' },
-  //   { label: 'Below page x', value: '2' },
-  //   { label: 'Below page y', value: '3' },
-  //   { label: 'Below page z', value: '4' },
-  //   { label: 'Always at the bottom', value: '5' },
-  // ]
 
   const handleTemplateHelp = () => {
     toast('TODO')
@@ -595,6 +579,15 @@ export function AddEditContent(params: any) {
     return { PublishPage, isPublishingPage }
   }
 
+  const handleOpenPageDesigner = () => {
+    const subsite: any = params?.subsite ? params.subsite : undefined
+    const subref: string = subsite?.subRef ? subsite.subRef : undefined
+    if (subref) {
+      const url: string = `${window.location.origin}/publish/${subref}/pages/designer/${editSlug}`
+      window.open(url, '_blank')
+    }    
+  }
+
   return (
     <>
       <PublisherToolbar
@@ -733,7 +726,7 @@ export function AddEditContent(params: any) {
       {pageType === 'markdown' ? (
         <>
           <Separator className="mt-5" />
-          <Label className="text-lg">Markdown Editor</Label>
+          <Label className="text-lg">Edit in Markdown Editor</Label>
           <MarkdownEditor
             mounted={mounted}
             value={editorContent}
@@ -745,11 +738,11 @@ export function AddEditContent(params: any) {
         <></>
       )}
 
-      {pageType === 'home' ? (
+      {pageType === 'full-width' ? (
         <>
           <Separator className="mt-5" />
-          <Label className="text-lg">Home Page</Label>
-
+          <Label className="text-lg">Edit in Full-Width Page Designer</Label>
+          <Button className='bg-blue-500 hover:bg-blue-600 text-white text-lg' onClick={handleOpenPageDesigner}>Open Page Designer</Button>
         </>
       ) : (
         <></>

@@ -121,7 +121,7 @@ export const PublisherToolbar = ({
   const statusText: any = getFormattedStatus(props?.status)
 
   return (
-    <header className="sticky top-0 z-[1000] w-full border-b bg-white dark:bg-black">
+    <header className="sticky top-0 z-[1000] w-full dark:bg-[#09090b84] bg-white backdrop-blur-sm rounded-2xl overflow-hidden border border-black/[0.4] dark:border-white/[0.4] shadow-xl">
       <div className="container flex flex-row h-16 items-center">
         <div className="mx-[-32px]">
           <div className="flex flex-row">
@@ -134,7 +134,7 @@ export const PublisherToolbar = ({
               )}
             </div>
             {/* @ts-ignore */}
-            <Badge size="3" color={statusBadgeColor}>
+            <Badge className='ml-5' size="3" color={statusBadgeColor}>
               {statusText}
             </Badge>
           </div>

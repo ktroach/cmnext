@@ -10,7 +10,6 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@/components/ui/carousel'
-import { Button } from '@/components/ui/button'
 import { RootConfig } from '@/config/root-config'
 
 export interface CarouselTemplateProps {
@@ -66,7 +65,7 @@ export default function CarouselTemplate({ subtree }: CarouselTemplateProps) {
                       height={0}
                       fill 
                       style={{
-                        objectFit: 'cover',
+                        objectFit: 'cover'
                       }}
                     />
                   </div>
