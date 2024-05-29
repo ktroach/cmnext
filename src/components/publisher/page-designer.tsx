@@ -14,17 +14,25 @@ import {
 } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
-import { Input } from '@/components/ui/input'
 import { Textarea } from '../ui/textarea'
 
 export default function PageDesigner() {
   const [isDraggingBlock, setIsDraggingBlock] = useState(false)
-  const [isDraggingPanel, setIsDraggingPanel] = useState(false)
+  const [isDraggingSubBlock, setIsDraggingSubBlock] = useState(false)
   const [open, setOpen] = useState(false)
   const [blocks, setBlocks] = useState<any>([])
-  const [panels, setPanels] = useState<any>([])
+  const [subBlocks, setSubBlocks] = useState<any>([])
   const [curBlockId, setCurBlockId] = useState<number>(-1)
   const [textBlockColor, setTextBlockColor] = useState<string>('bg-white dark:bg-gray-900')
+
+  const handleMainSectionClick = () => {
+    if (isDraggingBlock) {
+      // @ts-ignore
+      setBlocks([...blocks, { id: blocks.length, subBlocks: [], removed: false }])
+      setIsDraggingBlock(false)
+      setTextBlockColor('bg-white dark:bg-gray-900')
+    }
+  }
 
   // @ts-ignore
   const handleBlockClick = (blockId) => {
@@ -32,31 +40,43 @@ export default function PageDesigner() {
       setOpen(true)
       setCurBlockId(blockId)
     }
-    if (isDraggingPanel) {
+    if (isDraggingSubBlock) {
       // @ts-ignore
-      setPanels([...panels, { blockId, id: panels.length, removed: false, blockType: 'text' }])
-      setIsDraggingPanel(false)
+      setSubBlocks([...subBlocks, { blockId, id: subBlocks.length, removed: false }])
+      setIsDraggingSubBlock(false)
     }
+    setTextBlockColor('bg-white dark:bg-gray-900')
   }
 
-  const handleTextAddBlockClick = () => {
+  const handleAddBlockClick = () => {
     setIsDraggingBlock(true)
     setTextBlockColor('bg-cyan-400 dark:bg-cyan-400')
+
+    if (isDraggingSubBlock) {
+		// @ts-ignore	
+        setSubBlocks([...subBlocks, { blockId, id: subBlocks.length, removed: false }])
+        setIsDraggingSubBlock(false)
+    }    
+  }
+  
+  const handleAddSubBlockClick = () => {
+    setTextBlockColor('bg-cyan-400 dark:bg-cyan-400')
+    setIsDraggingSubBlock(true)
+    setIsDraggingBlock(false)
   }
 
-  const handleRemoveBlock = (blockId: any) => {
+
+  const handleSubBlockClick = (subBlockId: any) => {
+    if (isDraggingSubBlock) {
+        setIsDraggingSubBlock(false)
+	}
+    setTextBlockColor('bg-white dark:bg-gray-900')
+  }
+
+  const handleRemoveSubBlock = (blockId: any) => {
     let blockFilter = blocks.filter((block: any) => block.id === blockId)
     let blockElement =
       blockFilter && blockFilter.length > 0 ? blockFilter[0] : null
-  }
-
-  const handleMainSectionClick = () => {
-    if (isDraggingBlock) {
-      // @ts-ignore
-      setBlocks([...blocks, { id: blocks.length, panels: [], removed: false }])
-      setIsDraggingBlock(false)
-      setTextBlockColor('bg-white dark:bg-gray-900')
-    }
   }
 
   const getPropertiesByBlockType = () => {
@@ -115,6 +135,7 @@ export default function PageDesigner() {
       <div className="flex h-screen w-full overflow-hidden">
         <div className="bg-gray-100 dark:bg-gray-950 w-64 p-4 border-r border-gray-200 dark:border-gray-800 flex flex-col gap-4">
           <h2 className="text-lg font-semibold">Blocks</h2>
+
           <div className="grid grid-cols-2 gap-4">
             <div>
               <div
@@ -122,32 +143,39 @@ export default function PageDesigner() {
                   'rounded-lg shadow-sm p-4 flex flex-col gap-2b',
                   textBlockColor
                 )}
-                onClick={handleTextAddBlockClick}
+                onClick={handleAddBlockClick}
               >
-                <TextIcon
+                <BoxIcon
                   className="w-6 h-6 text-gray-500 dark:text-gray-400"
-                  onClick={handleTextAddBlockClick}
+                  onClick={handleAddBlockClick}
                 />
                 <span
                   className="text-sm font-medium"
-                  onClick={handleTextAddBlockClick}
+                  onClick={handleAddBlockClick}
                 >
-                  Text
+                  Block
                 </span>
               </div>
             </div>
+
+            <div>
+              <div className={cn(
+                  'rounded-lg shadow-sm p-4 flex flex-col gap-2b',
+                  textBlockColor
+                )} onClick={handleAddSubBlockClick}>
+                <BoxIcon className="w-6 h-6 text-green-500 dark:text-gray-400" onClick={handleAddSubBlockClick} />
+                <span className="text-sm font-medium" onClick={handleAddSubBlockClick}>Sub Block</span>
+              </div>
+            </div>
+
+
             <div>
               <div className="bg-white dark:bg-gray-900 rounded-lg shadow-sm p-4 flex flex-col gap-2 cursor-grab">
                 <ImageIcon className="w-6 h-6 text-gray-500 dark:text-gray-400" />
                 <span className="text-sm font-medium">Image</span>
               </div>
             </div>
-            <div>
-              <div className="bg-white dark:bg-gray-900 rounded-lg shadow-sm p-4 flex flex-col gap-2 cursor-grab">
-                <BoxIcon className="w-6 h-6 text-gray-500 dark:text-gray-400" />
-                <span className="text-sm font-medium">Button</span>
-              </div>
-            </div>
+
             <div>
               <div className="bg-white dark:bg-gray-900 rounded-lg shadow-sm p-4 flex flex-col gap-2 cursor-grab">
                 <HeadingIcon className="w-6 h-6 text-gray-500 dark:text-gray-400" />
@@ -168,20 +196,28 @@ export default function PageDesigner() {
             </div>
           </div>
         </div>
-        <div className="flex-1 overflow-auto p-6">
-          <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900 overflow-visible">
+        <div className="flex-1 overflow-auto p-1">
+          <div className="rounded-lg  border-gray-200 bg-white p-4 shadow-sm dark:border-gray-800 dark:bg-gray-900 overflow-visible">
             <h3 className="mb-4 text-lg font-semibold">Layout</h3>
             <div className="grid grid-cols-1 gap-4">
-              <div onClick={handleMainSectionClick}>
+              <div className="flex-1 relative cursor-pointer" onClick={handleMainSectionClick}>
                 {blocks.map((block: any, index: number) => (
                   <div
                     key={block.id}
-                    className="flex flex-col h-[200px] w-full items-center justify-center rounded-md border-2 border-dashed border-gray-500 dark:border-gray-700 hover:border-4 hover:border-gray-400 mb-5"
-                    style={{ top: `${index * 10}%` }}
+                    className="absolute flex h-[200px] w-full rounded-md border-2 border-dashed border-gray-500 dark:border-gray-700 hover:border-4 hover:border-gray-400 mb-5"
+                    style={{ top: `${index * 100}%` }}
                     onClick={() => handleBlockClick(block.id)}
                   >
+                    {subBlocks.filter((subBlock: any) => subBlock.blockId === block.id).map((subBlock: any) => (
+                        <div
+                            key={subBlock.id}
+                            className="panel w-1/2 h-full border-r-2 border-blue-700 flex flex-wrap bg-green-400"
+                            onClick={() => handleSubBlockClick(subBlock.id)}
+                        >
+                            Work in Progress
 
-                    {/* traverse inner blocks */}
+                        </div>
+                    ))}
 
                   </div>
                 ))}
