@@ -1,9 +1,9 @@
-import React from 'react';
-
-import { Separator } from '@/components/ui/separator';
-import { Icons } from '@/styles/icons';
-import { cn } from '@/lib/utils';
-import { RootConfig } from '@/config/root-config';
+import React from 'react'
+import Link from 'next/link'
+import { Separator } from '@/components/ui/separator'
+import { Icons } from '@/styles/icons'
+import { cn } from '@/lib/utils'
+import { RootConfig } from '@/config/root-config'
 
 export const SidebarHeader = ({ collapsed }: { collapsed: boolean }) => {
   return (
@@ -14,5 +14,5 @@ export const SidebarHeader = ({ collapsed }: { collapsed: boolean }) => {
       </div>
       <Separator className="mt-4" />
     </>
-  );
-};
+  )
+}

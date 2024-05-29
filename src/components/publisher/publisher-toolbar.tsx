@@ -1,16 +1,23 @@
 'use client'
 
 import { Icons } from '@/styles/icons'
-import { Button } from '@/components/ui/button'
-import { Circle } from 'lucide-react'
 import { RootConfig } from '@/config/root-config'
-import { ArrowUpDown, ChevronLeft, MoreHorizontal } from 'lucide-react'
+import { Badge, IconButton, Tooltip } from '@radix-ui/themes'
 import { toast } from 'sonner'
+import {
+  EyeOpenIcon,
+  ChevronLeftIcon,
+  TrashIcon,
+  RocketIcon,
+  CrumpledPaperIcon,
+} from '@radix-ui/react-icons'
+import { Save } from 'lucide-react'
 
 interface PublisherToolbarProps {
   isBlog?: boolean
   status?: string
   closeEditor?: any
+  viewPage?: any
   saveDraft?: any
   publishChanges?: any
   publishDisabled?: boolean
@@ -20,6 +27,7 @@ interface PublisherToolbarProps {
   deleteContent?: any
   unPublishDisabled?: boolean
   deleteDisabled?: boolean
+  allToolbarActionsDisabled?: boolean
 }
 
 export const PublisherToolbar = ({
@@ -49,6 +57,12 @@ export const PublisherToolbar = ({
     }
   }
 
+  const HandleViewPage = () => {
+    if (props && props?.viewPage) {
+      props.viewPage()
+    }
+  }
+
   const HandleUnPublishChanges = () => {
     if (props && props?.unPublishChanges) {
       props.unPublishChanges()
@@ -72,14 +86,9 @@ export const PublisherToolbar = ({
     }
   }
 
-  const renderIcon = (iconColor: string) => {
-    const iconClass: string = `h-5 w-5 ${iconColor} fill-current rounded-2xl border border-white/[0.5] dark:border-white/[0.5] shadow-xl`
-    return <Circle className={iconClass} />
-  }
-
-  const getStatusIcon = (status: string | undefined) => {
+  const getStatusColor = (status: string | undefined) => {
     if (!status) {
-      return <></>
+      return RootConfig.statusConfigs.draft.statusColor
     }
     const statusKey: string = status.toLowerCase()
     let statusColor: any = ''
@@ -91,22 +100,28 @@ export const PublisherToolbar = ({
       statusColor = RootConfig.statusConfigs.published.statusColor
     if (statusKey === 'pending')
       statusColor = RootConfig.statusConfigs.pending.statusColor
-    return renderIcon(statusColor)
+    return statusColor
   }
 
-  const isInUpdatingState =
-    props?.isUpdating && props?.isUpdating === true ? true : false
-  const isPublishDisabled =
-    props?.publishDisabled && props?.publishDisabled === true ? true : false
-  const isSaveDraftDisabled =
-    props?.isSaveDisabled && props?.isSaveDisabled === true ? true : false
-  const unPublishDisabled =
-    props?.unPublishDisabled && props?.unPublishDisabled === true ? true : false
-  const deleteDisabled =
-    props?.deleteDisabled && props?.deleteDisabled === true ? true : false
+  const isInUpdatingState = props?.isUpdating && props?.isUpdating === true ? true : false
+  let isPublishDisabled = props?.publishDisabled && props?.publishDisabled === true ? true : false
+  let isSaveDraftDisabled = props?.isSaveDisabled && props?.isSaveDisabled === true ? true : false
+  let unPublishDisabled = props?.unPublishDisabled && props?.unPublishDisabled === true ? true : false
+  let deleteDisabled = props?.deleteDisabled && props?.deleteDisabled === true ? true : false
+  let viewPageDisabled = props?.deleteDisabled && props?.deleteDisabled === true ? true : false
+  if (props?.allToolbarActionsDisabled) {
+    isPublishDisabled = true
+    isSaveDraftDisabled = true
+    unPublishDisabled = true
+    deleteDisabled = true
+    viewPageDisabled = true
+  }
+
+  const statusBadgeColor: string = getStatusColor(props?.status)
+  const statusText: any = getFormattedStatus(props?.status)
 
   return (
-    <header className="sticky top-0 z-[1000] w-full border-b bg-white dark:bg-transparent">
+    <header className="sticky top-0 z-[1000] w-full dark:bg-[#09090b84] bg-white backdrop-blur-sm rounded-2xl overflow-hidden border border-black/[0.4] dark:border-white/[0.4] shadow-xl">
       <div className="container flex flex-row h-16 items-center">
         <div className="mx-[-32px]">
           <div className="flex flex-row">
@@ -118,53 +133,73 @@ export const PublisherToolbar = ({
                 />
               )}
             </div>
-            <div>{getStatusIcon(props?.status)}</div>
-            <div className="mx-2">{getFormattedStatus(props?.status)}</div>
+            {/* @ts-ignore */}
+            <Badge className='ml-5' size="3" color={statusBadgeColor}>
+              {statusText}
+            </Badge>
           </div>
         </div>
         <div className="flex flex-1 justify-end space-x-4">
-          <Button
-            className=" bg-gray-800 hover:bg-gray-600 text-white text-sm font-medium font-mono"
-            onClick={HandleCloseEditor}
-            disabled={isInUpdatingState}
-          >
-            <ChevronLeft className="mr-2 h-4 w-4" /> Back
-          </Button>
-          <Button
-            className="  bg-cyan-800 hover:bg-cyan-600 text-white text-sm font-medium font-mono"
-            onClick={HandleCloseEditor}
-            disabled={deleteDisabled}
-          >
-            View Page
-          </Button>
-          <Button
-            className="  bg-orange-800 hover:bg-orange-600 text-white text-sm font-medium font-mono"
-            onClick={HandleUnPublishChanges}
-            disabled={unPublishDisabled}
-          >
-            Un-Publish
-          </Button>
-          <Button
-            className=" bg-red-800 hover:bg-red-600 text-white text-sm font-medium font-mono"
-            onClick={HandleDeleteContent}
-            disabled={deleteDisabled}
-          >
-            Delete
-          </Button>
-          <Button
-            className="bg-blue-800 hover:bg-blue-600 text-white text-sm font-medium font-mono"
-            onClick={HandleSaveDraft}
-            disabled={isInUpdatingState || isSaveDraftDisabled}
-          >
-            Save Draft
-          </Button>
-          <Button
-            className="bg-green-800 hover:bg-green-600 text-white text-sm font-medium font-mono"
-            onClick={HandlePublishChanges}
-            disabled={isPublishDisabled || isInUpdatingState}
-          >
-            Publish
-          </Button>
+          <Tooltip content="Close Editor">
+            <IconButton
+              color="gray"
+              variant="classic"
+              onClick={HandleCloseEditor}
+              disabled={isInUpdatingState}
+            >
+              <ChevronLeftIcon width="18" height="18" />
+            </IconButton>
+          </Tooltip>
+          <Tooltip content="View Page on your Site">
+            <IconButton
+              color="indigo"
+              variant="classic"
+              onClick={HandleViewPage}
+              disabled={viewPageDisabled}
+            >
+              <EyeOpenIcon width="18" height="18" />
+            </IconButton>
+          </Tooltip>
+          <Tooltip content="Un-Publish">
+            <IconButton
+              color="plum"
+              variant="classic"
+              onClick={HandleUnPublishChanges}
+              disabled={unPublishDisabled}
+            >
+              <CrumpledPaperIcon width="18" height="18" />
+            </IconButton>
+          </Tooltip>
+          <Tooltip content="Delete">
+            <IconButton
+              color="ruby"
+              variant="classic"
+              onClick={HandleDeleteContent}
+              disabled={deleteDisabled}
+            >
+              <TrashIcon width="18" height="18" />
+            </IconButton>
+          </Tooltip>
+          <Tooltip content="Save Draft">
+            <IconButton
+              color="amber"
+              variant="classic"
+              onClick={HandleSaveDraft}
+              disabled={isInUpdatingState || isSaveDraftDisabled}
+            >
+              <Save width="18" height="18" />
+            </IconButton>
+          </Tooltip>
+          <Tooltip content="Publish">
+            <IconButton
+              color="grass"
+              variant="classic"
+              onClick={HandlePublishChanges}
+              disabled={isPublishDisabled || isInUpdatingState}
+            >
+              <RocketIcon width="18" height="18" />
+            </IconButton>
+          </Tooltip>
         </div>
       </div>
     </header>

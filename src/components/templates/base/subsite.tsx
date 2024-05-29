@@ -163,10 +163,10 @@ export default function SubsiteHomeTemplate({
           {line}
         </h1>
         <section className="mx-auto flex w-full max-w-5xl flex-col items-center justify-center gap-4 text-center">
-          <TextGenerator
+          {/* <TextGenerator
             className="mt-5  text-black/[0.85] dark:text-white/[0.95]"
-            words={words}
-          />
+            pitch={[words]}
+          /> */}
           <div className="flex flex-wrap items-center justify-center gap-4 mt-10 z-40">
             <ColorWaves
               animationTimeoutMs={4000}

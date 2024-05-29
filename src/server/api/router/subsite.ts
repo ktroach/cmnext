@@ -1,6 +1,8 @@
 import { z } from 'zod'
 
 import { createTRPCRouter, protectedProcedure } from '../trpc'
+import { createContent } from '@/lib/publisherBackend'
+import { RootConfig } from '@/config/root-config'
 
 export const subsiteRouter = createTRPCRouter({
   create: protectedProcedure
@@ -17,6 +19,62 @@ export const subsiteRouter = createTRPCRouter({
           accountId: input.accountId,
         },
       })
+
+      if (!newSubSite) {
+        console.log('Failed to CREATE Subsite. Subsite does not exist.')
+        return null
+      }         
+      const newSubSiteId = newSubSite?.id 
+      const newSubRef = newSubSite?.subsiteRef
+
+      const user = await ctx.db.user.findFirst({
+        where: {
+          id: input.accountId,
+        },
+      })
+      if (!user) {
+        console.log('Failed to CREATE Subsite. User does not exist.')
+        return null
+      }   
+      const userId = user && user?.id ? user.id : undefined
+
+      // Create the initial Home page to the subsite
+      const createContentData: any = {
+        isUpdate: false,
+        contentType: 'pages',
+        subRef: newSubRef,
+        title: 'Home',
+        description: 'Home Page',
+        image: RootConfig.defaultCoverImage,
+        body: '# Home Page',
+        userName: user.name,           
+      }
+
+      const responseData = await createContent('pages', user.name, newSubRef, createContentData)
+      let slug: string | undefined = responseData && responseData?.slug ? responseData.slug : undefined
+      let metaDataSlug: string  = slug ? slug : ''
+      let pageSlug: string = slug ? slug : ''
+      if (pageSlug && pageSlug?.indexOf('/') === 0) {
+        pageSlug = `/${pageSlug}`
+      }
+
+      if (newSubSiteId && userId) {
+        const newPage = {
+          data: {
+            title: 'Home',
+            content: 'Home',
+            authorId: userId,
+            subsiteId: newSubSiteId,
+            slug: pageSlug,
+            published: false,
+            deleted: false,
+            metaData: `${metaDataSlug}.mdx`,
+            pageType: 'full-width',
+          },
+        }
+        await ctx.db.page.create(newPage)
+      }
+
       return newSubSite
     }),
 
@@ -123,7 +181,7 @@ export const subsiteRouter = createTRPCRouter({
         data: {
           name: input.name,
           accountId: input.accountId,
-          subsiteRef: input.subsiteRef, 
+          subsiteRef: input.subsiteRef,
         },
       })
     }),

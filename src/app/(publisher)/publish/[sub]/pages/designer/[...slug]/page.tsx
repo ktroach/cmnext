@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation'
 import { currentUser } from '@clerk/nextjs/server'
 import { Header } from '@/components/layouts/header'
 import { Block } from '@/components/containers/block'
-import { AddEditContent } from '@/components/publisher/add-edit-content'
+import PageDesigner from '@/components/publisher/page-designer'
 import { getFrontendBaseUrl } from '@/lib/url'
 import { 
   verifySubRefAccess, 
@@ -13,12 +13,12 @@ import {
 
 export const metadata: Metadata = {
   metadataBase: new URL(getFrontendBaseUrl()),
-  title: 'Edit Site Page',
-  description: 'Edit site page',
+  title: 'Page Designer',
+  description: 'Full-Width Page Designer',
 }
 
-export default async function PublisherEditPage({ params }: any) {
-  console.log('>>> entered EditPage >>> ')
+export default async function PublisherPageDesigner({ params }: any) {
+  console.log('>>> ENTERED: PublisherPageDesigner >>> ')
   const curUser = await currentUser()
   if (!curUser) redirect('/')
   const subRef = params?.sub ? params.sub : null
@@ -50,13 +50,8 @@ export default async function PublisherEditPage({ params }: any) {
   }
 
   return (
-    <Block>
-      <Header
-        title="Edit Site Page"
-        description="Edit your Sites Page"
-        size="sm"
-      />
-      <AddEditContent subsite={subsite} isNew={false} isPost={false} editParams={editParams} />
-    </Block>
+    <>
+        <PageDesigner />
+    </>
   )
 }

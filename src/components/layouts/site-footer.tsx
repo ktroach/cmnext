@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import FooterMenu from '@/components/layouts/footer-menu'
 import { RootConfig } from '@/config/root-config'
-import LogoSquare from '@/components/logo/logo-square'
+import LogoIcon from '@/components/logo/logo-icon'
 import { Suspense } from 'react'
 
 export default async function SiteFooter() {
@@ -19,7 +19,7 @@ export default async function SiteFooter() {
             className="flex items-center gap-2 text-black md:pt-1 dark:text-white"
             href="/"
           >
-            <LogoSquare size="sm" iconKey="nextjs" />
+            <LogoIcon size="sm" iconKey="nextjs" />
             <span className="uppercase">{RootConfig.name}</span>
           </Link>
         </div>
@@ -44,7 +44,7 @@ export default async function SiteFooter() {
             href="/signup"
           >
             <span className="px-3">
-              <LogoSquare size="sm" />
+              <LogoIcon size="sm" drawBorder={false} />
             </span>
             <hr className="h-full border-r border-neutral-200 dark:border-neutral-700" />
             <span className="px-3">GitHub</span>

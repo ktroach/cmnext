@@ -4,14 +4,15 @@ import { motion, stagger, useAnimate } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 export const TextGenerator = ({
-  words,
+  text,
   className,
 }: {
-  words: string;
+  text: string;
   className?: string;
 }) => {
   const [scope, animate] = useAnimate();
-  let wordsArray = words.split(" ");
+  if (!text) return (<></>)
+  let textArray = text.split(" ");
   useEffect(() => {
     animate(
       "span",
@@ -19,8 +20,8 @@ export const TextGenerator = ({
         opacity: 1,
       },
       {
-        duration: 2,
-        delay: stagger(0.2),
+        duration: 5,
+        delay: stagger(0.5),
       }
     );
   }, [scope.current]);
@@ -28,13 +29,13 @@ export const TextGenerator = ({
   const renderWords = () => {
     return (
       <motion.div ref={scope}>
-        {wordsArray.map((word, idx) => {
+        {textArray.map((curText, idx) => {
           return (
             <motion.span
-              key={word + idx}
-              className="dark:text-white text-black opacity-0"
+              key={curText + idx}
+              className="dark:text-white text-black  opacity-30"
             >
-              {word}{" "}
+              {curText}{" "}
             </motion.span>
           );
         })}

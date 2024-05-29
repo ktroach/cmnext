@@ -13,6 +13,8 @@ import { Mdx } from '@/components/mdx'
 import { Block } from '@/components/containers/block'
 import '@/styles/mdx.css'
 
+export const dynamic = 'force-dynamic'
+
 interface PostPageProps {
   params: {
     slug: string[] | string

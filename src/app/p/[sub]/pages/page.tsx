@@ -1,157 +1,73 @@
-import { Block } from '@/components/containers/block'
-import { RootConfig } from '@/config/root-config'
-import {
-  FeaturedPosts,
-  FeaturedPages,
-} from '@/components/templates/featured-content'
-import SubsiteHomeTemplate from '@/components/templates/facets/subsite'
+import React from 'react'
+import CarouselTemplate from '@/components/templates/carousel'
+import { SubTree } from '@/lib/subtree'
+import { getPageByTitle, getSubsiteBySubsiteRef } from '@/lib/queries'
 
 export default async function SubsiteHomePage({ params }: any) {
-  console.log('params: ', params)
   const subRef: string | undefined = params?.sub ? params.sub : undefined
+  let carouselNode: any = null
 
-  const buildFeaturedSections = (sectionContent: any) => {
-    let sections: any = []
-    const sectionsConfig = [
-      {
-        title: 'Featured',
-        description: 'Featured Content',
-        href: `/p/${subRef}/pages`,
-        linkText: 'View all Pages',
-      },
-      {
-        title: 'Blogs',
-        description: 'Recent Blog Posts',
-        href: `/p/${subRef}/blogs`,
-        linkText: 'View all Blogs',
-      },      
-    ]
-
-    if (!sectionsConfig) return []
-    for (let i = 0; i < sectionsConfig.length; i++) {
-      const sectionConf = sectionsConfig[i]
-      sections.push({
-        ...sectionConf,
-        content: sectionContent[i],
-      })
+  if (subRef) {
+    const subsite = await getSubsiteBySubsiteRef(subRef)
+    const subsiteId = subsite && subsite?.id ? subsite.id : undefined
+    if (subsiteId) {
+      const page = await getPageByTitle('Home', subsiteId)
+      const layout: string = page && page?.layoutTemplate ? page.layoutTemplate : undefined
+      if (layout) {
+        const parsedSubTree = SubTree.fromJSON<string>(layout)
+        carouselNode = parsedSubTree.findNodeAsJSON('carousel')
+      }
     }
-    return sections
   }
-
-  const mainSections = buildFeaturedSections([
-    <FeaturedPages 
-      takeLimit={RootConfig.featureSitesLimit}
-      subRef={subRef}
-      contentType="pages"
-    />,    
-    <FeaturedPosts
-      takeLimit={RootConfig.featureBlogsLimit}
-      subRef={subRef}
-      contentType="posts"
-    />,
-  ])
-
-  const line = '...'
-  const pitch = '.........'
-
-  const leftAction = {
-    title: "........",
-    href: '',
-  }
-  const rightAction = {
-    title: '........',
-    href: '',
-  }
-
-  const markupTest1: string = `<ul><li>Item 1</li><li>Item 2</li></ul>`
-
-
-  const markupTest2: string = `
-  <ContentSection
-    title="asdasdas"
-    description="12312312312312"
-    showButton={false}
-    href="/p/qwdqwedqwd"
-    linkText=""
-    className=""
-  >
-    <>dfgdfgdgf</>
-  </ContentSection>
-  `
-
-  const markdownTest1: string = `
-  Heading
-  =======
-  ## Sub-heading
-  Paragraphs are separated
-  by a blank line.
-  Two spaces at the end of a line
-  produces a line break.
-  Text attributes _italic_,
-
-  - Hello World
-  - poop
-  - yoooo
-
-
-  **bold**
   
-  ---
 
-  | Left-aligned | Center-aligned | Right-aligned |
-  | :---         |     :---:      |          ---: |
-  | git status   | git status     | git status    |
-  | git diff     | git diff       | git diff      |
-
-
-
-  |             |                |               |
-  | :---        |     :---:      |          ---: |
-  |             | git status     |               |
-  |             | git diff       |               |
-
-
-
-  ---
-
-Bullet list:
-* apples
-* oranges
-* pears
-    
-Numbered list:
-1. wash
-2. rinse
-3. repeat
-    
-  A [link](http://example.com).
+  // const subtree = new SubTree<string>()
+  // subtree.addNode('root', null, {})
+  // subtree.addNode('carousel', 'root', {
+  //   className:
+  //     'w-full flex flex-col items-center justify-center overflow-hidden text-center border',
+  //   parentClassName: 'p-5 inset-0 rounded-xl relative ',
+  //   delay: 3000,
+  //   stopOnInteraction: false,
+  //   showBorder: true,
+  // })
+  // subtree.addNode('image', 'carousel', {
+  //   className: 'inherit',
+  //   src: 'https://picsum.photos/id/1/800/800',
+  //   alt: 'image', 
+  // })
+  // subtree.addNode('image', 'carousel', {
+  //   className: 'inherit',
+  //   src: 'https://picsum.photos/id/2/800/800',
+  //   alt: 'image', 
+  // })
   
-  |     |  |
-| -------- | ------- |
-|  ![Image](https://via.placeholder.com/150)  |  ![Image](https://via.placeholder.com/150)    |
-|  ![Image](https://via.placeholder.com/150) |  ![Image](https://via.placeholder.com/150)     |
-|  ![Image](https://via.placeholder.com/150)    |  ![Image](https://via.placeholder.com/150)    |
- 
-  ![Image](https://via.placeholder.com/150)
+  // subtree.addNode('image', 'carousel', {
+  //   className: 'inherit',
+  //   src: 'https://picsum.photos/id/3/800/800',
+  //   alt: 'image', 
+  // })
+  // subtree.addNode('image', 'carousel', {
+  //   className: 'inherit',
+  //   src: 'https://picsum.photos/id/4/800/800',
+  //   alt: 'image', 
+  // })
 
-  ![Image](https://via.placeholder.com/150)
+  // const subTreeString = subtree.toJSON()
+  // console.log(subTreeString)
 
-  > Markdown uses email-style > characters for blockquoting.  
-  `
+  // const parsedSubTree = SubTree.fromJSON<string>(subTreeString)
+  // const carouselNode = parsedSubTree.findNodeAsJSON('carousel')
 
   return (
     <>
-      <SubsiteHomeTemplate
-        subRef={subRef}
-        line={line}
-        words={pitch}
-        waves={RootConfig.waveAnimationColors}
-        leftAction={leftAction}
-        rightAction={rightAction}
-        sections={mainSections}
-        markupTest={markupTest1}
-        markdownTest={markdownTest1}
-      />
+      {carouselNode ? (
+        <>
+          <CarouselTemplate subtree={carouselNode} />
+        </>
+      ) : (
+        <></>
+      )}
     </>
   )
 }

@@ -1,8 +1,11 @@
 import { notFound } from 'next/navigation'
+import { redirect } from 'next/navigation'
 import { Metadata } from 'next'
 import { Block } from '@/components/containers/block'
 import { allPages } from 'contentlayer/generated'
 import { Mdx } from '@/components/mdx'
+
+export const dynamic = 'force-dynamic'
 
 interface PageProps {
   params: {
@@ -53,6 +56,13 @@ export default async function PagePage({ params }: PageProps) {
   if (!page) {
     console.log("page not found: ", params)
     notFound()
+  }
+
+  if (page?.title === 'Home') {
+    const subRef: string | undefined = params?.sub ? params.sub : undefined
+    if (subRef) {
+      redirect(`/p/${subRef}/pages`)
+    }
   }
 
   return (

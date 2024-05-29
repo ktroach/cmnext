@@ -4,7 +4,9 @@ import { Toaster } from 'sonner'
 import { ThemeProvider } from '@/components/themes/theme-provider'
 import { TRPCReactProvider } from '@/trpc/provider'
 import { fontSans } from '@/styles/fonts'
+import { Theme } from '@radix-ui/themes'
 import '@/styles/globals.css'
+import '@radix-ui/themes/styles.css'
 
 interface RootLayoutProps {
   children: React.ReactNode
@@ -32,13 +34,15 @@ export default function RootLayout({ children }: RootLayoutProps) {
                 closeButton={true}
                 richColors
               />
-              <ThemeProvider
-                attribute="class"
-                defaultTheme="system"
-                enableSystem
-              >
-                {children}
-              </ThemeProvider>
+              <Theme>
+                <ThemeProvider
+                  attribute="class"
+                  defaultTheme="system"
+                  enableSystem
+                >
+                  {children}
+                </ThemeProvider>
+              </Theme>
             </TRPCReactProvider>
           </body>
         </html>

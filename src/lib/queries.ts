@@ -54,7 +54,7 @@ export const verifySubRefAccess = async (
       return false
     }
   }
-  console.log('Subsite Denied - Not Authenticated')
+  // console.log('Subsite Denied - Not Authenticated')
   return false
 }
 
@@ -334,6 +334,45 @@ export const getPostBySlug = async (
     `
   if (resultData && resultData.length > 0) {
     return resultData
+  }
+  return null
+}
+
+export const getPageByTitle = async (
+  title: string | null,
+  subsiteId: number | null
+): Promise<any | undefined> => {
+  if (!title) {
+    return null
+  }
+  if (!subsiteId) {
+    return null
+  }
+  const resultData = await sql`
+    SELECT "Page".*
+      FROM "Page"
+     WHERE "Page"."title" = ${title}     
+       AND "Page"."subsiteId" = ${subsiteId}  
+    `
+  if (resultData && resultData.length > 0) {
+    return resultData[0]
+  }
+  return null
+}
+
+export const getSubsiteBySubsiteRef = async (
+  subSiteRef: string | null
+): Promise<any | undefined> => {
+  if (!subSiteRef) {
+    return null
+  }
+  const resultData = await sql`
+  SELECT "Subsite".* 
+    FROM "Subsite"
+   WHERE "Subsite"."subsiteRef" = ${subSiteRef};       
+  `
+  if (resultData && resultData.length > 0) {
+    return resultData[0]
   }
   return null
 }

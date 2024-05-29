@@ -5,7 +5,11 @@ export const BaseUrl = getFrontendBaseUrl()
 export const RootConfig = {
   name: 'CMNexT',
   description: 'Taking your Content to the Next level',
-  pitch: 'Create Blogs, Create Sites, Create your Dreams',
+  pitches: [
+    'Create Sites, Blogs, Posts, Videos, and your own Design Templates',
+    'For Writers, Videographers, Bloggers, and Designers',
+    'Create your dreams within a matter of minutes',
+  ],
   waveAnimationColors: ['#38bfff', '#818cf8', '#c084fc', '#e879f9', '#22d3ee'],
   leftAction: { title: 'Learn More...', href: '' },
   rightAction: { title: 'Start Creating', href: '/signup' },
@@ -19,16 +23,16 @@ export const RootConfig = {
   },
   statusConfigs: {
     draft: {
-      statusColor: 'text-blue-600',
+      statusColor: 'amber',
     },
     published: {
-      statusColor: 'text-green-600',
+      statusColor: 'grass',
     },
     review: {
-      statusColor: 'text-yellow-600',
+      statusColor: 'indigo',
     },
     pending: {
-      statusColor: 'text-gray-600',
+      statusColor: 'sky',
     },
   },
   sections: [
@@ -123,4 +127,10 @@ export const RootConfig = {
       path: 'https://discord.com/',
     },
   ],
+  templateConfigs: {
+    carousel: {
+      defaultClassName: 'p-5 inset-0 rounded-xl object-cover',
+      defaultSrc: 'https://picsum.photos/id/230/800/800',
+    }
+  }
 }

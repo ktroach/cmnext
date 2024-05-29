@@ -16,6 +16,7 @@ export const pagesRouter = createTRPCRouter({
         content: z.string().min(1),
         authorId: z.number().min(1),
         subsiteId: z.number().min(1),
+        pageType: z.string().min(1),
       })
     )
     .mutation(async ({ input, ctx }) => {
@@ -55,10 +56,7 @@ export const pagesRouter = createTRPCRouter({
       const responseData = await createContent('pages', user.name, input.subRef, createContentData)
       let slug: string | undefined = responseData && responseData?.slug ? responseData.slug : undefined
       let metaDataSlug: string  = slug ? slug : ''
-      let pageSlug: string = slug ? slug : ''
-      if (pageSlug && pageSlug?.indexOf('/') === 0) {
-        pageSlug = `/${pageSlug}`
-      }
+      let pageSlug: string = slug ? `/${slug}` : ''
 
       return await ctx.db.page.create({
         data: {
@@ -69,7 +67,8 @@ export const pagesRouter = createTRPCRouter({
           deleted: false,
           authorId: input.authorId,
           subsiteId: input.subsiteId,
-          metaData: `${metaDataSlug}.mdx`
+          metaData: `${metaDataSlug}.mdx`,
+          pageType: input.pageType,
         },
       })
     }),    
