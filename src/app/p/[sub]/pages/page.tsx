@@ -11,10 +11,10 @@ export default async function SubsiteHomePage({ params }: any) {
     const subsite = await getSubsiteBySubsiteRef(subRef)
     const subsiteId = subsite && subsite?.id ? subsite.id : undefined
     if (subsiteId) {
-      const pageData = await getPageByTitle('Home', subsiteId)
-      const pageLayout: string = pageData && pageData?.layoutTemplate ? pageData.layoutTemplate : undefined
-      if (pageLayout) {
-        const parsedSubTree = SubTree.fromJSON<string>(pageLayout)
+      const page = await getPageByTitle('Home', subsiteId)
+      const layout: string = page && page?.layoutTemplate ? page.layoutTemplate : undefined
+      if (layout) {
+        const parsedSubTree = SubTree.fromJSON<string>(layout)
         carouselNode = parsedSubTree.findNodeAsJSON('carousel')
       }
     }

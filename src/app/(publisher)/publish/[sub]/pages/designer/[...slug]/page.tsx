@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation'
 import { currentUser } from '@clerk/nextjs/server'
 import { Header } from '@/components/layouts/header'
 import { Block } from '@/components/containers/block'
-import { AddEditContent } from '@/components/publisher/add-edit-content'
+import PageDesigner from '@/components/publisher/page-designer'
 import { getFrontendBaseUrl } from '@/lib/url'
 import { 
   verifySubRefAccess, 
@@ -50,13 +50,8 @@ export default async function PublisherPageDesigner({ params }: any) {
   }
 
   return (
-    <Block>
-      <Header
-        title="Page Designer"
-        description="Full-Width Page Designer"
-        size="sm"
-      />
-
-    </Block>
+    <>
+        <PageDesigner />
+    </>
   )
 }
