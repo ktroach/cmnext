@@ -44,7 +44,7 @@ export function SiteHeader({ user, subRef, subsite }: SiteHeaderProps) {
   return (
     <header className="sticky top-0 z-[100] w-full border-b bg-white dark:bg-transparent">
       <div className="flex h-16 w-full space-x-4">
-        <div className='mt-5 ml-5'>{siteName}</div>
+        <div className='mt-5 ml-5'></div>
         <div className="flex flex-1 items-center justify-end  mr-8 ">
           <nav className="flex items-center space-x-4">
             <ThemeToggle />

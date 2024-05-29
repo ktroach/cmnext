@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useRef } from 'react'
-import { cn } from "@/lib/utils"
+import { cn } from '@/lib/utils'
 import {
   DialogTrigger,
   DialogTitle,
@@ -20,19 +20,21 @@ import { Textarea } from '../ui/textarea'
 export default function PageDesigner() {
   const [isDraggingBlock, setIsDraggingBlock] = useState(false)
   const [isDraggingPanel, setIsDraggingPanel] = useState(false)
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false)
   const [blocks, setBlocks] = useState<any>([])
   const [panels, setPanels] = useState<any>([])
+  const [curBlockId, setCurBlockId] = useState<number>(-1)
   const [textBlockColor, setTextBlockColor] = useState<string>('bg-white dark:bg-gray-900')
 
   // @ts-ignore
   const handleBlockClick = (blockId) => {
     if (!isDraggingBlock) {
-        setOpen(true)
+      setOpen(true)
+      setCurBlockId(blockId)
     }
     if (isDraggingPanel) {
       // @ts-ignore
-      setPanels([...panels, { blockId, id: panels.length, removed: false }])
+      setPanels([...panels, { blockId, id: panels.length, removed: false, blockType: 'text' }])
       setIsDraggingPanel(false)
     }
   }
@@ -57,11 +59,38 @@ export default function PageDesigner() {
     }
   }
 
+  const getPropertiesByBlockType = () => {
+    const selectedBlock = blocks.filter((block: any) => block.id === curBlockId)
+    if (selectedBlock && selectedBlock?.blockType === 'text') {
+        return getTextBlockProperties()
+    }    
+  }
+
+  const getTextBlockProperties = () => {
+    return (
+        <div className="flex-1 overflow-auto p-4">
+            <div className="grid gap-4">
+                <div className="grid grid-cols-[120px_1fr] items-center gap-4">
+                    <Label htmlFor="textFld">Text</Label>
+                    <Textarea id="textFld" placeholder="Type your text here."></Textarea>
+                </div>
+            </div>
+      </div>
+    )
+  }
+
+  const updateProperties = () => {
+    // TODO: Update the layout subtree
+    setOpen(false)
+  }
+
   return (
     <>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
-          <Button className='hidden' variant="outline">Open Modal</Button>
+          <Button className="hidden" variant="outline">
+            Open Modal
+          </Button>
         </DialogTrigger>
         <DialogContent className="fixed left-64 top-64 w-[400px] max-w-[calc(100vw-32px)] rounded-lg shadow-lg md:left-64 md:top-64 ">
           <div className="flex h-full flex-col">
@@ -71,36 +100,9 @@ export default function PageDesigner() {
                 Customize the properties of your component.
               </DialogDescription>
             </DialogHeader>
-            <div className="flex-1 overflow-auto p-4">
-              <div className="grid gap-4">
-                <div className="grid grid-cols-[120px_1fr] items-center gap-4">
-                  <Label htmlFor="width">Width</Label>
-                  <Input defaultValue={200} id="width" type="number" />
-                </div>
-                <div className="grid grid-cols-[120px_1fr] items-center gap-4">
-                  <Label htmlFor="height">Height</Label>
-                  <Input defaultValue={100} id="height" type="number" />
-                </div>
-                <div className="grid grid-cols-[120px_1fr] items-center gap-4">
-                  <Label htmlFor="backgroundColor">Background Color</Label>
-                  <Input
-                    defaultValue="#ffffff"
-                    id="backgroundColor"
-                    type="color"
-                  />
-                </div>
-                <div className="grid grid-cols-[120px_1fr] items-center gap-4">
-                  <Label htmlFor="borderRadius">Border Radius</Label>
-                  <Input defaultValue={8} id="borderRadius" type="number" />
-                </div>
-                <div className="grid grid-cols-[120px_1fr] items-center gap-4">
-                  <Label htmlFor="padding">Padding</Label>
-                  <Input defaultValue={16} id="padding" type="number" />
-                </div>
-              </div>
-            </div>
+            {getTextBlockProperties()}
             <DialogFooter className="border-t p-4">
-              <Button type="submit">Save</Button>
+              <Button type="submit" onClick={updateProperties}>Save</Button>
               <DialogClose asChild>
                 <Button type="button" variant="secondary">
                   Close
@@ -116,7 +118,10 @@ export default function PageDesigner() {
           <div className="grid grid-cols-2 gap-4">
             <div>
               <div
-                className={cn("rounded-lg shadow-sm p-4 flex flex-col gap-2b", textBlockColor)}
+                className={cn(
+                  'rounded-lg shadow-sm p-4 flex flex-col gap-2b',
+                  textBlockColor
+                )}
                 onClick={handleTextAddBlockClick}
               >
                 <TextIcon
@@ -168,25 +173,23 @@ export default function PageDesigner() {
             <h3 className="mb-4 text-lg font-semibold">Layout</h3>
             <div className="grid grid-cols-1 gap-4">
               <div onClick={handleMainSectionClick}>
-                 {blocks.map((block: any, index: number) => (
-                    <div
-                      key={block.id}
-                      className="flex w-full h-1/2 bg-white dark:bg-gray-900 border-2 border-blue-700 border-dashed"
-                      style={{ top: `${index * 10}%` }}
-                      onClick={() => handleBlockClick(block.id)}
-                    >
-                        
+                {blocks.map((block: any, index: number) => (
+                  <div
+                    key={block.id}
+                    className="flex flex-col h-[200px] w-full items-center justify-center rounded-md border-2 border-dashed border-gray-500 dark:border-gray-700 hover:border-4 hover:border-gray-400 mb-5"
+                    style={{ top: `${index * 10}%` }}
+                    onClick={() => handleBlockClick(block.id)}
+                  >
 
+                    {/* traverse inner blocks */}
 
-                    </div>
-                  ))}
-
+                  </div>
+                ))}
 
                 <div
                   className="flex flex-col h-[200px] w-full items-center justify-center rounded-md border-2 border-dashed border-gray-400 dark:border-gray-700 hover:border-4 hover:border-gray-100"
                   onClick={handleMainSectionClick}
                 >
-
                   <span
                     className="text-gray-500 dark:text-gray-400"
                     onClick={handleMainSectionClick}
