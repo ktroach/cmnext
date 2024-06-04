@@ -43,6 +43,7 @@ import {
   humanizeDate,
 } from "@/lib/dates"
 import { Icons } from "@/styles/icons"
+import StatusBadge, { BadgeSize } from "@/components/publisher/status-badge"
 
 export const CreateColumns = (contentType: string | undefined | null, subRef: string | undefined | null): ColumnDef<any>[] => {
   if (!contentType) {
@@ -79,7 +80,7 @@ export const CreateColumns = (contentType: string | undefined | null, subRef: st
       accessorKey: "status",
       header: "Status",
       cell: ({ row }) => (
-        <div className="line-clamp-3 text-muted-foreground">{row.getValue("status")}</div>
+        <div className="line-clamp-3 text-muted-foreground"><StatusBadge status={row.getValue("status")} size={BadgeSize.MEDIUM} /></div>
       ),
     },   
     {

@@ -58,7 +58,7 @@ export default async function AdminLayout({
         <div className="sticky bg-background top-0 h-screen z-[49]">
           <Sidebar routes={routes} subRef={subRef} account={account} />
         </div>
-        <div className="flex flex-col flex-1 space-x-5 mr-5">
+        <div className="flex flex-col flex-1 space-x-5 mr-5 ml-5">
           <div className='h-full'>
             {children}
           </div>

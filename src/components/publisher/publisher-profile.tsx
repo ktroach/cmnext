@@ -28,10 +28,6 @@ export function PublisherProfile(props: any) {
           {profileData ? (
             <Table>
               <TableBody>
-                <TableRow key="handle">
-                  <TableCell>Handle</TableCell>
-                  <TableCell>{userHandle}</TableCell>
-                </TableRow>
                 <TableRow key="avatar">
                   <TableCell>Avatar</TableCell>
                   <TableCell>
@@ -44,6 +40,10 @@ export function PublisherProfile(props: any) {
                       <AvatarFallback>{userInitials}</AvatarFallback>
                     </Avatar>
                   </TableCell>
+                </TableRow>                
+                <TableRow key="handle">
+                  <TableCell>Handle</TableCell>
+                  <TableCell>{userHandle}</TableCell>
                 </TableRow>
                 <TableRow key="userEmail">
                   <TableCell>Email</TableCell>

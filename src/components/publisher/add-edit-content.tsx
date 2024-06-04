@@ -723,7 +723,7 @@ export function AddEditContent(params: any) {
         </form>
       </Form>
 
-      {pageType === 'markdown' ? (
+      {pageType === 'markdown' || !isPage ? (
         <>
           <Separator className="mt-5" />
           <Label className="text-lg">Edit in Markdown Editor</Label>

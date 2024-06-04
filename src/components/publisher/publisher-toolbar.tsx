@@ -1,8 +1,7 @@
 'use client'
 
 import { Icons } from '@/styles/icons'
-import { RootConfig } from '@/config/root-config'
-import { Badge, IconButton, Tooltip } from '@radix-ui/themes'
+import { IconButton, Tooltip } from '@radix-ui/themes'
 import { toast } from 'sonner'
 import {
   EyeOpenIcon,
@@ -12,6 +11,7 @@ import {
   CrumpledPaperIcon,
 } from '@radix-ui/react-icons'
 import { Save } from 'lucide-react'
+import StatusBadge, { BadgeSize } from './status-badge'
 
 interface PublisherToolbarProps {
   isBlog?: boolean
@@ -34,11 +34,6 @@ export const PublisherToolbar = ({
   isBlog,
   ...props
 }: PublisherToolbarProps) => {
-  const getFormattedStatus = (currentStatus: string | undefined) => {
-    if (!currentStatus) return 'DRAFT'
-    return currentStatus.toUpperCase()
-  }
-
   const HandlePublishChanges = () => {
     if (props && props?.publishChanges) {
       props.publishChanges()
@@ -86,23 +81,6 @@ export const PublisherToolbar = ({
     }
   }
 
-  const getStatusColor = (status: string | undefined) => {
-    if (!status) {
-      return RootConfig.statusConfigs.draft.statusColor
-    }
-    const statusKey: string = status.toLowerCase()
-    let statusColor: any = ''
-    if (statusKey === 'draft')
-      statusColor = RootConfig.statusConfigs.draft.statusColor
-    if (statusKey === 'review')
-      statusColor = RootConfig.statusConfigs.review.statusColor
-    if (statusKey === 'published')
-      statusColor = RootConfig.statusConfigs.published.statusColor
-    if (statusKey === 'pending')
-      statusColor = RootConfig.statusConfigs.pending.statusColor
-    return statusColor
-  }
-
   const isInUpdatingState = props?.isUpdating && props?.isUpdating === true ? true : false
   let isPublishDisabled = props?.publishDisabled && props?.publishDisabled === true ? true : false
   let isSaveDraftDisabled = props?.isSaveDisabled && props?.isSaveDisabled === true ? true : false
@@ -117,9 +95,6 @@ export const PublisherToolbar = ({
     viewPageDisabled = true
   }
 
-  const statusBadgeColor: string = getStatusColor(props?.status)
-  const statusText: any = getFormattedStatus(props?.status)
-
   return (
     <header className="sticky top-0 z-[1000] w-full dark:bg-[#09090b84] bg-white backdrop-blur-sm rounded-2xl overflow-hidden border border-black/[0.4] dark:border-white/[0.4] shadow-xl">
       <div className="container flex flex-row h-16 items-center">
@@ -133,10 +108,7 @@ export const PublisherToolbar = ({
                 />
               )}
             </div>
-            {/* @ts-ignore */}
-            <Badge className='ml-5' size="3" color={statusBadgeColor}>
-              {statusText}
-            </Badge>
+            <StatusBadge status={props?.status} className='ml-5' size={BadgeSize.LARGE} />
           </div>
         </div>
         <div className="flex flex-1 justify-end space-x-4">
