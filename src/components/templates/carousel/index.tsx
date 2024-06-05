@@ -13,20 +13,20 @@ import {
 import { RootConfig } from '@/config/root-config'
 
 export interface CarouselTemplateProps {
-  subtree: any
+  children: any
+  carouselDelay?: number | undefined 
+  carouselStopOnInteraction?: boolean
+  carouselClassName?: string | undefined
+  carouselParentClassName?: string | undefined
 }
 
-export default function CarouselTemplate({ subtree }: CarouselTemplateProps) {
-  const carousel = JSON.parse(subtree)
-  const delay: number = carousel?.delay ?? 3000
-  const stopOnInteraction: boolean = carousel?.stopOnInteraction ?? true
-  const rootClassName: string = carousel?.className ? carousel.className : ''
-  const parentClassName: string = carousel?.parentClassName
-    ? carousel.parentClassName
-    : ''
-  const carouselImages: any = carousel?.children ? carousel?.children : []
-  const defaultClassName: string =
-    RootConfig.templateConfigs.carousel.defaultClassName
+export default function CarouselTemplate({ children, carouselDelay, carouselStopOnInteraction, carouselClassName, carouselParentClassName }: CarouselTemplateProps) {
+  const delay: number = carouselDelay ?? 3000
+  const stopOnInteraction: boolean = carouselStopOnInteraction ?? true
+  const rootClassName: string = carouselClassName ? carouselClassName : ''
+  const parentClassName: string = carouselParentClassName ? carouselParentClassName : ''
+  const carouselImages: any = children ? children : []
+  const defaultClassName: string = RootConfig.templateConfigs.carousel.defaultClassName
   const defaultSrc: string = RootConfig.templateConfigs.carousel.defaultSrc
 
   const plugin = React.useRef(

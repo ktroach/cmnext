@@ -22,8 +22,11 @@ const components = {
       {...props}
     />
   ),  
+  
   Callout: MdxCallout, 
+
   Card: MdxCard,
+
   h1: ({ className, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
     <h1
       className={cn("mt-2 scroll-m-20 text-4xl font-bold", className)}
@@ -78,6 +81,7 @@ const components = {
   hr: ({ ...props }: React.HTMLAttributes<HTMLHRElement>) => (
     <hr className="my-4 md:my-8" {...props} />
   ),
+
   img: ({
     className,
     alt,
@@ -89,6 +93,7 @@ const components = {
   Image: ({ className, alt, ...props }: ImageProps) => (
     <Image className={cn(className, "mt-4")} alt={alt} {...props} />
   ),
+
   pre: MdxCodeBlock,
   code: ({ className, ...props }: React.HTMLAttributes<HTMLElement>) => (
     <code

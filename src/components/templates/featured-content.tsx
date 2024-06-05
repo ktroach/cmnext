@@ -5,7 +5,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
-import SkeletonCard from './skeleton-card';
+import SkeletonCard from './skeleton-card'
 import { api } from '@/trpc/client'
 
 export interface LinkCardProps {
