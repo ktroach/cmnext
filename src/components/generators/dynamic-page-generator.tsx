@@ -9,7 +9,8 @@ import React from 'react'
 import Image from 'next/image'
 import { cn } from '@/lib/utils'
 import CarouselTemplate from '@/components/templates/carousel'
-import CardTemplate from '@/components/templates/card'
+import LinkableImageCard from '@/components/templates/cards/LinkableImageCard'
+import LinkableImageCardsSection from '@/components/templates/cards/LinkableImageCardsSection'
 import BlockQuoteTemplate from '@/components/templates/blockquote'
 import UnOrderedListTemplate from '@/components/templates/lists/UnorderedListTemplate'
 import IconSection2ColsGrid  from '@/components/templates/grids/IconSection2ColsGrid'
@@ -52,8 +53,14 @@ const componentsMap: { [key: string]: React.FC<ComponentProps> } = {
     <UnOrderedListTemplate children={children} {...props} />
   ),  
   card: ({ children, ...props }: ComponentProps) => (
-    <CardTemplate children={children} {...props} />
+    <LinkableImageCard children={children} {...props} />
   ),
+  LinkableImageCard: ({ children, ...props }: ComponentProps) => (
+    <LinkableImageCard children={children} {...props} />
+  ),  
+  LinkableImageCardsSection: ({ children, ...props }: ComponentProps) => (
+    <LinkableImageCardsSection children={children} {...props} />
+  ),  
   hr: (props: ComponentProps) => (
     <hr className={cn('my-5 md:my-5', props?.className)} />
   ),
@@ -143,6 +150,7 @@ const componentsMap: { [key: string]: React.FC<ComponentProps> } = {
       {props?.text}
     </h6>
   ),
+
   IconSection2ColsGrid: ({ children, ...props }: ComponentProps) => (
     <IconSection2ColsGrid children={children} {...props} />
   ),  

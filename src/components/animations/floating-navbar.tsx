@@ -81,7 +81,7 @@ export const Menu = ({
   showBorders?: boolean
   children: React.ReactNode
 }) => {
-  let className: string = "relative bg-transparent shadow-input flex justify-center space-x-8 px-8 py-6 "
+  let className: string = "relative bg-red-700 shadow-input flex justify-center space-x-8 px-8 py-6 "
   if (showBorders) {
     className = " relative border border-black/[0.4] dark:border-white/[0.4] rounded-full dark:bg-[#09090b] bg-white shadow-input flex justify-center space-x-8 px-8 py-6 "
   }
@@ -100,7 +100,7 @@ export const HoveredLink = ({ children, ...rest }: any) => {
     <Link
       {...rest}
       className="text-neutral-700 dark:text-neutral-200 hover:text-black dark:bg-[#09090b] bg-white "
-      title="todo: description..."
+      title=""
     >
       {children}
     </Link>

@@ -6,18 +6,18 @@ import Link from 'next/link'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Skeleton } from '@/components/ui/skeleton'
 
-export interface CardTemplateProps {
+export interface LinkableImageCardProps {
   title?: string | undefined
   className?: string | undefined
   children?: any
   linkSrc?: string | undefined
 }
 
-export default function CardTemplate({
+export default function LinkableImageCard({
   title,
   children,
   linkSrc,
-}: CardTemplateProps) {
+}: LinkableImageCardProps) {
   if (linkSrc) {
     return (
       <Link href={linkSrc} key={Math.random()}>
