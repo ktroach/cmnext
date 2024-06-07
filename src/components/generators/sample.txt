@@ -1,0 +1,185 @@
+{
+  "value": "root",
+  "children": [
+    {
+      "value": "carousel",
+      "children": [
+        {
+          "value": "image",
+          "children": [],
+          "properties": {
+            "className": "mt-5 rounded-md border transition-colors p-5",
+            "src": "https://picsum.photos/1600/900",
+            "alt": "image"
+          }
+        },
+        {
+          "value": "image",
+          "children": [],
+          "properties": {
+            "className": "mt-5 rounded-md border transition-colors p-5",
+            "src": "https://picsum.photos/id/16/1600/900",
+            "alt": "image"
+          }
+        }
+      ],
+      "properties": {
+        "className": "w-full flex flex-col items-center justify-center text-center border p-15",
+        "parentClassName": "",
+        "delay": 2000,
+        "stopOnInteraction": false,
+        "showBorder": true
+      }
+    }, 
+    {
+      "value": "block",
+      "properties": {
+        "className": "mt-8 flex space-x-4"
+      },
+      "children": [
+        {
+          "value": "image",
+          "children": [],
+          "properties": {
+            "src": "https://picsum.photos/id/10/800/800", 
+            "alt": "picture",  
+            "width": 520,
+            "height": 205,
+            "className": "mt-8 rounded-md border bg-muted transition-colors p-5",
+            "priority": true       
+          }
+        }                
+      ]
+    },
+    {
+      "value": "block",
+      "properties": {
+        "className": "mt-8 flex space-x-4"
+      },
+      "children": [
+        {
+          "value": "blockquote",
+          "children": [],
+          "properties": {
+            "className": "text-md", 
+            "cite": "https://loremipsum.io/",
+            "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+          }
+        }                
+      ]
+    },
+
+    {
+      "value": "hr",
+      "properties": {
+        "className": ""
+      },
+      "children": []
+    },
+
+    {
+      "value": "block",
+      "properties": {
+        "className": "mt-8 flex space-x-4"
+      },
+      "children": [
+        {
+          "value": "h1",
+          "children": [],
+          "properties": {
+            "className": "", 
+            "text": "H1 - Lorem ipsum dolor sit amet"
+          }
+        }                
+      ]
+    }, 
+    
+    {
+      "value": "block",
+      "properties": {
+        "className": "mt-8 flex space-x-4"
+      },
+      "children": [
+        {
+          "value": "h2",
+          "children": [],
+          "properties": {
+            "className": "", 
+            "text": "H2 - Lorem ipsum dolor sit amet"
+          }
+        }                
+      ]
+    }, 
+
+    {
+      "value": "block",
+      "properties": {
+        "className": "mt-8 flex space-x-4"
+      },
+      "children": [
+        {
+          "value": "h3",
+          "children": [],
+          "properties": {
+            "className": "", 
+            "text": "H3 - Lorem ipsum dolor sit amet"
+          }
+        }                
+      ]
+    },     
+
+    {
+      "value": "block",
+      "properties": {
+        "className": "mt-8 flex space-x-4"
+      },
+      "children": [
+        {
+          "value": "h4",
+          "children": [],
+          "properties": {
+            "className": "", 
+            "text": "H4 - Lorem ipsum dolor sit amet"
+          }
+        }                
+      ]
+    },     
+
+
+    {
+      "value": "block",
+      "properties": {
+        "className": "mt-8 flex space-x-4"
+      },
+      "children": [
+        {
+          "value": "h5",
+          "children": [],
+          "properties": {
+            "className": "", 
+            "text": "H5 - Lorem ipsum dolor sit amet"
+          }
+        }                
+      ]
+    },     
+
+    {
+      "value": "block",
+      "properties": {
+        "className": "mt-8 flex space-x-4"
+      },
+      "children": [
+        {
+          "value": "h6",
+          "children": [],
+          "properties": {
+            "className": "", 
+            "text": "H6 - Lorem ipsum dolor sit amet"
+          }
+        }                
+      ]
+    }     
+
+  ],
+  "properties": {}
+}

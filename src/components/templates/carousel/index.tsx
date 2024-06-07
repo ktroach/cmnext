@@ -37,26 +37,30 @@ export default function CarouselTemplate({ children, carouselDelay, carouselStop
     <div className="mt-5">
       <div className={rootClassName}>
         <Carousel
+          orientation='horizontal'
           plugins={[plugin.current]}
           onMouseEnter={plugin.current.stop}
           onMouseLeave={plugin.current.reset}
         >
           <CarouselContent>
             {carouselImages.map((img: any, index: number) => {
-              const inheritClass =
-                img?.properties?.className &&
+              const imgProps = img?.props ? img.props : undefined
+              const inheritClass = imgProps && 
+                imgProps?.className &&
                 img?.properties?.className === 'inherit'
                   ? true
                   : false
               const imgClass = inheritClass
                 ? parentClassName
-                : img?.properties?.className ?? defaultClassName
-              const imgSrc = img?.properties?.src ?? defaultSrc
-              const imgAlt = img?.properties?.alt ?? 'image'
+                : imgProps?.className ?? defaultClassName
+              const imgSrc = imgProps?.src ?? defaultSrc
+              const imgAlt = imgProps?.alt ?? 'image'
+             
               return (
-                <CarouselItem key={index}>
+                <CarouselItem key={Math.random()}>
                   <div className="relative w-screen h-screen overflow-hidden -z-10">
                     <Image
+                      key={Math.random()}
                       className={imgClass}
                       src={imgSrc}
                       alt={imgAlt}

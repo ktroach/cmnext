@@ -10,6 +10,8 @@ import Image from 'next/image'
 import { cn } from '@/lib/utils'
 import CarouselTemplate from '@/components/templates/carousel'
 import CardTemplate from '@/components/templates/card'
+import BlockQuoteTemplate from '@/components/templates/blockquote'
+import UnOrderedListTemplate from '@/components/templates/lists/UnOrderedListTemplate'
 
 type ComponentProps = {
   [key: string]: any
@@ -32,73 +34,100 @@ const componentsMap: { [key: string]: React.FC<ComponentProps> } = {
   carousel: ({ children, ...props }: ComponentProps) => (
     <CarouselTemplate children={children} {...props} />
   ),
+  list: ({ children, ...props }: ComponentProps) => (
+    <UnOrderedListTemplate children={children} {...props} />
+  ),  
   card: ({ children, ...props }: ComponentProps) => (
     <CardTemplate children={children} {...props} />
   ),
-  quote: ({ className, children, ...props }: React.HTMLAttributes<HTMLElement>) => (
-    <blockquote
-      className={cn('mt-6 border-l-2 pl-6 italic', className)}
-      {...props}
-      {...children ? (
-        <p>
-            {children}      
-        </p>
-        ):(<></>)}
-    />
+  hr: (props: ComponentProps) => (
+    <hr className={cn('my-5 md:my-5', props?.className)} />
   ),
-  h1: ({ className, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
-    <h1
-      className={cn('mt-2 scroll-m-20 text-4xl font-bold', className)}
-      {...props}
-    />
+  blockquote: (props: ComponentProps) => <BlockQuoteTemplate {...props} />,
+  p: (props: ComponentProps) => (
+    <p className={cn('leading-7 [&:not(:first-child)]:mt-6', props?.className)}>
+      {props?.text}
+    </p>
+  ),  
+  lead: (props: ComponentProps) => (
+    <p className={cn('text-xl text-muted-foreground', props?.className)}>
+      {props?.text}
+    </p>
+  ),  
+  muted: (props: ComponentProps) => (
+    <p className={cn('text-sm text-muted-foreground', props?.className)}>
+      {props?.text}
+    </p>
+  ),    
+  small: (props: ComponentProps) => (
+    <p className={cn('text-sm font-medium leading-none', props?.className)}>
+      {props?.text}
+    </p>
+  ), 
+  large: (props: ComponentProps) => (
+    <p className={cn('text-lg font-semibold', props?.className)}>
+      {props?.text}
+    </p>
+  ),         
+  code: (props: ComponentProps) => (
+    <code className={cn('relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold', props?.className)}>
+      {props?.text}
+    </code>
+  ),      
+  h1: (props: ComponentProps) => (
+    <h1 className={cn('scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl', props?.className)}>
+      {props?.text}
+    </h1>
   ),
-  h2: ({ className, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
+  h2: (props: ComponentProps) => (
     <h2
       className={cn(
-        'mt-10 scroll-m-20 border-b pb-2 text-2xl font-semibold tracking-tight first:mt-0',
-        className
+        'scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0',
+        props?.className
       )}
-      {...props}
-    />
+    >
+      {props?.text}
+    </h2>
   ),
-  h3: ({ className, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
+  h3: (props: ComponentProps) => (
     <h3
       className={cn(
-        'mt-8 scroll-m-20 text-xl font-semibold tracking-tight',
-        className
+        'scroll-m-20 text-2xl font-semibold tracking-tight',
+        props?.className
       )}
-      {...props}
-    />
+    >
+      {props?.text}
+    </h3>
   ),
-  h4: ({ className, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
+  h4: (props: ComponentProps) => (
     <h4
       className={cn(
-        'mt-8 scroll-m-20 text-lg font-semibold tracking-tight',
-        className
+        'scroll-m-20 text-xl font-semibold tracking-tight',
+        props?.className
       )}
-      {...props}
-    />
+    >
+      {props?.text}
+    </h4>
   ),
-  h5: ({ className, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
+  h5: (props: ComponentProps) => (
     <h5
       className={cn(
         'mt-8 scroll-m-20 text-lg font-semibold tracking-tight',
-        className
+        props?.className
       )}
-      {...props}
-    />
+    >
+      {props?.text}
+    </h5>
   ),
-  h6: ({ className, ...props }: React.HTMLAttributes<HTMLHeadingElement>) => (
+  h6: (props: ComponentProps) => (
     <h6
       className={cn(
         'mt-8 scroll-m-20 text-base font-semibold tracking-tight',
-        className
+        props?.className
       )}
-      {...props}
-    />
-  ),
-  hr: ({ ...props }: React.HTMLAttributes<HTMLHRElement>) => (
-    <hr className="my-4 md:my-8" {...props} />
+    >
+      {props?.text}
+    </h6>
   ),
 }
 
