@@ -1,6 +1,12 @@
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button'
 
-export default function HeroSectionGradientBackground() {
+export interface HeroSectionGradientBackgroundProps {
+  children?: any
+}
+
+export default function HeroSectionGradientBackground({
+  children,
+}: HeroSectionGradientBackgroundProps) {
   return (
     <>
       {/* Hero */}
@@ -33,8 +39,8 @@ export default function HeroSectionGradientBackground() {
               </div>
               {/* Buttons */}
               <div className="mt-8 gap-3 flex justify-center">
-                <Button size={"lg"}>Get started</Button>
-                <Button size={"lg"} variant={"outline"}>
+                <Button size={'lg'}>Get started</Button>
+                <Button size={'lg'} variant={'outline'}>
                   Learn more
                 </Button>
               </div>
@@ -45,5 +51,5 @@ export default function HeroSectionGradientBackground() {
       </div>
       {/* End Hero */}
     </>
-  );
+  )
 }

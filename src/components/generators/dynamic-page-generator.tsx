@@ -11,7 +11,21 @@ import { cn } from '@/lib/utils'
 import CarouselTemplate from '@/components/templates/carousel'
 import CardTemplate from '@/components/templates/card'
 import BlockQuoteTemplate from '@/components/templates/blockquote'
-import UnOrderedListTemplate from '@/components/templates/lists/UnOrderedListTemplate'
+import UnOrderedListTemplate from '@/components/templates/lists/UnorderedListTemplate'
+import IconSection2ColsGrid  from '@/components/templates/grids/IconSection2ColsGrid'
+import IconSectionCentredDescriptionWithIconBlocks  from '@/components/templates/grids/IconSectionCentredDescriptionWithIconBlocks'
+import IconSectionCircleIconsCentreAligned  from '@/components/templates/grids/IconSectionCircleIconsCentreAligned'
+import IconSectionDescriptionOnLeftIconBlocksOnRight  from '@/components/templates/grids/IconSectionDescriptionOnLeftIconBlocksOnRight'
+import IconSectionSolidIconWithHoverEffect  from '@/components/templates/grids/IconSectionSolidIconWithHoverEffect'
+import IconSectionStackedCards  from '@/components/templates/grids/IconSectionStackedCards'
+import HeroFormCenterAlignedSearchWithTags  from '@/components/templates/heros/HeroFormCenterAlignedSearchWithTags'
+import HeroFormCenterAlignedWithAForm  from '@/components/templates/heros/HeroFormCenterAlignedWithAForm'
+import HeroFormSignUpForm  from '@/components/templates/heros/HeroFormSignUpForm'
+import HeroSectionCentredWithImage  from '@/components/templates/heros/HeroSectionCentredWithImage'
+import HeroSectionGradientBackground  from '@/components/templates/heros/HeroSectionGradientBackground'
+import HeroSectionImageWithReviews  from '@/components/templates/heros/HeroSectionImageWithReviews'
+import HeroSectionSimpleCentred  from '@/components/templates/heros/HeroSectionSimpleCentred'
+import HeroSectionWithEmailInput  from '@/components/templates/heros/HeroSectionWithEmailInput'
 
 type ComponentProps = {
   [key: string]: any
@@ -129,6 +143,48 @@ const componentsMap: { [key: string]: React.FC<ComponentProps> } = {
       {props?.text}
     </h6>
   ),
+  IconSection2ColsGrid: ({ children, ...props }: ComponentProps) => (
+    <IconSection2ColsGrid children={children} {...props} />
+  ),  
+  IconSectionCentredDescriptionWithIconBlocks: ({ children, ...props }: ComponentProps) => (
+    <IconSectionCentredDescriptionWithIconBlocks children={children} {...props} />
+  ),
+  IconSectionCircleIconsCentreAligned: ({ children, ...props }: ComponentProps) => (
+    <IconSectionCircleIconsCentreAligned children={children} {...props} />
+  ), 
+  IconSectionDescriptionOnLeftIconBlocksOnRight: ({ children, ...props }: ComponentProps) => (
+    <IconSectionDescriptionOnLeftIconBlocksOnRight children={children} {...props} />
+  ),        
+  IconSectionSolidIconWithHoverEffect: ({ children, ...props }: ComponentProps) => (
+    <IconSectionSolidIconWithHoverEffect children={children} {...props} />
+  ),        
+  IconSectionStackedCards: ({ children, ...props }: ComponentProps) => (
+    <IconSectionStackedCards children={children} {...props} />
+  ),        
+  HeroFormCenterAlignedSearchWithTags: ({ children, ...props }: ComponentProps) => (
+    <HeroFormCenterAlignedSearchWithTags children={children} {...props} />
+  ),        
+  HeroFormCenterAlignedWithAForm: ({ children, ...props }: ComponentProps) => (
+    <HeroFormCenterAlignedWithAForm children={children} {...props} />
+  ),        
+  HeroFormSignUpForm: ({ children, ...props }: ComponentProps) => (
+    <HeroFormSignUpForm children={children} {...props} />
+  ),        
+  HeroSectionCentredWithImage: ({ children, ...props }: ComponentProps) => (
+    <HeroSectionCentredWithImage children={children} {...props} />
+  ),        
+  HeroSectionGradientBackground: ({ children, ...props }: ComponentProps) => (
+    <HeroSectionGradientBackground children={children} {...props} />
+  ),        
+  HeroSectionImageWithReviews: ({ children, ...props }: ComponentProps) => (
+    <HeroSectionImageWithReviews children={children} {...props} />
+  ),        
+  HeroSectionSimpleCentred: ({ children, ...props }: ComponentProps) => (
+    <HeroSectionSimpleCentred children={children} {...props} />
+  ),        
+  HeroSectionWithEmailInput: ({ children, ...props }: ComponentProps) => (
+    <HeroSectionWithEmailInput children={children} {...props} />
+  ),        
 }
 
 const createComponent = (node: Node): React.ReactNode => {

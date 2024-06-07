@@ -1,6 +1,12 @@
-import { Building2Icon, ThumbsUpIcon, Users2Icon } from "lucide-react";
+import { Building2Icon, ThumbsUpIcon, Users2Icon } from 'lucide-react'
 
-export default function IconSectionCentredDescriptionWithIconBlocks() {
+export interface IconSectionCentredDescriptionWithIconBlocksProps {
+  children?: any
+}
+
+export default function IconSectionCentredDescriptionWithIconBlocks({
+  children,
+}: IconSectionCentredDescriptionWithIconBlocksProps) {
   return (
     <>
       {/* Icon Blocks */}
@@ -72,5 +78,5 @@ export default function IconSectionCentredDescriptionWithIconBlocks() {
       </div>
       {/* End Icon Blocks */}
     </>
-  );
+  )
 }

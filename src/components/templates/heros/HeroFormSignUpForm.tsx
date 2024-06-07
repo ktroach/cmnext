@@ -1,17 +1,23 @@
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button'
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Separator } from "@/components/ui/separator";
+} from '@/components/ui/card'
+import { Checkbox } from '@/components/ui/checkbox'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Separator } from '@/components/ui/separator'
 
-export default function HeroFormSignUpForm() {
+export interface HeroFormSignUpFormProps {
+  children?: any
+}
+
+export default function HeroFormSignUpForm({
+  children
+}: HeroFormSignUpFormProps) {
   return (
     <>
       {/* Hero */}
@@ -88,7 +94,7 @@ export default function HeroFormSignUpForm() {
                         Start your free trial
                       </h2>
                       <CardDescription>
-                        Already have an account?{" "}
+                        Already have an account?{' '}
                         <a
                           className="text-primary hover:underline underline-offset-4"
                           href="#"
@@ -98,7 +104,7 @@ export default function HeroFormSignUpForm() {
                       </CardDescription>
                     </CardHeader>
                     <CardContent>
-                      <Button className="w-full" variant={"outline"}>
+                      <Button className="w-full" variant={'outline'}>
                         <svg
                           className="w-4 h-auto mr-2"
                           width={46}
@@ -318,5 +324,5 @@ export default function HeroFormSignUpForm() {
       </div>
       {/* End Hero */}
     </>
-  );
+  )
 }

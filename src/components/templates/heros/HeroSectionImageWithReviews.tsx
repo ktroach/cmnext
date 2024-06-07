@@ -1,6 +1,12 @@
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button'
 
-export default function HeroSectionImageWithReviews() {
+export interface HeroSectionImageWithReviewsProps {
+  children?: any
+}
+
+export default function HeroSectionImageWithReviews({
+  children,
+}: HeroSectionImageWithReviewsProps) {
   return (
     <>
       {/* Hero */}
@@ -17,8 +23,8 @@ export default function HeroSectionImageWithReviews() {
             </p>
             {/* Buttons */}
             <div className="mt-7 grid gap-3 w-full sm:inline-flex">
-              <Button size={"lg"}>Get started</Button>
-              <Button variant={"outline"} size={"lg"}>
+              <Button size={'lg'}>Get started</Button>
+              <Button variant={'outline'} size={'lg'}>
                 Contact sales team
               </Button>
             </div>
@@ -138,7 +144,7 @@ export default function HeroSectionImageWithReviews() {
       </div>
       {/* End Hero */}
     </>
-  );
+  )
 }
 
 const star = (
@@ -155,4 +161,4 @@ const star = (
       fill="currentColor"
     />
   </svg>
-);
+)

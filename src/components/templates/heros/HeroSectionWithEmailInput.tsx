@@ -1,8 +1,14 @@
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 
-export default function HeroSectionWithEmailInput() {
+export interface HeroSectionWithEmailInputProps {
+  children?: any
+}
+
+export default function HeroSectionWithEmailInput({
+  children,
+}: HeroSectionWithEmailInputProps) {
   return (
     <>
       {/* Hero */}
@@ -181,5 +187,5 @@ export default function HeroSectionWithEmailInput() {
       </div>
       {/* End Hero */}
     </>
-  );
+  )
 }

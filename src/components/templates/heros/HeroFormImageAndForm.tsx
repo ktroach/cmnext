@@ -1,9 +1,15 @@
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Separator } from "@/components/ui/separator";
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Separator } from '@/components/ui/separator'
 
-export default function HeroFormImageAndForm() {
+export interface HeroFormImageAndFormProps {
+  children?: any
+}
+
+export default function HeroFormImageAndForm({
+  children,
+}: HeroFormImageAndFormProps) {
   return (
     <>
       {/* Hero */}
@@ -20,7 +26,7 @@ export default function HeroFormImageAndForm() {
             </p>
             {/* End Title */}
             <div className="mt-8 grid">
-              <Button variant={"outline"}>
+              <Button variant={'outline'}>
                 <svg
                   className="w-4 h-auto mr-2"
                   width={46}
@@ -89,5 +95,5 @@ export default function HeroFormImageAndForm() {
       </div>
       {/* End Hero */}
     </>
-  );
+  )
 }

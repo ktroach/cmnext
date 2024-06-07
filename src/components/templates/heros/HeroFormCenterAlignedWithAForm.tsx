@@ -1,9 +1,15 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 
-export default function HeroFormCenterAlignedWithAForm() {
+export interface HeroFormCenterAlignedWithAFormProps {
+  children?: any
+}
+
+export default function HeroFormCenterAlignedWithAForm({
+  children,
+}: HeroFormCenterAlignedWithAFormProps) {
   return (
     <>
       {/* Hero */}
@@ -161,5 +167,5 @@ export default function HeroFormCenterAlignedWithAForm() {
       </div>
       {/* End Hero */}
     </>
-  );
+  )
 }

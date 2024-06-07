@@ -1,6 +1,6 @@
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 import {
   BriefcaseIcon,
   FlowerIcon,
@@ -9,9 +9,15 @@ import {
   MountainSnow,
   SearchIcon,
   SettingsIcon,
-} from "lucide-react";
+} from 'lucide-react'
 
-export default function HeroFormCenterAlignedSearchWithTags() {
+export interface HeroFormCenterAlignedSearchWithTagsProps {
+  children?: any
+}
+
+export default function HeroFormCenterAlignedSearchWithTags({
+  children,
+}: HeroFormCenterAlignedSearchWithTagsProps) {
   return (
     <>
       {/* Hero */}
@@ -40,7 +46,7 @@ export default function HeroFormCenterAlignedSearchWithTags() {
                     />
                   </div>
                   <div className="flex-[0_0_auto]">
-                    <Button size={"icon"}>
+                    <Button size={'icon'}>
                       <SearchIcon />
                     </Button>
                   </div>
@@ -99,27 +105,27 @@ export default function HeroFormCenterAlignedSearchWithTags() {
               {/* End SVG Element */}
             </div>
             <div className="mt-10 sm:mt-20 flex flex-wrap gap-2 justify-center">
-              <Button variant={"outline"}>
+              <Button variant={'outline'}>
                 <BriefcaseIcon className="flex-shrink-0 w-3 h-auto mr-2" />
                 Business
               </Button>
-              <Button variant={"outline"}>
+              <Button variant={'outline'}>
                 <SettingsIcon className="flex-shrink-0 w-3 h-auto mr-2" />
                 Strategy
               </Button>
-              <Button variant={"outline"}>
+              <Button variant={'outline'}>
                 <HeartIcon className="flex-shrink-0 w-3 h-auto mr-2" />
                 Health
               </Button>
-              <Button variant={"outline"}>
+              <Button variant={'outline'}>
                 <LightbulbIcon className="flex-shrink-0 w-3 h-auto mr-2" />
                 Creative
               </Button>
-              <Button variant={"outline"}>
+              <Button variant={'outline'}>
                 <FlowerIcon className="flex-shrink-0 w-3 h-auto mr-2" />
                 Environment
               </Button>
-              <Button variant={"outline"}>
+              <Button variant={'outline'}>
                 <MountainSnow className="flex-shrink-0 w-3 h-auto mr-2" />
                 Adventure
               </Button>
@@ -129,5 +135,5 @@ export default function HeroFormCenterAlignedSearchWithTags() {
       </div>
       {/* End Hero */}
     </>
-  );
+  )
 }

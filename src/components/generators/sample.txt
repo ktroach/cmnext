@@ -31,6 +31,40 @@
         "showBorder": true
       }
     }, 
+
+    {
+      "value": "HeroSectionWithEmailInput",
+      "properties": {
+        "className": ""
+      },
+      "children": []
+    },    
+
+    {
+      "value": "hr",
+      "properties": {
+        "className": ""
+      },
+      "children": []
+    },
+    
+    {
+      "value": "IconSection2ColsGrid",
+      "properties": {
+        "className": ""
+      },
+      "children": []
+    },      
+
+    {
+      "value": "hr",
+      "properties": {
+        "className": ""
+      },
+      "children": []
+    },
+
+
     {
       "value": "block",
       "properties": {
