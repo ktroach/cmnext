@@ -11,6 +11,12 @@ module.exports = {
       },
     },
     extend: {
+      backgroundImage: {
+        grid: `repeating-linear-gradient(0deg, transparent, transparent 69px, #88F 69px, #88F 70px),
+               repeating-linear-gradient(-90deg, transparent, transparent 69px, #88F 69px, #88F 70px)`,
+        smallgrid: `repeating-linear-gradient(0deg, transparent, transparent 13px, #CCF 13px, #CCF 14px),
+                    repeating-linear-gradient(-90deg, transparent, transparent 13px, #CCF 13px, #CCF 14px)`,
+      },      
       ul: {
         listStyle: "revert"
       },      

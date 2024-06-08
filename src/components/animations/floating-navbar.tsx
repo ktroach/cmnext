@@ -37,11 +37,11 @@ export const MenuItem = ({
     <div onMouseEnter={() => setActive(item)} className="relative">
       <motion.p
         transition={{ duration: 0.3 }}
-        className="cursor-pointer text-black hover:opacity-[0.9] dark:text-white whitespace-nowrap"
+        className="cursor-pointer text-black hover:opacity-[0.9] dark:text-neutral-200 whitespace-nowrap"
       >
         {linkUrl && linkUrl?.href && (
           <Link href={linkUrl.href} legacyBehavior>
-            {item} 
+            {item}
           </Link>
         )}
       </motion.p>
@@ -53,11 +53,11 @@ export const MenuItem = ({
             transition={transition}
           >
             {active === item && (
-              <div className="absolute top-[calc(100%_+_1.7rem)] left-1/2 transform -translate-x-1/2 -translate-y-[15%]  ">
+              <div className="absolute top-[calc(100%_+_2.7rem)] left-1/2 transform -translate-x-1/2 -translate-y-[25%]  ">
                 <motion.div
                   transition={transition}
                   layoutId="active"
-                  className="dark:bg-[#09090b84] bg-white backdrop-blur-sm rounded-2xl overflow-hidden border border-black/[0.4] dark:border-white/[0.4] shadow-xl"
+                  className="  backdrop-blur-sm rounded-2xl overflow-hidden border border-black/[0.4] dark:border-white/[0.4] shadow-xl"
                 >
                   <motion.div layout className="w-max h-full p-4">
                     {children}
@@ -81,7 +81,7 @@ export const Menu = ({
   showBorders?: boolean
   children: React.ReactNode
 }) => {
-  let className: string = "relative bg-transparent shadow-input flex justify-center space-x-8 px-8 py-6 "
+  let className: string = "relative  shadow-input flex justify-center space-x-8 px-8 py-6 rounded-full "
   if (showBorders) {
     className = " relative border border-black/[0.4] dark:border-white/[0.4] rounded-full dark:bg-[#09090b] bg-white shadow-input flex justify-center space-x-8 px-8 py-6 "
   }
@@ -99,8 +99,8 @@ export const HoveredLink = ({ children, ...rest }: any) => {
   return (
     <Link
       {...rest}
-      className="text-neutral-700 dark:text-neutral-200 hover:text-black dark:bg-[#09090b] bg-white "
-      title="todo: description..."
+      className="text-neutral-700 dark:text-neutral-200 hover:text-black "
+      title=""
     >
       {children}
     </Link>

@@ -22,6 +22,12 @@ export const PublisherNavConfig: any = {
           children: [],
         },
         {
+          label: "Storage",
+          path: "/storage",
+          icon: <Icons.video className="size-4" />,
+          children: [],
+        },        
+        {
           label: "Settings",
           path: "/settings",
           icon: <Icons.settings className="size-4" />,

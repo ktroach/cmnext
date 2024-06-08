@@ -24,15 +24,19 @@ export const RootConfig = {
   statusConfigs: {
     draft: {
       statusColor: 'amber',
+      tooltip: 'This content is in DRAFT Status'
     },
     published: {
       statusColor: 'grass',
+      tooltip: 'This content is currently PUBLISHED'
     },
     review: {
       statusColor: 'indigo',
+      tooltip: 'This content is in REVIEW Status'
     },
     pending: {
       statusColor: 'sky',
+      tooltip: 'This content is in PENDING Status'
     },
   },
   sections: [

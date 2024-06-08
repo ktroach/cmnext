@@ -60,7 +60,7 @@ export function SiteSettings(props: any) {
     const subSiteDetailsMapping = [
       {
         key: 'name',
-        label: 'Name',
+        label: 'Site Name',
         value: siteData?.name,
         editable: true,
         trigger: EditNameDialog.trigger,
