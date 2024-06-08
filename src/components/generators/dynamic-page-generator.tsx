@@ -8,10 +8,10 @@
 import React from 'react'
 import Image from 'next/image'
 import { cn } from '@/lib/utils'
-import CarouselTemplate from '@/components/templates/carousel'
+import CarouselTemplate from '@/components/templates/carousel/CarouselTemplate'
 import LinkableImageCard from '@/components/templates/cards/LinkableImageCard'
 import LinkableImageCardsSection from '@/components/templates/cards/LinkableImageCardsSection'
-import BlockQuoteTemplate from '@/components/templates/blockquote'
+import BlockQuoteTemplate from '@/components/templates/blockquote/BlockQuoteTemplate'
 import UnOrderedListTemplate from '@/components/templates/lists/UnorderedListTemplate'
 import IconSection2ColsGrid  from '@/components/templates/grids/IconSection2ColsGrid'
 import IconSectionCentredDescriptionWithIconBlocks  from '@/components/templates/grids/IconSectionCentredDescriptionWithIconBlocks'
@@ -27,6 +27,10 @@ import HeroSectionGradientBackground  from '@/components/templates/heros/HeroSec
 import HeroSectionImageWithReviews  from '@/components/templates/heros/HeroSectionImageWithReviews'
 import HeroSectionSimpleCentred  from '@/components/templates/heros/HeroSectionSimpleCentred'
 import HeroSectionWithEmailInput  from '@/components/templates/heros/HeroSectionWithEmailInput'
+import IconTemplate from '../templates/icon/IconTemplate'
+import VideoTemplate from '../templates/video/VideoTemplate'
+import EmbeddedTemplate from '../templates/embedded/EmbeddedTemplate'
+import MarkdownTemplate from '../templates/markdown/MarkdownTemplate'
 
 type ComponentProps = {
   [key: string]: any
@@ -55,6 +59,18 @@ const componentsMap: { [key: string]: React.FC<ComponentProps> } = {
   card: ({ children, ...props }: ComponentProps) => (
     <LinkableImageCard children={children} {...props} />
   ),
+  icon: ({ children, ...props }: ComponentProps) => (
+    <IconTemplate children={children} {...props} />
+  ),  
+  video: ({ children, ...props }: ComponentProps) => (
+    <VideoTemplate children={children} {...props} />
+  ),  
+  embedded: ({ children, ...props }: ComponentProps) => (
+    <EmbeddedTemplate children={children} {...props} />
+  ),  
+  markdown: ({ children, ...props }: ComponentProps) => (
+    <MarkdownTemplate children={children} {...props} />
+  ),  
   LinkableImageCard: ({ children, ...props }: ComponentProps) => (
     <LinkableImageCard children={children} {...props} />
   ),  
