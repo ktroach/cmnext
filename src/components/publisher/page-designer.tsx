@@ -15,6 +15,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '../ui/textarea'
+import { Icons } from '@/styles/icons'
 
 export default function PageDesigner() {
   const [isDraggingBlock, setIsDraggingBlock] = useState(false)
@@ -145,7 +146,7 @@ export default function PageDesigner() {
                 )}
                 onClick={handleAddBlockClick}
               >
-                <BoxIcon
+                <Icons.boxIcon
                   className="w-6 h-6 text-gray-500 dark:text-gray-400"
                   onClick={handleAddBlockClick}
                 />
@@ -163,7 +164,7 @@ export default function PageDesigner() {
                   'rounded-lg shadow-sm p-4 flex flex-col gap-2b',
                   textBlockColor
                 )} onClick={handleAddSubBlockClick}>
-                <BoxIcon className="w-6 h-6 text-green-500 dark:text-gray-400" onClick={handleAddSubBlockClick} />
+                <Icons.boxIcon className="w-6 h-6 text-green-500 dark:text-gray-400" onClick={handleAddSubBlockClick} />
                 <span className="text-sm font-medium" onClick={handleAddSubBlockClick}>Sub Block</span>
               </div>
             </div>
@@ -171,26 +172,26 @@ export default function PageDesigner() {
 
             <div>
               <div className="bg-white dark:bg-gray-900 rounded-lg shadow-sm p-4 flex flex-col gap-2 cursor-grab">
-                <ImageIcon className="w-6 h-6 text-gray-500 dark:text-gray-400" />
+                <Icons.imageIcon className="w-6 h-6 text-gray-500 dark:text-gray-400" />
                 <span className="text-sm font-medium">Image</span>
               </div>
             </div>
 
             <div>
               <div className="bg-white dark:bg-gray-900 rounded-lg shadow-sm p-4 flex flex-col gap-2 cursor-grab">
-                <HeadingIcon className="w-6 h-6 text-gray-500 dark:text-gray-400" />
+                <Icons.headingIcon className="w-6 h-6 text-gray-500 dark:text-gray-400" />
                 <span className="text-sm font-medium">Heading</span>
               </div>
             </div>
             <div>
               <div className="bg-white dark:bg-gray-900 rounded-lg shadow-sm p-4 flex flex-col gap-2 cursor-grab">
-                <BoxIcon className="w-6 h-6 text-gray-500 dark:text-gray-400" />
+                <Icons.boxIcon className="w-6 h-6 text-gray-500 dark:text-gray-400" />
                 <span className="text-sm font-medium">Carousel</span>
               </div>
             </div>
             <div>
               <div className="bg-white dark:bg-gray-900 rounded-lg shadow-sm p-4 flex flex-col gap-2 cursor-grab">
-                <BoxIcon className="w-6 h-6 text-gray-500 dark:text-gray-400" />
+                <Icons.boxIcon className="w-6 h-6 text-gray-500 dark:text-gray-400" />
                 <span className="text-sm font-medium">Hero</span>
               </div>
             </div>
@@ -239,89 +240,5 @@ export default function PageDesigner() {
         </div>
       </div>
     </>
-  )
-}
-
-function BoxIcon(props: any) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" />
-      <path d="m3.3 7 8.7 5 8.7-5" />
-      <path d="M12 22V12" />
-    </svg>
-  )
-}
-
-function HeadingIcon(props: any) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M6 12h12" />
-      <path d="M6 20V4" />
-      <path d="M18 20V4" />
-    </svg>
-  )
-}
-
-function ImageIcon(props: any) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <rect width="18" height="18" x="3" y="3" rx="2" ry="2" />
-      <circle cx="9" cy="9" r="2" />
-      <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
-    </svg>
-  )
-}
-
-function TextIcon(props: any) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M17 6.1H3" />
-      <path d="M21 12.1H3" />
-      <path d="M15.1 18H3" />
-    </svg>
   )
 }

@@ -15,7 +15,7 @@ export const getFrontendBaseUrl = () => {
   }
 
   // If absolutely nothing else is defined, return the localhost:3000 address
-  return `http://localhost:3000`
+  return `https://cmnext-seven.vercel.app`
 }
 
 export const getBackendBaseUrl = () => {
