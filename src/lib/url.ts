@@ -6,7 +6,12 @@ export const getCurrentEnv = () => {
 
 export const getBaseUrls = () => {
   const cmnextBaseUrlDev = process.env?.CMNEXT_BASE_URL_DEV ? process.env.CMNEXT_BASE_URL_DEV : 'http://localhost:3000'
-  const cmnextBaseUrlPrev = process.env?.CMNEXT_BASE_URL_PREVIEW ? process.env.CMNEXT_BASE_URL_PREVIEW : 'https://cmnext-git-subtree-titan-f4a1be16.vercel.app'
+  let cmnextBaseUrlPrev = process.env?.CMNEXT_BASE_URL_PREVIEW ? process.env.CMNEXT_BASE_URL_PREVIEW : 'https://cmnext-git-subtree-titan-f4a1be16.vercel.app'
+  const vercelPreviewUrl = process.env?.VERCEL_URL ?? process.env?.NEXT_PUBLIC_VERCEL_URL
+  console.log('>>> vercelPreviewUrl >>> ', vercelPreviewUrl)
+  if (vercelPreviewUrl) {
+    cmnextBaseUrlPrev = `https://${vercelPreviewUrl}`
+  }
   const cmnextBaseUrlProd = process.env?.CMNEXT_BASE_URL_PROD ? process.env.CMNEXT_BASE_URL_PROD : 'https://cmnext-seven.vercel.app'
   const baseUrls: any = {
     development: cmnextBaseUrlDev, 
