@@ -1,20 +1,37 @@
-export const getFrontendBaseUrl = () => {
+export const getCurrentEnv = () => {
+  const nodeEnv = process.env?.NODE_ENV ? process.env.NODE_ENV : 'development'
   const vercelEnv = process.env?.VERCEL_ENV ? process.env.VERCEL_ENV : 'development'
+  return vercelEnv ?? nodeEnv
+}
+
+export const getBaseUrls = () => {
   const cmnextBaseUrlDev = process.env?.CMNEXT_BASE_URL_DEV ? process.env.CMNEXT_BASE_URL_DEV : 'http://localhost:3000'
-  const vercelUrl = process.env?.VERCEL_URL ?? process.env?.NEXT_PUBLIC_VERCEL_URL
-  const cmnextBaseUrlPrev = process.env?.CMNEXT_BASE_URL_PREVIEW ? process.env.CMNEXT_BASE_URL_PREVIEW : vercelUrl ? `https://${vercelUrl}` : 'https://cmnext-git-subtree-titan-f4a1be16.vercel.app'
+  const cmnextBaseUrlPrev = process.env?.CMNEXT_BASE_URL_PREVIEW ? process.env.CMNEXT_BASE_URL_PREVIEW : 'https://cmnext-git-subtree-titan-f4a1be16.vercel.app'
   const cmnextBaseUrlProd = process.env?.CMNEXT_BASE_URL_PROD ? process.env.CMNEXT_BASE_URL_PROD : 'https://cmnext-seven.vercel.app'
+  const baseUrls: any = {
+    development: cmnextBaseUrlDev, 
+    preview: cmnextBaseUrlPrev, 
+    production: cmnextBaseUrlProd, 
+  }
+  return baseUrls
+}
 
-  if (vercelEnv === 'production') {
-    return cmnextBaseUrlProd
+export const getFrontendBaseUrl = () => {
+  const currentEnv = getCurrentEnv()
+  const baseUrls = getBaseUrls()
+  console.log('>>> currentEnv >>> ', currentEnv)
+  console.log('>>> baseUrls >>> ', baseUrls)
+  
+  if (currentEnv === 'development') {
+    return baseUrls?.development
   }
 
-  if (vercelEnv === 'preview') {
-    return cmnextBaseUrlPrev
-  }
+  if (currentEnv === 'preview') {
+    return baseUrls?.preview
+  }  
 
-  if (vercelEnv === 'development') {
-    return cmnextBaseUrlDev
+  if (currentEnv === 'production') {
+    return baseUrls?.production
   }
 
   return `http://localhost:3000`
