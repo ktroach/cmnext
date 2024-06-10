@@ -1,21 +1,23 @@
 export const getFrontendBaseUrl = () => {
-  // This setting takes precedence 
-  // NEXT_PUBLIC_APP_URL is used for PRODUCTION environment and for local Development, NOT PREVIEW
-  let appUrl = process.env.NEXT_PUBLIC_APP_URL
-  if (appUrl) {
-    return appUrl
-  }
-
-  // This is used by the PREVIEW environment
-  // Vercel will automatically create VERCEL_URL and NEXT_PUBLIC_VERCEL_URL, but you have to expose this in the Vercel settings
-  // Both of these should be available, but this could change. 
+  const vercelEnv = process.env?.VERCEL_ENV ? process.env.VERCEL_ENV : 'development'
+  const cmnextBaseUrlDev = process.env?.CMNEXT_BASE_URL_DEV ? process.env.CMNEXT_BASE_URL_DEV : 'http://localhost:3000'
   const vercelUrl = process.env?.VERCEL_URL ?? process.env?.NEXT_PUBLIC_VERCEL_URL
-  if (vercelUrl) {
-    return `https://${vercelUrl}`
+  const cmnextBaseUrlPrev = process.env?.CMNEXT_BASE_URL_PREVIEW ? process.env.CMNEXT_BASE_URL_PREVIEW : vercelUrl ? `https://${vercelUrl}` : 'https://cmnext-git-subtree-titan-f4a1be16.vercel.app'
+  const cmnextBaseUrlProd = process.env?.CMNEXT_BASE_URL_PROD ? process.env.CMNEXT_BASE_URL_PROD : 'https://cmnext-seven.vercel.app'
+
+  if (vercelEnv === 'production') {
+    return cmnextBaseUrlProd
   }
 
-  // If absolutely nothing else is defined, return the localhost:3000 address
-  return `https://cmnext-seven.vercel.app`
+  if (vercelEnv === 'preview') {
+    return cmnextBaseUrlPrev
+  }
+
+  if (vercelEnv === 'development') {
+    return cmnextBaseUrlDev
+  }
+
+  return `http://localhost:3000`
 }
 
 export const getBackendBaseUrl = () => {
