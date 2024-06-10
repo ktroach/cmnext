@@ -52,14 +52,14 @@ export async function generateStaticParams(): Promise<PageProps['params'][]> {
 }
 
 export default async function PagePage({ params }: PageProps) {
+  const subRef: string | undefined = params?.sub ? params.sub : undefined
+
   const page = await getPageFromSlug(params)
   if (!page) {
-    console.log("page not found: ", params)
-    notFound()
+    redirect(`/p/${subRef}/pages`)
   }
 
   if (page?.title === 'Home') {
-    const subRef: string | undefined = params?.sub ? params.sub : undefined
     if (subRef) {
       redirect(`/p/${subRef}/pages`)
     }
