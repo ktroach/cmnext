@@ -18,26 +18,28 @@ import { Textarea } from '../ui/textarea'
 import { Icons } from '@/styles/icons'
 
 export default function PageDesigner() {
-  const [isDraggingBlock, setIsDraggingBlock] = useState(false)
+  const [isDraggingSection, setIsDraggingSection] = useState(false)
   const [isDraggingSubBlock, setIsDraggingSubBlock] = useState(false)
   const [open, setOpen] = useState(false)
-  const [blocks, setBlocks] = useState<any>([])
+  const [sections, setSections] = useState<any>([])
   const [subBlocks, setSubBlocks] = useState<any>([])
   const [curBlockId, setCurBlockId] = useState<number>(-1)
-  const [textBlockColor, setTextBlockColor] = useState<string>('bg-white dark:bg-gray-900')
+  const [sectionButtonColor, setSectionButtonColor] = useState<string>('bg-white dark:bg-gray-900')
+  const [blockButtonColor, setBlockButtonColor] = useState<string>('bg-white dark:bg-gray-900')
+  
 
   const handleMainSectionClick = () => {
-    if (isDraggingBlock) {
+    if (isDraggingSection) {
       // @ts-ignore
-      setBlocks([...blocks, { id: blocks.length, subBlocks: [], removed: false }])
-      setIsDraggingBlock(false)
-      setTextBlockColor('bg-white dark:bg-gray-900')
+      setSections([...sections, { id: sections.length, subBlocks: [], removed: false }])
+      setIsDraggingSection(false)
+      setSectionButtonColor('bg-white dark:bg-gray-900')
     }
   }
 
   // @ts-ignore
-  const handleBlockClick = (blockId) => {
-    if (!isDraggingBlock) {
+  const handleSectionClick = (blockId) => {
+    if (!isDraggingSection) {
       setOpen(true)
       setCurBlockId(blockId)
     }
@@ -46,12 +48,13 @@ export default function PageDesigner() {
       setSubBlocks([...subBlocks, { blockId, id: subBlocks.length, removed: false }])
       setIsDraggingSubBlock(false)
     }
-    setTextBlockColor('bg-white dark:bg-gray-900')
+    setSectionButtonColor('bg-white dark:bg-gray-900')
+    setBlockButtonColor('bg-white dark:bg-gray-900')
   }
 
-  const handleAddBlockClick = () => {
-    setIsDraggingBlock(true)
-    setTextBlockColor('bg-cyan-400 dark:bg-cyan-400')
+  const handleAddSectionClick = () => {
+    setIsDraggingSection(true)
+    setSectionButtonColor('bg-cyan-400 dark:bg-cyan-400')
 
     if (isDraggingSubBlock) {
 		// @ts-ignore	
@@ -61,27 +64,26 @@ export default function PageDesigner() {
   }
   
   const handleAddSubBlockClick = () => {
-    setTextBlockColor('bg-cyan-400 dark:bg-cyan-400')
+    setBlockButtonColor('bg-cyan-400 dark:bg-cyan-400')
     setIsDraggingSubBlock(true)
-    setIsDraggingBlock(false)
+    setIsDraggingSection(false)
   }
 
-
-  const handleSubBlockClick = (subBlockId: any) => {
+  const handleBlockClick = (subBlockId: any) => {
     if (isDraggingSubBlock) {
         setIsDraggingSubBlock(false)
 	}
-    setTextBlockColor('bg-white dark:bg-gray-900')
+    setSectionButtonColor('bg-white dark:bg-gray-900')
   }
 
   const handleRemoveSubBlock = (blockId: any) => {
-    let blockFilter = blocks.filter((block: any) => block.id === blockId)
+    let blockFilter = sections.filter((block: any) => block.id === blockId)
     let blockElement =
       blockFilter && blockFilter.length > 0 ? blockFilter[0] : null
   }
 
   const getPropertiesByBlockType = () => {
-    const selectedBlock = blocks.filter((block: any) => block.id === curBlockId)
+    const selectedBlock = sections.filter((block: any) => block.id === curBlockId)
     if (selectedBlock && selectedBlock?.blockType === 'text') {
         return getTextBlockProperties()
     }    
@@ -142,19 +144,19 @@ export default function PageDesigner() {
               <div
                 className={cn(
                   'rounded-lg shadow-sm p-4 flex flex-col gap-2b',
-                  textBlockColor
+                  sectionButtonColor
                 )}
-                onClick={handleAddBlockClick}
+                onClick={handleAddSectionClick}
               >
                 <Icons.boxIcon
                   className="w-6 h-6 text-gray-500 dark:text-gray-400"
-                  onClick={handleAddBlockClick}
+                  onClick={handleAddSectionClick}
                 />
                 <span
                   className="text-sm font-medium"
-                  onClick={handleAddBlockClick}
+                  onClick={handleAddSectionClick}
                 >
-                  Block
+                  Section
                 </span>
               </div>
             </div>
@@ -162,10 +164,10 @@ export default function PageDesigner() {
             <div>
               <div className={cn(
                   'rounded-lg shadow-sm p-4 flex flex-col gap-2b',
-                  textBlockColor
+                  blockButtonColor
                 )} onClick={handleAddSubBlockClick}>
                 <Icons.boxIcon className="w-6 h-6 text-green-500 dark:text-gray-400" onClick={handleAddSubBlockClick} />
-                <span className="text-sm font-medium" onClick={handleAddSubBlockClick}>Sub Block</span>
+                <span className="text-sm font-medium" onClick={handleAddSubBlockClick}>Block</span>
               </div>
             </div>
 
@@ -202,20 +204,21 @@ export default function PageDesigner() {
             <h3 className="mb-4 text-lg font-semibold">Layout</h3>
             <div className="grid grid-cols-1 gap-4">
               <div className="flex-1 relative cursor-pointer" onClick={handleMainSectionClick}>
-                {blocks.map((block: any, index: number) => (
+
+                {sections.map((block: any, index: number) => (
                   <div
                     key={block.id}
                     className="absolute flex h-[200px] w-full rounded-md border-2 border-dashed border-gray-500 dark:border-gray-700 hover:border-4 hover:border-gray-400 mb-5"
                     style={{ top: `${index * 100}%` }}
-                    onClick={() => handleBlockClick(block.id)}
+                    onClick={() => handleSectionClick(block.id)}
                   >
                     {subBlocks.filter((subBlock: any) => subBlock.blockId === block.id).map((subBlock: any) => (
                         <div
                             key={subBlock.id}
-                            className="panel w-1/2 h-full border-r-2 border-blue-700 flex flex-wrap bg-green-400"
-                            onClick={() => handleSubBlockClick(subBlock.id)}
+                            className="panel w-1/2 h-full border-r-2 border-blue-700 flex flex-wrap bg-green-400 justify-center "
+                            onClick={() => handleBlockClick(subBlock.id)}
                         >
-                            Work in Progress
+                            Drop Components into this Block
 
                         </div>
                     ))}
@@ -231,7 +234,7 @@ export default function PageDesigner() {
                     className="text-gray-500 dark:text-gray-400"
                     onClick={handleMainSectionClick}
                   >
-                    Drag and drop blocks here
+                    Drag and drop sections here
                   </span>
                 </div>
               </div>

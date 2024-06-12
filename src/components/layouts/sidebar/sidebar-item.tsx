@@ -36,7 +36,7 @@ export const ItemLink = ({ item, collapsed, pathname }: ItemLinkProps) => {
           variant: 'ghost',
           size: collapsed ? 'icon' : 'default',
         }),
-        'flex w-full items-center gap-x-3.5 rounded-lg px-2.5 text-start text-sm ',
+        'flex w-full items-center gap-x-3.5 rounded-lg px-2.5 text-start text-md ',
         !collapsed && '!justify-start',
         pathname === item.path ? 'bg-accent' : ''
       )}
@@ -99,7 +99,7 @@ const SidebarItemWithAccordion = ({ item, collapsed, pathname }: SidebarItemProp
             variant="ghost"
             type="button"
             className={cn(
-              'flex w-full items-center justify-start gap-x-3.5 rounded-lg px-2.5  text-start text-sm '
+              'flex w-full items-center justify-start gap-x-3.5 rounded-lg px-2.5  text-start text-md '
             )}
           >
             {item.icon && <span className="!rotate-0">{item.icon}</span>}

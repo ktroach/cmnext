@@ -1,9 +1,8 @@
 import { type Metadata } from 'next'
 import { redirect } from 'next/navigation'
 import { currentUser } from '@clerk/nextjs/server'
-import { Header } from '@/components/layouts/header'
-import { Block } from '@/components/containers/block'
-import PageDesigner from '@/components/publisher/page-designer'
+// import PageDesigner from '@/components/publisher/page-designer'
+import PageDesign from '@/components/publisher/page-design'
 import { getFrontendBaseUrl } from '@/lib/url'
 import { 
   verifySubRefAccess, 
@@ -18,7 +17,6 @@ export const metadata: Metadata = {
 }
 
 export default async function PublisherPageDesigner({ params }: any) {
-  console.log('>>> ENTERED: PublisherPageDesigner >>> ')
   const curUser = await currentUser()
   if (!curUser) redirect('/')
   const subRef = params?.sub ? params.sub : null
@@ -32,13 +30,9 @@ export default async function PublisherPageDesigner({ params }: any) {
     pageSlug = `/${pageSlug}`
   }  
 
-  console.log('>>> pageSlug >>> ', pageSlug)
-
   const authorId: number | null = subsite && subsite?.userId ? subsite.userId : null
   const subsiteId: number | null = subsite && subsite?.subsiteId ? subsite.subsiteId : null
   const pageResult: any = await getPageBySlug(pageSlug, authorId, subsiteId)
-
-  console.log('>>> pageResult >>> ', pageResult)
 
   const pageData: any = pageResult && pageResult.length > 0 ? pageResult[0] : null
 
@@ -51,7 +45,7 @@ export default async function PublisherPageDesigner({ params }: any) {
 
   return (
     <>
-        <PageDesigner />
+        <PageDesign />
     </>
   )
 }

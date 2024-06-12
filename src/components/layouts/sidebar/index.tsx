@@ -72,7 +72,7 @@ export const Sidebar = ({ routes, account, subRef }: SidebarProps) => {
         variant="outline"
         size="icon"
         onClick={() => setCollapsed(!collapsed)}
-        className="bg-background absolute -right-3 top-1/2 -translate-y-1/2 z-10 size-6 rounded-full shadow-lg"
+        className="bg-background absolute -right-3 top-1/2 -translate-y-1/2 z-10 size-6 rounded-full shadow-lg dark:bg-gray-900"
       >
         <Icons.chevronLeft
           className={cn('size-4 transition-transform', {
@@ -81,7 +81,7 @@ export const Sidebar = ({ routes, account, subRef }: SidebarProps) => {
         />
       </Button>
 
-      <div className="flex flex-col flex-grow-0 absolute bottom-0 -translate-y-12 ml-2 ">
+      <div className="flex flex-col flex-grow-0 absolute bottom-0 -translate-y-12 ml-3 ">
         <div className="">
           <nav className="space-x-4">
             <ThemeToggle className="ml-4 mb-5" />
@@ -90,9 +90,9 @@ export const Sidebar = ({ routes, account, subRef }: SidebarProps) => {
                 <DropdownMenuTrigger className="" asChild>
                   <Button
                     variant="secondary"
-                    className="relative h-8 w-8 rounded-full ml-4"
+                    className="relative h-8 w-8 rounded-full ml-2"
                   >
-                    <Avatar className="h-8 w-8 ml-2 ">
+                    <Avatar className="h-9 w-9 ml-2 ">
                       <AvatarImage
                         src={account?.imageUrl}
                         alt={account?.username ?? ''}
@@ -107,7 +107,7 @@ export const Sidebar = ({ routes, account, subRef }: SidebarProps) => {
                   forceMount
                 >
                   <DropdownMenuLabel className="font-normal">
-                    <div className="flex flex-col space-y-1">
+                    <div className="flex flex-col space-y-1 ">
                       <p className="text-sm font-medium leading-none">
                         {account?.firstName} {account?.lastName}
                       </p>
