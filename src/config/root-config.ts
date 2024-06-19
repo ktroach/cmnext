@@ -5,6 +5,8 @@ export const BaseUrl = getFrontendBaseUrl()
 export const RootConfig = {
   name: 'CMNexT',
   description: 'Taking your Content to the Next level',
+  author: 'ktroach',
+  authorAvatar: '/images/avatar/1940742.png',
   pitches: [
     'Create Sites, Blogs, Posts, Videos, and your own Design Templates',
     'For Writers, Videographers, Bloggers, and Designers',

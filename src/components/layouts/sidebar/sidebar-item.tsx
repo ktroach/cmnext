@@ -99,7 +99,7 @@ const SidebarItemWithAccordion = ({ item, collapsed, pathname }: SidebarItemProp
             variant="ghost"
             type="button"
             className={cn(
-              'flex w-full items-center justify-start gap-x-3.5 rounded-lg px-2.5  text-start text-md '
+              'flex w-full items-center justify-start gap-x-3.5 rounded-lg px-2.5 text-start text-md '
             )}
           >
             {item.icon && <span className="!rotate-0">{item.icon}</span>}

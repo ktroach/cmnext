@@ -749,7 +749,7 @@ export function AddEditContent(params: any) {
         <></>
       )}
 
-      {pageType === 'full-width' ? (
+      {/* {pageType === 'full-width' ? (
         <>
           <Separator className="mt-5" />
           <Label className="text-lg">Edit in Full-Width Page Designer</Label>
@@ -757,7 +757,7 @@ export function AddEditContent(params: any) {
         </>
       ) : (
         <></>
-      )}      
+      )}       */}
 
 
 

@@ -16,6 +16,7 @@ import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '../ui/textarea'
 import { Icons } from '@/styles/icons'
+// import HeroSectionCentredWithImage from '@/components/templates/heros/HeroSectionCentredWithImage'
 
 export default function PageDesigner() {
   const [isDraggingSection, setIsDraggingSection] = useState(false)
@@ -40,7 +41,7 @@ export default function PageDesigner() {
   // @ts-ignore
   const handleSectionClick = (blockId) => {
     if (!isDraggingSection) {
-      setOpen(true)
+      // setOpen(true)
       setCurBlockId(blockId)
     }
     if (isDraggingSubBlock) {
@@ -208,18 +209,17 @@ export default function PageDesigner() {
                 {sections.map((block: any, index: number) => (
                   <div
                     key={block.id}
-                    className="absolute flex h-[200px] w-full rounded-md border-2 border-dashed border-gray-500 dark:border-gray-700 hover:border-4 hover:border-gray-400 mb-5"
+                    className="absolute flex h-auto w-full rounded-md border-2 border-dashed border-gray-500 dark:border-gray-700 hover:border-4 hover:border-gray-400 mb-5"
                     style={{ top: `${index * 100}%` }}
                     onClick={() => handleSectionClick(block.id)}
                   >
+
                     {subBlocks.filter((subBlock: any) => subBlock.blockId === block.id).map((subBlock: any) => (
                         <div
                             key={subBlock.id}
                             className="panel w-1/2 h-full border-r-2 border-blue-700 flex flex-wrap bg-green-400 justify-center "
                             onClick={() => handleBlockClick(subBlock.id)}
                         >
-                            Drop Components into this Block
-
                         </div>
                     ))}
 
