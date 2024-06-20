@@ -612,11 +612,47 @@ export const ContentDesigner: React.FC = () => {
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false)
   const [isPropertySheetCollapsed, setIsPropertySheetCollapsed] = useState(false)
 
+  const saveSubtree = () => {
+    // TODO: Now do the reverse and enumerate the sections and create the subtree 
+
+  }
+
   const addSection = (color: string, sectionType: string) => {
     const sectionId = sections[sections?.length - 1]?.id
     const newId = sectionId && sections.length > 0 ? sectionId + 1 : 1
 
-    setSections([...sections, { id: newId, text: `some text`, color, sectionType, node: null }])
+    let newNode: Node | null = null
+
+    if (sectionType === 'HeroSectionCentredWithImage') {
+      newNode = {
+        key: Math.random(),
+        value: sectionType,
+        properties: {
+          className: "",
+          header: "Title", 
+          subHeader: "Sub Title", 
+          imgSrc: "https://picsum.photos/id/10/800/800"
+        },
+        children: []
+      }
+    }
+
+    if (sectionType === 'HeroSectionGradientBackground') {
+      newNode = {
+        key: Math.random(),
+        value: sectionType,
+        properties: {
+          className: "",
+          header: "Title", 
+          subHeader: "Sub Title", 
+          tagLine: "This is the Tag Line"
+        },
+        children: []
+      }
+    }
+
+
+    setSections([...sections, { id: newId, text: `some text`, color, sectionType, node: newNode  }])
     
     setSelectedSectionId(newId)
   }
@@ -664,32 +700,39 @@ export const ContentDesigner: React.FC = () => {
   return (
     <DndProvider backend={HTML5Backend}>
       
-      <div className="relative flex p-4 w-5/12">
-        <button>Save</button>
-        <Sidebar addSection={addSection} isCollapsed={isSidebarCollapsed} toggleCollapse={() => setIsSidebarCollapsed(!isSidebarCollapsed)} />
-        <div className="flex-grow pr-4">
-          <div className="h-screen overflow-y-auto">
+      <div className='flex flex-col'>
+        <button onClick={saveSubtree}>Save</button>
+      
+        <div className="relative flex p-4">
+          <Sidebar addSection={addSection} isCollapsed={isSidebarCollapsed} toggleCollapse={() => setIsSidebarCollapsed(!isSidebarCollapsed)} />
+          <div className="flex-grow pr-4   w-5/6">
+            <div className="h-screen overflow-y-auto">
 
-            {sections.map((section, index) => (
-              <Section
-                key={section.id}
-                id={section.id}
-                text={section.text}
-                index={index}
-                moveSection={moveSection}
-                removeSection={removeSection}
-                selectSection={selectSection}
-                isSelected={section.id === selectedSectionId}
-                color={section.color}
-                sectionType={section.sectionType}
-                componentToRender={createComponent({ ...section?.node, key: index })}
-              />
-            ))}
+              {sections.map((section, index) => (
+                <Section
+                  key={section.id}
+                  id={section.id}
+                  text={section.text}
+                  index={index}
+                  moveSection={moveSection}
+                  removeSection={removeSection}
+                  selectSection={selectSection}
+                  isSelected={section.id === selectedSectionId}
+                  color={section.color}
+                  sectionType={section.sectionType}
+                  componentToRender={createComponent({ ...section?.node, key: index })}
+                />
+              ))}
 
+            </div>
           </div>
+          <PropertySheet selectedSection={selectedSection} setText={setText} isCollapsed={isPropertySheetCollapsed} toggleCollapse={() => setIsPropertySheetCollapsed(!isPropertySheetCollapsed)} />
         </div>
-        <PropertySheet selectedSection={selectedSection} setText={setText} isCollapsed={isPropertySheetCollapsed} toggleCollapse={() => setIsPropertySheetCollapsed(!isPropertySheetCollapsed)} />
+
       </div>
+
+
+
     </DndProvider>
   )
 }

@@ -1,17 +1,16 @@
 export interface HeroSectionCentredWithImageProps {
   children?: any
-  componentProps?: any
+  header?: any
+  subHeader?: any
+  imgSrc?: any 
 }
 
 export default function HeroSectionCentredWithImage({
   children,
-  componentProps, 
+  header,
+  subHeader, 
+  imgSrc
 }: HeroSectionCentredWithImageProps) {
-  const props = componentProps ? componentProps : undefined
-  const headerProp = props && props?.header ? props.header : ''
-  const subHeaderProp = props && props?.subHeader ? props.subHeader : ''
-  const imgSrcProp = props && props?.imgSrc ? props.imgSrc : 'https://placehold.co/1024x480'
-
   return (
     <>
       {/* Hero */}
@@ -19,15 +18,15 @@ export default function HeroSectionCentredWithImage({
         <div className="container">
           <div className="max-w-2xl text-center mx-auto">
             <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
-              {headerProp}
+              {header}
             </h1>
             <p className="mt-3 text-xl text-muted-foreground">
-              {subHeaderProp}
+              {subHeader}
             </p>
           </div>
           <div className="mt-10 relative max-w-5xl mx-auto">
             <img
-              src={imgSrcProp}
+              src={imgSrc}
               className="rounded-xl"
               alt="Image Description"
             />
