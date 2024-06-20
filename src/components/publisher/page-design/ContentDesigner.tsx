@@ -663,7 +663,9 @@ export const ContentDesigner: React.FC = () => {
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <div className="relative flex p-4">
+      
+      <div className="relative flex p-4 w-5/12">
+        <button>Save</button>
         <Sidebar addSection={addSection} isCollapsed={isSidebarCollapsed} toggleCollapse={() => setIsSidebarCollapsed(!isSidebarCollapsed)} />
         <div className="flex-grow pr-4">
           <div className="h-screen overflow-y-auto">
