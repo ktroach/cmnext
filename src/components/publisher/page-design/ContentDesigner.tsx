@@ -36,7 +36,7 @@ interface DragItem {
 const Section: React.FC<SectionProps> = ({ id, text, index, moveSection, removeSection, selectSection, isSelected, color }) => {
   const ref = useRef<HTMLDivElement>(null)
 
-  const [{ handlerId }, drop] = useDrop<DragItem, void, { handlerId: Identifier | null }>({
+  const [{ handlerId }, drop] = useDrop<DragItem, void, { handlerId: any }>({
     accept: ItemTypes.SECTION,
     collect: (monitor) => ({
       handlerId: monitor.getHandlerId(),
@@ -73,8 +73,8 @@ const Section: React.FC<SectionProps> = ({ id, text, index, moveSection, removeS
   return (
     <div
       ref={ref}
-      style={{ opacity: isDragging ? 0.5 : 1 }}
-      className={`relative p-4 mb-4 ${color} ${isSelected ? 'border-2 border-solid border-cyan-500' : 'border border-dashed border-gray-400'}`}
+      style={{ opacity: isDragging ? 0.5 : 1, height: isDragging ? 100 : "" }}
+      className={`relative p-4 mb-4 ${text} ${isSelected ? 'border-2 border-solid border-cyan-500' : 'border border-dashed border-gray-400'}`}
       onClick={() => selectSection(id)}
       data-handler-id={handlerId}
     >
@@ -85,7 +85,7 @@ const Section: React.FC<SectionProps> = ({ id, text, index, moveSection, removeS
         <Icons.trash className="w-5 h-5 text-red-500 cursor-pointer" onClick={(e) => { e.stopPropagation(); removeSection(id); }} />
       </div>
       <HeroSectionCentredWithImage header={text} subHeader={text} imgSrc='https://placehold.co/1024x480' />
-      {/* <div className="text-center">{text}</div> */}
+      <div className="text-center">{text}</div>
     </div>
   )
 }
@@ -104,7 +104,7 @@ const PropertySheet: React.FC<{ selectedSection: SectionData | null, setText: (i
       <div className="flex justify-end mb-2 cursor-pointer" onClick={toggleCollapse}>
         <Icons.chevronRight className="w-5 h-5" />
       </div>
-      <h2 className="mb-4 text-xl">Property Sheet</h2>
+      <h2 className="mb-4 text-xl">Properties</h2>
       <label className="block mb-2">Text:</label>
       <input
         type="text"
@@ -130,7 +130,7 @@ const Sidebar: React.FC<{ addSection: (color: string) => void, isCollapsed: bool
         </div>
         <div className='flex flex-col p-2'>
           <button onClick={() => addSection('bg-blue-500')} className="px-4 py-2 mb-4 text-white bg-blue-500 rounded">Add Blue Section</button>
-          <button onClick={() => addSection('bg-red-500')} className="px-4 py-2 mb-4 text-white bg-red-500 rounded">Add Red Section</button>
+          <button onClick={() => addSection('bg-purple-500')} className="px-4 py-2 mb-4 text-white bg-purple-500 rounded">Add Purple Section</button>
           <button onClick={() => addSection('bg-yellow-500')} className="px-4 py-2 mb-4 text-white bg-yellow-500 rounded">Add Yellow Section</button>
           <button onClick={() => addSection('bg-green-500')} className="px-4 py-2 mb-4 text-white bg-green-500 rounded">Add Green Section</button>
         </div>
@@ -145,15 +145,18 @@ export const ContentDesigner: React.FC = () => {
   const [isPropertySheetCollapsed, setIsPropertySheetCollapsed] = useState(false)
 
   const addSection = (color: string) => {
-    const newId = sections.length > 0 ? sections[sections.length - 1].id + 1 : 1
+    const sectionId = sections[sections?.length - 1]?.id
+    const newId = sectionId && sections.length > 0 ? sectionId + 1 : 1
+
     setSections([...sections, { id: newId, text: `${color}`, color }])
+    
     setSelectedSectionId(newId)
   }
 
   const moveSection = useCallback((dragIndex: number, hoverIndex: number) => {
     setSections((prevSections) => {
       const newSections = [...prevSections]
-      const [draggedSection] = newSections.splice(dragIndex, 1)
+      const [draggedSection]: any = newSections.splice(dragIndex, 1)
       newSections.splice(hoverIndex, 0, draggedSection)
       return newSections
     })
