@@ -1,20 +1,16 @@
 export interface HeroSectionCentredWithImageProps {
   children?: any
-  header?: any
-  subHeader?: any
-  imgSrc?: any
+  componentProps?: any
 }
 
 export default function HeroSectionCentredWithImage({
   children,
-  header, 
-  subHeader, 
-  imgSrc
+  componentProps, 
 }: HeroSectionCentredWithImageProps) {
-
-  const headerProp = header ? header : ''
-  const subHeaderProp = subHeader ? subHeader : ''
-  const imgSrcProp = imgSrc ? imgSrc : 'https://placehold.co/1024x480'
+  const props = componentProps ? componentProps : undefined
+  const headerProp = props && props?.header ? props.header : ''
+  const subHeaderProp = props && props?.subHeader ? props.subHeader : ''
+  const imgSrcProp = props && props?.imgSrc ? props.imgSrc : 'https://placehold.co/1024x480'
 
   return (
     <>
