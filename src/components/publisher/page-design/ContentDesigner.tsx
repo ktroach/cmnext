@@ -30,6 +30,8 @@ import VideoTemplate from '@/components/templates/video/VideoTemplate'
 import EmbeddedTemplate from '@/components/templates/embedded/EmbeddedTemplate'
 import MarkdownTemplate from '@/components/templates/markdown/MarkdownTemplate'
 
+import { Button } from '@/components/ui/button'
+
 const LayoutTemplate: string = `
 {
   "value": "root",
@@ -701,12 +703,26 @@ export const ContentDesigner: React.FC = () => {
     <DndProvider backend={HTML5Backend}>
       
       <div className='flex flex-col'>
-        <button onClick={saveSubtree}>Save</button>
-      
+        <div className='flex p-4'>
+          <Button className='w-[64] mr-4' variant={'default'} onClick={saveSubtree}>
+            Back
+          </Button>
+          <Button className='w-[64] mr-4' variant={'default'} onClick={saveSubtree}>
+            Preview 
+          </Button>
+          <Button className='w-[64] mr-4' variant={'default'} onClick={saveSubtree}>
+            Save Draft
+          </Button>
+          <Button className='w-[64]' variant={'default'} onClick={saveSubtree}>
+            Publish
+          </Button>
+
+        </div>
+     
         <div className="relative flex p-4">
           <Sidebar addSection={addSection} isCollapsed={isSidebarCollapsed} toggleCollapse={() => setIsSidebarCollapsed(!isSidebarCollapsed)} />
-          <div className="flex-grow pr-4   w-5/6">
-            <div className="h-screen overflow-y-auto">
+          <div className=" pr-4">
+            <div className="h-screen" style={{width: '1600px'}}>
 
               {sections.map((section, index) => (
                 <Section
