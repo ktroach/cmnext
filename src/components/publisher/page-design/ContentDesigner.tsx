@@ -30,6 +30,7 @@ import VideoTemplate from '@/components/templates/video/VideoTemplate'
 import EmbeddedTemplate from '@/components/templates/embedded/EmbeddedTemplate'
 import MarkdownTemplate from '@/components/templates/markdown/MarkdownTemplate'
 import { Button } from '@/components/ui/button'
+import { SubTree } from '@/lib/subtree'
 
 type ComponentProps = {
   [key: string]: any
@@ -373,8 +374,8 @@ const Sidebar: React.FC<{ addSection: (color: string, sectionType: string) => vo
           <Icons.chevronLeft className="w-5 h-5" />
         </div>
         <div className='flex flex-col p-2'>
-          <button onClick={() => addSection('bg-blue-500', 'HeroSectionCentredWithImage')} className="px-4 py-2 mb-4 text-white bg-blue-500 rounded">Hero Section Centred With Image</button>
-          <button onClick={() => addSection('bg-purple-500', 'HeroSectionGradientBackground')} className="px-4 py-2 mb-4 text-white bg-purple-500 rounded">Hero Section Gradient Background</button>
+          <Button onClick={() => addSection('bg-blue-500', 'HeroSectionCentredWithImage')} className="text-xs px-4 py-2 mb-4 text-white bg-gray-400 rounded">Hero Section Centred With Image</Button>
+          <Button onClick={() => addSection('bg-purple-500', 'HeroSectionGradientBackground')} className="text-xs px-4 py-2 mb-4 text-white bg-gray-400 rounded">Hero Section Gradient Background</Button>
           {/* <button onClick={() => addSection('bg-yellow-500', 'HeroSectionCentredWithImage')} className="px-4 py-2 mb-4 text-white bg-yellow-500 rounded">Add Yellow Section</button>
           <button onClick={() => addSection('bg-green-500', 'HeroSectionCentredWithImage')} className="px-4 py-2 mb-4 text-white bg-green-500 rounded">Add Green Section</button> */}
         </div>
@@ -391,11 +392,6 @@ export const ContentDesigner = ({ subTree }: ContentDesignerProps) => {
   const [selectedSectionId, setSelectedSectionId] = useState<number | null>(1)
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false)
   const [isPropertySheetCollapsed, setIsPropertySheetCollapsed] = useState(false)
-
-  const saveSubtree = () => {
-    // TODO: Now do the reverse and enumerate the sections and create the subtree 
-
-  }
 
   const addSection = (color: string, sectionType: string) => {
     const sectionId = sections[sections?.length - 1]?.id
@@ -476,20 +472,57 @@ export const ContentDesigner = ({ subTree }: ContentDesignerProps) => {
     setSections(sectionMap)
   }
 
+  const savePage = () => {
+    const subtree = new SubTree<string>()
+    subtree.addNode('root', null, {})
+
+    const imageProps = {
+      className: 'inherit',
+      src: 'https://picsum.photos/id/64/800/800',
+      alt: 'image', 
+    }
+   
+    if (!sections || sections?.length === 0) return
+    sections.map((section) => {
+      const subTreeComponent = section?.node
+      console.log('component >>> ', subTreeComponent)
+      subtree.addNode(subTreeComponent.value, 'root', subTreeComponent.properties)
+      const componentChildren = subTreeComponent?.children ? subTreeComponent.children : []
+      if (componentChildren && componentChildren?.length > 0) {
+        componentChildren.map((child: any) => {
+          subtree.addNode(child.value, subTreeComponent.value, imageProps)
+        })
+      }
+    })
+
+    const subTreeString = subtree.toJSON()
+    console.log(subTreeString)
+    // TODO: Save to DB 
+  }  
+
+  const navigateBack = () => {
+  }  
+
+  const previewPage = () => {
+  }  
+
+  const publishPage = () => {
+  }  
+
   return (
     <DndProvider backend={HTML5Backend}>
       <div className='flex flex-col'>
         <div className='flex p-4'>
-          <Button className='w-[64] mr-4' variant={'default'} onClick={saveSubtree}>
+          <Button className='w-[64] mr-4 bg-gray-400' variant={'default'} onClick={navigateBack}>
             Back
           </Button>
-          <Button className='w-[64] mr-4' variant={'default'} onClick={saveSubtree}>
+          <Button className='w-[64] mr-4 bg-gray-400' variant={'default'} onClick={previewPage}>
             Preview 
           </Button>
-          <Button className='w-[64] mr-4' variant={'default'} onClick={saveSubtree}>
-            Save Draft
+          <Button className='w-[64] mr-4 bg-gray-400' variant={'default'} onClick={savePage}>
+            Save 
           </Button>
-          <Button className='w-[64]' variant={'default'} onClick={saveSubtree}>
+          <Button className='w-[64] bg-gray-400' variant={'default'} onClick={publishPage}>
             Publish
           </Button>
         </div>
@@ -497,7 +530,6 @@ export const ContentDesigner = ({ subTree }: ContentDesignerProps) => {
           <Sidebar addSection={addSection} isCollapsed={isSidebarCollapsed} toggleCollapse={() => setIsSidebarCollapsed(!isSidebarCollapsed)} />
           <div className=" pr-4">
             <div className="h-screen" style={{width: '1600px'}}>
-
               {sections.map((section, index) => (
                 <Section
                   key={section.id}
@@ -518,11 +550,7 @@ export const ContentDesigner = ({ subTree }: ContentDesignerProps) => {
           </div>
           <PropertySheet selectedSection={selectedSection} setText={setText} isCollapsed={isPropertySheetCollapsed} toggleCollapse={() => setIsPropertySheetCollapsed(!isPropertySheetCollapsed)} />
         </div>
-
       </div>
-
-
-
     </DndProvider>
   )
 }
