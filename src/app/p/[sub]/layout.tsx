@@ -2,7 +2,6 @@
 
 import React from 'react'
 import SubsiteMenu from '@/components/containers/subsite-menu'
-import { getFrontendBaseUrl } from '@/lib/url'
 import { getAllPagesBySubRef, getAllBlogsBySubRef } from '@/lib/queries'
 import dayjs from 'dayjs'
 
@@ -53,7 +52,6 @@ export default async function SubsiteLayout({
   }
 
   let menuData: any = []
-  const baseUrl = getFrontendBaseUrl()
   const subRef = params?.sub ? params.sub : null
   let pagesData: any[] | null | undefined = await getAllPagesBySubRef(
     subRef,
@@ -71,7 +69,7 @@ export default async function SubsiteLayout({
           const childSlug = childPage?.slug ? childPage.slug : ''
           pagesMenu.push({
             label: childPage?.title,
-            href: `${baseUrl}/p/${subRef}/pages/${childSlug}`,
+            href: `/p/${subRef}/pages/${childSlug}`,
             slug: childSlug,
             sub: subRef,
             type: 'navlink',
@@ -86,7 +84,6 @@ export default async function SubsiteLayout({
 
       const pageTitle = pageMenu?.title ? pageMenu.title : undefined
       const pageSlug = pageMenu?.slug ? pageMenu.slug : undefined
-      const pageUrl = `${baseUrl}/p/${params.sub}/pages/${pageSlug}`
       menuData.push({
         label: pageTitle,
         href: '#',
@@ -108,7 +105,7 @@ export default async function SubsiteLayout({
     blogsData.map((post: any) =>
       blogsMenu.push({
         label: post.title,
-        href: `${baseUrl}/p/${params.sub}/blogs/${post.slug}`,
+        href: `/p/${params.sub}/blogs/${post.slug}`,
         type: 'navlink',
         slug: post.slug,
         sub: params.sub,
@@ -124,7 +121,7 @@ export default async function SubsiteLayout({
     
     menuData.push({
       label: 'Blogs',
-      href: `${baseUrl}/p/${params.sub}/blogs`,
+      href: `/p/${params.sub}/blogs`,
       type: 'super-group',
       slug: ['blogs'],
       sub: params.sub,

@@ -1,21 +1,57 @@
+type BaseUrls = {
+  development?: string
+  preview?: string
+  production?: string
+}
+
+type Environment = 'development' | 'preview' | 'production'
+
+export const getCurrentEnv = (): Environment => {
+  const nodeEnv: Environment = process.env.NODE_ENV as Environment || 'development'
+  const vercelEnv: Environment = process.env.VERCEL_ENV as Environment || 'development'
+  return vercelEnv || nodeEnv
+}
+
+export const getBaseUrls = (): BaseUrls => {
+  const cmnextBaseUrlDev = process.env?.CMNEXT_BASE_URL_DEV || 'http://localhost:3000'
+
+  const vercelPreviewUrl = process.env?.VERCEL_URL ?? process.env?.NEXT_PUBLIC_VERCEL_URL
+  let cmnextBaseUrlPrev = process.env?.CMNEXT_BASE_URL_PREVIEW || 'https://cmnext-git-subtree-titan-f4a1be16.vercel.app'
+  if (vercelPreviewUrl) {
+    cmnextBaseUrlPrev = `https://${vercelPreviewUrl}`
+  }
+
+  const cmnextBaseUrlProd = process.env?.CMNEXT_BASE_URL_PROD || 'https://cmnext-seven.vercel.app'
+
+  const baseUrls: BaseUrls = {
+    development: cmnextBaseUrlDev,
+    preview: cmnextBaseUrlPrev,
+    production: cmnextBaseUrlProd,
+  }
+
+  return baseUrls
+}
+
+const getBaseUrl = (currentEnv: 'development' | 'preview' | 'production', baseUrls: BaseUrls) => {
+  const envUrls = {
+    development: baseUrls?.development,
+    preview: baseUrls?.preview,
+    production: baseUrls?.production,
+  }
+
+  return envUrls[currentEnv]
+}
+
 export const getFrontendBaseUrl = () => {
-  // This setting takes precedence 
-  // NEXT_PUBLIC_APP_URL is used for PRODUCTION environment and for local Development, NOT PREVIEW
-  let appUrl = process.env.NEXT_PUBLIC_APP_URL
-  if (appUrl) {
-    return appUrl
+  const currentEnv = getCurrentEnv()
+  const baseUrls = getBaseUrls()
+  const baseUrl = getBaseUrl(currentEnv, baseUrls)
+  
+  if (baseUrl) {
+    return baseUrl
   }
 
-  // This is used by the PREVIEW environment
-  // Vercel will automatically create VERCEL_URL and NEXT_PUBLIC_VERCEL_URL, but you have to expose this in the Vercel settings
-  // Both of these should be available, but this could change. 
-  const vercelUrl = process.env?.VERCEL_URL ?? process.env?.NEXT_PUBLIC_VERCEL_URL
-  if (vercelUrl) {
-    return `https://${vercelUrl}`
-  }
-
-  // If absolutely nothing else is defined, return the localhost:3000 address
-  return `http://localhost:3000`
+  return `${window.location.origin}:3000`
 }
 
 export const getBackendBaseUrl = () => {

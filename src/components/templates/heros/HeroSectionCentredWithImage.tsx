@@ -1,9 +1,15 @@
 export interface HeroSectionCentredWithImageProps {
   children?: any
+  header?: any
+  subHeader?: any
+  imgSrc?: any 
 }
 
 export default function HeroSectionCentredWithImage({
   children,
+  header,
+  subHeader, 
+  imgSrc
 }: HeroSectionCentredWithImageProps) {
   return (
     <>
@@ -12,15 +18,15 @@ export default function HeroSectionCentredWithImage({
         <div className="container">
           <div className="max-w-2xl text-center mx-auto">
             <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
-              Nano-Frontiers: Reshaping Tech
+              {header}
             </h1>
             <p className="mt-3 text-xl text-muted-foreground">
-              Nano-computing breaks barriers, unlocking new tech horizons.
+              {subHeader}
             </p>
           </div>
           <div className="mt-10 relative max-w-5xl mx-auto">
             <img
-              src="https://placehold.co/1024x480"
+              src={imgSrc}
               className="rounded-xl"
               alt="Image Description"
             />

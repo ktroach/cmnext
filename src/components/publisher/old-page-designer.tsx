@@ -15,29 +15,33 @@ import {
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '../ui/textarea'
+import { Icons } from '@/styles/icons'
+// import HeroSectionCentredWithImage from '@/components/templates/heros/HeroSectionCentredWithImage'
 
 export default function PageDesigner() {
-  const [isDraggingBlock, setIsDraggingBlock] = useState(false)
+  const [isDraggingSection, setIsDraggingSection] = useState(false)
   const [isDraggingSubBlock, setIsDraggingSubBlock] = useState(false)
   const [open, setOpen] = useState(false)
-  const [blocks, setBlocks] = useState<any>([])
+  const [sections, setSections] = useState<any>([])
   const [subBlocks, setSubBlocks] = useState<any>([])
   const [curBlockId, setCurBlockId] = useState<number>(-1)
-  const [textBlockColor, setTextBlockColor] = useState<string>('bg-white dark:bg-gray-900')
+  const [sectionButtonColor, setSectionButtonColor] = useState<string>('bg-white dark:bg-gray-900')
+  const [blockButtonColor, setBlockButtonColor] = useState<string>('bg-white dark:bg-gray-900')
+  
 
   const handleMainSectionClick = () => {
-    if (isDraggingBlock) {
+    if (isDraggingSection) {
       // @ts-ignore
-      setBlocks([...blocks, { id: blocks.length, subBlocks: [], removed: false }])
-      setIsDraggingBlock(false)
-      setTextBlockColor('bg-white dark:bg-gray-900')
+      setSections([...sections, { id: sections.length, subBlocks: [], removed: false }])
+      setIsDraggingSection(false)
+      setSectionButtonColor('bg-white dark:bg-gray-900')
     }
   }
 
   // @ts-ignore
-  const handleBlockClick = (blockId) => {
-    if (!isDraggingBlock) {
-      setOpen(true)
+  const handleSectionClick = (blockId) => {
+    if (!isDraggingSection) {
+      // setOpen(true)
       setCurBlockId(blockId)
     }
     if (isDraggingSubBlock) {
@@ -45,12 +49,13 @@ export default function PageDesigner() {
       setSubBlocks([...subBlocks, { blockId, id: subBlocks.length, removed: false }])
       setIsDraggingSubBlock(false)
     }
-    setTextBlockColor('bg-white dark:bg-gray-900')
+    setSectionButtonColor('bg-white dark:bg-gray-900')
+    setBlockButtonColor('bg-white dark:bg-gray-900')
   }
 
-  const handleAddBlockClick = () => {
-    setIsDraggingBlock(true)
-    setTextBlockColor('bg-cyan-400 dark:bg-cyan-400')
+  const handleAddSectionClick = () => {
+    setIsDraggingSection(true)
+    setSectionButtonColor('bg-cyan-400 dark:bg-cyan-400')
 
     if (isDraggingSubBlock) {
 		// @ts-ignore	
@@ -60,27 +65,26 @@ export default function PageDesigner() {
   }
   
   const handleAddSubBlockClick = () => {
-    setTextBlockColor('bg-cyan-400 dark:bg-cyan-400')
+    setBlockButtonColor('bg-cyan-400 dark:bg-cyan-400')
     setIsDraggingSubBlock(true)
-    setIsDraggingBlock(false)
+    setIsDraggingSection(false)
   }
 
-
-  const handleSubBlockClick = (subBlockId: any) => {
+  const handleBlockClick = (subBlockId: any) => {
     if (isDraggingSubBlock) {
         setIsDraggingSubBlock(false)
 	}
-    setTextBlockColor('bg-white dark:bg-gray-900')
+    setSectionButtonColor('bg-white dark:bg-gray-900')
   }
 
   const handleRemoveSubBlock = (blockId: any) => {
-    let blockFilter = blocks.filter((block: any) => block.id === blockId)
+    let blockFilter = sections.filter((block: any) => block.id === blockId)
     let blockElement =
       blockFilter && blockFilter.length > 0 ? blockFilter[0] : null
   }
 
   const getPropertiesByBlockType = () => {
-    const selectedBlock = blocks.filter((block: any) => block.id === curBlockId)
+    const selectedBlock = sections.filter((block: any) => block.id === curBlockId)
     if (selectedBlock && selectedBlock?.blockType === 'text') {
         return getTextBlockProperties()
     }    
@@ -141,19 +145,19 @@ export default function PageDesigner() {
               <div
                 className={cn(
                   'rounded-lg shadow-sm p-4 flex flex-col gap-2b',
-                  textBlockColor
+                  sectionButtonColor
                 )}
-                onClick={handleAddBlockClick}
+                onClick={handleAddSectionClick}
               >
-                <BoxIcon
+                <Icons.boxIcon
                   className="w-6 h-6 text-gray-500 dark:text-gray-400"
-                  onClick={handleAddBlockClick}
+                  onClick={handleAddSectionClick}
                 />
                 <span
                   className="text-sm font-medium"
-                  onClick={handleAddBlockClick}
+                  onClick={handleAddSectionClick}
                 >
-                  Block
+                  Section
                 </span>
               </div>
             </div>
@@ -161,36 +165,36 @@ export default function PageDesigner() {
             <div>
               <div className={cn(
                   'rounded-lg shadow-sm p-4 flex flex-col gap-2b',
-                  textBlockColor
+                  blockButtonColor
                 )} onClick={handleAddSubBlockClick}>
-                <BoxIcon className="w-6 h-6 text-green-500 dark:text-gray-400" onClick={handleAddSubBlockClick} />
-                <span className="text-sm font-medium" onClick={handleAddSubBlockClick}>Sub Block</span>
+                <Icons.boxIcon className="w-6 h-6 text-green-500 dark:text-gray-400" onClick={handleAddSubBlockClick} />
+                <span className="text-sm font-medium" onClick={handleAddSubBlockClick}>Block</span>
               </div>
             </div>
 
 
             <div>
               <div className="bg-white dark:bg-gray-900 rounded-lg shadow-sm p-4 flex flex-col gap-2 cursor-grab">
-                <ImageIcon className="w-6 h-6 text-gray-500 dark:text-gray-400" />
+                <Icons.imageIcon className="w-6 h-6 text-gray-500 dark:text-gray-400" />
                 <span className="text-sm font-medium">Image</span>
               </div>
             </div>
 
             <div>
               <div className="bg-white dark:bg-gray-900 rounded-lg shadow-sm p-4 flex flex-col gap-2 cursor-grab">
-                <HeadingIcon className="w-6 h-6 text-gray-500 dark:text-gray-400" />
+                <Icons.headingIcon className="w-6 h-6 text-gray-500 dark:text-gray-400" />
                 <span className="text-sm font-medium">Heading</span>
               </div>
             </div>
             <div>
               <div className="bg-white dark:bg-gray-900 rounded-lg shadow-sm p-4 flex flex-col gap-2 cursor-grab">
-                <BoxIcon className="w-6 h-6 text-gray-500 dark:text-gray-400" />
+                <Icons.boxIcon className="w-6 h-6 text-gray-500 dark:text-gray-400" />
                 <span className="text-sm font-medium">Carousel</span>
               </div>
             </div>
             <div>
               <div className="bg-white dark:bg-gray-900 rounded-lg shadow-sm p-4 flex flex-col gap-2 cursor-grab">
-                <BoxIcon className="w-6 h-6 text-gray-500 dark:text-gray-400" />
+                <Icons.boxIcon className="w-6 h-6 text-gray-500 dark:text-gray-400" />
                 <span className="text-sm font-medium">Hero</span>
               </div>
             </div>
@@ -201,21 +205,21 @@ export default function PageDesigner() {
             <h3 className="mb-4 text-lg font-semibold">Layout</h3>
             <div className="grid grid-cols-1 gap-4">
               <div className="flex-1 relative cursor-pointer" onClick={handleMainSectionClick}>
-                {blocks.map((block: any, index: number) => (
+
+                {sections.map((block: any, index: number) => (
                   <div
                     key={block.id}
-                    className="absolute flex h-[200px] w-full rounded-md border-2 border-dashed border-gray-500 dark:border-gray-700 hover:border-4 hover:border-gray-400 mb-5"
+                    className="absolute flex h-auto w-full rounded-md border-2 border-dashed border-gray-500 dark:border-gray-700 hover:border-4 hover:border-gray-400 mb-5"
                     style={{ top: `${index * 100}%` }}
-                    onClick={() => handleBlockClick(block.id)}
+                    onClick={() => handleSectionClick(block.id)}
                   >
+
                     {subBlocks.filter((subBlock: any) => subBlock.blockId === block.id).map((subBlock: any) => (
                         <div
                             key={subBlock.id}
-                            className="panel w-1/2 h-full border-r-2 border-blue-700 flex flex-wrap bg-green-400"
-                            onClick={() => handleSubBlockClick(subBlock.id)}
+                            className="panel w-1/2 h-full border-r-2 border-blue-700 flex flex-wrap bg-green-400 justify-center "
+                            onClick={() => handleBlockClick(subBlock.id)}
                         >
-                            Work in Progress
-
                         </div>
                     ))}
 
@@ -230,7 +234,7 @@ export default function PageDesigner() {
                     className="text-gray-500 dark:text-gray-400"
                     onClick={handleMainSectionClick}
                   >
-                    Drag and drop blocks here
+                    Drag and drop sections here
                   </span>
                 </div>
               </div>
@@ -239,89 +243,5 @@ export default function PageDesigner() {
         </div>
       </div>
     </>
-  )
-}
-
-function BoxIcon(props: any) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z" />
-      <path d="m3.3 7 8.7 5 8.7-5" />
-      <path d="M12 22V12" />
-    </svg>
-  )
-}
-
-function HeadingIcon(props: any) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M6 12h12" />
-      <path d="M6 20V4" />
-      <path d="M18 20V4" />
-    </svg>
-  )
-}
-
-function ImageIcon(props: any) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <rect width="18" height="18" x="3" y="3" rx="2" ry="2" />
-      <circle cx="9" cy="9" r="2" />
-      <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
-    </svg>
-  )
-}
-
-function TextIcon(props: any) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M17 6.1H3" />
-      <path d="M21 12.1H3" />
-      <path d="M15.1 18H3" />
-    </svg>
   )
 }

@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
@@ -101,6 +101,17 @@ export function AddEditContent(params: any) {
     }
     setContentLoaded(true)
   }
+
+  useEffect(() => {
+    if (contentLoaded && editData && editSlug) {
+      const subsite: any = params?.subsite ? params.subsite : undefined
+      const subref: string = subsite?.subRef ? subsite.subRef : undefined
+      if (subref) {
+        const designerUrl: string = `${window.location.origin}/publish/${subref}/pages/designer/${editSlug}`
+        router.push(designerUrl);
+      }  
+    }
+  }, [contentLoaded, editData, editContentId]);  
 
   const form = useForm<Inputs>({
     resolver: zodResolver(blogSchema),
@@ -583,8 +594,8 @@ export function AddEditContent(params: any) {
     const subsite: any = params?.subsite ? params.subsite : undefined
     const subref: string = subsite?.subRef ? subsite.subRef : undefined
     if (subref) {
-      const url: string = `${window.location.origin}/publish/${subref}/pages/designer/${editSlug}`
-      window.open(url, '_blank')
+      const designerUrl: string = `${window.location.origin}/publish/${subref}/pages/designer/${editSlug}`
+      window.open(designerUrl, '_blank')
     }    
   }
 
@@ -738,7 +749,7 @@ export function AddEditContent(params: any) {
         <></>
       )}
 
-      {pageType === 'full-width' ? (
+      {/* {pageType === 'full-width' ? (
         <>
           <Separator className="mt-5" />
           <Label className="text-lg">Edit in Full-Width Page Designer</Label>
@@ -746,7 +757,7 @@ export function AddEditContent(params: any) {
         </>
       ) : (
         <></>
-      )}      
+      )}       */}
 
 
 

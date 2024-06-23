@@ -22,9 +22,7 @@ export default async function AdminLayout({
   let accountInitials: string | undefined = ''
   let accountEmail: string | undefined = ''
   if (curUser) {
-    accountInitials = `${curUser?.firstName?.charAt(0) ?? ''} ${
-      curUser?.lastName?.charAt(0) ?? curUser?.username
-   }`
+    accountInitials = `@${curUser?.username?.charAt(0).toUpperCase() ?? ''}`
    accountEmail =
     curUser?.emailAddresses?.find((e) => e.id === curUser.primaryEmailAddressId)
         ?.emailAddress ?? ''
