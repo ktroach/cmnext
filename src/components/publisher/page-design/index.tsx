@@ -3,12 +3,16 @@
 import React from 'react'
 import {ContentDesigner} from './ContentDesigner'
 
-const PageDesign = () => {
+export interface ContentDesignerContainerProps {
+  subTree: any
+}
+
+const ContentDesignerContainer = ({ subTree }: ContentDesignerContainerProps) => {
   return (
   <>
-    <ContentDesigner />
+    <ContentDesigner subTree={subTree} />
   </>
   )
 }
 
-export default PageDesign
+export default ContentDesignerContainer

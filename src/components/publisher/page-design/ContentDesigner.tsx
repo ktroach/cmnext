@@ -29,233 +29,7 @@ import IconTemplate from '@/components/templates/icon/IconTemplate'
 import VideoTemplate from '@/components/templates/video/VideoTemplate'
 import EmbeddedTemplate from '@/components/templates/embedded/EmbeddedTemplate'
 import MarkdownTemplate from '@/components/templates/markdown/MarkdownTemplate'
-
 import { Button } from '@/components/ui/button'
-
-const LayoutTemplate: string = `
-{
-  "value": "root",
-  "children": [
-    {
-      "value": "carousel",
-      "children": [
-        {
-          "value": "image",
-          "children": [],
-          "properties": {
-            "className": "mt-5 rounded-md border transition-colors p-5",
-            "src": "https://picsum.photos/1600/900",
-            "alt": "image"
-          }
-        },
-        {
-          "value": "image",
-          "children": [],
-          "properties": {
-            "className": "mt-5 rounded-md border transition-colors p-5",
-            "src": "https://picsum.photos/id/16/1600/900",
-            "alt": "image"
-          }
-        }
-      ],
-      "properties": {
-        "className": "w-full flex flex-col items-center justify-center text-center border p-15",
-        "parentClassName": "",
-        "delay": 2000,
-        "stopOnInteraction": false,
-        "showBorder": true
-      }
-    }, 
-
-    {
-      "value": "HeroSectionWithEmailInput",
-      "properties": {
-        "className": ""
-      },
-      "children": []
-    },    
-
-    {
-      "value": "hr",
-      "properties": {
-        "className": ""
-      },
-      "children": []
-    },
-    
-    {
-      "value": "IconSection2ColsGrid",
-      "properties": {
-        "className": ""
-      },
-      "children": []
-    },      
-
-    {
-      "value": "hr",
-      "properties": {
-        "className": ""
-      },
-      "children": []
-    },
-
-
-    {
-      "value": "block",
-      "properties": {
-        "className": "mt-8 flex space-x-4"
-      },
-      "children": [
-        {
-          "value": "image",
-          "children": [],
-          "properties": {
-            "src": "https://picsum.photos/id/10/800/800", 
-            "alt": "picture",  
-            "width": 520,
-            "height": 205,
-            "className": "mt-8 rounded-md border bg-muted transition-colors p-5",
-            "priority": true       
-          }
-        }                
-      ]
-    },
-    {
-      "value": "block",
-      "properties": {
-        "className": "mt-8 flex space-x-4"
-      },
-      "children": [
-        {
-          "value": "blockquote",
-          "children": [],
-          "properties": {
-            "className": "text-md", 
-            "cite": "https://loremipsum.io/",
-            "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-          }
-        }                
-      ]
-    },
-
-    {
-      "value": "hr",
-      "properties": {
-        "className": ""
-      },
-      "children": []
-    },
-
-    {
-      "value": "block",
-      "properties": {
-        "className": "mt-8 flex space-x-4"
-      },
-      "children": [
-        {
-          "value": "h1",
-          "children": [],
-          "properties": {
-            "className": "", 
-            "text": "H1 - Lorem ipsum dolor sit amet"
-          }
-        }                
-      ]
-    }, 
-    
-    {
-      "value": "block",
-      "properties": {
-        "className": "mt-8 flex space-x-4"
-      },
-      "children": [
-        {
-          "value": "h2",
-          "children": [],
-          "properties": {
-            "className": "", 
-            "text": "H2 - Lorem ipsum dolor sit amet"
-          }
-        }                
-      ]
-    }, 
-
-    {
-      "value": "block",
-      "properties": {
-        "className": "mt-8 flex space-x-4"
-      },
-      "children": [
-        {
-          "value": "h3",
-          "children": [],
-          "properties": {
-            "className": "", 
-            "text": "H3 - Lorem ipsum dolor sit amet"
-          }
-        }                
-      ]
-    },     
-
-    {
-      "value": "block",
-      "properties": {
-        "className": "mt-8 flex space-x-4"
-      },
-      "children": [
-        {
-          "value": "h4",
-          "children": [],
-          "properties": {
-            "className": "", 
-            "text": "H4 - Lorem ipsum dolor sit amet"
-          }
-        }                
-      ]
-    },     
-
-
-    {
-      "value": "block",
-      "properties": {
-        "className": "mt-8 flex space-x-4"
-      },
-      "children": [
-        {
-          "value": "h5",
-          "children": [],
-          "properties": {
-            "className": "", 
-            "text": "H5 - Lorem ipsum dolor sit amet"
-          }
-        }                
-      ]
-    },     
-
-    {
-      "value": "block",
-      "properties": {
-        "className": "mt-8 flex space-x-4"
-      },
-      "children": [
-        {
-          "value": "h6",
-          "children": [],
-          "properties": {
-            "className": "", 
-            "text": "H6 - Lorem ipsum dolor sit amet"
-          }
-        }                
-      ]
-    }     
-
-  ],
-  "properties": {}
-}
-    
-    
-    `
-
 
 type ComponentProps = {
   [key: string]: any
@@ -608,7 +382,11 @@ const Sidebar: React.FC<{ addSection: (color: string, sectionType: string) => vo
     )
 }
 
-export const ContentDesigner: React.FC = () => {
+export interface ContentDesignerProps {
+  subTree: any
+}
+
+export const ContentDesigner = ({ subTree }: ContentDesignerProps) => {
   const [sections, setSections] = useState<SectionData[]>([{ id: 1, text: 'Initial Section', color: 'bg-white', sectionType: '', node: null }])
   const [selectedSectionId, setSelectedSectionId] = useState<number | null>(1)
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false)
@@ -687,21 +465,19 @@ export const ContentDesigner: React.FC = () => {
 
   const selectedSection = sections.find((section) => section.id === selectedSectionId) || null
 
-  let parsedSubTree: any = []
-  if (LayoutTemplate) {
-    parsedSubTree = JSON.parse(LayoutTemplate)
-  }
   let sectionMap: any = []
-  {parsedSubTree.children.map((node: any, index: number) =>
-    sectionMap.push({ id: index, text: node?.value, color: 'bg-white', sectionType: node?.value, node })
-  )}
+  if (subTree && subTree?.children?.length > 0) {
+    {subTree.children.map((node: any, index: number) =>
+      sectionMap.push({ id: index, text: node?.value, color: 'bg-white', sectionType: node?.value, node })
+    )}
+  }
+
   if (sections.length === 1) {
     setSections(sectionMap)
   }
 
   return (
     <DndProvider backend={HTML5Backend}>
-      
       <div className='flex flex-col'>
         <div className='flex p-4'>
           <Button className='w-[64] mr-4' variant={'default'} onClick={saveSubtree}>
@@ -716,9 +492,7 @@ export const ContentDesigner: React.FC = () => {
           <Button className='w-[64]' variant={'default'} onClick={saveSubtree}>
             Publish
           </Button>
-
         </div>
-     
         <div className="relative flex p-4">
           <Sidebar addSection={addSection} isCollapsed={isSidebarCollapsed} toggleCollapse={() => setIsSidebarCollapsed(!isSidebarCollapsed)} />
           <div className=" pr-4">
