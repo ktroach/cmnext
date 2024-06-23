@@ -13,7 +13,7 @@ import {
 export const metadata: Metadata = {
   metadataBase: new URL(getFrontendBaseUrl()),
   title: 'Content Designer',
-  description: 'Full-Width Content Designer',
+  description: 'Content Designer',
 }
 
 export default async function PublisherPageDesigner({ params }: any) {
@@ -26,8 +26,11 @@ export default async function PublisherPageDesigner({ params }: any) {
   const subsiteId = subsite && subsite?.subsiteId ? subsite.subsiteId : undefined
 
   let parsedSubTree: any = null
+  let page: any = null
+  let pageId: any = null
   if (subsiteId) {
-    const page = await getPageByTitle('Home', subsiteId)
+    page = await getPageByTitle('Home', subsiteId)
+    pageId = page && page?.id ? page.id : undefined
     const pageDesignData: string = page && page?.layoutTemplate ? page.layoutTemplate : undefined
     if (pageDesignData) {
       parsedSubTree = JSON.parse(pageDesignData)
@@ -54,7 +57,7 @@ export default async function PublisherPageDesigner({ params }: any) {
 
   return (
     <>
-        <ContentDesignerContainer subTree={parsedSubTree} />
+        <ContentDesignerContainer subTree={parsedSubTree} pageId={pageId} authorId={authorId} subsiteId={subsiteId} />
     </>
   )
 }

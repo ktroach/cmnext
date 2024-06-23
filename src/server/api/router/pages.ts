@@ -155,6 +155,73 @@ export const pagesRouter = createTRPCRouter({
       })
     }),    
     
+    updateLayoutTemplate: protectedProcedure
+    .input(
+      z.object({
+        pageId: z.number().min(1),
+        authorId: z.number().min(1),
+        subsiteId: z.number().min(1),   
+        layoutTemplate: z.string().min(1), 
+      })
+    )
+    .mutation(async ({ input, ctx }) => {
+      const existingPage = await ctx.db.page.findFirst({
+        where: {
+          id: input.pageId,
+        },
+      })
+
+      if (!existingPage) {
+        console.log('Failed to UPDATE Content. Page does not exist: ', input.pageId)
+        return null
+      }
+
+      // you have to get the username 
+      const user = await ctx.db.user.findFirst({
+        where: {
+          id: input.authorId,
+        },
+      })
+
+      if (!user) {
+        console.log('Failed to UPDATE Content. User does not exist.')
+        return null
+      }    
+
+      const userName: string | undefined =  user?.name ?  user.name : undefined
+      if (!userName) {
+        console.log('Failed to UPDATE Content >>> user.name is invalid.')
+        return null
+      }         
+      
+      const subsite = await ctx.db.subsite.findFirst({
+        where: {
+          id: input.subsiteId,
+        },
+      })      
+      if (!subsite) {
+        console.log('Failed to UPDATE Content. subsite does not exist.')
+        return null
+      }    
+      const subRef = subsite?.subsiteRef ? subsite.subsiteRef : null
+      if (!subRef) {
+        console.log('Failed to UPDATE Content. subsiteRef does not exist.')
+        return null
+      }       
+      
+      return await ctx.db.page.update({
+        where: {
+          id: input.pageId,
+          authorId: input.authorId,
+          subsiteId: input.subsiteId,           
+        },
+        data: {
+          layoutTemplate: input.layoutTemplate,
+          updatedAt: new Date()
+        },
+      })
+  }),    
+
   getFeatured: publicProcedure
     .input(
       z.object({

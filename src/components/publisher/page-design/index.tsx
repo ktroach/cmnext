@@ -5,12 +5,15 @@ import {ContentDesigner} from './ContentDesigner'
 
 export interface ContentDesignerContainerProps {
   subTree: any
+  pageId: any
+  authorId: any
+  subsiteId: any 
 }
 
-const ContentDesignerContainer = ({ subTree }: ContentDesignerContainerProps) => {
+const ContentDesignerContainer = ({ subTree, pageId, authorId, subsiteId }: ContentDesignerContainerProps) => {
   return (
   <>
-    <ContentDesigner subTree={subTree} />
+    <ContentDesigner subTree={subTree} pageId={pageId} authorId={authorId} subsiteId={subsiteId} />
   </>
   )
 }

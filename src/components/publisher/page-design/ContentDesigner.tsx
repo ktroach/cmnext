@@ -31,6 +31,8 @@ import EmbeddedTemplate from '@/components/templates/embedded/EmbeddedTemplate'
 import MarkdownTemplate from '@/components/templates/markdown/MarkdownTemplate'
 import { Button } from '@/components/ui/button'
 import { SubTree } from '@/lib/subtree'
+import { toast } from 'sonner'
+import { api } from '@/trpc/client'
 
 type ComponentProps = {
   [key: string]: any
@@ -385,9 +387,12 @@ const Sidebar: React.FC<{ addSection: (color: string, sectionType: string) => vo
 
 export interface ContentDesignerProps {
   subTree: any
+  pageId: any
+  authorId: any
+  subsiteId: any   
 }
 
-export const ContentDesigner = ({ subTree }: ContentDesignerProps) => {
+export const ContentDesigner = ({ subTree, pageId, authorId, subsiteId }: ContentDesignerProps) => {
   const [sections, setSections] = useState<SectionData[]>([{ id: 1, text: 'Initial Section', color: 'bg-white', sectionType: '', node: null }])
   const [selectedSectionId, setSelectedSectionId] = useState<number | null>(1)
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false)
@@ -472,7 +477,20 @@ export const ContentDesigner = ({ subTree }: ContentDesignerProps) => {
     setSections(sectionMap)
   }
 
-  const savePage = () => {
+  // Edit Page Mutations
+  const savePageMutation = api.pages.updateLayoutTemplate.useMutation({
+    onSuccess: (modifiedPage) => {
+      console.log('onSuccess >>> modifiedPage >>> ', modifiedPage)
+    },
+    onError: (error) =>
+      toast('Failed to Edit Post', {
+        duration: 2000,
+        description: error.message,
+      }),
+  })
+  const isSavingPage = savePageMutation.isLoading  
+
+  const savePage = async () => {
     const subtree = new SubTree<string>()
     subtree.addNode('root', null, {})
 
@@ -495,9 +513,57 @@ export const ContentDesigner = ({ subTree }: ContentDesignerProps) => {
       }
     })
 
-    const subTreeString = subtree.toJSON()
-    console.log(subTreeString)
+    const layoutTemplate = subtree.toJSON()
+    console.log(layoutTemplate)
     // TODO: Save to DB 
+    toast('Saving Changes...')
+
+    if (!layoutTemplate) {
+      console.log('layoutTemplate is null')
+      toast('There was a problem saving draft. Please try again.')
+      return
+    }    
+
+    if (!pageId) {
+      console.log('pageId is null')
+      toast('There was a problem saving draft. Please try again.')
+      return
+    }
+
+    if (!authorId) {
+      console.log('authorId is null')
+      toast('There was a problem saving draft. Please try again.')
+      return
+    }
+
+    if (!subsiteId) {
+      console.log('subsiteId is null')
+      toast('There was a problem saving draft. Please try again.')
+      return
+    }
+
+    let savedContent: any = null
+    let mutationVars: any = null
+    mutationVars = {
+      pageId: pageId,
+      layoutTemplate: layoutTemplate,
+      authorId: authorId,
+      subsiteId: subsiteId,
+    }    
+    savedContent = await savePageMutation.mutateAsync(mutationVars)
+
+    if (!savedContent) {
+      console.log('There was a problem saving draft: savedContent is null')
+      toast('There was a problem saving draft. Please try again.')
+      return
+    }
+
+    if (!savedContent?.id) {
+      console.log('savedContent.id is null')
+      return
+    }    
+
+    toast.success('Content saved successfully.')
   }  
 
   const navigateBack = () => {
