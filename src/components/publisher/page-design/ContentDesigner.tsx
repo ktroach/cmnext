@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback, useRef } from 'react'
+import { useState, useCallback, useRef, SetStateAction } from 'react'
 import { DndProvider, useDrag, useDrop, XYCoord } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { Icons } from '@/styles/icons'
@@ -290,63 +290,98 @@ interface DragItem {
 }
 
 // @ts-ignore
-const PropertyPopover = ({ section }) => {
+const PropertyPopover = ({ section, properties, onChange }) => {
   if (!section) return null
  
+  const sectionType  = section && section?.sectionType ? section.sectionType.toUpperCase() : 'Component'
+  const sectionProps = section && section?.node?.properties ? section.node.properties : null
+  if (sectionProps) {
+    for (const [key, value] of Object.entries(sectionProps)) {
+      console.log(`${key}: ${value}`);
+    }
+  
+  }
+//      {JSON.stringify(section)}   
+
+const handleInputChange = (key: string, newValue: string) => {
+  onChange({ ...properties, [key]: newValue });
+};
 
   return (
     <>
-      {JSON.stringify(section)}
-
-      {/* <SectionPropertySheet selectedSection={selectedSection} sectionProperties={selectedSection?.node?.properties}  /> */}
+     
       <div className="grid gap-4">
-            <div className="space-y-2">
-              <h4 className="font-medium leading-none">Properties</h4>
-              <p className="text-sm text-muted-foreground">
-                Set the properties for the component.
-              </p>
-            </div>
-            <div className="grid gap-2">
-              <div className="grid grid-cols-3 items-center gap-4">
-                <Label htmlFor="width">Header</Label>
-                <Input
-                  id="width"
-                  defaultValue="Your Header"
-                  className="col-span-2 h-8"
-                />
-              </div>
-              <div className="grid grid-cols-3 items-center gap-4">
-                <Label htmlFor="maxWidth">Max. width</Label>
-                <Input
-                  id="maxWidth"
-                  defaultValue="300px"
-                  className="col-span-2 h-8"
-                />
-              </div>
-              <div className="grid grid-cols-3 items-center gap-4">
-                <Label htmlFor="height">Height</Label>
-                <Input
-                  id="height"
-                  defaultValue="25px"
-                  className="col-span-2 h-8"
-                />
-              </div>
-              <div className="grid grid-cols-3 items-center gap-4">
-                <Label htmlFor="maxHeight">Max. height</Label>
-                <Input
-                  id="maxHeight"
-                  defaultValue="none"
-                  className="col-span-2 h-8"
+        <div className="space-y-2">
+          <h4 className="font-medium leading-none">{` ${sectionType} Properties`}</h4>
+          <p className="text-sm text-muted-foreground">
+            Set the properties for the component.
+          </p>
+        </div>
+        <div className="grid gap-2">
+          {Object.entries(properties).map(([key, value]) => (
+            <div className="grid grid-cols-3 items-center gap-4">
+              <div key={key} className="mb-4">
+                <label className="block font-bold mb-2">{key}</label>
+                <input
+                  type="text"
+                  value={value}
+                  onChange={(e) => handleInputChange(key, e.target.value)}
+                  className="border rounded p-2 w-full"
                 />
               </div>
             </div>
-          </div>      
+          ))}
+
+{/* 
+          <div className="grid grid-cols-3 items-center gap-4">
+            <Label htmlFor="width">Header</Label>
+            <Input
+              id="width"
+              defaultValue="Your Header"
+              className="col-span-2 h-8"
+            />
+          </div>
+          <div className="grid grid-cols-3 items-center gap-4">
+            <Label htmlFor="maxWidth">Max. width</Label>
+            <Input
+              id="maxWidth"
+              defaultValue="300px"
+              className="col-span-2 h-8"
+            />
+          </div>
+          <div className="grid grid-cols-3 items-center gap-4">
+            <Label htmlFor="height">Height</Label>
+            <Input
+              id="height"
+              defaultValue="25px"
+              className="col-span-2 h-8"
+            />
+          </div>
+          <div className="grid grid-cols-3 items-center gap-4">
+            <Label htmlFor="maxHeight">Max. height</Label>
+            <Input
+              id="maxHeight"
+              defaultValue="none"
+              className="col-span-2 h-8"
+            />
+          </div> */}
+        </div>
+        <Button>Apply</Button>
+      </div>      
     </>
   )
 }
 
 // @ts-ignore
 const Section = ({ id, text, index, moveSection, removeSection, selectSection, isSelected, color, sectionType, componentToRender, section }) => {
+
+  const [properties, setProperties] = useState({
+    key1: 'value1',
+    key2: 'value2',
+    key3: 'value3'
+  });
+
+
   const ref = useRef<HTMLDivElement>(null)
 
   const [{ handlerId }, drop] = useDrop<DragItem, void, { handlerId: any }>({
@@ -383,6 +418,10 @@ const Section = ({ id, text, index, moveSection, removeSection, selectSection, i
 
   drag(drop(ref))
 
+  const handlePropertiesChange = (newProperties: any) => {
+    setProperties(newProperties);
+  };  
+
   return (
     <>
     <Popover>
@@ -395,7 +434,7 @@ const Section = ({ id, text, index, moveSection, removeSection, selectSection, i
         data-handler-id={handlerId}
       >
         <PopoverContent className="w-80 drop-shadow-2xl border-4 border-solid border-cyan-500" align='center' sticky='partial' side='top'>
-          <PropertyPopover section={section} />
+          <PropertyPopover section={section} properties={properties}  onChange={handlePropertiesChange} />
         </PopoverContent>         
         <div ref={preview} className="absolute left-2 top-1/2 transform -translate-y-1/2 cursor-grab">
           <Icons.menu className="w-5 h-5 text-gray-600" />
