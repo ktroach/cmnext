@@ -138,5 +138,11 @@ export const RootConfig = {
       defaultClassName: 'p-5 inset-0 rounded-xl object-cover',
       defaultSrc: 'https://picsum.photos/id/230/800/800',
     }
+  }, 
+  markdownConfig: {
+    helpGuides: [
+      {url: 'https://www.markdownguide.org/basic-syntax/'},
+      {url: 'https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax'}
+    ]
   }
 }

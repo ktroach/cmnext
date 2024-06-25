@@ -30,9 +30,28 @@ import VideoTemplate from '@/components/templates/video/VideoTemplate'
 import EmbeddedTemplate from '@/components/templates/embedded/EmbeddedTemplate'
 import MarkdownTemplate from '@/components/templates/markdown/MarkdownTemplate'
 import { Button } from '@/components/ui/button'
+import { Label } from '@/components/ui/label'
+import { Input } from '@/components/ui/input'
 import { SubTree } from '@/lib/subtree'
 import { toast } from 'sonner'
 import { api } from '@/trpc/client'
+import SectionPropertySheet from '@/components/publisher/page-design/SectionPropertySheet'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
 
 type ComponentProps = {
   [key: string]: any
@@ -270,7 +289,64 @@ interface DragItem {
   type: string
 }
 
-const Section: React.FC<SectionProps> = ({ id, text, index, moveSection, removeSection, selectSection, isSelected, color, sectionType, componentToRender }) => {
+// @ts-ignore
+const PropertyPopover = ({ section }) => {
+  if (!section) return null
+ 
+
+  return (
+    <>
+      {JSON.stringify(section)}
+
+      {/* <SectionPropertySheet selectedSection={selectedSection} sectionProperties={selectedSection?.node?.properties}  /> */}
+      <div className="grid gap-4">
+            <div className="space-y-2">
+              <h4 className="font-medium leading-none">Properties</h4>
+              <p className="text-sm text-muted-foreground">
+                Set the properties for the component.
+              </p>
+            </div>
+            <div className="grid gap-2">
+              <div className="grid grid-cols-3 items-center gap-4">
+                <Label htmlFor="width">Header</Label>
+                <Input
+                  id="width"
+                  defaultValue="Your Header"
+                  className="col-span-2 h-8"
+                />
+              </div>
+              <div className="grid grid-cols-3 items-center gap-4">
+                <Label htmlFor="maxWidth">Max. width</Label>
+                <Input
+                  id="maxWidth"
+                  defaultValue="300px"
+                  className="col-span-2 h-8"
+                />
+              </div>
+              <div className="grid grid-cols-3 items-center gap-4">
+                <Label htmlFor="height">Height</Label>
+                <Input
+                  id="height"
+                  defaultValue="25px"
+                  className="col-span-2 h-8"
+                />
+              </div>
+              <div className="grid grid-cols-3 items-center gap-4">
+                <Label htmlFor="maxHeight">Max. height</Label>
+                <Input
+                  id="maxHeight"
+                  defaultValue="none"
+                  className="col-span-2 h-8"
+                />
+              </div>
+            </div>
+          </div>      
+    </>
+  )
+}
+
+// @ts-ignore
+const Section = ({ id, text, index, moveSection, removeSection, selectSection, isSelected, color, sectionType, componentToRender, section }) => {
   const ref = useRef<HTMLDivElement>(null)
 
   const [{ handlerId }, drop] = useDrop<DragItem, void, { handlerId: any }>({
@@ -308,62 +384,54 @@ const Section: React.FC<SectionProps> = ({ id, text, index, moveSection, removeS
   drag(drop(ref))
 
   return (
-    <div
-      ref={ref}
-      style={{ opacity: isDragging ? 0.5 : 1, height: isDragging ? 100 : "" }}
-      className={`relative p-4 mb-4 ${isSelected ? 'border-2 border-solid border-cyan-500' : 'border border-dashed border-gray-400'}`}
-      onClick={() => selectSection(id)}
-      data-handler-id={handlerId}
-    >
-      <div ref={preview} className="absolute left-2 top-1/2 transform -translate-y-1/2 cursor-grab">
-        <Icons.menu className="w-5 h-5 text-gray-600" />
+    <>
+    <Popover>
+      <PopoverTrigger asChild={true}>
+      <div
+        ref={ref}
+        style={{ opacity: isDragging ? 0.5 : 1, height: isDragging ? 100 : "" }}
+        className={`relative p-4 mb-4 ${isSelected ? 'border-4 border-solid border-cyan-500' : 'border border-dashed border-gray-400'}`}
+        onClick={() => selectSection(id)}
+        data-handler-id={handlerId}
+      >
+        <PopoverContent className="w-80 drop-shadow-2xl border-4 border-solid border-cyan-500" align='center' sticky='partial' side='top'>
+          <PropertyPopover section={section} />
+        </PopoverContent>         
+        <div ref={preview} className="absolute left-2 top-1/2 transform -translate-y-1/2 cursor-grab">
+          <Icons.menu className="w-5 h-5 text-gray-600" />
+        </div>
+        {/* <div className="absolute top-2 right-2 z-20">
+          <Icons.trash className="w-6 h-6 text-red-500 drop-shadow-xl cursor-pointer hover:text-red-700 hover:w-8 hover:h-8" onClick={(e) => { e.stopPropagation(); removeSection(id); }} />
+        </div> */}
+        <AlertDialog>
+        <AlertDialogTrigger>
+            <Icons.trash className="w-6 h-6 m-2 text-red-500 drop-shadow-xl cursor-pointer hover:text-red-700 hover:w-8 hover:h-8" />
+        </AlertDialogTrigger>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently delete this section and remove it from your layout.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction>Continue</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>           
+        {componentToRender}
       </div>
-      <div className="absolute top-2 right-2 z-20">
-        <Icons.trash className="w-5 h-5 text-red-500 cursor-pointer hover:text-red-700 hover:w-6 hover:h-6" onClick={(e) => { e.stopPropagation(); removeSection(id); }} />
-      </div>
-      {componentToRender}
-    </div>
+      </PopoverTrigger> 
+      </Popover>
+    </>
   )
 }
 
-const PropertySheet: React.FC<{ selectedSection: SectionData | null, setText: (id: number, text: string) => void, isCollapsed: boolean, toggleCollapse: () => void }> = ({ selectedSection, setText, isCollapsed, toggleCollapse }) => {
-  if (isCollapsed) return (
-    <div className="w-10 h-full p-2 bg-gray-200 cursor-pointer" onClick={toggleCollapse}>
-      <Icons.chevronLeft className="w-5 h-5 mx-auto" />
-    </div>
-  )
-
-  if (!selectedSection) return null
-
-  return (
-    <div className="w-1/4 h-full p-4 bg-gray-200">
-      <div className="flex justify-end mb-2 cursor-pointer" onClick={toggleCollapse}>
-        <Icons.chevronRight className="w-5 h-5" />
-      </div>
-      <h2 className="mb-4 text-xl">Properties</h2>
-
-      <label className="block mb-2">Header:</label>
-      <input
-        type="text"
-        className="w-full p-2 mb-4 border border-gray-400"
-        value={selectedSection.text}
-        onChange={(e) => setText(selectedSection.id, e.target.value)}
-      />
-
-      <label className="block mb-2">Sub Header:</label>
-      <input
-        type="text"
-        className="w-full p-2 mb-4 border border-gray-400"
-        value={selectedSection.text}
-        onChange={(e) => setText(selectedSection.id, e.target.value)}
-      />      
 
 
-    </div>
-  )
-}
-
-const Sidebar: React.FC<{ addSection: (color: string, sectionType: string) => void, isCollapsed: boolean, toggleCollapse: () => void }> = ({ addSection, isCollapsed, toggleCollapse }) => {
+// @ts-ignore
+const Sidebar = ({ addSection, isCollapsed, toggleCollapse }) => {
     if (isCollapsed) return (
       <div className="w-10 h-full p-2 bg-gray-200 cursor-pointer" onClick={toggleCollapse}>
         <Icons.chevronRight className="w-5 h-5 mx-auto" />
@@ -448,6 +516,9 @@ export const ContentDesigner = ({ subTree, pageId, authorId, subsiteId }: Conten
   }, [])
 
   const removeSection = (id: number) => {
+    // TODO: Confirm before removing 
+
+
     setSections((prevSections) => prevSections.filter((section) => section.id !== id))
     if (selectedSectionId === id) {
       setSelectedSectionId(null)
@@ -566,6 +637,12 @@ export const ContentDesigner = ({ subTree, pageId, authorId, subsiteId }: Conten
     toast.success('Content saved successfully.')
   }  
 
+  const loadFromTemplate = () => {
+  } 
+
+  const saveAsTemplate = () => {
+  } 
+
   const navigateBack = () => {
   }  
 
@@ -582,12 +659,18 @@ export const ContentDesigner = ({ subTree, pageId, authorId, subsiteId }: Conten
           <Button className='w-[64] mr-4 bg-gray-400' variant={'default'} onClick={navigateBack}>
             Back
           </Button>
+          <Button className='w-[64] mr-4 bg-gray-400' variant={'default'} onClick={loadFromTemplate}>
+            Load Template
+          </Button>           
           <Button className='w-[64] mr-4 bg-gray-400' variant={'default'} onClick={previewPage}>
             Preview 
           </Button>
           <Button className='w-[64] mr-4 bg-gray-400' variant={'default'} onClick={savePage}>
             Save 
           </Button>
+          <Button className='w-[64] mr-4 bg-gray-400' variant={'default'} onClick={saveAsTemplate}>
+            Save as Template
+          </Button>          
           <Button className='w-[64] bg-gray-400' variant={'default'} onClick={publishPage}>
             Publish
           </Button>
@@ -609,14 +692,18 @@ export const ContentDesigner = ({ subTree, pageId, authorId, subsiteId }: Conten
                   color={section.color}
                   sectionType={section.sectionType}
                   componentToRender={createComponent({ ...section?.node, key: index })}
+                  section={section}
                 />
               ))}
+  
 
             </div>
           </div>
-          <PropertySheet selectedSection={selectedSection} setText={setText} isCollapsed={isPropertySheetCollapsed} toggleCollapse={() => setIsPropertySheetCollapsed(!isPropertySheetCollapsed)} />
+          {/* <PropertySheet selectedSection={selectedSection} setText={setText} isCollapsed={isPropertySheetCollapsed} toggleCollapse={() => setIsPropertySheetCollapsed(!isPropertySheetCollapsed)} /> */}
         </div>
       </div>
+ 
+      
     </DndProvider>
   )
 }

@@ -14,6 +14,7 @@ import {
 import { Label } from '../ui/label'
 import { useTheme } from 'next-themes'
 import { Icons } from '@/styles/icons'
+import { RootConfig } from '@/config/root-config'
 
 interface MarkdownEditorProps {
   value: any
@@ -211,7 +212,16 @@ export const MarkdownEditor = ({
       </svg>
     ),
     execute: (state: any, api: any) => {
-      window.open('https://www.markdownguide.org/basic-syntax/', '_blank')
+      const helpGuides = RootConfig?.markdownConfig?.helpGuides
+      if (helpGuides && helpGuides.length > 0) {
+        for (let i = 0 ; i < helpGuides.length; i++) {
+          const helpGuide = helpGuides[i]
+          const helpGuideUrl = helpGuide && helpGuide?.url ? helpGuide.url : undefined
+          if (helpGuideUrl) {
+            window.open(helpGuideUrl, '_blank')    
+          }
+        }
+      }
     },
   }
 
