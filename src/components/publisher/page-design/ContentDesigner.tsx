@@ -408,6 +408,9 @@ const Section = ({
   })
 
   const ref = useRef<HTMLDivElement>(null)
+  const [popoverPosition, setPopoverPosition] = useState({ top: 0, left: 0 })
+  // @ts-ignore
+  const [boundingRect, setBoundingRect] = useState<DOMRect>({})
 
   const [{ handlerId }, drop] = useDrop<DragItem, void, { handlerId: any }>({
     accept: ItemTypes.SECTION,
@@ -448,6 +451,17 @@ const Section = ({
     setProperties(newProperties)
   }
 
+  const handleSelectionChange = (id: any) => {
+    const sectionBoundingRect = ref.current?.getBoundingClientRect()
+    if (sectionBoundingRect) {
+      setBoundingRect(sectionBoundingRect)
+      const popoverTop = sectionBoundingRect.top + window.scrollY + sectionBoundingRect.height / 2
+      const popoverLeft = sectionBoundingRect.left + window.scrollX + sectionBoundingRect.width
+      setPopoverPosition({ top: popoverTop, left: popoverLeft })
+    }
+    selectSection(id)
+  }
+
   return (
     <>
       <Popover>
@@ -459,13 +473,13 @@ const Section = ({
               height: isDragging ? 100 : '',
             }}
             className={`relative p-4 mb-4 ${isSelected ? 'border-4 border-solid border-cyan-500' : 'border border-dashed border-gray-400'}`}
-            onClick={() => selectSection(id)}
+            onClick={() => handleSelectionChange(id)}
             data-handler-id={handlerId}
           >
             <PopoverContent
               className="w-80 drop-shadow-2xl border-4 border-solid border-cyan-500 "
-              align="center"
-              side="top"
+              style={{ top: `${popoverPosition.top}px`, left: `${popoverPosition.left}px` }}
+              sideOffset={boundingRect.top - boundingRect.bottom}
             >
               <PropertyPopover
                 section={section}
@@ -775,51 +789,39 @@ export const ContentDesigner = ({
     <DndProvider backend={HTML5Backend}>
       <Sheet>
         <div className="flex flex-col">
-          <div className="flex p-4">
+          <div className="flex p-4 z-50 transform translate-x-2 translate-y-2">
             <SheetTrigger asChild>
               <Button
-                className="w-[64] mr-4 bg-gray-400"
+                className="w-[64] mr-4 bg-cyan-600"
                 variant={'default'}
                 onClick={openLibrary}
               >
                 Library
               </Button>
             </SheetTrigger>
-            <Button
-              className="w-[64] mr-4 bg-gray-400"
-              variant={'default'}
-              onClick={loadFromTemplate}
-            >
-              Load Template
-            </Button>
-            <Button
-              className="w-[64] mr-4 bg-gray-400"
-              variant={'default'}
-              onClick={previewPage}
-            >
-              Preview
-            </Button>
+
             <Button
               className="w-[64] mr-4 bg-gray-400"
               variant={'default'}
               onClick={savePage}
+              disabled={true}
             >
-              Save
-            </Button>
-            <Button
-              className="w-[64] mr-4 bg-gray-400"
-              variant={'default'}
-              onClick={saveAsTemplate}
-            >
-              Save as Template
-            </Button>
+              Save   
+            </Button>     
+
             <Button
               className="w-[64] bg-gray-400"
               variant={'default'}
               onClick={publishPage}
+              disabled={true}
             >
               Publish
-            </Button>
+            </Button>                
+
+            <div className="fixed bottom-4 right-4 bg-cyan-500 text-white p-3 rounded-full shadow-lg hover:bg-cyan-700 focus:outline-none">
+              <Icons.arrowDown className="w-5 h-5 text-white" onClick={scrollToBottom} />
+            </div>
+
           </div>
           <div className="relative flex p-4">
             <SheetContent side="right" className="w-[400px] sm:w-[540px]">
@@ -836,7 +838,7 @@ export const ContentDesigner = ({
                     onClick={() =>
                       addSection('bg-blue-500', 'HeroSectionCentredWithImage')
                     }
-                    className="text-xs px-4 py-2 mb-4 text-white bg-gray-400 rounded"
+                    className="text-xs px-4 py-2 mb-4 text-white bg-cyan-600 rounded"
                   >
                     Hero Section Centred With Image
                   </Button>
@@ -847,14 +849,15 @@ export const ContentDesigner = ({
                         'HeroSectionGradientBackground'
                       )
                     }
-                    className="text-xs px-4 py-2 mb-4 text-white bg-gray-400 rounded"
+                    className="text-xs px-4 py-2 mb-4 text-white bg-cyan-600 rounded"
                   >
                     Hero Section Gradient Background
                   </Button>
                 </div>
               </>
             </SheetContent>
-            <div className=" pr-4">
+            <div className="pr-4">
+
               <div className="h-full" style={{ width: '92vw' }}>
                 {sections.map((section, index) => (
                   <Section
@@ -879,8 +882,8 @@ export const ContentDesigner = ({
               </div>
             </div>
           </div>
-           <div className=" fixed bottom-4 right-4 bg-cyan-500 text-white p-3 rounded-full shadow-lg hover:bg-cyan-700 focus:outline-none"  >
-            <Icons.arrowUp className="w-5 h-5 text-white "  onClick={scrollToTop}  />
+          <div className="fixed bottom-4 right-4 bg-cyan-500 text-white p-3 rounded-full shadow-lg hover:bg-cyan-700 focus:outline-none"  >
+            <Icons.arrowUp className="w-5 h-5 text-white" onClick={scrollToTop} />
           </div>
         </div>
       </Sheet>
