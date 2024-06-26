@@ -11,20 +11,20 @@ import LinkableImageCard from '@/components/templates/cards/LinkableImageCard'
 import LinkableImageCardsSection from '@/components/templates/cards/LinkableImageCardsSection'
 import BlockQuoteTemplate from '@/components/templates/blockquote/BlockQuoteTemplate'
 import UnOrderedListTemplate from '@/components/templates/lists/UnorderedListTemplate'
-import IconSection2ColsGrid  from '@/components/templates/grids/IconSection2ColsGrid'
-import IconSectionCentredDescriptionWithIconBlocks  from '@/components/templates/grids/IconSectionCentredDescriptionWithIconBlocks'
-import IconSectionCircleIconsCentreAligned  from '@/components/templates/grids/IconSectionCircleIconsCentreAligned'
-import IconSectionDescriptionOnLeftIconBlocksOnRight  from '@/components/templates/grids/IconSectionDescriptionOnLeftIconBlocksOnRight'
-import IconSectionSolidIconWithHoverEffect  from '@/components/templates/grids/IconSectionSolidIconWithHoverEffect'
-import IconSectionStackedCards  from '@/components/templates/grids/IconSectionStackedCards'
-import HeroFormCenterAlignedSearchWithTags  from '@/components/templates/heros/HeroFormCenterAlignedSearchWithTags'
-import HeroFormCenterAlignedWithAForm  from '@/components/templates/heros/HeroFormCenterAlignedWithAForm'
-import HeroFormSignUpForm  from '@/components/templates/heros/HeroFormSignUpForm'
-import HeroSectionCentredWithImage  from '@/components/templates/heros/HeroSectionCentredWithImage'
-import HeroSectionGradientBackground  from '@/components/templates/heros/HeroSectionGradientBackground'
-import HeroSectionImageWithReviews  from '@/components/templates/heros/HeroSectionImageWithReviews'
-import HeroSectionSimpleCentred  from '@/components/templates/heros/HeroSectionSimpleCentred'
-import HeroSectionWithEmailInput  from '@/components/templates/heros/HeroSectionWithEmailInput'
+import IconSection2ColsGrid from '@/components/templates/grids/IconSection2ColsGrid'
+import IconSectionCentredDescriptionWithIconBlocks from '@/components/templates/grids/IconSectionCentredDescriptionWithIconBlocks'
+import IconSectionCircleIconsCentreAligned from '@/components/templates/grids/IconSectionCircleIconsCentreAligned'
+import IconSectionDescriptionOnLeftIconBlocksOnRight from '@/components/templates/grids/IconSectionDescriptionOnLeftIconBlocksOnRight'
+import IconSectionSolidIconWithHoverEffect from '@/components/templates/grids/IconSectionSolidIconWithHoverEffect'
+import IconSectionStackedCards from '@/components/templates/grids/IconSectionStackedCards'
+import HeroFormCenterAlignedSearchWithTags from '@/components/templates/heros/HeroFormCenterAlignedSearchWithTags'
+import HeroFormCenterAlignedWithAForm from '@/components/templates/heros/HeroFormCenterAlignedWithAForm'
+import HeroFormSignUpForm from '@/components/templates/heros/HeroFormSignUpForm'
+import HeroSectionCentredWithImage from '@/components/templates/heros/HeroSectionCentredWithImage'
+import HeroSectionGradientBackground from '@/components/templates/heros/HeroSectionGradientBackground'
+import HeroSectionImageWithReviews from '@/components/templates/heros/HeroSectionImageWithReviews'
+import HeroSectionSimpleCentred from '@/components/templates/heros/HeroSectionSimpleCentred'
+import HeroSectionWithEmailInput from '@/components/templates/heros/HeroSectionWithEmailInput'
 import IconTemplate from '@/components/templates/icon/IconTemplate'
 import VideoTemplate from '@/components/templates/video/VideoTemplate'
 import EmbeddedTemplate from '@/components/templates/embedded/EmbeddedTemplate'
@@ -46,12 +46,22 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
+} from '@/components/ui/alert-dialog'
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover"
+} from '@/components/ui/popover'
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@/components/ui/sheet'
 
 type ComponentProps = {
   [key: string]: any
@@ -76,28 +86,28 @@ const componentsMap: { [key: string]: React.FC<ComponentProps> } = {
   ),
   list: ({ children, ...props }: ComponentProps) => (
     <UnOrderedListTemplate children={children} {...props} />
-  ),  
+  ),
   card: ({ children, ...props }: ComponentProps) => (
     <LinkableImageCard children={children} {...props} />
   ),
   icon: ({ children, ...props }: ComponentProps) => (
     <IconTemplate children={children} {...props} />
-  ),  
+  ),
   video: ({ children, ...props }: ComponentProps) => (
     <VideoTemplate children={children} {...props} />
-  ),  
+  ),
   embedded: ({ children, ...props }: ComponentProps) => (
     <EmbeddedTemplate children={children} {...props} />
-  ),  
+  ),
   markdown: ({ children, ...props }: ComponentProps) => (
     <MarkdownTemplate children={children} {...props} />
-  ),  
+  ),
   LinkableImageCard: ({ children, ...props }: ComponentProps) => (
     <LinkableImageCard children={children} {...props} />
-  ),  
+  ),
   LinkableImageCardsSection: ({ children, ...props }: ComponentProps) => (
     <LinkableImageCardsSection children={children} {...props} />
-  ),  
+  ),
   hr: (props: ComponentProps) => (
     <hr className={cn('my-5 md:my-5', props?.className)} />
   ),
@@ -106,34 +116,44 @@ const componentsMap: { [key: string]: React.FC<ComponentProps> } = {
     <p className={cn('leading-7 [&:not(:first-child)]:mt-6', props?.className)}>
       {props?.text}
     </p>
-  ),  
+  ),
   lead: (props: ComponentProps) => (
     <p className={cn('text-xl text-muted-foreground', props?.className)}>
       {props?.text}
     </p>
-  ),  
+  ),
   muted: (props: ComponentProps) => (
     <p className={cn('text-sm text-muted-foreground', props?.className)}>
       {props?.text}
     </p>
-  ),    
+  ),
   small: (props: ComponentProps) => (
     <p className={cn('text-sm font-medium leading-none', props?.className)}>
       {props?.text}
     </p>
-  ), 
+  ),
   large: (props: ComponentProps) => (
     <p className={cn('text-lg font-semibold', props?.className)}>
       {props?.text}
     </p>
-  ),         
+  ),
   code: (props: ComponentProps) => (
-    <code className={cn('relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold', props?.className)}>
+    <code
+      className={cn(
+        'relative rounded bg-muted px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold',
+        props?.className
+      )}
+    >
       {props?.text}
     </code>
-  ),      
+  ),
   h1: (props: ComponentProps) => (
-    <h1 className={cn('scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl', props?.className)}>
+    <h1
+      className={cn(
+        'scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl',
+        props?.className
+      )}
+    >
       {props?.text}
     </h1>
   ),
@@ -190,46 +210,67 @@ const componentsMap: { [key: string]: React.FC<ComponentProps> } = {
 
   IconSection2ColsGrid: ({ children, ...props }: ComponentProps) => (
     <IconSection2ColsGrid children={children} {...props} />
-  ),  
-  IconSectionCentredDescriptionWithIconBlocks: ({ children, ...props }: ComponentProps) => (
-    <IconSectionCentredDescriptionWithIconBlocks children={children} {...props} />
   ),
-  IconSectionCircleIconsCentreAligned: ({ children, ...props }: ComponentProps) => (
+  IconSectionCentredDescriptionWithIconBlocks: ({
+    children,
+    ...props
+  }: ComponentProps) => (
+    <IconSectionCentredDescriptionWithIconBlocks
+      children={children}
+      {...props}
+    />
+  ),
+  IconSectionCircleIconsCentreAligned: ({
+    children,
+    ...props
+  }: ComponentProps) => (
     <IconSectionCircleIconsCentreAligned children={children} {...props} />
-  ), 
-  IconSectionDescriptionOnLeftIconBlocksOnRight: ({ children, ...props }: ComponentProps) => (
-    <IconSectionDescriptionOnLeftIconBlocksOnRight children={children} {...props} />
-  ),        
-  IconSectionSolidIconWithHoverEffect: ({ children, ...props }: ComponentProps) => (
+  ),
+  IconSectionDescriptionOnLeftIconBlocksOnRight: ({
+    children,
+    ...props
+  }: ComponentProps) => (
+    <IconSectionDescriptionOnLeftIconBlocksOnRight
+      children={children}
+      {...props}
+    />
+  ),
+  IconSectionSolidIconWithHoverEffect: ({
+    children,
+    ...props
+  }: ComponentProps) => (
     <IconSectionSolidIconWithHoverEffect children={children} {...props} />
-  ),        
+  ),
   IconSectionStackedCards: ({ children, ...props }: ComponentProps) => (
     <IconSectionStackedCards children={children} {...props} />
-  ),        
-  HeroFormCenterAlignedSearchWithTags: ({ children, ...props }: ComponentProps) => (
+  ),
+  HeroFormCenterAlignedSearchWithTags: ({
+    children,
+    ...props
+  }: ComponentProps) => (
     <HeroFormCenterAlignedSearchWithTags children={children} {...props} />
-  ),        
+  ),
   HeroFormCenterAlignedWithAForm: ({ children, ...props }: ComponentProps) => (
     <HeroFormCenterAlignedWithAForm children={children} {...props} />
-  ),        
+  ),
   HeroFormSignUpForm: ({ children, ...props }: ComponentProps) => (
     <HeroFormSignUpForm children={children} {...props} />
-  ),        
+  ),
   HeroSectionCentredWithImage: ({ children, ...props }: ComponentProps) => (
     <HeroSectionCentredWithImage children={children} {...props} />
-  ),        
+  ),
   HeroSectionGradientBackground: ({ children, ...props }: ComponentProps) => (
     <HeroSectionGradientBackground children={children} {...props} />
-  ),        
+  ),
   HeroSectionImageWithReviews: ({ children, ...props }: ComponentProps) => (
     <HeroSectionImageWithReviews children={children} {...props} />
-  ),        
+  ),
   HeroSectionSimpleCentred: ({ children, ...props }: ComponentProps) => (
     <HeroSectionSimpleCentred children={children} {...props} />
-  ),        
+  ),
   HeroSectionWithEmailInput: ({ children, ...props }: ComponentProps) => (
     <HeroSectionWithEmailInput children={children} {...props} />
-  ),        
+  ),
 }
 
 const createComponent = (node: Node): React.ReactNode => {
@@ -272,7 +313,7 @@ interface SectionProps {
   isSelected: boolean
   color: string
   sectionType: string
-  componentToRender: any 
+  componentToRender: any
 }
 
 interface SectionData {
@@ -280,7 +321,7 @@ interface SectionData {
   text: string
   color: string
   sectionType: string
-  node: any 
+  node: any
 }
 
 interface DragItem {
@@ -292,24 +333,31 @@ interface DragItem {
 // @ts-ignore
 const PropertyPopover = ({ section, properties, onChange }) => {
   if (!section) return null
- 
-  const sectionType  = section && section?.sectionType ? section.sectionType.toUpperCase() : 'Component'
-  const sectionProps = section && section?.node?.properties ? section.node.properties : null
+
+  const sectionType =
+    section && section?.sectionType
+      ? section.sectionType.toUpperCase()
+      : 'Component'
+  const sectionProps =
+    section && section?.node?.properties ? section.node.properties : null
   if (sectionProps) {
     for (const [key, value] of Object.entries(sectionProps)) {
-      console.log(`${key}: ${value}`);
+      console.log(`${key}: ${value}`)
     }
-  
   }
-//      {JSON.stringify(section)}   
 
-const handleInputChange = (key: string, newValue: string) => {
-  onChange({ ...properties, [key]: newValue });
-};
+  //      {JSON.stringify(section)}
+
+  const handleInputChange = (key: string, newValue: string) => {
+    onChange({ ...properties, [key]: newValue })
+  }
+
+  const saveChanges = () => {
+    // TODO: Take the current values and map them to the properties of the node in the subtree
+  }
 
   return (
     <>
-     
       <div className="grid gap-4">
         <div className="space-y-2">
           <h4 className="font-medium leading-none">{` ${sectionType} Properties`}</h4>
@@ -322,6 +370,7 @@ const handleInputChange = (key: string, newValue: string) => {
             <div className="grid grid-cols-3 items-center gap-4">
               <div key={key} className="mb-4">
                 <label className="block font-bold mb-2">{key}</label>
+                {/* @ts-ignore */}
                 <input
                   type="text"
                   value={value}
@@ -331,56 +380,32 @@ const handleInputChange = (key: string, newValue: string) => {
               </div>
             </div>
           ))}
-
-{/* 
-          <div className="grid grid-cols-3 items-center gap-4">
-            <Label htmlFor="width">Header</Label>
-            <Input
-              id="width"
-              defaultValue="Your Header"
-              className="col-span-2 h-8"
-            />
-          </div>
-          <div className="grid grid-cols-3 items-center gap-4">
-            <Label htmlFor="maxWidth">Max. width</Label>
-            <Input
-              id="maxWidth"
-              defaultValue="300px"
-              className="col-span-2 h-8"
-            />
-          </div>
-          <div className="grid grid-cols-3 items-center gap-4">
-            <Label htmlFor="height">Height</Label>
-            <Input
-              id="height"
-              defaultValue="25px"
-              className="col-span-2 h-8"
-            />
-          </div>
-          <div className="grid grid-cols-3 items-center gap-4">
-            <Label htmlFor="maxHeight">Max. height</Label>
-            <Input
-              id="maxHeight"
-              defaultValue="none"
-              className="col-span-2 h-8"
-            />
-          </div> */}
         </div>
-        <Button>Apply</Button>
-      </div>      
+        <Button onClick={saveChanges}>Apply</Button>
+      </div>
     </>
   )
 }
 
-// @ts-ignore
-const Section = ({ id, text, index, moveSection, removeSection, selectSection, isSelected, color, sectionType, componentToRender, section }) => {
-
+const Section = ({
+  id,
+  text,
+  index,
+  moveSection,
+  removeSection,
+  selectSection,
+  isSelected,
+  color,
+  sectionType,
+  componentToRender,
+  section,
+  duplicateSection,
+}) => {
   const [properties, setProperties] = useState({
     key1: 'value1',
     key2: 'value2',
-    key3: 'value3'
-  });
-
+    key3: 'value3',
+  })
 
   const ref = useRef<HTMLDivElement>(null)
 
@@ -396,7 +421,8 @@ const Section = ({ id, text, index, moveSection, removeSection, selectSection, i
       if (dragIndex === hoverIndex) return
 
       const hoverBoundingRect = ref.current?.getBoundingClientRect()
-      const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2
+      const hoverMiddleY =
+        (hoverBoundingRect.bottom - hoverBoundingRect.top) / 2
       const clientOffset = monitor.getClientOffset()
       const hoverClientY = (clientOffset as XYCoord).y - hoverBoundingRect.top
 
@@ -419,91 +445,117 @@ const Section = ({ id, text, index, moveSection, removeSection, selectSection, i
   drag(drop(ref))
 
   const handlePropertiesChange = (newProperties: any) => {
-    setProperties(newProperties);
-  };  
+    setProperties(newProperties)
+  }
 
   return (
     <>
-    <Popover>
-      <PopoverTrigger asChild={true}>
-      <div
-        ref={ref}
-        style={{ opacity: isDragging ? 0.5 : 1, height: isDragging ? 100 : "" }}
-        className={`relative p-4 mb-4 ${isSelected ? 'border-4 border-solid border-cyan-500' : 'border border-dashed border-gray-400'}`}
-        onClick={() => selectSection(id)}
-        data-handler-id={handlerId}
-      >
-        <PopoverContent className="w-80 drop-shadow-2xl border-4 border-solid border-cyan-500" align='center' sticky='partial' side='top'>
-          <PropertyPopover section={section} properties={properties}  onChange={handlePropertiesChange} />
-        </PopoverContent>         
-        <div ref={preview} className="absolute left-2 top-1/2 transform -translate-y-1/2 cursor-grab">
-          <Icons.menu className="w-5 h-5 text-gray-600" />
-        </div>
-        {/* <div className="absolute top-2 right-2 z-20">
-          <Icons.trash className="w-6 h-6 text-red-500 drop-shadow-xl cursor-pointer hover:text-red-700 hover:w-8 hover:h-8" onClick={(e) => { e.stopPropagation(); removeSection(id); }} />
-        </div> */}
-        <AlertDialog>
-        <AlertDialogTrigger>
-            <Icons.trash className="w-6 h-6 m-2 text-red-500 drop-shadow-xl cursor-pointer hover:text-red-700 hover:w-8 hover:h-8" />
-        </AlertDialogTrigger>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-            <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete this section and remove it from your layout.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction>Continue</AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>           
-        {componentToRender}
-      </div>
-      </PopoverTrigger> 
+      <Popover>
+        <PopoverTrigger asChild={true}>
+          <div
+            ref={ref}
+            style={{
+              opacity: isDragging ? 0.5 : 1,
+              height: isDragging ? 100 : '',
+            }}
+            className={`relative p-4 mb-4 ${isSelected ? 'border-4 border-solid border-cyan-500' : 'border border-dashed border-gray-400'}`}
+            onClick={() => selectSection(id)}
+            data-handler-id={handlerId}
+          >
+            <PopoverContent
+              className="w-80 drop-shadow-2xl border-4 border-solid border-cyan-500 "
+              align="center"
+              side="top"
+            >
+              <PropertyPopover
+                section={section}
+                properties={properties}
+                onChange={handlePropertiesChange}
+              />
+            </PopoverContent>
+            <div
+              ref={preview}
+              className="absolute left-4 top-1/2 transform -translate-y-1/2 cursor-grab"
+            >
+              <Icons.menu className="w-5 h-5 text-gray-600" />
+            </div>
+            <div className="absolute top-2 right-2 z-20">
+              <Icons.copy
+                className="mr-5 mt-5 w-6 h-6 text-cyan-500 drop-shadow-xl cursor-pointer hover:text-cyan-700 hover:w-8 hover:h-8"
+                onClick={(e) => {
+                  duplicateSection(id)
+                }}
+              />
+            </div>
+            <AlertDialog>
+              <AlertDialogTrigger>
+                <Icons.trash className="w-6 h-6 m-2 ml-6 text-red-500 drop-shadow-xl cursor-pointer hover:text-red-700 hover:w-8 hover:h-8" />
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This action cannot be undone. This will permanently delete
+                    this block and remove it from your layout.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={(e) => {
+                      removeSection(id)
+                    }}
+                  >
+                    Continue
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+            {componentToRender}
+          </div>
+        </PopoverTrigger>
       </Popover>
     </>
   )
-}
-
-
-
-// @ts-ignore
-const Sidebar = ({ addSection, isCollapsed, toggleCollapse }) => {
-    if (isCollapsed) return (
-      <div className="w-10 h-full p-2 bg-gray-200 cursor-pointer" onClick={toggleCollapse}>
-        <Icons.chevronRight className="w-5 h-5 mx-auto" />
-      </div>
-    )
-  
-    return (
-      <div className="w-1/4 h-full p-4 bg-gray-200">
-        <div className="flex justify-end mb-2 cursor-pointer" onClick={toggleCollapse}>
-          <Icons.chevronLeft className="w-5 h-5" />
-        </div>
-        <div className='flex flex-col p-2'>
-          <Button onClick={() => addSection('bg-blue-500', 'HeroSectionCentredWithImage')} className="text-xs px-4 py-2 mb-4 text-white bg-gray-400 rounded">Hero Section Centred With Image</Button>
-          <Button onClick={() => addSection('bg-purple-500', 'HeroSectionGradientBackground')} className="text-xs px-4 py-2 mb-4 text-white bg-gray-400 rounded">Hero Section Gradient Background</Button>
-          {/* <button onClick={() => addSection('bg-yellow-500', 'HeroSectionCentredWithImage')} className="px-4 py-2 mb-4 text-white bg-yellow-500 rounded">Add Yellow Section</button>
-          <button onClick={() => addSection('bg-green-500', 'HeroSectionCentredWithImage')} className="px-4 py-2 mb-4 text-white bg-green-500 rounded">Add Green Section</button> */}
-        </div>
-      </div>
-    )
 }
 
 export interface ContentDesignerProps {
   subTree: any
   pageId: any
   authorId: any
-  subsiteId: any   
+  subsiteId: any
 }
 
-export const ContentDesigner = ({ subTree, pageId, authorId, subsiteId }: ContentDesignerProps) => {
-  const [sections, setSections] = useState<SectionData[]>([{ id: 1, text: 'Initial Section', color: 'bg-white', sectionType: '', node: null }])
+export const ContentDesigner = ({
+  subTree,
+  pageId,
+  authorId,
+  subsiteId,
+}: ContentDesignerProps) => {
+  const [sections, setSections] = useState<SectionData[]>([
+    {
+      id: 1,
+      text: 'Initial Section',
+      color: 'bg-white',
+      sectionType: '',
+      node: null,
+    },
+  ])
   const [selectedSectionId, setSelectedSectionId] = useState<number | null>(1)
-  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false)
-  const [isPropertySheetCollapsed, setIsPropertySheetCollapsed] = useState(false)
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    })
+  }
+
+  const scrollToBottom = () => {
+    window.scrollTo({
+      top: document.documentElement.scrollHeight,
+      behavior: 'smooth'
+    })
+  }  
 
   const addSection = (color: string, sectionType: string) => {
     const sectionId = sections[sections?.length - 1]?.id
@@ -516,12 +568,12 @@ export const ContentDesigner = ({ subTree, pageId, authorId, subsiteId }: Conten
         key: Math.random(),
         value: sectionType,
         properties: {
-          className: "",
-          header: "Title", 
-          subHeader: "Sub Title", 
-          imgSrc: "https://picsum.photos/id/10/800/800"
+          className: '',
+          header: 'Title',
+          subHeader: 'Sub Title',
+          imgSrc: 'https://picsum.photos/id/10/800/800',
         },
-        children: []
+        children: [],
       }
     }
 
@@ -530,19 +582,24 @@ export const ContentDesigner = ({ subTree, pageId, authorId, subsiteId }: Conten
         key: Math.random(),
         value: sectionType,
         properties: {
-          className: "",
-          header: "Title", 
-          subHeader: "Sub Title", 
-          tagLine: "This is the Tag Line"
+          className: '',
+          header: 'Title',
+          subHeader: 'Sub Title',
+          tagLine: 'This is the Tag Line',
         },
-        children: []
+        children: [],
       }
     }
 
+    setSections([
+      ...sections,
+      { id: newId, text: `some text`, color, sectionType, node: newNode },
+    ])
 
-    setSections([...sections, { id: newId, text: `some text`, color, sectionType, node: newNode  }])
-    
     setSelectedSectionId(newId)
+
+    // scroll to the bottom of the page 
+    scrollToBottom()
   }
 
   const moveSection = useCallback((dragIndex: number, hoverIndex: number) => {
@@ -555,12 +612,26 @@ export const ContentDesigner = ({ subTree, pageId, authorId, subsiteId }: Conten
   }, [])
 
   const removeSection = (id: number) => {
-    // TODO: Confirm before removing 
-
-
-    setSections((prevSections) => prevSections.filter((section) => section.id !== id))
+    setSections((prevSections) =>
+      prevSections.filter((section) => section.id !== id)
+    )
     if (selectedSectionId === id) {
       setSelectedSectionId(null)
+    }
+  }
+
+  const duplicateSection = (id: number) => {
+    const sectionCopy =
+      sections.find((section) => section.id === selectedSectionId) || null
+    if (sectionCopy) {
+      setSelectedSectionId(null)
+      sectionCopy.id = sections.length + 1
+      setSections((prevSections) => {
+        const newSections = [...prevSections]
+        newSections.push(sectionCopy)
+        return newSections
+      })
+      toast('Section copied')
     }
   }
 
@@ -570,17 +641,25 @@ export const ContentDesigner = ({ subTree, pageId, authorId, subsiteId }: Conten
 
   const setText = (id: number, text: string) => {
     setSections((prevSections) =>
-      prevSections.map((section) => (section.id === id ? { ...section, text } : section))
+      prevSections.map((section) =>
+        section.id === id ? { ...section, text } : section
+      )
     )
   }
 
-  const selectedSection = sections.find((section) => section.id === selectedSectionId) || null
-
   let sectionMap: any = []
   if (subTree && subTree?.children?.length > 0) {
-    {subTree.children.map((node: any, index: number) =>
-      sectionMap.push({ id: index, text: node?.value, color: 'bg-white', sectionType: node?.value, node })
-    )}
+    {
+      subTree.children.map((node: any, index: number) =>
+        sectionMap.push({
+          id: index,
+          text: node?.value,
+          color: 'bg-white',
+          sectionType: node?.value,
+          node,
+        })
+      )
+    }
   }
 
   if (sections.length === 1) {
@@ -598,7 +677,7 @@ export const ContentDesigner = ({ subTree, pageId, authorId, subsiteId }: Conten
         description: error.message,
       }),
   })
-  const isSavingPage = savePageMutation.isLoading  
+  const isSavingPage = savePageMutation.isLoading
 
   const savePage = async () => {
     const subtree = new SubTree<string>()
@@ -607,15 +686,21 @@ export const ContentDesigner = ({ subTree, pageId, authorId, subsiteId }: Conten
     const imageProps = {
       className: 'inherit',
       src: 'https://picsum.photos/id/64/800/800',
-      alt: 'image', 
+      alt: 'image',
     }
-   
+
     if (!sections || sections?.length === 0) return
     sections.map((section) => {
       const subTreeComponent = section?.node
       console.log('component >>> ', subTreeComponent)
-      subtree.addNode(subTreeComponent.value, 'root', subTreeComponent.properties)
-      const componentChildren = subTreeComponent?.children ? subTreeComponent.children : []
+      subtree.addNode(
+        subTreeComponent.value,
+        'root',
+        subTreeComponent.properties
+      )
+      const componentChildren = subTreeComponent?.children
+        ? subTreeComponent.children
+        : []
       if (componentChildren && componentChildren?.length > 0) {
         componentChildren.map((child: any) => {
           subtree.addNode(child.value, subTreeComponent.value, imageProps)
@@ -625,14 +710,14 @@ export const ContentDesigner = ({ subTree, pageId, authorId, subsiteId }: Conten
 
     const layoutTemplate = subtree.toJSON()
     console.log(layoutTemplate)
-    // TODO: Save to DB 
+    // TODO: Save to DB
     toast('Saving Changes...')
 
     if (!layoutTemplate) {
       console.log('layoutTemplate is null')
       toast('There was a problem saving draft. Please try again.')
       return
-    }    
+    }
 
     if (!pageId) {
       console.log('pageId is null')
@@ -659,7 +744,7 @@ export const ContentDesigner = ({ subTree, pageId, authorId, subsiteId }: Conten
       layoutTemplate: layoutTemplate,
       authorId: authorId,
       subsiteId: subsiteId,
-    }    
+    }
     savedContent = await savePageMutation.mutateAsync(mutationVars)
 
     if (!savedContent) {
@@ -671,78 +756,134 @@ export const ContentDesigner = ({ subTree, pageId, authorId, subsiteId }: Conten
     if (!savedContent?.id) {
       console.log('savedContent.id is null')
       return
-    }    
+    }
 
     toast.success('Content saved successfully.')
-  }  
+  }
 
-  const loadFromTemplate = () => {
-  } 
+  const loadFromTemplate = () => {}
 
-  const saveAsTemplate = () => {
-  } 
+  const saveAsTemplate = () => {}
 
-  const navigateBack = () => {
-  }  
+  const openLibrary = () => {}
 
-  const previewPage = () => {
-  }  
+  const previewPage = () => {}
 
-  const publishPage = () => {
-  }  
+  const publishPage = () => {}
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <div className='flex flex-col'>
-        <div className='flex p-4'>
-          <Button className='w-[64] mr-4 bg-gray-400' variant={'default'} onClick={navigateBack}>
-            Back
-          </Button>
-          <Button className='w-[64] mr-4 bg-gray-400' variant={'default'} onClick={loadFromTemplate}>
-            Load Template
-          </Button>           
-          <Button className='w-[64] mr-4 bg-gray-400' variant={'default'} onClick={previewPage}>
-            Preview 
-          </Button>
-          <Button className='w-[64] mr-4 bg-gray-400' variant={'default'} onClick={savePage}>
-            Save 
-          </Button>
-          <Button className='w-[64] mr-4 bg-gray-400' variant={'default'} onClick={saveAsTemplate}>
-            Save as Template
-          </Button>          
-          <Button className='w-[64] bg-gray-400' variant={'default'} onClick={publishPage}>
-            Publish
-          </Button>
-        </div>
-        <div className="relative flex p-4">
-          <Sidebar addSection={addSection} isCollapsed={isSidebarCollapsed} toggleCollapse={() => setIsSidebarCollapsed(!isSidebarCollapsed)} />
-          <div className=" pr-4">
-            <div className="h-screen" style={{width: '1600px'}}>
-              {sections.map((section, index) => (
-                <Section
-                  key={section.id}
-                  id={section.id}
-                  text={section.text}
-                  index={index}
-                  moveSection={moveSection}
-                  removeSection={removeSection}
-                  selectSection={selectSection}
-                  isSelected={section.id === selectedSectionId}
-                  color={section.color}
-                  sectionType={section.sectionType}
-                  componentToRender={createComponent({ ...section?.node, key: index })}
-                  section={section}
-                />
-              ))}
-  
-
+      <Sheet>
+        <div className="flex flex-col">
+          <div className="flex p-4">
+            <SheetTrigger asChild>
+              <Button
+                className="w-[64] mr-4 bg-gray-400"
+                variant={'default'}
+                onClick={openLibrary}
+              >
+                Library
+              </Button>
+            </SheetTrigger>
+            <Button
+              className="w-[64] mr-4 bg-gray-400"
+              variant={'default'}
+              onClick={loadFromTemplate}
+            >
+              Load Template
+            </Button>
+            <Button
+              className="w-[64] mr-4 bg-gray-400"
+              variant={'default'}
+              onClick={previewPage}
+            >
+              Preview
+            </Button>
+            <Button
+              className="w-[64] mr-4 bg-gray-400"
+              variant={'default'}
+              onClick={savePage}
+            >
+              Save
+            </Button>
+            <Button
+              className="w-[64] mr-4 bg-gray-400"
+              variant={'default'}
+              onClick={saveAsTemplate}
+            >
+              Save as Template
+            </Button>
+            <Button
+              className="w-[64] bg-gray-400"
+              variant={'default'}
+              onClick={publishPage}
+            >
+              Publish
+            </Button>
+          </div>
+          <div className="relative flex p-4">
+            <SheetContent side="right" className="w-[400px] sm:w-[540px]">
+              <SheetHeader>
+                <SheetTitle>Content Library</SheetTitle>
+                <SheetDescription className="pb-4">
+                  Add Content to your page from your library of components and templates 
+                </SheetDescription>
+              </SheetHeader>
+              <>
+                <hr />
+                <div className="flex flex-col p-2 pt-4">
+                  <Button
+                    onClick={() =>
+                      addSection('bg-blue-500', 'HeroSectionCentredWithImage')
+                    }
+                    className="text-xs px-4 py-2 mb-4 text-white bg-gray-400 rounded"
+                  >
+                    Hero Section Centred With Image
+                  </Button>
+                  <Button
+                    onClick={() =>
+                      addSection(
+                        'bg-purple-500',
+                        'HeroSectionGradientBackground'
+                      )
+                    }
+                    className="text-xs px-4 py-2 mb-4 text-white bg-gray-400 rounded"
+                  >
+                    Hero Section Gradient Background
+                  </Button>
+                </div>
+              </>
+            </SheetContent>
+            <div className=" pr-4">
+              <div className="h-full" style={{ width: '92vw' }}>
+                {sections.map((section, index) => (
+                  <Section
+                    key={section.id}
+                    id={section.id}
+                    text={section.text}
+                    index={index}
+                    moveSection={moveSection}
+                    removeSection={removeSection}
+                    selectSection={selectSection}
+                    isSelected={section.id === selectedSectionId}
+                    color={section.color}
+                    sectionType={section.sectionType}
+                    componentToRender={createComponent({
+                      ...section?.node,
+                      key: index,
+                    })}
+                    section={section}
+                    duplicateSection={duplicateSection}
+                  />
+                ))}
+              </div>
             </div>
           </div>
-          {/* <PropertySheet selectedSection={selectedSection} setText={setText} isCollapsed={isPropertySheetCollapsed} toggleCollapse={() => setIsPropertySheetCollapsed(!isPropertySheetCollapsed)} /> */}
+           <div className=" fixed bottom-4 right-4 bg-cyan-500 text-white p-3 rounded-full shadow-lg hover:bg-cyan-700 focus:outline-none"  >
+            <Icons.arrowUp className="w-5 h-5 text-white "  onClick={scrollToTop}  />
+          </div>
         </div>
-      </div>
- 
-      
+      </Sheet>
     </DndProvider>
   )
 }
