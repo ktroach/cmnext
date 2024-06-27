@@ -11,7 +11,7 @@ import LinkableImageCard from '@/components/templates/cards/LinkableImageCard'
 import LinkableImageCardsSection from '@/components/templates/cards/LinkableImageCardsSection'
 import BlockQuoteTemplate from '@/components/templates/blockquote/BlockQuoteTemplate'
 import UnOrderedListTemplate from '@/components/templates/lists/UnorderedListTemplate'
-import IconSection2ColsGrid from '@/components/templates/grids/IconSection2ColsGrid'
+import IconSection2ColsGridProps_Designer from '@/components/templates/grids/designer/IconSection2ColsGrid'
 import IconSectionCentredDescriptionWithIconBlocks from '@/components/templates/grids/IconSectionCentredDescriptionWithIconBlocks'
 import IconSectionCircleIconsCentreAligned from '@/components/templates/grids/IconSectionCircleIconsCentreAligned'
 import IconSectionDescriptionOnLeftIconBlocksOnRight from '@/components/templates/grids/IconSectionDescriptionOnLeftIconBlocksOnRight'
@@ -209,8 +209,9 @@ const componentsMap: { [key: string]: React.FC<ComponentProps> } = {
   ),
 
   IconSection2ColsGrid: ({ children, ...props }: ComponentProps) => (
-    <IconSection2ColsGrid children={children} {...props} />
+    <IconSection2ColsGridProps_Designer children={children} {...props} designMode={true} />
   ),
+
   IconSectionCentredDescriptionWithIconBlocks: ({
     children,
     ...props
