@@ -209,7 +209,11 @@ const componentsMap: { [key: string]: React.FC<ComponentProps> } = {
   ),
 
   IconSection2ColsGrid: ({ children, ...props }: ComponentProps) => (
-    <IconSection2ColsGridProps_Designer children={children} {...props} designMode={true} />
+    <IconSection2ColsGridProps_Designer
+      children={children}
+      {...props}
+      designMode={true}
+    />
   ),
 
   IconSectionCentredDescriptionWithIconBlocks: ({
@@ -359,7 +363,7 @@ interface DragItem {
 //   }
 
 //   const handleInputChange = (key: string, newValue: string) => {
-//     if (!properties) return 
+//     if (!properties) return
 //     handlePropertiesChange({ ...properties, [key]: newValue })
 //   }
 
@@ -369,18 +373,18 @@ interface DragItem {
 
 //   const getEditablePropertyName = (key: string) => {
 //     const editableProps = [
-//         {key: 'title', displayName: 'Title'}, 
-//         {key: 'subTitle', displayName: 'Sub Title'}, 
-//         {key: 'imgSrc', displayName: 'Image URL'}, 
-//         {key: 'imgAlt', displayName: 'Image Alt'}, 
-//         {key: 'text', displayName: 'Text'}, 
-//         {key: 'header', displayName: 'Header'}, 
-//         {key: 'subHeader', displayName: 'Sub Header'}, 
-//         {key: 'className', displayName: 'Style'},     
-//         {key: 'parentClassName', displayName: 'Parent Style'},     
-//         {key: 'delay', displayName: 'Delay (ms)'},     
-//         {key: 'stopOnInteraction', displayName: 'Stop on interaction'},     
-//         {key: 'showBorder', displayName: 'Show Border'},     
+//         {key: 'title', displayName: 'Title'},
+//         {key: 'subTitle', displayName: 'Sub Title'},
+//         {key: 'imgSrc', displayName: 'Image URL'},
+//         {key: 'imgAlt', displayName: 'Image Alt'},
+//         {key: 'text', displayName: 'Text'},
+//         {key: 'header', displayName: 'Header'},
+//         {key: 'subHeader', displayName: 'Sub Header'},
+//         {key: 'className', displayName: 'Style'},
+//         {key: 'parentClassName', displayName: 'Parent Style'},
+//         {key: 'delay', displayName: 'Delay (ms)'},
+//         {key: 'stopOnInteraction', displayName: 'Stop on interaction'},
+//         {key: 'showBorder', displayName: 'Show Border'},
 //     ]
 //     const editableProp = editableProps.find((prop) => prop.key === key) || null
 //     if (editableProp) {
@@ -414,7 +418,7 @@ interface DragItem {
 //                 </div>
 //               </div>
 //             ))}
-//             </>  
+//             </>
 //           ): (<></>)}
 //         </div>
 //         <Button onClick={saveChanges}>Apply</Button>
@@ -430,9 +434,10 @@ const PropertyPopover = ({ section }) => {
     setProperties(newProperties)
   }
 
-  const sectionType = section && section?.sectionType
+  const sectionType =
+    section && section?.sectionType
       ? section.sectionType.toUpperCase()
-      : 'Component'  
+      : 'Component'
 
   useEffect(() => {
     if (section && section.node && section.node.properties) {
@@ -479,7 +484,11 @@ const PropertyPopover = ({ section }) => {
     return key
   }
 
-  const renderInputControl = (key: string, value: any, propertyType: string) => {
+  const renderInputControl = (
+    key: string,
+    value: any,
+    propertyType: string
+  ) => {
     switch (propertyType) {
       case 'text':
         return (
@@ -556,9 +565,14 @@ const PropertyPopover = ({ section }) => {
             <>
               {Object.entries(properties).map(([key, value]) => {
                 return (
-                  <div className="grid grid-cols-1 items-center gap-4" key={key}>
+                  <div
+                    className="grid grid-cols-1 items-center gap-4"
+                    key={key}
+                  >
                     <div className="mb-4">
-                      <label className="block font-bold mb-2">{getEditablePropertyName(key)}</label>
+                      <label className="block font-bold mb-2">
+                        {getEditablePropertyName(key)}
+                      </label>
                       {renderInputControl(key, value, getPropertyType(key))}
                     </div>
                   </div>
@@ -575,8 +589,6 @@ const PropertyPopover = ({ section }) => {
   )
 }
 
-
-
 const Section = ({
   id,
   text,
@@ -591,7 +603,6 @@ const Section = ({
   section,
   duplicateSection,
 }) => {
-
   // const [properties, setProperties] = useState({
   //   title: 'value1',
   //   subTitle: 'value2',
@@ -642,18 +653,30 @@ const Section = ({
     const sectionBoundingRect = ref.current?.getBoundingClientRect()
     if (sectionBoundingRect) {
       setBoundingRect(sectionBoundingRect)
-      const popoverTop = sectionBoundingRect.top + window.scrollY + sectionBoundingRect.height / 2
-      const popoverLeft = sectionBoundingRect.left + window.scrollX + sectionBoundingRect.width
+      const popoverTop =
+        sectionBoundingRect.top +
+        window.scrollY +
+        sectionBoundingRect.height / 2
+      const popoverLeft =
+        sectionBoundingRect.left + window.scrollX + sectionBoundingRect.width
       setPopoverPosition({ top: popoverTop, left: popoverLeft })
     }
     selectSection(id)
+  }
+
+  const moveSectionUp = () => {
+    moveSection(index, index-1)
+  }
+
+  const moveSectionDown = () => {
+    moveSection(index, index+1)
   }
 
   const [open, setOpen] = useState(false)
 
   return (
     <>
-      <Popover open={open} onOpenChange={setOpen} >
+      <Popover open={open}>
         <PopoverTrigger asChild={true}>
           <div
             ref={ref}
@@ -667,7 +690,10 @@ const Section = ({
           >
             <PopoverContent
               className="w-80 drop-shadow-2xl border-4 border-solid border-cyan-500 "
-              style={{ top: `${popoverPosition.top}px`, left: `${popoverPosition.left}px` }}
+              style={{
+                top: `${popoverPosition.top}px`,
+                left: `${popoverPosition.left}px`,
+              }}
               sideOffset={boundingRect.top - boundingRect.bottom}
             >
               <PropertyPopover section={section} />
@@ -678,38 +704,66 @@ const Section = ({
             >
               <Icons.menu className="w-5 h-5 text-gray-600" />
             </div>
-            <div className="absolute top-2 right-2 z-20">
+
+            <div className="absolute flex top-2 right-4 p-2 z-20 border-4 border-slate-400 bg-slate-100 w-fit rounded-md">
+              {index > 1 ? (
+                <Icons.arrowUp
+                  className="w-6 h-6 mr-2 text-cyan-500 drop-shadow-xl cursor-pointer hover:text-cyan-700 hover:w-8 hover:h-8"
+                  onClick={(e) => {
+                    moveSectionUp()
+                  }}
+                />
+              ) : (
+                <></>
+              )}
+
+              <Icons.arrowDown
+                className="w-6 h-6 mr-2 text-cyan-500 drop-shadow-xl cursor-pointer hover:text-cyan-700 hover:w-8 hover:h-8"
+                onClick={(e) => {
+                  moveSectionDown()
+                }}
+              />
+
+              <Icons.boxIcon
+                className="w-6 h-6 mr-2 text-cyan-500 drop-shadow-xl cursor-pointer hover:text-cyan-700 hover:w-8 hover:h-8"
+                onClick={(e) => {
+                  setOpen(false)
+                }}
+              />
+
               <Icons.copy
-                className="mr-5 mt-5 w-6 h-6 text-cyan-500 drop-shadow-xl cursor-pointer hover:text-cyan-700 hover:w-8 hover:h-8"
+                className="w-6 h-6 mr-2 text-cyan-500 drop-shadow-xl cursor-pointer hover:text-cyan-700 hover:w-8 hover:h-8"
                 onClick={(e) => {
                   duplicateSection(id)
                 }}
               />
+
+              <AlertDialog>
+                <AlertDialogTrigger>
+                  <Icons.trash className="w-6 h-6  text-red-500 drop-shadow-xl cursor-pointer hover:text-red-700 hover:w-8 hover:h-8" />
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      This action cannot be undone. This will permanently delete
+                      this block and remove it from your layout.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction
+                      onClick={(e) => {
+                        removeSection(id)
+                      }}
+                    >
+                      Continue
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
             </div>
-            <AlertDialog>
-              <AlertDialogTrigger>
-                <Icons.trash className="w-6 h-6 m-2 ml-6 text-red-500 drop-shadow-xl cursor-pointer hover:text-red-700 hover:w-8 hover:h-8" />
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    This action cannot be undone. This will permanently delete
-                    this block and remove it from your layout.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction
-                    onClick={(e) => {
-                      removeSection(id)
-                    }}
-                  >
-                    Continue
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
+
             {componentToRender}
           </div>
         </PopoverTrigger>
@@ -745,16 +799,16 @@ export const ContentDesigner = ({
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
-      behavior: 'smooth'
+      behavior: 'smooth',
     })
   }
 
   const scrollToBottom = () => {
     window.scrollTo({
       top: document.documentElement.scrollHeight,
-      behavior: 'smooth'
+      behavior: 'smooth',
     })
-  }  
+  }
 
   const addSection = (color: string, sectionType: string) => {
     const sectionId = sections[sections?.length - 1]?.id
@@ -797,7 +851,7 @@ export const ContentDesigner = ({
 
     setSelectedSectionId(newId)
 
-    // scroll to the bottom of the page 
+    // scroll to the bottom of the page
     scrollToBottom()
   }
 
@@ -820,7 +874,8 @@ export const ContentDesigner = ({
   }
 
   const duplicateSection = (id: number) => {
-    const sectionCopy = sections.find((section) => section.id === selectedSectionId) || null
+    const sectionCopy =
+      sections.find((section) => section.id === selectedSectionId) || null
     if (sectionCopy) {
       setSelectedSectionId(null)
       sectionCopy.id = sections.length + 1
@@ -990,8 +1045,8 @@ export const ContentDesigner = ({
               onClick={savePage}
               disabled={true}
             >
-              Save   
-            </Button>     
+              Save
+            </Button>
 
             <Button
               className="w-[64] bg-gray-400"
@@ -1000,19 +1055,22 @@ export const ContentDesigner = ({
               disabled={true}
             >
               Publish
-            </Button>                
+            </Button>
 
             <div className="fixed bottom-4 right-4 bg-cyan-500 text-white p-3 rounded-full shadow-lg hover:bg-cyan-700 focus:outline-none">
-              <Icons.arrowDown className="w-5 h-5 text-white" onClick={scrollToBottom} />
+              <Icons.arrowDown
+                className="w-5 h-5 text-white"
+                onClick={scrollToBottom}
+              />
             </div>
-
           </div>
           <div className="relative flex p-4">
             <SheetContent side="right" className="w-[400px] sm:w-[540px]">
               <SheetHeader>
                 <SheetTitle>Content Library</SheetTitle>
                 <SheetDescription className="pb-4">
-                  Add Content to your page from your library of components and templates 
+                  Add Content to your page from your library of components and
+                  templates
                 </SheetDescription>
               </SheetHeader>
               <>
@@ -1041,7 +1099,6 @@ export const ContentDesigner = ({
               </>
             </SheetContent>
             <div className="pr-4">
-
               <div className="h-full" style={{ width: '92vw' }}>
                 {sections.map((section, index) => (
                   <Section
@@ -1066,8 +1123,11 @@ export const ContentDesigner = ({
               </div>
             </div>
           </div>
-          <div className="fixed bottom-4 right-4 bg-cyan-500 text-white p-3 rounded-full shadow-lg hover:bg-cyan-700 focus:outline-none"  >
-            <Icons.arrowUp className="w-5 h-5 text-white" onClick={scrollToTop} />
+          <div className="fixed bottom-4 right-4 bg-cyan-500 text-white p-3 rounded-full shadow-lg hover:bg-cyan-700 focus:outline-none">
+            <Icons.arrowUp
+              className="w-5 h-5 text-white"
+              onClick={scrollToTop}
+            />
           </div>
         </div>
       </Sheet>

@@ -139,6 +139,8 @@ export default function IconSection2ColsGrid_Designer({
                                     <SelectValue placeholder="Select a Icon" />
                                     </SelectTrigger>
                                     <SelectContent>
+                                    <SelectGroup>
+                                    <SelectLabel>Lucide Icons</SelectLabel>
                                     <SelectItem value="braincog">
                                         <span className="font-medium">BrainCogIcon</span> 
                                         <span className="text-muted-foreground">
@@ -151,6 +153,7 @@ export default function IconSection2ColsGrid_Designer({
                                         <TornadoIcon />
                                         </span>
                                     </SelectItem>
+                                    </SelectGroup>
                                     </SelectContent>
                                 </Select>
                                   {/* <input
