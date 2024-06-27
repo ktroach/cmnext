@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback, useRef, SetStateAction } from 'react'
+import { useState, useCallback, useRef, useEffect } from 'react'
 import { DndProvider, useDrag, useDrop, XYCoord } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { Icons } from '@/styles/icons'
@@ -331,61 +331,250 @@ interface DragItem {
 }
 
 // @ts-ignore
-const PropertyPopover = ({ section, properties, onChange }) => {
-  if (!section) return null
+// const PropertyPopover = ({ section }) => {
+//   const [properties, setProperties] = useState<object | null>(null)
 
-  const sectionType =
-    section && section?.sectionType
-      ? section.sectionType.toUpperCase()
-      : 'Component'
-  const sectionProps =
-    section && section?.node?.properties ? section.node.properties : null
-  if (sectionProps) {
-    for (const [key, value] of Object.entries(sectionProps)) {
-      console.log(`${key}: ${value}`)
-    }
+//   const handlePropertiesChange = (newProperties: any) => {
+//     setProperties(newProperties)
+//   }
+
+//   if (!section) return null
+
+//   const sectionType = section && section?.sectionType
+//       ? section.sectionType.toUpperCase()
+//       : 'Component'
+
+//   const sectionProps = section && section?.node?.properties ? section.node.properties : null
+
+//   if (sectionProps) {
+//     let p: any = {}
+//     for (const [key, value] of Object.entries(sectionProps)) {
+//       console.log(`${key}: ${value}`)
+//       p[key] = value
+//     }
+//     if (!properties) {
+//       setProperties(p)
+//     }
+//   }
+
+//   const handleInputChange = (key: string, newValue: string) => {
+//     if (!properties) return 
+//     handlePropertiesChange({ ...properties, [key]: newValue })
+//   }
+
+//   const saveChanges = () => {
+//     // TODO: Take the current values and map them to the properties of the node in the subtree
+//   }
+
+//   const getEditablePropertyName = (key: string) => {
+//     const editableProps = [
+//         {key: 'title', displayName: 'Title'}, 
+//         {key: 'subTitle', displayName: 'Sub Title'}, 
+//         {key: 'imgSrc', displayName: 'Image URL'}, 
+//         {key: 'imgAlt', displayName: 'Image Alt'}, 
+//         {key: 'text', displayName: 'Text'}, 
+//         {key: 'header', displayName: 'Header'}, 
+//         {key: 'subHeader', displayName: 'Sub Header'}, 
+//         {key: 'className', displayName: 'Style'},     
+//         {key: 'parentClassName', displayName: 'Parent Style'},     
+//         {key: 'delay', displayName: 'Delay (ms)'},     
+//         {key: 'stopOnInteraction', displayName: 'Stop on interaction'},     
+//         {key: 'showBorder', displayName: 'Show Border'},     
+//     ]
+//     const editableProp = editableProps.find((prop) => prop.key === key) || null
+//     if (editableProp) {
+//       return editableProp.displayName
+//     }
+//     return key
+//   }
+
+//   return (
+//     <>
+//       <div className="grid gap-4">
+//         <div className="space-y-2">
+//           <h4 className="font-medium leading-none">{` ${sectionType} Properties`}</h4>
+//           <p className="text-sm text-muted-foreground">
+//             Set the properties for the component.
+//           </p>
+//         </div>
+//         <div className="grid gap-2">
+//           {properties ? (
+//             <>
+//             {Object.entries(properties).map(([key, value]) => (
+//               <div className="grid grid-cols-1 items-center gap-4">
+//                 <div key={key} className="mb-4">
+//                   <label className="block font-bold mb-2">{getEditablePropertyName(key)}</label>
+//                   <input
+//                     type="text"
+//                     value={value}
+//                     onChange={(e) => handleInputChange(key, e.target.value)}
+//                     className="border rounded p-2 w-full"
+//                   />
+//                 </div>
+//               </div>
+//             ))}
+//             </>  
+//           ): (<></>)}
+//         </div>
+//         <Button onClick={saveChanges}>Apply</Button>
+//       </div>
+//     </>
+//   )
+// }
+
+const PropertyPopover = ({ section }) => {
+  const [properties, setProperties] = useState<object | null>(null)
+
+  const handlePropertiesChange = (newProperties: any) => {
+    setProperties(newProperties)
   }
 
-  //      {JSON.stringify(section)}
+  const sectionType = section && section?.sectionType
+      ? section.sectionType.toUpperCase()
+      : 'Component'  
+
+  useEffect(() => {
+    if (section && section.node && section.node.properties) {
+      const sectionProps = section.node.properties
+      let p: any = {}
+      for (const [key, value] of Object.entries(sectionProps)) {
+        console.log(`${key}: ${value}`)
+        p[key] = value
+      }
+      if (!properties) {
+        setProperties(p)
+      }
+    }
+  }, [section, properties])
 
   const handleInputChange = (key: string, newValue: string) => {
-    onChange({ ...properties, [key]: newValue })
+    if (!properties) return
+    handlePropertiesChange({ ...properties, [key]: newValue })
   }
 
   const saveChanges = () => {
     // TODO: Take the current values and map them to the properties of the node in the subtree
   }
 
+  const getEditablePropertyName = (key: string) => {
+    const editableProps = [
+      { key: 'title', displayName: 'Title' },
+      { key: 'subTitle', displayName: 'Sub Title' },
+      { key: 'imgSrc', displayName: 'Image URL' },
+      { key: 'imgAlt', displayName: 'Image Alt' },
+      { key: 'text', displayName: 'Text' },
+      { key: 'header', displayName: 'Header' },
+      { key: 'subHeader', displayName: 'Sub Header' },
+      { key: 'className', displayName: 'Style' },
+      { key: 'parentClassName', displayName: 'Parent Style' },
+      { key: 'delay', displayName: 'Delay (ms)' },
+      { key: 'stopOnInteraction', displayName: 'Stop on interaction' },
+      { key: 'showBorder', displayName: 'Show Border' },
+    ]
+    const editableProp = editableProps.find((prop) => prop.key === key) || null
+    if (editableProp) {
+      return editableProp.displayName
+    }
+    return key
+  }
+
+  const renderInputControl = (key: string, value: any, propertyType: string) => {
+    switch (propertyType) {
+      case 'text':
+        return (
+          <input
+            type="text"
+            value={value}
+            onChange={(e) => handleInputChange(key, e.target.value)}
+            className="border rounded p-2 w-full"
+          />
+        )
+      case 'toggle':
+        return (
+          <input
+            type="checkbox"
+            checked={value}
+            onChange={(e) => handleInputChange(key, e.target.checked)}
+            className="border rounded p-2 w-full"
+          />
+        )
+      case 'color':
+        return (
+          <input
+            type="color"
+            value={value}
+            onChange={(e) => handleInputChange(key, e.target.value)}
+            className="border rounded p-2 w-full"
+          />
+        )
+      default:
+        return (
+          <input
+            type="text"
+            value={value}
+            onChange={(e) => handleInputChange(key, e.target.value)}
+            className="border rounded p-2 w-full"
+          />
+        )
+    }
+  }
+
+  const getPropertyType = (key: string) => {
+    const editableProps = [
+      { key: 'title', propertyType: 'text' },
+      { key: 'subTitle', propertyType: 'text' },
+      { key: 'imgSrc', propertyType: 'text' },
+      { key: 'imgAlt', propertyType: 'text' },
+      { key: 'text', propertyType: 'text' },
+      { key: 'header', propertyType: 'text' },
+      { key: 'subHeader', propertyType: 'text' },
+      { key: 'className', propertyType: 'className' },
+      { key: 'parentClassName', propertyType: 'text' },
+      { key: 'delay', propertyType: 'text' },
+      { key: 'stopOnInteraction', propertyType: 'toggle' },
+      { key: 'showBorder', propertyType: 'toggle' },
+    ]
+    const editableProp = editableProps.find((prop) => prop.key === key) || null
+    if (editableProp) {
+      return editableProp.propertyType
+    }
+    return key
+  }
+
   return (
     <>
       <div className="grid gap-4">
         <div className="space-y-2">
-          <h4 className="font-medium leading-none">{` ${sectionType} Properties`}</h4>
+          <h4 className="font-medium leading-none">{` ${section?.sectionType?.toUpperCase() || 'Component'} Properties`}</h4>
           <p className="text-sm text-muted-foreground">
             Set the properties for the component.
           </p>
         </div>
         <div className="grid gap-2">
-          {Object.entries(properties).map(([key, value]) => (
-            <div className="grid grid-cols-3 items-center gap-4">
-              <div key={key} className="mb-4">
-                <label className="block font-bold mb-2">{key}</label>
-                {/* @ts-ignore */}
-                <input
-                  type="text"
-                  value={value}
-                  onChange={(e) => handleInputChange(key, e.target.value)}
-                  className="border rounded p-2 w-full"
-                />
-              </div>
-            </div>
-          ))}
+          {properties ? (
+            <>
+              {Object.entries(properties).map(([key, value]) => {
+                return (
+                  <div className="grid grid-cols-1 items-center gap-4" key={key}>
+                    <div className="mb-4">
+                      <label className="block font-bold mb-2">{getEditablePropertyName(key)}</label>
+                      {renderInputControl(key, value, getPropertyType(key))}
+                    </div>
+                  </div>
+                )
+              })}
+            </>
+          ) : (
+            <></>
+          )}
         </div>
         <Button onClick={saveChanges}>Apply</Button>
       </div>
     </>
   )
 }
+
+
 
 const Section = ({
   id,
@@ -401,11 +590,12 @@ const Section = ({
   section,
   duplicateSection,
 }) => {
-  const [properties, setProperties] = useState({
-    key1: 'value1',
-    key2: 'value2',
-    key3: 'value3',
-  })
+
+  // const [properties, setProperties] = useState({
+  //   title: 'value1',
+  //   subTitle: 'value2',
+  //   imgSrc: 'value3',
+  // })
 
   const ref = useRef<HTMLDivElement>(null)
   const [popoverPosition, setPopoverPosition] = useState({ top: 0, left: 0 })
@@ -447,10 +637,6 @@ const Section = ({
 
   drag(drop(ref))
 
-  const handlePropertiesChange = (newProperties: any) => {
-    setProperties(newProperties)
-  }
-
   const handleSelectionChange = (id: any) => {
     const sectionBoundingRect = ref.current?.getBoundingClientRect()
     if (sectionBoundingRect) {
@@ -462,9 +648,11 @@ const Section = ({
     selectSection(id)
   }
 
+  const [open, setOpen] = useState(false)
+
   return (
     <>
-      <Popover>
+      <Popover open={open} onOpenChange={setOpen} >
         <PopoverTrigger asChild={true}>
           <div
             ref={ref}
@@ -481,11 +669,7 @@ const Section = ({
               style={{ top: `${popoverPosition.top}px`, left: `${popoverPosition.left}px` }}
               sideOffset={boundingRect.top - boundingRect.bottom}
             >
-              <PropertyPopover
-                section={section}
-                properties={properties}
-                onChange={handlePropertiesChange}
-              />
+              <PropertyPopover section={section} />
             </PopoverContent>
             <div
               ref={preview}
@@ -635,8 +819,7 @@ export const ContentDesigner = ({
   }
 
   const duplicateSection = (id: number) => {
-    const sectionCopy =
-      sections.find((section) => section.id === selectedSectionId) || null
+    const sectionCopy = sections.find((section) => section.id === selectedSectionId) || null
     if (sectionCopy) {
       setSelectedSectionId(null)
       sectionCopy.id = sections.length + 1
