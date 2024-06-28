@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import {
-  BrainCogIcon,
   PackageIcon,
   ThumbsUpIcon,
   TrophyIcon,
@@ -8,7 +7,6 @@ import {
   ZapIcon,
   Briefcase,
   X,
-  TornadoIcon,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
@@ -16,16 +14,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
-import IconPicker from './IconPicker'
+import { IconPicker } from './IconPicker'
 
 export interface IconSection2ColsGridProps_Designer {
   children?: any

@@ -1228,12 +1228,13 @@ interface IconPickerProps {
   onValueChange?: any
 }
 
-export default function IconPicker({
-  defaultValue,
-  onValueChange,
-  value,
-}: IconPickerProps) {
-  type ComponentProps = {
+export const IconPicker = ({
+    defaultValue,
+    onValueChange,
+    value,
+  }: IconPickerProps) =>  {
+
+    type ComponentProps = {
     [key: string]: any
   }
 
