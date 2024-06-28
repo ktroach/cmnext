@@ -25,6 +25,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import IconPicker from './IconPicker'
 
 export interface IconSection2ColsGridProps_Designer {
   children?: any
@@ -36,11 +37,9 @@ export default function IconSection2ColsGrid_Designer({
   designMode,
 }: IconSection2ColsGridProps_Designer) {
   const [properties, setProperties] = useState<object | null>(null)
-
+  const [selectedIcon, setSelectedIcon] = useState('')
   const [selected, setSelected] = useState(false)
   const [open, setOpen] = useState(false)
-
-  const [value, setValue] = useState('')
 
   useEffect(() => {
     if (!properties) {
@@ -77,6 +76,10 @@ export default function IconSection2ColsGrid_Designer({
     setSelected(false)
   }
 
+  const onIconChanged = (value: any) => {
+    setSelectedIcon(value)
+  }
+
   const selectedStyle = selected
     ? 'flex border-4 border-cyan-600'
     : 'flex hover:border-4 hover:border-cyan-600'
@@ -88,22 +91,22 @@ export default function IconSection2ColsGrid_Designer({
         <div className="max-w-4xl mx-auto">
           {/* Grid */}
           <div className="grid md:grid-cols-2 gap-6 lg:gap-12">
+             {/* Col */}
             <div className="space-y-6 lg:space-y-10">
               {/* Icon Block */}
               <div className={selectedStyle}>
-                {designMode ? (
                   <>
                     <Popover open={open} onOpenChange={handleOpen}>
                       <PopoverTrigger asChild={true}>
                         <div className={selectedStyle}>
                           <Briefcase className="flex-shrink-0 mt-2 h-8 w-8" />
+                          {/* {properties?.iconBlock1_icon} */}
                           <div className="ms-5 sm:ms-8">
                             <h3 className="text-base sm:text-lg font-semibold">
-                              Creative minds
+                                {properties?.iconBlock1_h3}
                             </h3>
                             <p className="mt-1 text-muted-foreground">
-                              We choose our teams carefully. Our people are the
-                              secret to great work.
+                                {properties?.iconBlock1_paragraph}
                             </p>
                           </div>
                         </div>
@@ -134,39 +137,11 @@ export default function IconSection2ColsGrid_Designer({
                                   <label className="block font-bold mb-2">
                                     Icon
                                   </label>
-                                  <Select>
-                                    <SelectTrigger>
-                                    <SelectValue placeholder="Select a Icon" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                    <SelectGroup>
-                                    <SelectLabel>Lucide Icons</SelectLabel>
-                                    <SelectItem value="braincog">
-                                        <span className="font-medium">BrainCogIcon</span> 
-                                        <span className="text-muted-foreground">
-                                        <BrainCogIcon />
-                                        </span>
-                                    </SelectItem>
-                                    <SelectItem value="tornado">
-                                        <span className="font-medium">TornadoIcon</span>
-                                        <span className="text-muted-foreground">
-                                        <TornadoIcon />
-                                        </span>
-                                    </SelectItem>
-                                    </SelectGroup>
-                                    </SelectContent>
-                                </Select>
-                                  {/* <input
-                                    type="text"
-                                    value={properties?.iconBlock1_icon}
-                                    onChange={(e) =>
-                                      handleInputChange(
-                                        'iconBlock1_icon',
-                                        e.target.value
-                                      )
-                                    }
-                                    className="border rounded p-2 w-full"
-                                  /> */}
+                                  <IconPicker
+                                    onValueChange={onIconChanged}
+                                    defaultValue=""
+                                    value={selectedIcon}
+                                  />
                                 </div>
                                 <div className="mb-4">
                                   <label className="block font-bold mb-2">
@@ -207,22 +182,6 @@ export default function IconSection2ColsGrid_Designer({
                       </PopoverContent>
                     </Popover>
                   </>
-                ) : (
-                  <>
-                    <div className={selectedStyle}>
-                      <Briefcase className="flex-shrink-0 mt-2 h-8 w-8" />
-                      <div className="ms-5 sm:ms-8">
-                        <h3 className="text-base sm:text-lg font-semibold">
-                          Creative minds
-                        </h3>
-                        <p className="mt-1 text-muted-foreground">
-                          We choose our teams carefully. Our people are the
-                          secret to great work.
-                        </p>
-                      </div>
-                    </div>
-                  </>
-                )}
               </div>
               {/* End Icon Block */}
               {/* Icon Block */}
@@ -255,6 +214,8 @@ export default function IconSection2ColsGrid_Designer({
               {/* End Icon Block */}
             </div>
             {/* End Col */}
+
+            {/* Col */}                        
             <div className="space-y-6 lg:space-y-10">
               {/* Icon Block */}
               <div className="flex">
@@ -299,6 +260,8 @@ export default function IconSection2ColsGrid_Designer({
               {/* End Icon Block */}
             </div>
             {/* End Col */}
+
+
           </div>
           {/* End Grid */}
         </div>
