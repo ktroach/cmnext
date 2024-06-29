@@ -265,7 +265,7 @@ const componentsMap: { [key: string]: React.FC<ComponentProps> } = {
     <HeroSectionCentredWithImage children={children} {...props} />
   ),
   HeroSectionGradientBackground: ({ children, ...props }: ComponentProps) => (
-    <HeroSectionGradientBackground children={children} {...props} />
+    <HeroSectionGradientBackground designMode={true} children={children} {...props} />
   ),
   HeroSectionImageWithReviews: ({ children, ...props }: ComponentProps) => (
     <HeroSectionImageWithReviews children={children} {...props} />
@@ -838,7 +838,7 @@ export const ContentDesigner = ({
           className: '',
           header: 'Title',
           subHeader: 'Sub Title',
-          tagLine: 'This is the Tag Line',
+          tagLine: 'This is the Paragraph',
         },
         children: [],
       }
