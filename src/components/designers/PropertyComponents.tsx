@@ -14,7 +14,7 @@ interface PropertySetProps {
   designMode?: boolean
 }
 
-function processChildren(children, propertyControls, otherChildren) {
+function processChildren(children: any, propertyControls: any, otherChildren: any) {
   React.Children.forEach(children, (child) => {
     if (!React.isValidElement(child)) return
 
@@ -34,17 +34,7 @@ export function PropertySet({ children, designMode }: PropertySetProps) {
   const [selected, setSelected] = useState(false)
   const [open, setOpen] = useState(false)
   const propertyControls: any = []
-  //   const otherChildren: any = []
   const otherChildren = processChildren(children, propertyControls, [])
-
-  //   React.Children.forEach(children, (child) => {
-  //     if (child.type === PropertyControl) {
-  //       propertyControls.push(child)
-  //     } else {
-  //       otherChildren.push(child)
-  //     }
-  //   })
-  //   console.log(propertyControls)
 
   const handleOpen = () => {
     setOpen(true)
@@ -69,9 +59,11 @@ export function PropertySet({ children, designMode }: PropertySetProps) {
       {designMode ? (
         <>
           <div className={selectedStyle}>
+            {otherChildren}
+
             <Popover open={open} onOpenChange={handleOpen}>
               <PopoverTrigger asChild={true}>
-                <div>{otherChildren}</div>
+                <div className="absolute top-0 left-0 w-full h-full cursor-pointer" />
               </PopoverTrigger>
               <PopoverContent className={selectedStyle}>
                 <>
