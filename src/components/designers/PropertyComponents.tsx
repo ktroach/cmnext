@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   Popover,
   PopoverContent,
@@ -12,29 +12,36 @@ import { toast } from 'sonner'
 interface PropertySetProps {
   children?: any
   designMode?: boolean
+  onPropertyChange?: (key: string, value: any) => void
 }
 
-function processChildren(children: any, propertyControls: any, otherChildren: any) {
-  React.Children.forEach(children, (child) => {
-    if (!React.isValidElement(child)) return
-
-    if (child.type === PropertyControl) {
-      propertyControls.push(child)
-    } else {
-      const newChild = React.cloneElement(child, {
-        children: processChildren(child.props.children, propertyControls, []),
-      })
-      otherChildren.push(newChild)
-    }
-  })
-  return otherChildren
-}
-
-export function PropertySet({ children, designMode }: PropertySetProps) {
+export function PropertySet({ children, designMode, onPropertyChange }: PropertySetProps) {
   const [selected, setSelected] = useState(false)
   const [open, setOpen] = useState(false)
-  const propertyControls: any = []
-  const otherChildren = processChildren(children, propertyControls, [])
+  const [properties, setProperties] = useState({})
+
+  const findPropertyControls = (children) => {
+    const newProperties = {}
+    const searchChildren = (element) => {
+      React.Children.forEach(element, (child) => {
+        if (React.isValidElement(child)) {
+          if (child.type === PropertyControl) {
+            newProperties[child.props.propertyKey] = child.props.value
+          } else if (child.props.children) {
+            searchChildren(child.props.children)
+          }
+        }
+      })
+    }
+    searchChildren(children)
+    return newProperties
+  }
+
+  useEffect(() => {
+    const newProperties = findPropertyControls(children)
+    console.log('>>> newProperties >>> ', newProperties)
+    setProperties(newProperties)
+  }, [children])
 
   const handleOpen = () => {
     setOpen(true)
@@ -46,21 +53,48 @@ export function PropertySet({ children, designMode }: PropertySetProps) {
     setSelected(false)
   }
 
+  const handlePropertyChange = (key: string, value: any) => {
+    setProperties(prevProps => ({
+      ...prevProps,
+      [key]: value
+    }))
+    if (onPropertyChange) {
+      onPropertyChange(key, value)
+    }
+  }
+
   const applyChanges = () => {
     toast('Changes applied')
+    handleClosePopover()
   }
 
   const selectedStyle = selected
     ? ' border-4 border-cyan-600'
     : ' hover:border-4 hover:border-cyan-600'
 
+  const renderChildren = () => {
+    return React.Children.map(children, child => {
+      if (React.isValidElement(child)) {
+        if (child.type === PropertyControl) {
+          return React.cloneElement(child, {
+            ...child.props,
+            value: properties[child.props.propertyKey] || child.props.value,
+            onChange: handlePropertyChange,
+            designMode
+          })
+        }
+        return child
+      }
+      return child
+    })
+  }
+
   return (
     <div>
       {designMode ? (
         <>
           <div className={selectedStyle}>
-            {otherChildren}
-
+            {renderChildren()}
             <Popover open={open} onOpenChange={handleOpen}>
               <PopoverTrigger asChild={true}>
                 <div className="absolute top-0 left-0 w-full h-full cursor-pointer" />
@@ -83,28 +117,16 @@ export function PropertySet({ children, designMode }: PropertySetProps) {
                       </p>
                     </div>
                     <div className="grid gap-2">
-                      <div
-                        className="grid grid-cols-1 items-center gap-4"
-                        key="iconBlock1"
-                      >
-                        {propertyControls.map((control: any, index: number) => (
-                          <div className="mb-4">
-                            <div key={index}>
-                              <label>{control.props.propertyKey}</label>
-                              <Input
-                                type="text"
-                                value={control.props.value}
-                                onChange={(e) =>
-                                  control.props.onChange(
-                                    control.props.propertyKey,
-                                    e.target.value
-                                  )
-                                }
-                              />
-                            </div>
-                          </div>
-                        ))}
-                      </div>
+                      {Object.entries(properties).map(([key, value], index) => (
+                        <div className="mb-4" key={index}>
+                          <label>{key}</label>
+                          <Input
+                            type="text"
+                            value={value as string}
+                            onChange={(e) => handlePropertyChange(key, e.target.value)}
+                          />
+                        </div>
+                      ))}
                     </div>
                     <Button onClick={applyChanges}>Apply</Button>
                   </div>
@@ -114,7 +136,7 @@ export function PropertySet({ children, designMode }: PropertySetProps) {
           </div>
         </>
       ) : (
-        otherChildren
+        renderChildren()
       )}
     </div>
   )
@@ -124,7 +146,7 @@ interface PropertyControlProps {
   children?: any
   value?: any
   propertyKey?: any
-  onChange?: any
+  onChange?: (key: string, value: any) => void
   designMode?: boolean
 }
 
@@ -135,5 +157,13 @@ export function PropertyControl({
   onChange,
   designMode,
 }: PropertyControlProps) {
-  return <div>{children}</div>
+  return (
+    <>
+      {React.Children.map(children, child =>
+        React.isValidElement(child)
+          ? React.cloneElement(child, { children: value })
+          : child
+      )}
+    </>
+  )
 }

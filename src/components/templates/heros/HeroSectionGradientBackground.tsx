@@ -4,12 +4,13 @@ import { PropertyControl, PropertySet } from '@/components/designers/PropertyCom
 
 export interface HeroSectionGradientBackgroundProps {
   children?: any
-  header?: any
-  subHeader?: any
-  tagLine?: any
-  buttonTitle?: any
-  button2Title?: any
+  header?: string
+  subHeader?: string
+  tagLine?: string
+  buttonTitle?: string
+  button2Title?: string
   designMode?: boolean
+  onPropertyChange?: (key: string, value: any) => void
 }
 
 export default function HeroSectionGradientBackground({
@@ -19,7 +20,8 @@ export default function HeroSectionGradientBackground({
   tagLine,
   buttonTitle,
   button2Title,
-  designMode
+  designMode,
+  onPropertyChange
 }: HeroSectionGradientBackgroundProps) {
   
   const [properties, setProperties] = useState({
@@ -35,6 +37,11 @@ export default function HeroSectionGradientBackground({
       ...prevProps,
       [key]: value
     }))
+    
+    // Call the onPropertyChange prop if it exists
+    if (onPropertyChange) {
+      onPropertyChange(key, value)
+    }
   }
 
   return (
@@ -51,55 +58,41 @@ export default function HeroSectionGradientBackground({
         </div>
         {/* End Gradients */}
        
-        <PropertySet key="block_gradient_bg" designMode={designMode}>
-
+        <PropertySet designMode={designMode} onPropertyChange={handlePropertyChange}>
           <div className="relative z-10">
             <div className="container py-10 lg:py-16">
-
-              
               <div className="max-w-2xl text-center mx-auto">
-                <PropertyControl key="block_gradient_bg" propertyKey="tagLine" value={properties.tagLine} designMode={designMode} onChange={handlePropertyChange}>
-                  <p className="">
-                    {properties?.tagLine}
-                  </p>
+                <PropertyControl propertyKey="tagLine" value={properties.tagLine}>
+                  <p className="">{properties.tagLine}</p>
                 </PropertyControl>
-                {/* Title */}
+                
                 <div className="mt-5 max-w-2xl">
-                  <PropertyControl key="block_gradient_bg" propertyKey="header" value={properties.header} designMode={designMode} onChange={handlePropertyChange}>
+                  <PropertyControl propertyKey="header" value={properties.header}>
                     <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
-                      {properties?.header}
+                      {properties.header}
                     </h1>
                   </PropertyControl>
                 </div>
-                {/* End Title */}
+                
                 <div className="mt-5 max-w-3xl">
-                  <PropertyControl key="block_gradient_bg" propertyKey="subHeader" value={properties.subHeader} designMode={designMode} onChange={handlePropertyChange}>
-                    <p className="text-xl text-muted-foreground">
-                      {properties?.subHeader}
-                    </p>
+                  <PropertyControl propertyKey="subHeader" value={properties.subHeader}>
+                    <p className="text-xl text-muted-foreground">{properties.subHeader}</p>
                   </PropertyControl>
                 </div>
-                {/* Buttons */}
+                
                 <div className="mt-8 gap-3 flex justify-center">
-                  <PropertyControl key="block_gradient_bg" propertyKey="buttonTitle" value={properties.buttonTitle} designMode={designMode} onChange={handlePropertyChange}>
-                    <Button size={'lg'}>{properties?.buttonTitle}</Button>
+                  <PropertyControl propertyKey="buttonTitle" value={properties.buttonTitle}>
+                    <Button size={'lg'}>{properties.buttonTitle}</Button>
                   </PropertyControl>
-                  <PropertyControl key="block_gradient_bg" propertyKey="button2Title" value={properties.button2Title} designMode={designMode} onChange={handlePropertyChange}>
-                    <Button size={'lg'} variant={'outline'}>
-                      {properties?.button2Title}
-                    </Button>
+                  <PropertyControl propertyKey="button2Title" value={properties.button2Title}>
+                    <Button size={'lg'} variant={'outline'}>{properties.button2Title}</Button>
                   </PropertyControl>
                 </div>
-                {/* End Buttons */}
               </div>
-              
-              
             </div>
           </div>
-
-          </PropertySet>
+        </PropertySet>
       </div>
-      {/* End Hero */}
     </>
   )
 }

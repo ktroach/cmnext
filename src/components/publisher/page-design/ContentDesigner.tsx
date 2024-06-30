@@ -265,7 +265,18 @@ const componentsMap: { [key: string]: React.FC<ComponentProps> } = {
     <HeroSectionCentredWithImage children={children} {...props} />
   ),
   HeroSectionGradientBackground: ({ children, ...props }: ComponentProps) => (
-    <HeroSectionGradientBackground designMode={true} children={children} {...props} />
+    <HeroSectionGradientBackground 
+    header="Welcome"
+    subHeader="Explore our services"
+    tagLine="Innovation at its best"
+    buttonTitle="Get Started"
+    button2Title="Learn More"
+    designMode={true}
+    onPropertyChange={(key, value) => {
+      console.log(`Property ${key} changed to ${value}`);
+      // Handle the property change in the parent component
+    }}    
+    children={children} {...props} />
   ),
   HeroSectionImageWithReviews: ({ children, ...props }: ComponentProps) => (
     <HeroSectionImageWithReviews children={children} {...props} />
