@@ -1,32 +1,34 @@
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { PropertyControl, PropertySet } from '@/components/designers/PropertyComponents'
+import { cn } from '@/lib/utils'
 
 export interface HeroSectionGradientBackgroundProps {
   children?: any
+  className?: string
   header?: string
   subHeader?: string
   tagLine?: string
   buttonTitle?: string
   button2Title?: string
   designMode?: boolean
-  onPropertyChange?: (key: string, value: any) => void
   onApplyChanges?: (propChanges: any) => void
 }
 
 export default function HeroSectionGradientBackground({
   children,
+  className,
   header,
   subHeader,
   tagLine,
   buttonTitle,
   button2Title,
   designMode,
-  onPropertyChange, 
   onApplyChanges
 }: HeroSectionGradientBackgroundProps) {
   
   const [properties, setProperties] = useState({
+    className,
     tagLine,
     header,
     subHeader,
@@ -39,17 +41,10 @@ export default function HeroSectionGradientBackground({
       ...prevProps,
       [key]: value
     }))
-    
-    // Call the onPropertyChange prop if it exists
-    if (onPropertyChange) {
-      onPropertyChange(key, value)
-    }
   }
 
   const handleOnApplyChanges = (propChanges: any) => {
-    // Call the onApplyChanges prop if it exists
     if (onApplyChanges) {
-      console.log('called handleOnApplyChanges')
       onApplyChanges(propChanges)
     }    
   }
@@ -57,7 +52,7 @@ export default function HeroSectionGradientBackground({
   return (
     <>
       {/* Hero */}
-      <div className="relative overflow-hidden py-24 lg:py-32">
+      <div className={cn('relative overflow-hidden py-24 lg:py-32', className)}>
         {/* Gradients */}
         <div
           aria-hidden="true"

@@ -249,11 +249,22 @@ const componentsMap: { [key: string]: React.FC<ComponentProps> } = {
   IconSectionStackedCards: ({ children, ...props }: ComponentProps) => (
     <IconSectionStackedCards children={children} {...props} />
   ),
+
+  HeroSectionGradientBackground: ({ children, ...props }: ComponentProps) => (
+    <HeroSectionGradientBackground 
+    designMode={true}
+    children={children} {...props} />
+  ),
+  HeroSectionCentredWithImage: ({ children, ...props }: ComponentProps) => (
+    <HeroSectionCentredWithImage children={children} {...props} designMode={true} />
+  ),
+
+
   HeroFormCenterAlignedSearchWithTags: ({
     children,
     ...props
   }: ComponentProps) => (
-    <HeroFormCenterAlignedSearchWithTags children={children} {...props} />
+    <HeroFormCenterAlignedSearchWithTags children={children} {...props} designMode={true} />
   ),
   HeroFormCenterAlignedWithAForm: ({ children, ...props }: ComponentProps) => (
     <HeroFormCenterAlignedWithAForm children={children} {...props} />
@@ -261,21 +272,8 @@ const componentsMap: { [key: string]: React.FC<ComponentProps> } = {
   HeroFormSignUpForm: ({ children, ...props }: ComponentProps) => (
     <HeroFormSignUpForm children={children} {...props} />
   ),
-  HeroSectionCentredWithImage: ({ children, ...props }: ComponentProps) => (
-    <HeroSectionCentredWithImage children={children} {...props} />
-  ),
-  HeroSectionGradientBackground: ({ children, ...props }: ComponentProps) => (
-    <HeroSectionGradientBackground 
-    designMode={true}
-    onPropertyChange={(key, value) => {
-      console.log(`Property ${key} changed to ${value}`);
-      // TODO: Handle the property change in the parent component
-      // Every component could have this onPropertyChange handler, but how would it update the subtree correctly?
-      // it would need to know which node of the subtree to modify 
 
-    }}    
-    children={children} {...props} />
-  ),
+
   HeroSectionImageWithReviews: ({ children, ...props }: ComponentProps) => (
     <HeroSectionImageWithReviews children={children} {...props} />
   ),
@@ -835,7 +833,7 @@ export const ContentDesigner = ({
           className: '',
           header: 'Title',
           subHeader: 'Sub Title',
-          imgSrc: 'https://picsum.photos/id/10/800/800',
+          imgSrc: "https://picsum.photos/id/16/800/800",
         },
         children: [],
       }
@@ -846,7 +844,7 @@ export const ContentDesigner = ({
         key: Math.random(),
         value: sectionType,
         properties: {
-          className: 'bg-slate-500',
+          className: '',
           header: 'Title',
           subHeader: 'Sub Title',
           tagLine: 'This is the Paragraph',
@@ -950,6 +948,7 @@ export const ContentDesigner = ({
     subtree.addNode('root', null, {})
 
     if (!sections || sections?.length === 0) return
+
     sections.map((section) => {
       const subTreeComponent = section?.node
       // console.log('component >>> ', subTreeComponent)
@@ -958,6 +957,7 @@ export const ContentDesigner = ({
         'root',
         subTreeComponent.properties
       )
+
       const componentChildren = subTreeComponent?.children
         ? subTreeComponent.children
         : []
@@ -1009,26 +1009,26 @@ export const ContentDesigner = ({
       return
     }
 
-    let savedContent: any = null
-    let mutationVars: any = null
-    mutationVars = {
-      pageId: pageId,
-      layoutTemplate: layoutTemplate,
-      authorId: authorId,
-      subsiteId: subsiteId,
-    }
-    savedContent = await savePageMutation.mutateAsync(mutationVars)
+    // let savedContent: any = null
+    // let mutationVars: any = null
+    // mutationVars = {
+    //   pageId: pageId,
+    //   layoutTemplate: layoutTemplate,
+    //   authorId: authorId,
+    //   subsiteId: subsiteId,
+    // }
+    // savedContent = await savePageMutation.mutateAsync(mutationVars)
 
-    if (!savedContent) {
-      console.log('There was a problem saving draft: savedContent is null')
-      toast('There was a problem saving draft. Please try again.')
-      return
-    }
+    // if (!savedContent) {
+    //   console.log('There was a problem saving draft: savedContent is null')
+    //   toast('There was a problem saving draft. Please try again.')
+    //   return
+    // }
 
-    if (!savedContent?.id) {
-      console.log('savedContent.id is null')
-      return
-    }
+    // if (!savedContent?.id) {
+    //   console.log('savedContent.id is null')
+    //   return
+    // }
 
     toast.success('Content saved successfully.')
   }

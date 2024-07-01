@@ -7,7 +7,6 @@ import {
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { X } from 'lucide-react'
-import { toast } from 'sonner'
 
 interface PropertySetProps {
   children?: any
@@ -75,23 +74,6 @@ export function PropertySet({ children, designMode, onPropertyChange, onApplyCha
   const selectedStyle = selected
     ? ' border-4 border-cyan-600'
     : ' hover:border-4 hover:border-cyan-600'
-
-  const renderChildren = () => {
-    return React.Children.map(children, child => {
-      if (React.isValidElement(child)) {
-        if (child.type === PropertyControl) {
-          return React.cloneElement(child, {
-            ...child.props,
-            value: properties[child.props.propertyKey] || child.props.value,
-            onChange: handlePropertyChange,
-            designMode
-          })
-        }
-        return child
-      }
-      return child
-    })
-  }
 
   const handleContainerClick = (e: React.MouseEvent) => {
     if (designMode && containerRef.current && containerRef.current.contains(e.target)) {
@@ -165,13 +147,24 @@ export function PropertyControl({
   onChange,
   designMode,
 }: PropertyControlProps) {
-  return (
-    <>
-      {React.Children.map(children, child =>
-        React.isValidElement(child)
-          ? React.cloneElement(child, { children: value })
-          : child
-      )}
-    </>
-  )
+    if (propertyKey === 'imgSrc') {
+        return (
+            <>
+              {React.Children.map(children, child =>
+                React.isValidElement(child)
+                  ? React.cloneElement(child)
+                  : child
+              )}
+            </>
+          )
+    }
+    return (
+        <>
+        {React.Children.map(children, child =>
+            React.isValidElement(child)
+            ? React.cloneElement(child, { children: value })
+            : child
+        )}
+        </>
+    )
 }

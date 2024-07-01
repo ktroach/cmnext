@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -10,18 +11,45 @@ import {
   SearchIcon,
   SettingsIcon,
 } from 'lucide-react'
+import { cn } from '@/lib/utils'
+import { PropertyControl, PropertySet } from '@/components/designers/PropertyComponents'
 
 export interface HeroFormCenterAlignedSearchWithTagsProps {
   children?: any
+  className?: string
+  designMode?: boolean
+  onApplyChanges?: (propChanges: any) => void  
 }
 
 export default function HeroFormCenterAlignedSearchWithTags({
   children,
+  className,
+  designMode,
+  onApplyChanges  
 }: HeroFormCenterAlignedSearchWithTagsProps) {
+
+  const [properties, setProperties] = useState({
+    className,
+  })
+
+  const handlePropertyChange = (key: string, value: any) => {
+    setProperties(prevProps => ({
+      ...prevProps,
+      [key]: value
+    }))
+  }
+
+  const handleOnApplyChanges = (propChanges: any) => {
+    if (onApplyChanges) {
+      onApplyChanges(propChanges)
+    }    
+  }  
+
   return (
     <>
       {/* Hero */}
-      <div className="relative overflow-hidden">
+      <div className={cn('relative overflow-hidden', className)}>
+      <PropertySet designMode={designMode} onPropertyChange={handlePropertyChange} onApplyChanges={handleOnApplyChanges}>
         <div className="container py-24 lg:py-32">
           <div className="text-center">
             <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
@@ -132,6 +160,7 @@ export default function HeroFormCenterAlignedSearchWithTags({
             </div>
           </div>
         </div>
+        </PropertySet>
       </div>
       {/* End Hero */}
     </>
