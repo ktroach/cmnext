@@ -13,9 +13,10 @@ interface PropertySetProps {
   children?: any
   designMode?: boolean
   onPropertyChange?: (key: string, value: any) => void
+  onApplyChanges?: (propChanges: any) => void
 }
 
-export function PropertySet({ children, designMode, onPropertyChange }: PropertySetProps) {
+export function PropertySet({ children, designMode, onPropertyChange, onApplyChanges }: PropertySetProps) {
   const [selected, setSelected] = useState(false)
   const [open, setOpen] = useState(false)
   const [properties, setProperties] = useState({})
@@ -41,7 +42,6 @@ export function PropertySet({ children, designMode, onPropertyChange }: Property
 
   useEffect(() => {
     const newProperties = findPropertyControls(children)
-    console.log('>>> newProperties >>> ', newProperties)
     setProperties(newProperties)
   }, [children])
 
@@ -65,8 +65,10 @@ export function PropertySet({ children, designMode, onPropertyChange }: Property
     }
   }
 
-  const applyChanges = () => {
-    toast('Changes applied')
+  const handleOnApplyChanges = () => {
+    if (onApplyChanges) {
+        onApplyChanges(properties)
+    }    
     handleClosePopover()
   }
 
@@ -108,7 +110,7 @@ export function PropertySet({ children, designMode, onPropertyChange }: Property
       {children}
       {designMode && (
         <Popover open={open} onOpenChange={setOpen}>
-          <PopoverTrigger asChild>
+          <PopoverTrigger >
             <div className="absolute top-0 left-0 w-full h-full cursor-pointer" />
           </PopoverTrigger>
           <PopoverContent ref={popoverRef} className={selectedStyle}>
@@ -139,7 +141,7 @@ export function PropertySet({ children, designMode, onPropertyChange }: Property
                   </div>
                 ))}
               </div>
-              <Button onClick={applyChanges}>Apply</Button>
+              <Button onClick={handleOnApplyChanges}>Apply Changes</Button>
             </div>
           </PopoverContent>
         </Popover>
@@ -147,7 +149,6 @@ export function PropertySet({ children, designMode, onPropertyChange }: Property
     </div>
   )
 }
-
 
 interface PropertyControlProps {
   children?: any

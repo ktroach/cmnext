@@ -266,15 +266,13 @@ const componentsMap: { [key: string]: React.FC<ComponentProps> } = {
   ),
   HeroSectionGradientBackground: ({ children, ...props }: ComponentProps) => (
     <HeroSectionGradientBackground 
-    header="Welcome"
-    subHeader="Explore our services"
-    tagLine="Innovation at its best"
-    buttonTitle="Get Started"
-    button2Title="Learn More"
     designMode={true}
     onPropertyChange={(key, value) => {
       console.log(`Property ${key} changed to ${value}`);
-      // Handle the property change in the parent component
+      // TODO: Handle the property change in the parent component
+      // Every component could have this onPropertyChange handler, but how would it update the subtree correctly?
+      // it would need to know which node of the subtree to modify 
+
     }}    
     children={children} {...props} />
   ),
@@ -289,18 +287,19 @@ const componentsMap: { [key: string]: React.FC<ComponentProps> } = {
   ),
 }
 
-const createComponent = (node: Node): React.ReactNode => {
+const createComponent = (node: Node, onApplyChanges: any): React.ReactNode => {
   const Component = componentsMap[node.value]
   if (!Component) return null
 
   if (node?.children && node?.children?.length > 0) {
     const children = node.children.map((child, index) =>
-      createComponent({ ...child, key: index })
+      createComponent({ ...child, key: index }, null)
     )
     return (
       <Component
         key={node.properties.key || Math.random()}
         {...node.properties}
+        onApplyChanges={onApplyChanges}
       >
         {children}
       </Component>
@@ -311,6 +310,7 @@ const createComponent = (node: Node): React.ReactNode => {
     <Component
       key={node.properties.key || Math.random()}
       {...node.properties}
+      onApplyChanges={onApplyChanges}
     ></Component>
   )
 }
@@ -846,10 +846,12 @@ export const ContentDesigner = ({
         key: Math.random(),
         value: sectionType,
         properties: {
-          className: '',
+          className: 'bg-slate-500',
           header: 'Title',
           subHeader: 'Sub Title',
           tagLine: 'This is the Paragraph',
+          buttonTitle: 'button 1', 
+          button2Title: 'button 2'
         },
         children: [],
       }
@@ -903,13 +905,13 @@ export const ContentDesigner = ({
     setSelectedSectionId(id)
   }
 
-  const setText = (id: number, text: string) => {
-    setSections((prevSections) =>
-      prevSections.map((section) =>
-        section.id === id ? { ...section, text } : section
-      )
-    )
-  }
+  // const setText = (id: number, text: string) => {
+  //   setSections((prevSections) =>
+  //     prevSections.map((section) =>
+  //       section.id === id ? { ...section, text } : section
+  //     )
+  //   )
+  // }
 
   let sectionMap: any = []
   if (subTree && subTree?.children?.length > 0) {
@@ -947,16 +949,10 @@ export const ContentDesigner = ({
     const subtree = new SubTree<string>()
     subtree.addNode('root', null, {})
 
-    const imageProps = {
-      className: 'inherit',
-      src: 'https://picsum.photos/id/64/800/800',
-      alt: 'image',
-    }
-
     if (!sections || sections?.length === 0) return
     sections.map((section) => {
       const subTreeComponent = section?.node
-      console.log('component >>> ', subTreeComponent)
+      // console.log('component >>> ', subTreeComponent)
       subtree.addNode(
         subTreeComponent.value,
         'root',
@@ -967,7 +963,19 @@ export const ContentDesigner = ({
         : []
       if (componentChildren && componentChildren?.length > 0) {
         componentChildren.map((child: any) => {
-          subtree.addNode(child.value, subTreeComponent.value, imageProps)
+          // let childProps = { className: '' }
+          // if (child.value === 'image') {
+          //   const imageProps = {
+          //     src: "https://picsum.photos/id/10/800/800", 
+          //     alt: "image",  
+          //     width: 520,
+          //     height: 205,
+          //     className: "mt-8 rounded-md border bg-muted transition-colors p-5",
+          //     priority: true 
+          //   }            
+          //   childProps = imageProps
+          // }
+          subtree.addNode(child.value, subTreeComponent.value, child.properties)
         })
       }
     })
@@ -1034,6 +1042,46 @@ export const ContentDesigner = ({
   const previewPage = () => {}
 
   const publishPage = () => {}
+
+  const updateSelectedSection = (selectedSection: any, propChanges: any) => {
+    if (!selectedSection || !selectedSection.node || !selectedSection.node.properties) {
+      return selectedSection
+    }
+  
+    const updatedProperties = { ...selectedSection.node.properties }
+  
+    Object.keys(propChanges).forEach(key => {
+      updatedProperties[key] = propChanges[key]
+    })
+  
+    return {
+      ...selectedSection,
+      node: {
+        ...selectedSection.node,
+        properties: updatedProperties
+      }
+    }
+  }  
+
+  const handleComponentChanged = (propChanges: any) => {
+    toast('called handleComponentChanged')
+
+    console.log(`>>> propChanges >>> ${JSON.stringify(propChanges)}`)
+    console.log(`>>> selectedSectionId >>> ${selectedSectionId}`)
+
+    const selectedSection = sections.find((section) => section.id === selectedSectionId) || null    
+    console.log(`>>> selectedSection >>> ${JSON.stringify(selectedSection)}`)
+
+    const updatedSection = updateSelectedSection(selectedSection, propChanges)
+    console.log('>>> updatedSection >>>', JSON.stringify(updatedSection))
+
+    const updatedSections = sections.map(section => 
+      section.id === selectedSectionId ? updateSelectedSection(section, propChanges) : section
+    )    
+    console.log('>>> updatedSections >>>', JSON.stringify(updatedSections))
+
+    savePage()
+  }
 
   return (
     <DndProvider backend={HTML5Backend}>
@@ -1126,7 +1174,7 @@ export const ContentDesigner = ({
                     componentToRender={createComponent({
                       ...section?.node,
                       key: index,
-                    })}
+                    }, handleComponentChanged)}
                     section={section}
                     duplicateSection={duplicateSection}
                   />

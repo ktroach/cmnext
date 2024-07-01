@@ -11,6 +11,7 @@ export interface HeroSectionGradientBackgroundProps {
   button2Title?: string
   designMode?: boolean
   onPropertyChange?: (key: string, value: any) => void
+  onApplyChanges?: (propChanges: any) => void
 }
 
 export default function HeroSectionGradientBackground({
@@ -21,7 +22,8 @@ export default function HeroSectionGradientBackground({
   buttonTitle,
   button2Title,
   designMode,
-  onPropertyChange
+  onPropertyChange, 
+  onApplyChanges
 }: HeroSectionGradientBackgroundProps) {
   
   const [properties, setProperties] = useState({
@@ -44,6 +46,14 @@ export default function HeroSectionGradientBackground({
     }
   }
 
+  const handleOnApplyChanges = (propChanges: any) => {
+    // Call the onApplyChanges prop if it exists
+    if (onApplyChanges) {
+      console.log('called handleOnApplyChanges')
+      onApplyChanges(propChanges)
+    }    
+  }
+
   return (
     <>
       {/* Hero */}
@@ -58,7 +68,7 @@ export default function HeroSectionGradientBackground({
         </div>
         {/* End Gradients */}
        
-        <PropertySet designMode={designMode} onPropertyChange={handlePropertyChange}>
+        <PropertySet designMode={designMode} onPropertyChange={handlePropertyChange} onApplyChanges={handleOnApplyChanges}>
           <div className="relative z-10">
             <div className="container py-10 lg:py-16">
               <div className="max-w-2xl text-center mx-auto">
